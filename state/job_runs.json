@@ -51,6 +51,25 @@
         "teaching": "ok"
       },
       "entry": null
+    },
+    "hourly": {
+      "sent": {
+        "status": {
+          "at": "2026-09-28T22:06:03+08:00",
+          "ids": [
+            153
+          ]
+        }
+      },
+      "runs": 1,
+      "last_prices": {
+        "SOUN": 5.925
+      },
+      "last_real_prices": {},
+      "last_regime": "NORMAL",
+      "alerts": {},
+      "last_run": "2026-09-28T22:06:03+08:00",
+      "status": "ok"
     }
   }
 }

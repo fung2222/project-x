@@ -1,26 +1,33 @@
 {
-  "hkt": "2026-09-28T04:15:22.044713+08:00",
-  "vix": 14.869999885559082,
+  "hkt": "2026-09-28T22:06:01.988406+08:00",
+  "session_date": "2026-09-28",
+  "vix": 15.95,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "SOUN",
       "shares": 25,
-      "px": 6.05,
-      "pnl_pct": -3.35,
+      "px": 5.92,
+      "pnl_pct": -5.35,
       "sl": 5.76,
       "tp": 6.89,
-      "dist_sl_pct": 4.79,
+      "dist_sl_pct": 2.78,
       "action": "HOLD",
       "near_stop": false
     }
   ],
-  "equity_usd": 1291.81,
+  "executed": [],
+  "equity_usd": 1288.68,
   "cash_usd": 1140.56,
   "alerts": [],
-  "need_push": false,
-  "first_today": false,
-  "push_reason": "none",
-  "pushed": false,
-  "push_err": null
+  "real_alerts": [],
+  "paper_notes": [],
+  "real_positions": [],
+  "need_push": true,
+  "first_today": true,
+  "push_reason": "first_of_session",
+  "pushed": true,
+  "push_err": null,
+  "dry_run": false,
+  "engine": "px v3-core"
 }

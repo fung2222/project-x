@@ -68,7 +68,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if len(P) == 1:
         P.append("空倉（現金 100%）")
     m2 = "\n".join(P)
-    # trend + mag7 context + movers
+    # trend + movers (market context = SPY/QQQ/VIX only)
     T = ["<b>🧭 趨勢狀態（已收市日 bar）</b>"]
     core = s["universe"]["core"] + [p["ticker"] for p in pf.get("positions", []) if p["ticker"] not in s["universe"]["core"]]
     movers = []

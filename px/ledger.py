@@ -64,9 +64,29 @@ def sync_rules(pf):
         vg[name]["min_confidence"] = reg["min_confidence"]
 
 
-def fee(notional):
-    f = load_settings()["rules"]["fee"]
-    return round(max(f["min_usd"], round(f["rate"] * notional, 2)), 2)
+def fee(notional, shares=None, side="buy", fcfg=None):
+    """Per-order fee in USD.
+
+    model "futu_hk_fixed" (default): Futu HK US-stock fixed plan — commission + platform fee
+    (each with its per-order minimum; the 0.5%-of-notional cap never goes below the minimums),
+    settlement fee per share, TAF on sells. ~US$2.00 per small order, ~US$4 per round trip.
+    model "flat": the pre-2026-09-28 paper model max(min_usd, rate * notional)."""
+    f = fcfg or load_settings()["rules"]["fee"]
+    if f.get("model", "flat") != "futu_hk_fixed":
+        return round(max(f["min_usd"], round(f["rate"] * notional, 2)), 2)
+    sh = int(shares) if shares else 0
+    comm = max(f["commission_min"], f["commission_per_share"] * sh)
+    plat = max(f["platform_min"], f["platform_per_share"] * sh)
+    both = max(f["commission_min"] + f["platform_min"], min(comm + plat, f["cap_pct_of_notional"] * notional))
+    other = f["settlement_per_share"] * sh
+    if side == "sell":
+        other += min(f["taf_max"], max(f["taf_min"], f["taf_per_share_sell"] * sh))
+    return round(both + other, 2)
+
+
+def round_trip_fee(price, shares, fcfg=None):
+    n = price * shares
+    return round(fee(n, shares, "buy", fcfg) + fee(n, shares, "sell", fcfg), 2)
 
 
 def _r2(x):
@@ -220,7 +240,7 @@ def execute_exit(pf, ticker, price, reason, note="", now=None):
     sh = int(pos["shares"])
     entry = float(pos["entry_price"])
     gross = _r2(price * sh)
-    f = fee(gross)
+    f = fee(gross, sh, "sell")
     buy_fee = _buy_fee_for(pf, pos)
     net = _r2(gross - f - entry * sh - buy_fee)
     cost_basis = entry * sh + buy_fee
@@ -271,7 +291,7 @@ def size_position(equity, cash, entry, sl, size_factor=1.0):
     budget = min(cap_pos, cap_cash, cap_risk)
     # leave room for the entry fee
     shares = int(math.floor(max(0.0, budget) / (entry * (1 + r["fee"]["rate"]))))
-    while shares > 0 and (entry * shares + fee(entry * shares)) > cap_cash:
+    while shares > 0 and (entry * shares + fee(entry * shares, shares)) > cap_cash:
         shares -= 1
     return shares, {"cap_position": _r2(cap_pos), "cap_cash_floor": _r2(cap_cash), "cap_risk": _r2(cap_risk)}
 
@@ -303,7 +323,7 @@ def enforce_entry_rules(pf, ticker, price, shares, sl, regime, now=None):
     if shares < 1:
         raise RuleViolation("position size < 1 share")
     notional = price * shares
-    f = fee(notional)
+    f = fee(notional, shares)
     if notional > r["max_position_pct"] * eq + 0.01:
         raise RuleViolation(f"notional {notional:.2f} > {r['max_position_pct']*100:.0f}% of equity")
     if cash - notional - f < r["min_cash_pct"] * eq - 0.01:
@@ -319,7 +339,7 @@ def execute_entry(pf, ticker, price, shares, sl, tp, regime, reason, setup=None,
     now = now or clock.now_hkt()
     enforce_entry_rules(pf, ticker, price, shares, sl, regime, now)
     notional = _r2(price * shares)
-    f = fee(notional)
+    f = fee(notional, shares)
     tid = next_trade_id(pf)
     session = clock.session_date(now).isoformat()
     trade = {

@@ -35,6 +35,17 @@
     "time_review_days": 15,
     "max_price_sanity_jump_pct": 50.0,
     "fee": {
+      "model": "futu_hk_fixed",
+      "_source": "Futu HK US-stock fees (futuhk.com/support/topic2_283, checked 2026-09-28): commission 0.0049/sh min 0.99 + platform (fixed plan) 0.005/sh min 1.00 per order (0.5% cap does not override the minimums), settlement 0.003/sh, TAF on sells 0.000195/sh (min 0.01, max 9.79), SEC fee 0. Trades before 2026-09-28 were booked with the old flat model max(1.00, 0.5%) and are NOT restated.",
+      "commission_per_share": 0.0049,
+      "commission_min": 0.99,
+      "platform_per_share": 0.005,
+      "platform_min": 1.0,
+      "cap_pct_of_notional": 0.005,
+      "settlement_per_share": 0.003,
+      "taf_per_share_sell": 0.000195,
+      "taf_min": 0.01,
+      "taf_max": 9.79,
       "min_usd": 1.0,
       "rate": 0.005
     }
@@ -416,8 +427,8 @@
     "paper_entry_min_score": 75,
     "yf_earnings_fallback": true,
     "max_per_theme": 1,
-    "_backtest_note": "2026-09-28: 3xATR stop (max 20%) / 30-day time stop chosen among 5 a-priori variants (see docs/AUDIT.md §backtest); in-sample choice, edge NOT proven.",
-    "max_fee_drag_pct": 2.0
+    "_backtest_note": "2026-09-28: 3xATR stop (max 20%) / 30-day time stop chosen among a-priori variants BEFORE the Futu fee fix (in-sample). Re-run with real Futu fees: portfolio sim -25.5% (MDD -27.3%, 38 trades, fees US$154) vs QQQ +31.9%. Edge NOT proven; scan = research list, not a buy signal. See docs/AUDIT.md §6.",
+    "max_fee_drag_pct": 3.0
   },
   "schedule": {
     "_comment": "MASTER push schedule. ET jobs run on NYSE trading days only (px/clock.py holiday + early-close calendar). HKT jobs: morning = after a completed US session; weekly = every Monday HKT. Cron lines for Hermes: docs/HERMES_HANDOVER.md §3. `python run.py check` (watchdog) re-runs missed/failed slots inside rerun windows, else sends ONE alert.",

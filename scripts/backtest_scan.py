@@ -3,7 +3,7 @@
 Uses the SAME features()/evaluate()/rank() as the live scan. Honest caveats are
 written into the output: survivorship bias (universe chosen in 2026-09), no
 historical earnings blackout, daily-bar ambiguity (stop assumed hit before target
-when both are inside one bar), fills at next-day open, fees max(US$1, 0.5%) per side
+when both are inside one bar), fills at next-day open, Futu HK fees per order (px.ledger.fee: ~US$2 min per side)
 in the portfolio simulation, no slippage beyond that.
 
 Usage:  python scripts/backtest_scan.py [--period 2y] [--out data/backtest/scan_backtest.json]
@@ -32,6 +32,9 @@ VARIANTS = {
     "pullback_only": {"allowed_setups": ["上升趨勢回踩MA20"]},
     "trend_trail": {"exit_mode": "ma20_trail", "time_stop_days": 60},  # initial ATR stop, exit on close < MA20
     "trend_trail_wide": {"exit_mode": "ma20_trail", "time_stop_days": 60, "sl_atr_mult": 3.0, "sl_max_pct": 0.20},
+    # fee sensitivity (added 2026-09-28 after the Futu fee audit)
+    "live_drag2": {"max_fee_drag_pct": 2.0},                       # stricter fee-drag filter, real Futu fees
+    "live_oldfees": {"fee_model": "flat", "max_fee_drag_pct": 2.0},  # reproduces the pre-audit run (US$1 min fee)
 }
 
 
@@ -96,8 +99,9 @@ def stats(trades):
                          ("target", "trail", "stop", "stop_gap", "time", "open_at_end")}}
 
 
-def fee(notional, rules):
-    return max(rules["fee"]["min_usd"], rules["fee"]["rate"] * notional)
+def fee(notional, rules, shares=None, side="buy"):
+    from px.ledger import fee as _fee
+    return _fee(notional, shares, side, rules["fee"])
 
 
 def main():
@@ -110,6 +114,10 @@ def main():
     rules = S["rules"]
     c = dict(S["scan"])
     c.update(VARIANTS[a.variant])
+    if c.get("fee_model") == "flat":
+        rules = dict(rules)
+        rules["fee"] = dict(rules["fee"], model="flat")
+        S["rules"] = rules  # scan.evaluate reads the fee model via load_settings() (cached dict)
     exit_mode = c.get("exit_mode", "fixed")
     fx = S["account"]["fx_fallback_usdhkd"]
     uni = c["universe"]
@@ -192,7 +200,7 @@ def main():
                     exit_px, why = cl, "time"
             if exit_px is not None:
                 notional = exit_px * p["shares"]
-                f_ = fee(notional, rules)
+                f_ = fee(notional, rules, p["shares"], "sell")
                 cash += notional - f_
                 pnl = (exit_px - p["entry"]) * p["shares"] - f_ - p["fee_in"]
                 ptrades.append({"ticker": t, "entry_date": p["date"], "exit_date": str(d.date()), "shares": p["shares"],
@@ -220,7 +228,7 @@ def main():
             sz = scan.size(entry, lv["stop"], equity, fx, c, rules)
             sh = sz["shares"]
             cost = sh * entry
-            f_in = fee(cost, rules)
+            f_in = fee(cost, rules, sh, "buy")
             if sh < 1 or cash - cost - f_in < rules["min_cash_pct"] * equity:
                 continue
             cash -= cost + f_in
@@ -249,7 +257,7 @@ def main():
         "caveats": ["survivorship bias: universe chosen in 2026-09 with hindsight of which names are still listed/liquid",
                     "no historical earnings blackout (catalyst filter not simulated)",
                     "daily bars only: intrabar order unknown -> conservative stop-first assumption",
-                    "fees in portfolio sim: max(US$1, 0.5%) per side; no extra slippage",
+                    "fees in portfolio sim: Futu HK fixed plan per order (commission+platform min US$1.99, settlement, TAF); no extra slippage",
                     "small sample: one market regime; not predictive of future returns"],
         "signal_level": {"top1_each_day": stats(top1), "top5_each_day": stats(top5),
                          "baseline_all_liquid_names_same_exits": stats(baseline)},

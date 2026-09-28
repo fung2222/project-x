@@ -115,7 +115,8 @@ def evaluate(ticker, row, qqq_row, equity_usd, fx, rs_pct=None, c=None, earnings
     if sz["shares"] < c["min_shares"]:
         why_fail.append(f"每股太貴：25% 上限只買到 {sz['shares']} 股")
     rules = load_settings()["rules"]
-    fee_rt = 2 * max(rules["fee"]["min_usd"], rules["fee"]["rate"] * sz["cost_usd"])
+    from .ledger import round_trip_fee
+    fee_rt = round_trip_fee(lv["entry"], sz["shares"]) if sz["shares"] > 0 else 99.0
     fee_drag = fee_rt / sz["cost_usd"] * 100 if sz["cost_usd"] > 0 else 99.0
     if sz["shares"] >= c["min_shares"] and fee_drag > c.get("max_fee_drag_pct", 2.0):
         why_fail.append(f"注碼太細：來回手續費佔 {fee_drag:.1f}%（> {c.get('max_fee_drag_pct', 2.0)}%）")

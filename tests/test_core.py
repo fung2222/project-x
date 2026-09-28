@@ -102,9 +102,15 @@ class T4_Signals(unittest.TestCase):
 
 class T5_T8_Ledger(unittest.TestCase):
     def test_T5_fees(self):
-        self.assertEqual(ledger.fee(188.85), 1.00)
-        self.assertEqual(ledger.fee(208.95), 1.04)
-        self.assertEqual(ledger.fee(218.27), 1.09)
+        flat = {"model": "flat", "min_usd": 1.0, "rate": 0.005}  # pre-2026-09-28 paper model (history)
+        self.assertEqual(ledger.fee(188.85, fcfg=flat), 1.00)
+        self.assertEqual(ledger.fee(208.95, fcfg=flat), 1.04)
+        self.assertEqual(ledger.fee(218.27, fcfg=flat), 1.09)
+        # Futu HK fixed plan: 0.99 + 1.00 minimums + 0.003/sh settlement (+ TAF on sells)
+        self.assertEqual(ledger.fee(136.0, 3, "buy"), 2.00)
+        self.assertEqual(ledger.fee(136.0, 3, "sell"), 2.01)
+        self.assertEqual(ledger.round_trip_fee(45.33, 3), 4.01)
+        self.assertEqual(ledger.fee(30000.0, 1000, "buy"), 12.9)  # per-share parts above minimums
 
     def test_T6_reconciliation_fixture(self):
         pf = base_pf()
@@ -132,10 +138,10 @@ class T5_T8_Ledger(unittest.TestCase):
         pf["positions"][0]["current_price"] = 5.70
         self.assertEqual(ledger.check_exit(pf["positions"][0], 5.70), "STOP_LOSS")
         tr = ledger.execute_exit(pf, "SOUN", 5.70, "STOP_LOSS", now=dt.datetime(2026, 9, 29, 22, 0, tzinfo=clock.HKT))
-        self.assertEqual((tr["action"], tr["shares"], tr["exit_price"], tr["fee_usd"]), ("SELL", 25, 5.70, 1.00))
-        self.assertEqual(round(pf["account"]["cash_usd"] - cash0, 2), 141.50)
+        self.assertEqual((tr["action"], tr["shares"], tr["exit_price"], tr["fee_usd"]), ("SELL", 25, 5.70, 2.08))  # Futu: 1.99 + 25*0.003 + TAF 0.01
+        self.assertEqual(round(pf["account"]["cash_usd"] - cash0, 2), 140.42)
         self.assertEqual(pf["positions"], [])
-        self.assertEqual(tr["net_pnl_usd"], round(142.5 - 1.0 - 156.5 - 1.0, 2))
+        self.assertEqual(tr["net_pnl_usd"], round(142.5 - 2.08 - 156.5 - 1.0, 2))  # SOUN buy fee was booked at 1.00 (old model)
 
 
 class T7_Gates(unittest.TestCase):
@@ -291,6 +297,30 @@ class TestSecretsPrecedence(unittest.TestCase):
             self.assertEqual(config.get_secret("TEST_SECRET_X"), "explicit")
         finally:
             os.environ.clear(); os.environ.update(old); os.unlink(fn); config._dotenv_loaded = False
+
+
+class TestNoLLMAndConfigDriven(unittest.TestCase):
+    """Roy requirement: scheduled jobs never depend on an LLM; Telegram target purely from config/env."""
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    def _py(self):
+        for d in ("px",):
+            for dp, _, fs in os.walk(os.path.join(self.ROOT, d)):
+                for f in fs:
+                    if f.endswith(".py"):
+                        yield os.path.join(dp, f)
+        yield os.path.join(self.ROOT, "run.py")
+
+    def test_no_llm_imports_or_hosts(self):
+        pat = re.compile(r"\b(import openai|from openai|import anthropic|from anthropic|api\.x\.ai|xai-oauth|grok-4|api\.openai\.com)")
+        bad = [f for f in self._py() if pat.search(open(f, encoding="utf-8").read())]
+        self.assertEqual(bad, [])
+
+    def test_no_hardcoded_chat_id_or_token(self):
+        tok = re.compile(r"\d{8,10}:[A-Za-z0-9_-]{30,}")
+        chat = re.compile(r"chat_id\s*[=:]\s*['\"]?-?\d{6,}")
+        bad = [f for f in self._py() if tok.search(open(f, encoding="utf-8").read()) or chat.search(open(f, encoding="utf-8").read())]
+        self.assertEqual(bad, [])
 
 
 if __name__ == "__main__":

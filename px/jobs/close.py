@@ -3,7 +3,7 @@
 Plain-language close report (Roy 2026-09-28) — ONE text message + the equity chart photo:
   🌙 收市報告: market mood (SPY/QQQ/VIX in words) -> Roy's REAL positions first (today, since buy in % + US$ + HK$,
   trend word, one-line reason) -> 資金 -> 買賣信號 (揸住／考慮賣出／考慮買入 sized for the real account) ->
-  明日潛力股 (scan on today's completed bar, plain reasons) -> 紙上倉 one line -> health line -> site link.
+  下次開市潛力股 (scan on today's completed bar, plain reasons) -> 紙上倉 one line -> health line -> site link.
 Writes data/pnl_history.json, data/scan.json, data/reasons.json, data/reports/close_report_<date>.*, portfolio.json.
 Yahoo rate-limited during the run -> data_wait (nothing pushed; the watchdog retries)."""
 import json
@@ -66,15 +66,15 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         notes.append(f"權益 {day_chg:+.2f} 美元")
     spy_ret, qqq_ret = paper_bench()
     dw = plain.day_word(mk.get("session_date"), ctx.now)
-    L = [f"<b>🌙 收市報告 {mk.get('session_date') or ctx.session}</b>（美股已收市）",
+    L = [f"<b>🌙 收市報告 {mk.get('session_date') or ctx.session}</b>（{plain.session_label(ctx.now)}）",
          "🌍 " + " ".join(plain.market_lines(mk.get("spy_chg_pct"), mk.get("qqq_chg_pct"), mk.get("vix"), rs.market_headline(), when=dw)), ""]
     L += plain.real_block(real_ev, rsn, trends, dw)
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", True)))
     L += ["", "<b>🧭 買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
-    L += plain.buy_suggestion(real_ev, res, mk.get("regime"), market_open=False)[0]
-    L += [""] + plain.picks_block(res, news, title="⭐ 明日潛力股")
+    L += plain.buy_suggestion(real_ev, res, mk.get("regime"), market_open=False, now=ctx.now)[0]
+    L += [""] + plain.picks_block(res, news, title=f"⭐ {plain.next_open_words(ctx.now)[0]}開市潛力股")
     L += ["", plain.paper_line(acct, len(open_rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret, notes)]
     health = schedule.health_line(clock.to_et(ctx.now).date(), ctx.now, exclude=("close",))
     L += [health, "", plain.footer_line()]

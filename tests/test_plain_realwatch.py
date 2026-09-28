@@ -448,3 +448,67 @@ class TestReasonsLessonsPlain(_TmpState):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------------------------------------------------------------- follow-ups 2026-09-28 (headline relevance, run-time labels)
+class TestMarketHeadlineRelevance(unittest.TestCase):
+    NOW = time.time()
+
+    def _items(self, *hs):
+        return [{"headline": h, "ts": self.NOW - 600 * i} for i, h in enumerate(hs)]
+
+    def test_irrelevant_headlines_are_omitted(self):
+        items = self._items("South African rand slips as US-Iran stalemate pushes oil prices higher - Reuters",
+                            "What is known about arrests at US airbase in Britain - Reuters",
+                            "Oil prices rise as Iran tensions mount",
+                            "Japan's Nikkei hits record as yen weakens",
+                            "Europe stocks slip as ECB holds rates")
+        self.assertIsNone(reasons.pick_market_headline(items, now=self.NOW))
+
+    def test_prefers_us_equity_headline(self):
+        items = self._items("South African rand slips as US-Iran stalemate pushes oil prices higher - Reuters",
+                            "Oil jumps 4%, energy stocks lift S&P 500",
+                            "Wall Street closes higher as tech stocks rally ahead of Fed decision")
+        self.assertEqual(reasons.pick_market_headline(items, now=self.NOW)["headline"],
+                         "Wall Street closes higher as tech stocks rally ahead of Fed decision")
+        self.assertGreaterEqual(reasons.market_relevance("Oil jumps 4%, energy stocks lift S&P 500"),
+                                reasons.MARKET_HEADLINE_MIN_SCORE)  # oil counts only when tied to stocks
+        self.assertLess(reasons.market_relevance("Oil prices rise as Iran tensions mount"), reasons.MARKET_HEADLINE_MIN_SCORE)
+
+    def test_stale_headline_ignored_and_no_line_when_none(self):
+        items = [{"headline": "Treasury yields climb after strong jobs report", "ts": self.NOW - 30 * 3600}]
+        self.assertIsNone(reasons.pick_market_headline(items, now=self.NOW))
+        lines = plain.market_lines(0.5, 0.5, 16, None)
+        self.assertFalse(any(x.startswith("頭條") for x in lines))
+
+
+class TestRunTimeLabels(unittest.TestCase):
+    def test_session_label_from_actual_run_time(self):
+        h = lambda *a: dt.datetime(*a, tzinfo=HKT)
+        self.assertEqual(plain.session_label(h(2026, 9, 29, 22, 0)), "開市 30 分鐘")          # 10:00 ET (EDT)
+        self.assertEqual(plain.session_label(h(2026, 9, 30, 1, 45)), "開市 4 個鐘")            # deferred to 13:45 ET
+        self.assertEqual(plain.session_label(h(2026, 9, 30, 3, 20)), "收市前 40 分鐘")
+        self.assertEqual(plain.session_label(h(2026, 9, 30, 5, 0)), "美股已收市")
+        self.assertEqual(plain.session_label(h(2026, 9, 28, 21, 7)), "開市前，仲有 23 分鐘開市")
+        self.assertEqual(plain.session_label(h(2026, 9, 28, 15, 0)), "美股未開市（香港時間 21:30 開）")
+        self.assertEqual(plain.session_label(h(2026, 11, 2, 23, 0)), "開市 30 分鐘")           # EST: open 22:30 HKT
+        self.assertEqual(plain.session_label(h(2026, 11, 2, 22, 0)), "開市前，仲有 30 分鐘開市")
+        self.assertTrue(plain.session_label(h(2026, 11, 27, 23, 30)).endswith("（半日市）"))  # day after Thanksgiving, 10:30 ET
+        self.assertIn("休市", plain.session_label(h(2026, 11, 26, 23, 0)))                     # Thanksgiving
+        self.assertIn("休市", plain.session_label(h(2026, 10, 3, 23, 0)))                      # Saturday ET
+
+    def test_next_open_words(self):
+        h = lambda *a: dt.datetime(*a, tzinfo=HKT)
+        self.assertEqual(plain.next_open_words(h(2026, 10, 2, 8, 30)), ("今晚", "21:30"))
+        self.assertEqual(plain.next_open_words(h(2026, 10, 3, 8, 30)), ("10-05（星期一）", "21:30"))  # Saturday morning
+        self.assertEqual(plain.next_open_words(h(2026, 10, 2, 23, 0)), ("10-05（星期一）", "21:30"))  # Fri session open
+        self.assertEqual(plain.next_open_words(h(2026, 11, 2, 10, 0)), ("今晚", "22:30"))              # after DST
+        self.assertEqual(plain.next_open_words(h(2026, 11, 26, 8, 30)), ("聽晚", "22:30"))            # Thanksgiving skip
+
+    def test_no_hardcoded_phase_labels_in_jobs(self):
+        root = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "px", "jobs")
+        for fn in os.listdir(root):
+            if fn.endswith(".py"):
+                src = open(os.path.join(root, fn), encoding="utf-8").read()
+                for bad in ("開市半個鐘", "（美股已收市）", "今晚美股", "今晚開市後", "明日潛力股", "今晚潛力股"):
+                    self.assertNotIn(bad, src, f"{fn}: hard-coded '{bad}'")

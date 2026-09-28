@@ -261,8 +261,49 @@ def reason(ticker, chg, mkt_chg=None, fetch_news=True):
             "at": clock.now_hkt().isoformat(timespec="seconds")}
 
 
-def market_headline():
-    """One general market headline (Finnhub /news general, cached 6 h) or None."""
+# ---------------------------------------------------------------- market headline relevance (US-equity investor)
+_US_STRONG = re.compile(r"\b(wall street|s&p( 500)?|nasdaq|dow( jones)?|nyse|russell 2000|stocks?|equit(y|ies)|"
+                        r"stock market|shares|futures|fed|federal reserve|fomc|powell|rate (cut|hike)s?|interest rates?|"
+                        r"treasur(y|ies)|bond yields?|yields?|inflation|cpi|pce|jobs report|payrolls|nonfarm|jobless claims|"
+                        r"unemployment|earnings|guidance|ipo)\b")
+_US_THEME = re.compile(r"\b(tech|chips?|chipmakers?|semiconductors?|ai|nvidia|apple|microsoft|alphabet|google|amazon|meta|"
+                       r"tesla|broadcom|magnificent seven|megacaps?|us economy|u\.s\. economy|recession|tariffs?|"
+                       r"white house|treasury secretary|sec)\b")
+_COMMODITY = re.compile(r"\b(oil|crude|brent|opec|gold|natural gas)\b")
+_FX = re.compile(r"\b(rand|yen|euro|sterling|pound|rupee|peso|yuan|renminbi|lira|won|ringgit|baht|rupiah|real|franc|"
+                 r"forex|fx|currenc(y|ies)|dollar index)\b")
+_FOREIGN = re.compile(r"\b(south africa(n)?|india(n|'s)?|china(ese|'s)?|japan(ese|'s)?|europe(an)?|euro zone|eurozone|ecb|"
+                      r"boj|bank of japan|bank of england|boe|uk|britain|british|germany|german|france|french|brazil(ian)?|"
+                      r"mexico|mexican|turkey|turkish|russia(n)?|ukraine|korea(n)?|australia(n)?|canada|canadian|"
+                      r"hong kong|hang seng|nikkei|ftse|dax|stoxx|asia(n)?|emerging markets?)\b")
+_US_MARK = re.compile(r"\b(us|u\.s\.|american|wall street|s&p|nasdaq|dow|fed|federal reserve)\b")
+MARKET_HEADLINE_MIN_SCORE = 3
+
+
+def market_relevance(headline):
+    """Score a general-news headline for a US-stock investor. >= MARKET_HEADLINE_MIN_SCORE -> worth showing.
+    + US equity / Fed / rates / inflation / jobs / earnings words (3 each, max 2 counted), US tech/chip themes (1 each);
+    oil & commodities add nothing on their own and are penalised unless the headline also talks about stocks/markets; FX and other-country-only
+    headlines are penalised; generic listicles are rejected."""
+    h = (headline or "").lower()
+    if not h or GENERIC.search(h):
+        return -99
+    strong = {m.group(0) for m in _US_STRONG.finditer(h)}
+    theme = {m.group(0) for m in _US_THEME.finditer(h)}
+    score = 3 * min(len(strong), 2) + min(len(theme), 2)
+    if _COMMODITY.search(h):
+        score -= 0 if strong else 1  # oil only counts via the stock words it comes with; "oil rises on Iran" alone is out
+    us = bool(_US_MARK.search(h))
+    if _FX.search(h) and not strong:  # currency moves are not a US-stock story unless stocks/Fed/rates are in it
+        score -= 4
+    if _FOREIGN.search(h) and not us:  # other-country-only stories
+        score -= 4
+    return score
+
+
+def market_headline(min_score=MARKET_HEADLINE_MIN_SCORE):
+    """The most US-equity-relevant general market headline of the last 24 h (Finnhub /news?category=general, cached
+    6 h), or None when nothing scores well enough — then the push simply has no headline line (never an irrelevant one)."""
     c = _load()
     e = c.get("__general__")
     if e and time.time() - float(e.get("ts", 0)) < float(_cfg()["news_cache_hours"]) * 3600:
@@ -276,18 +317,25 @@ def market_headline():
             items = (e or {}).get("items") or []
         else:
             items = [{"headline": x.get("headline"), "source": x.get("source"), "url": x.get("url"), "ts": x.get("datetime")}
-                     for x in d if x.get("headline")][:20]
+                     for x in d if x.get("headline")][:40]
             c["__general__"] = {"ts": time.time(), "items": items}
             _save(c)
-    now = time.time()
-    for x in items:
+    return pick_market_headline(items, min_score)
+
+
+def pick_market_headline(items, min_score=MARKET_HEADLINE_MIN_SCORE, now=None):
+    now = now or time.time()
+    best = None
+    for x in items or []:
         if x.get("ts") and now - float(x["ts"]) > 24 * 3600:
             continue
-        h = (x.get("headline") or "").lower()
-        if GENERIC.search(h) or not MARKET_WORDS.search(h):
+        sc = market_relevance(x.get("headline"))
+        if sc < min_score:
             continue
-        return x
-    return None
+        key = (sc, float(x.get("ts") or 0))
+        if best is None or key > best[0]:
+            best = (key, x)
+    return best[1] if best else None
 
 
 def save_site(reasons_by_ticker, extra=None):

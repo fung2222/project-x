@@ -86,7 +86,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             real_al, _new = real_alerts(real_ev, alerted, reasons=rsn)
             alerts = real_al + market
         head = "<b>🚨 真倉警報</b>" if real_al else ("<b>⚠️ 市況警報</b>" if market else "<b>📊 持倉監控</b>")
-        L = [f"{head} {ctx.now.strftime('%m-%d %H:%M')} HKT"]
+        L = [f"{head} {ctx.now.strftime('%m-%d %H:%M')} HKT（{plain.session_label(ctx.now)}）"]
         L += [f"• {esc(a)}" for a in alerts]
         if real_al:
             L.append(REAL_NOTE)

@@ -198,13 +198,13 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     dw = plain.day_word(mk.get("quote_session"), ctx.now)
     mood = plain.market_lines(mk.get("spy_change"), mk.get("qqq_change"), mk.get("vix"), rs.market_headline(), when=dw)
     lesson = lessons.pick(clock.session_date(ctx.now), save=not dry_run)
-    L = [f"<b>📘 每日報告 {ctx.session}</b>（開市半個鐘）"]
+    L = [f"<b>📘 每日報告 {ctx.session}</b>（{plain.session_label(ctx.now)}）"]
     L += plain.real_block(real_ev, rsn, trends, dw)
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", report["market"].get("fx_live", True))))
     L += ["", "<b>🧭 買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
-    L += plain.buy_suggestion(real_ev, scan_res, regime, clock.market_is_open(ctx.now))[0]
+    L += plain.buy_suggestion(real_ev, scan_res, regime, clock.market_is_open(ctx.now), now=ctx.now)[0]
     L += [""] + plain.picks_block(scan_res, news)
     L += ["", "<b>🌍 大市</b>"] + mood
     L += ["", f"<b>🎓 今日學一樣</b>：{esc(lesson)}"]

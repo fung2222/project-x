@@ -45,11 +45,6 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         sc = scan.run_scan(ctx.now, acct["equity_usd"], fx)
         if not dry_run:
             archive.save_scan(sc)
-    nxt = clock.session_date(ctx.now)  # ET date now (evening before) -> tonight's session is next trading day
-    tonight = session + dt.timedelta(days=1)
-    while not clock.is_trading_day(tonight):
-        tonight += dt.timedelta(days=1)
-    open_hkt = clock.et_to_hkt_str("09:30", tonight)
     real_book, real_ev, rsn, trends = real_context(ctx, fx)
     real_al, _ = real_alerts(real_ev, reasons=rsn)
     from .. import plain
@@ -61,9 +56,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", True)))
-    L += ["", "<b>🧭 今晚買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
-    L += plain.buy_suggestion(real_ev, sc, mk.get("regime"), market_open=False)[0]
-    L += [""] + plain.picks_block(sc, news, title="⭐ 今晚潛力股")
+    nxt_w, nxt_hkt = plain.next_open_words(ctx.now)
+    L += ["", f"<b>🧭 {nxt_w}開市買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
+    L += plain.buy_suggestion(real_ev, sc, mk.get("regime"), market_open=False, now=ctx.now)[0]
+    L += [""] + plain.picks_block(sc, news, title=f"⭐ {nxt_w}開市潛力股")
     cats = []
     held = [r["ticker"] for r in real_ev["rows"]]
     for x in (sc.get("top") or [])[:3]:
@@ -76,7 +72,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         pass
     if cats:
         L += ["", "📅 快出業績（股價可能大上大落）：" + "、".join(cats)]
-    L += ["", f"🕘 今晚美股 {open_hkt} 開市（香港時間）。先諗定買咩、買幾多、止蝕位，唔好臨場 FOMO。"]
+    L += ["", f"🕘 下次美股開市：{nxt_w} {nxt_hkt}（香港時間）。先諗定買咩、買幾多、止蝕位，唔好臨場 FOMO。"]
     spy_ret, qqq_ret = paper_bench()
     L += ["", plain.paper_line(acct, len(rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret), "",
           plain.footer_line()]

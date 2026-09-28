@@ -19,14 +19,14 @@ def build_message(ctx, mkt, rows, executed, alerts, teach, acct, real_ev=None, r
     from .. import plain, realpos
     real_ev = real_ev or realpos.evaluate(realpos.empty_book(), {}, acct.get("fx_usdhkd"))
     dw = plain.day_word(mkt.get("session_date"), ctx.now)
-    L = [f"<b>🔔 美股開市</b>（{ctx.now.strftime('%m-%d %H:%M')} HKT）",
+    L = [f"<b>🔔 美股開市報告</b>（{plain.session_label(ctx.now)}，{ctx.now.strftime('%m-%d %H:%M')} HKT）",
          "🌍 " + " ".join(plain.market_lines(mkt.get("spy_chg_pct"), mkt.get("qqq_chg_pct"), mkt.get("vix"),
                                             when="開市" if dw == "今日" else dw)), ""]
     L += plain.real_block(real_ev, reasons, trends, dw)
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     elif real_ev.get("rows"):
-        L.append("📍 今晚照預設止蝕／止賺做，唔好頭半個鐘用感覺加倉。")
+        L.append("📍 照預設止蝕／止賺做，唔好頭半個鐘用感覺加倉。")
     L.append(plain.capital_line(real_ev, mkt.get("fx_live", True)))
     notes = []
     for tr in executed:

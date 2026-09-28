@@ -85,6 +85,58 @@ def day_word(session_date, now=None):
     return "今日" if session_date == today else f"上個交易日（{session_date[5:]}）"
 
 
+def session_label(now=None):
+    """Where the US regular session is RIGHT NOW (computed from the actual run time vs the real NYSE open/close,
+    DST / holiday / half-day aware) — never a per-job hard-coded label, so a late or deferred run is labelled right."""
+    import datetime as _dt
+    from . import clock
+    et = clock.to_et(now) if now else clock.now_et()
+    d = et.date()
+    if not clock.is_trading_day(d):
+        return f"今日美股休市（{clock.holiday_name(d) or '週末'}）"
+    open_dt = _dt.datetime.combine(d, clock.MARKET_OPEN, tzinfo=clock.ET)
+    close_dt = _dt.datetime.combine(d, clock.close_time(d), tzinfo=clock.ET)
+    half = "（半日市）" if clock.is_early_close(d) else ""
+    if et < open_dt:
+        mins = int((open_dt - et).total_seconds() // 60) + (1 if (open_dt - et).total_seconds() % 60 else 0)
+        hkt_open = open_dt.astimezone(clock.HKT).strftime("%H:%M")
+        return f"開市前，仲有 {mins} 分鐘開市" if mins <= 120 else f"美股未開市（香港時間 {hkt_open} 開）"
+    if et >= close_dt:
+        return "美股已收市" + half
+    m = int((et - open_dt).total_seconds() // 60)
+    left = int((close_dt - et).total_seconds() // 60)
+    if left <= 60:
+        return f"收市前 {max(left, 1)} 分鐘{half}"
+    if m < 60:
+        return f"開市 {m} 分鐘{half}"
+    h, r = divmod(m, 60)
+    return f"開市 {h} 個鐘{'半' if r >= 30 else ''}{half}"
+
+
+def next_open_words(now=None):
+    """'今晚' / '聽晚' / 'MM-DD（星期X）' for the NEXT regular-session open in HKT, computed from the calendar
+    (weekends, NYSE holidays, DST) — e.g. a Saturday-morning report never says '今晚開市'. Returns (words, hkt_hhmm)."""
+    import datetime as _dt
+    from . import clock
+    now_h = clock.to_hkt(now) if now else clock.now_hkt()
+    et = clock.to_et(now_h)
+    d = et.date()
+    while True:
+        open_dt = _dt.datetime.combine(d, clock.MARKET_OPEN, tzinfo=clock.ET)
+        if clock.is_trading_day(d) and open_dt > et:
+            break
+        d += _dt.timedelta(days=1)
+    o = open_dt.astimezone(clock.HKT)
+    delta = (o.date() - now_h.date()).days
+    if delta == 0:
+        w = "今晚"
+    elif delta == 1:
+        w = "聽晚"
+    else:
+        w = f"{o.strftime('%m-%d')}（星期{'一二三四五六日'[o.weekday()]}）"
+    return w, o.strftime("%H:%M")
+
+
 def market_lines(spy_chg, qqq_chg, vix, headline=None, when="今日"):
     """1–3 plain sentences on market mood."""
     L = []
@@ -166,7 +218,7 @@ def hold_signal_lines(ev, trends=None):
     return L
 
 
-def buy_suggestion(ev, scan, regime=None, market_open=True):
+def buy_suggestion(ev, scan, regime=None, market_open=True, now=None):
     """(lines, chosen_ticker|None). Plain "考慮買入" for the best scan pick that is safe to suggest,
     sized with realpos.suggest_shares for Roy's real account; otherwise an honest "今日唔建議買".
     Conservative: no suggestion when VIX is missing (UNKNOWN), earnings unknown/within blackout, or outside entry zone."""
@@ -203,7 +255,7 @@ def buy_suggestion(ev, scan, regime=None, market_open=True):
         if not sh:
             why_not.append(f"{t}：{why}")
             continue
-        when = "" if market_open else "今晚開市後"
+        when = "" if market_open else f"{next_open_words(now)[0]}開市後"
         zone = f"（價錢喺 {price(lo)}–{price(hi)} 之間先買，唔好追高）" if not market_open or not live else ""
         sl_pct = (float(x["stop"]) / entry - 1) * 100
         tp_pct = (float(x["target"]) / entry - 1) * 100

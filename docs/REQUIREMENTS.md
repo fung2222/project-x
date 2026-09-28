@@ -86,6 +86,8 @@
 | R36 | 真倉同潛力股每隻有一句「原因」（冇 LLM）：最相關近期新聞（Finnhub company-news；冇先用 Marketaux，**每日硬上限 60 次**＋cache 6 粒鐘）＋ 同 QQQ／板塊 ETF 比較（「跟大市跌」／「似係個股消息」）；冇相關新聞就寫「冇特別新聞，似係跟大市／板塊波動」；標題只會截短，唔會作原因 | `px/reasons.py`；網站 `js/px.js`（`realCard`、`oppCard` 讀 `data/reasons.json`、`scan.json reason_plain`） | `test_move_class`、`test_reason_never_invents_a_cause`、`test_marketaux_hard_daily_budget`、`test_generic_headlines_filtered` | ✅ |
 | R37 | 今日學一樣：daily 一條實用教學，揀自 40 條精選，30 日內唔重複 | `px/lessons.py`（`state/lesson_history.json`） | `test_lessons_no_repeat_30_days` | ✅ |
 | R38 | Roy 最優先：**唔可以錯、漏、重複推送** — 每個 slot 最多推一次（hourly `slot@HH:MM`、其他 job 按交易日＋部分）；真倉警報 hourly／realwatch 共用一個去重記錄；send 成功即刻記低 | `px/guard.py`（`real_alerted`／`save_real_alerted`）、`px/jobs/hourly.py`、`px/jobs/realwatch.py` | `test_same_slot_never_pushes_twice`、`test_hourly_and_realwatch_share_alert_store`、`test_marked_only_after_successful_send` | ✅ |
+| R39 | **大市新聞要同美股有關**：Finnhub general news（最多 40 條、24 粒鐘內）逐條計分——Fed／息口／通脹／CPI／就業／業績／Nasdaq／S&P／Dow／華爾街／美股 加分，科技／晶片 小加分；油價／商品本身唔加分、冇講股市就扣分；外匯（如南非蘭特）同淨係講其他國家嘅新聞重扣；最高分 < 3 就**唔出大市新聞行**（寧願唔講都唔出無關標題） | `px/reasons.py`（`market_relevance`、`pick_market_headline`、`market_headline`） | `TestMarketHeadlineRelevance` | ✅ |
+| R40 | **時段字眼按實際推送時間計**（唔係每個 job 寫死）：「開市前，仲有 N 分鐘開市」／「開市 N 分鐘」／「開市 1 個鐘半」／「收市前 N 分鐘」／「美股已收市」／「今日美股休市」，跟紐約時間同 NYSE 開收市（夏令時、假期、半日市都計）；延遲／補發唔會出錯字眼；「今晚／聽晚／MM-DD 開市」同香港開市時間都係實時計 | `px/plain.py`（`session_label`、`next_open_words`、`buy_suggestion(now=)`）、`px/jobs/{daily,open_monitor,hourly,close,morning}.py` | `TestRunTimeLabels`（包括源碼掃描唔准寫死「開市半個鐘」） | ✅ |
 
 ## 7. Hermes 唔准自己改嘅嘢（冇 Roy 批准）
 1. 推送目的地（群組 Project X Nas）、推送時間、job 數目。

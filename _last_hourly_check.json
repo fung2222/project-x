@@ -1,21 +1,21 @@
 {
-  "hkt": "2026-09-25T21:19:43.086122+08:00",
-  "vix": 15.210000038146973,
+  "hkt": "2026-09-28T04:15:22.044713+08:00",
+  "vix": 14.869999885559082,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "SOUN",
       "shares": 25,
-      "px": 6.1,
-      "pnl_pct": -2.56,
+      "px": 6.05,
+      "pnl_pct": -3.35,
       "sl": 5.76,
       "tp": 6.89,
-      "dist_sl_pct": 5.57,
+      "dist_sl_pct": 4.79,
       "action": "HOLD",
       "near_stop": false
     }
   ],
-  "equity_usd": 1293.06,
+  "equity_usd": 1291.81,
   "cash_usd": 1140.56,
   "alerts": [],
   "need_push": false,

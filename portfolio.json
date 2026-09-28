@@ -11,10 +11,10 @@
     "started": "2026-07-07",
     "cash_usd": 1140.56,
     "cash_hkd": 8896.37,
-    "equity_usd": 1292.81,
+    "equity_usd": 1291.81,
     "total_invested_usd": 156.5,
-    "total_pnl_usd": -4.25,
-    "total_pnl_pct": -2.72,
+    "total_pnl_usd": -5.25,
+    "total_pnl_pct": -3.35,
     "total_fees_usd": 4.13,
     "last_decision": {
       "date": "2026-09-25",
@@ -46,15 +46,15 @@
       "entry_price": 6.26,
       "entry_date": "2026-09-13",
       "trade_id": "T004",
-      "current_price": 6.09,
+      "current_price": 6.05,
       "cost_usd": 156.5,
-      "value_usd": 152.25,
-      "pnl_usd": -4.25,
-      "pnl_pct": -2.72,
+      "value_usd": 151.25,
+      "pnl_usd": -5.25,
+      "pnl_pct": -3.35,
       "stop_loss_price": 5.76,
       "take_profit_price": 6.89,
       "thesis": "tactical oversold satellite; reject other 95% clones to avoid spray",
-      "last_updated": "2026-09-25T22:02:37.095966"
+      "last_updated": "2026-09-28T04:15:22.933799"
     }
   ],
   "trade_log": [
@@ -265,5 +265,5 @@
       }
     ]
   },
-  "last_tracker_update": "2026-09-25T21:39:13.283195"
+  "last_tracker_update": "2026-09-28T04:15:22.933817"
 }

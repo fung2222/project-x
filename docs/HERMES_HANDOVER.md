@@ -3,7 +3,7 @@
 > 版本：2026-09-28 HKT（合併版 v3 最終交接）。寫俾：**Hermes**（Linux 環境：`/opt/data/.env`、shell script、自己嘅 `cron/jobs.json`）同 Roy Chan。
 > 語言：解釋用繁體中文；code、路徑、指令用英文。所有時間寫明 HKT 或 ET（美東）。
 > 規則：`docs/REQUIREMENTS.md` 係 Roy 同意咗嘅要求，**冇 Roy 批准唔准改**（§11）。審計同修正：`docs/AUDIT.md`。
-> Repo：真正嘅 repo 係 `fung2222/project-x-minimax`（改名之後係 `fung2222/project-x`，見 §9）。Repo B `fung2222/project-x-2026` 保持唯讀存檔。
+> Repo：真正嘅 repo 係 **`fung2222/project-x`**（2026-09-28 由 `project-x-minimax` 改名；舊名而家係淨係做 redirect 嘅細 repo，見 §9）。Repo B `fung2222/project-x-2026` 保持唯讀存檔。
 
 ## 目錄
 - H0 Hermes 自我盤點（短）
@@ -58,13 +58,13 @@ cron (每分鐘) ──> ops/hermes/px_job.sh tick ──> python run.py tick
                      └─ git commit + push → GitHub Pages 網站自動更新
 ```
 - 全部係 Python，**冇 LLM**。Hermes 嘅角色：operator（裝、監察、答 Roy、人手更新富途鏡像）。
-- 網站：https://fung2222.github.io/project-x-minimax/（改名後 https://fung2222.github.io/project-x/）。
+- 網站：https://fung2222.github.io/project-x/（舊網址 https://fung2222.github.io/project-x-minimax/ 會自動跳過嚟）。
 
 ## §2 安裝（Linux）
 ```bash
 # 1. clone（用有 push 權限嘅 token／SSH key；唔好將 token 寫入 repo）
 cd /opt/data
-git clone https://github.com/fung2222/project-x-minimax.git project-x     # 改名後：.../fung2222/project-x.git
+git clone https://github.com/fung2222/project-x.git project-x     # 唔好 clone project-x-minimax（嗰個淨係 redirect 頁）
 cd project-x
 git config user.name  "Hermes Agent"
 git config user.email "hermes@nousresearch.com"
@@ -223,7 +223,7 @@ CRON_TZ=Asia/Hong_Kong
 ---
 
 ## §4 由 Grok Bot routine 過渡（切換之前）
-- 2026-09-28 為止，**Grok Bot 平台 routine 仲係 runner**（喺 Grok Bot box 嘅 `/workspace/project-x-minimax` 跑，舊 wrapper 已經指去新引擎）：開市監控 21:35 HKT、每日約 21:53 HKT（`analyzer.py`＋`telegram_push.py`，2 條訊息＋Grok Bot 自己嘅教學）、hourly `:06`、星期一 09:44 週報。**冇 close／morning**（呢兩個由 B pipeline 繼續 send 去 gushen DM，直至切換）。
+- 2026-09-28 為止，**Grok Bot 平台 routine 仲係 runner**（喺 Grok Bot box 嘅 `/workspace/project-x-minimax` 資料夾跑，remote 已改做 `fung2222/project-x`，舊 wrapper 已經指去新引擎）：開市監控 21:35 HKT、每日約 21:53 HKT（`analyzer.py`＋`telegram_push.py`，2 條訊息＋Grok Bot 自己嘅教學）、hourly `:06`、星期一 09:44 週報。**冇 close／morning**（呢兩個由 B pipeline 繼續 send 去 gushen DM，直至切換）。
 - **2026-11-01 之後 Grok Bot 21:35 HKT 會早過開市**（code 會靜靜跳過 → 冇開市訊息）。所以切換最好喺 **2026-10-30 之前**完成；如果做唔到，Roy 要將 Grok Bot routine 推遲 1 小時。
 - Grok Bot routine 運行期間**唔好**開 Hermes crontab（會兩邊跑）。切換當日：先停 Grok Bot routine，再開 Hermes crontab（§5）。
 

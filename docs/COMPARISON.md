@@ -4,7 +4,7 @@
 
 | 項目 | **A：`fung2222/project-x-minimax`**（Grok Bot routine） | **B：`fung2222/project-x-2026`**（Hermes，gushen profile 每日跑緊） | 合併決定 |
 |---|---|---|---|
-| 網址 | https://fung2222.github.io/project-x-minimax/ | https://fung2222.github.io/project-x-2026/ | A 做 base（之後改名 `project-x`，舊名做 redirect） |
+| 網址 | https://fung2222.github.io/project-x-minimax/ | https://fung2222.github.io/project-x-2026/ | A 做 base；2026-09-28 改名 `fung2222/project-x`（https://fung2222.github.io/project-x/），舊名淨係做 redirect |
 | 活動 | 每個交易日有推送（開市、每日、hourly、週報） | **活躍**：2026-08-06 起 141 個 commit（05:00 收市、08:30 晨早、21:30 日報），最新 2026-09-28 | 兩邊都係現役；合併後由 Hermes 跑合併版 |
 | Code | Python 喺 repo 入面 | Pipeline 喺 Hermes（`/opt/data/project_x_learning`）；2026-09-28 匯出去 repo B `export/2026-09-28/` | B 嘅輸出同好嘅部分移植去 `px/` |
 | 排程 | Grok Bot 平台，寫死 HKT（hourly `6 21-23,0-4 * * 1-5` → 漏星期五下半場） | Hermes cron 寫死 HKT（close／morning `1-5` → 漏星期五；DST 未處理）；PX cron 09-21 起 default profile `enabled=false`，由 gushen profile 繼續 | ET 排程＋NYSE 日曆＋watchdog；`run.py tick` |

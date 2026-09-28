@@ -1,6 +1,6 @@
 // Project X — shared site helpers (merged v3). All numbers come from JSON written by the Python jobs.
 const PX = {
-  site: 'https://fung2222.github.io/project-x-minimax/',
+  site: 'https://fung2222.github.io/project-x/',
   async json(path) {
     try {
       const r = await fetch(`${path}${path.includes('?') ? '&' : '?'}t=${Date.now()}`);

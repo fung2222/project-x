@@ -341,7 +341,7 @@
   },
   "telegram": {
     "enabled": true,
-    "site_url": "https://fung2222.github.io/project-x-minimax/",
+    "site_url": "https://fung2222.github.io/project-x/",
     "hourly_first_of_session_status": true,
     "footer": "紙上模擬；真錢落單由你喺富途執行。",
     "send_charts": true,

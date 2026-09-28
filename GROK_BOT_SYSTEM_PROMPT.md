@@ -10,8 +10,8 @@
 
 | 項目 | 內容 |
 |------|------|
-| GitHub Repo | https://github.com/fung2222/project-x-minimax |
-| Dashboard | https://fung2222.github.io/project-x-minimax/ |
+| GitHub Repo | https://github.com/fung2222/project-x |
+| Dashboard | https://fung2222.github.io/project-x/ |
 | 起始資金 | HKD 5,000（USD ~641） |
 | 目前狀態 | 模擬交易 Phase 3 |
 | 帳戶總值 | $662.63 USD（+3.37%） |

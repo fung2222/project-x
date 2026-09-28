@@ -55,7 +55,7 @@ Project X 係一個 AI 美股模擬投資系統，全自動運行，每日推送
                    ▼
 ┌─────────────────────────────────────────────┐
 │  GitHub Pages                              │
-│  https://fung2222.github.io/project-x-minimax/
+│  https://fung2222.github.io/project-x/
 │                                             │
 │  index.html + 4個JSON自動更新              │
 │  你隨時可以打開睇最新數據                   │
@@ -127,7 +127,7 @@ py -3.12 C:\path\to\project_x\analyzer.py
 
 ## 🌐 Dashboard 網址
 
-👉 https://fung2222.github.io/project-x-minimax/
+👉 https://fung2222.github.io/project-x/
 
 **6個 Tab：**
 | Tab | 內容 |
@@ -196,7 +196,7 @@ py -3.12 C:\path\to\project_x\analyzer.py
 
 1. **告訴我**：「跑一次分析」— 我即時幫你手動運行
 2. **直接打開 Dashboard** — 數據係靜態文件，就算cron壞咗都仲可以睇上次嘅數據
-3. **檢查 GitHub** — https://github.com/fung2222/project-x-minimax
+3. **檢查 GitHub** — https://github.com/fung2222/project-x
 
 ---
 

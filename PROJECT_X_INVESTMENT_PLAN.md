@@ -886,8 +886,8 @@ py -3.12 C:\path\to\project_x\telegram_push.py
 
 | 名稱 | URL |
 |------|-----|
-| Dashboard | https://fung2222.github.io/project-x-minimax/ |
-| GitHub Repo | https://github.com/fung2222/project-x-minimax |
+| Dashboard | https://fung2222.github.io/project-x/ |
+| GitHub Repo | https://github.com/fung2222/project-x |
 | Yahoo Finance | https://finance.yahoo.com/ |
 | Finnhub | https://finnhub.io/ |
 | Marketaux | https://www.marketaux.com/ |

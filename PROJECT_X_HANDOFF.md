@@ -241,20 +241,20 @@ data = yf.download("NVDA", period="3mo")
 | 項目 | 內容 |
 |------|------|
 | 倉庫名 | `fung2222/project-x-minimax` |
-| 倉庫地址 | https://github.com/fung2222/project-x-minimax |
-| Dashboard URL | https://fung2222.github.io/project-x-minimax/ |
+| 倉庫地址 | https://github.com/fung2222/project-x |
+| Dashboard URL | https://fung2222.github.io/project-x/ |
 | GitHub 帳戶 | fung2222 |
 
 ### 獲取倉庫訪問權
 Grok Bot 需要以下任一方式：
 
 **方式 A：作為 Collaborator 加入（推薦）**
-1. 現有管理員打開 https://github.com/fung2222/project-x-minimax/settings/access
+1. 現有管理員打開 https://github.com/fung2222/project-x/settings/access
 2. 邀請 Grok Bot 的 GitHub 帳戶作為 collaborator
 3. Grok Bot 接受邀請
 
 **方式 B：Fork 倉庫**
-1. Fork https://github.com/fung2222/project-x-minimax
+1. Fork https://github.com/fung2222/project-x
 2. 在 fork 的倉庫上進行更改
 3. 通過 Pull Request 合併
 
@@ -282,7 +282,7 @@ git push origin main                     # 推送到遠端
 
 > ⚠️ 首次 clone 倉庫：
 > ```bash
-> git clone https://github.com/fung2222/project-x-minimax.git
+> git clone https://github.com/fung2222/project-x.git
 > ```
 
 ---
@@ -550,7 +550,7 @@ C:\Users\fung2\.mavis\crons\
 ## 11. Dashboard 更新流程
 
 ### Dashboard URL
-**https://fung2222.github.io/project-x-minimax/**
+**https://fung2222.github.io/project-x/**
 
 ### 更新步驟
 
@@ -594,7 +594,7 @@ git push origin main
 
 **Step 3：等待部署**
 - GitHub Actions 自動觸發部署（約 1-2 分鐘）
-- Dashboard 自動更新：https://fung2222.github.io/project-x-minimax/
+- Dashboard 自動更新：https://fung2222.github.io/project-x/
 
 ### index.html 技術說明
 - 純靜態 HTML + CSS + JavaScript
@@ -657,7 +657,7 @@ WATCHLIST = ["NVDA", "TSLA", "RKLB", "AMD", "MSFT", "GOOGL", "META", "PLTR", "AR
 ### 環境設置
 - [ ] 設置 Python 3 環境
 - [ ] 安裝所需庫：`pip install yfinance pandas matplotlib finnhub-python requests`
-- [ ] Clone GitHub 倉庫：`git clone https://github.com/fung2222/project-x-minimax.git`
+- [ ] Clone GitHub 倉庫：`git clone https://github.com/fung2222/project-x.git`
 - [ ] 獲取 GitHub 倉庫訪問權（作為 collaborator 或使用 token）
 
 ### API 憑證設置
@@ -670,7 +670,7 @@ WATCHLIST = ["NVDA", "TSLA", "RKLB", "AMD", "MSFT", "GOOGL", "META", "PLTR", "AR
 - [ ] 運行 `python analyzer.py`（獨立測試分析引擎）
 - [ ] 運行 `python telegram_push.py`（獨立測試 Telegram 推送）
 - [ ] 確認 Telegram 收到測試消息
-- [ ] 確認 GitHub Pages 可訪問：https://fung2222.github.io/project-x-minimax/
+- [ ] 確認 GitHub Pages 可訪問：https://fung2222.github.io/project-x/
 
 ### 自動化設置
 - [ ] 設置每日 cron 任務（見第 10 節）
@@ -705,7 +705,7 @@ WATCHLIST = ["NVDA", "TSLA", "RKLB", "AMD", "MSFT", "GOOGL", "META", "PLTR", "AR
 **Mavis 最後狀態確認（2026-09-13）：**
 - ✅ 所有 Project X 源代碼完整
 - ✅ 帳戶數據準確（portfolio.json、signals.json、daily_report.json）
-- ✅ GitHub Pages 正常運行（https://fung2222.github.io/project-x-minimax/）
+- ✅ GitHub Pages 正常運行（https://fung2222.github.io/project-x/）
 - ✅ 交易記錄清晰（NVDA T001-T002，+11.06%，已平倉）
 - ✅ Telegram 推送正常
 - ✅ Cron 任務已配置（4個）

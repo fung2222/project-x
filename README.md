@@ -1,6 +1,6 @@
 # Project X — AI 美股模擬投資系統（合併版 v3）
 
-網站：https://fung2222.github.io/project-x-minimax/ （計劃改名做 https://fung2222.github.io/project-x/，見 `docs/HERMES_HANDOVER.md §9`）
+網站：https://fung2222.github.io/project-x/ ・ Repo：`fung2222/project-x`（2026-09-28 由 `project-x-minimax` 改名；舊網址自動跳轉，見 `docs/HERMES_HANDOVER.md §9`）
 
 - **紙上組合**：HKD 10,000 ≈ US$1,280（2026-09-13 起），最多 3 隻、每隻 ≤25%、現金 ≥20%、信心 ≥0.75、每筆預設 SL/TP 並自動紙上執行、富途真實手續費、FX 7.8。
 - **核心產品**：高潛力機會掃描 Top 5（入場區、止損、目標、R:R、股數、HKD、點解）。⚠️ 回測未證明有優勢，只係研究名單，唔係買入訊號（`docs/AUDIT.md §6`）。

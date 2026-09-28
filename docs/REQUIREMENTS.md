@@ -71,7 +71,7 @@
 | R26 | 排程 job 唔可以靠 LLM（xAI credit 用完之後 Hermes 嘅 job 由 09-18 開始 fail 過） | 全部 job = `python run.py <job>`，純 Python | ✅ |
 | R27 | Secrets 唔可以入 repo；舊 key 要換 | `.gitignore`、`.env.example`、`tests::test_T16_no_secret_files_tracked`；Finnhub／Marketaux key 要 rotate | 🟡 rotate 要 Roy 做 |
 | R28 | Repo B（`fung2222/project-x-2026`）唯讀，Hermes 匯出檔保留做存檔 | 本 repo `data/legacy/hermes_project_x_2026/`（副本） | ✅ |
-| R29 | Repo 改名做 `project-x`，舊名 `project-x-minimax` 淨係做 redirect | 見 HERMES_HANDOVER §9 | 見該節狀態 |
+| R29 | Repo 改名做 `project-x`，舊名 `project-x-minimax` 淨係做 redirect | 見 HERMES_HANDOVER §9 | ✅ 2026-09-28 |
 
 ## 7. Hermes 唔准自己改嘅嘢（冇 Roy 批准）
 1. 推送目的地（群組 Project X Nas）、推送時間、job 數目。

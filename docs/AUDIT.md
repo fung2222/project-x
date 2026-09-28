@@ -1,7 +1,7 @@
 # Project X 全面審計（AUDIT）— A（Grok Bot）＋ B（Hermes）
 
 > 日期：2026-09-28 HKT。審計人：Grok Bot（executor）。解釋用繁體中文；code、路徑、指令用英文。
-> 範圍：**A** = `fung2222/project-x-minimax`（本 repo，Grok Bot 平台 routine 跑）；**B** = `fung2222/project-x-2026`（Hermes，每日 05:00／08:30／21:30 commit，2026-08-06 之後有 141 個 commit，最新 2026-09-28）同 B 嘅 pipeline 原始碼 `export/2026-09-28/project_x_learning/`（本 repo 有副本：`data/legacy/hermes_project_x_2026/export_2026-09-28/`）。
+> 範圍：**A** = `fung2222/project-x`（本 repo；2026-09-28 由 `project-x-minimax` 改名，Grok Bot 平台 routine 跑）；**B** = `fung2222/project-x-2026`（Hermes，每日 05:00／08:30／21:30 commit，2026-08-06 之後有 141 個 commit，最新 2026-09-28）同 B 嘅 pipeline 原始碼 `export/2026-09-28/project_x_learning/`（本 repo 有副本：`data/legacy/hermes_project_x_2026/export_2026-09-28/`）。
 > Mag7 觀察池：**retired by Roy 2026-09-28**，唔喺審計範圍。
 > 嚴重程度：🔴 高（會令數字錯、漏推、蝕錢或者洩密）　🟠 中（誤導、唔穩定）　🟡 低（整潔、易用）。
 > 狀態：✅ 已修（寫明 commit／檔案）　🟡 部分／要切換時做　⏳ 未修（寫明原因）。**所有 🔴 同 🟠 都已經修咗，或者列明要 Roy／Hermes 做嘅一步。**
@@ -224,7 +224,7 @@
 - **修正**：`js/px.js` freshness 警告（例：富途鏡像 2026-07-08 之後冇更新 → 黃色警告）。✅
 
 ### R-05 🟡 A：repo homepage 寫錯（soonoo.github.io）
-- ✅ 已改做 `https://fung2222.github.io/project-x-minimax/`（改名之後會再改，見 HERMES_HANDOVER §9）。
+- ✅ 已改做 `https://fung2222.github.io/project-x/`（2026-09-28 改名後；舊網址 redirect，見 HERMES_HANDOVER §9）。
 
 ---
 

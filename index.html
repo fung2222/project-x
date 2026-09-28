@@ -17,8 +17,8 @@
 <script>
 PX.nav();
 (async () => {
-  const [pf, rep, scan, hist, idx, futu, rsn] = await Promise.all([PX.json('portfolio.json'), PX.json('daily_report.json'),
-    PX.json('data/scan.json'), PX.json('data/pnl_history.json'), PX.json('data/reports_index.json'), PX.json('data/futu_positions.json'), PX.json('data/reasons.json')]);
+  const [pf, rep, scan, hist, idx, futu, rsn, hm] = await Promise.all([PX.json('portfolio.json'), PX.json('daily_report.json'),
+    PX.json('data/scan.json'), PX.json('data/pnl_history.json'), PX.json('data/reports_index.json'), PX.json('data/futu_positions.json'), PX.json('data/reasons.json'), PX.json('data/heatmap.json')]);
   const a = (pf && pf.account) || {}; const fx = a.fx_usdhkd || 7.8; const mk = (rep && rep.market) || {};
   PX.setUpdated(`更新：${(rep && (rep.timestamp || rep.date)) || '—'}`);
   const pos = (pf && pf.positions) || [];
@@ -32,6 +32,12 @@ PX.nav();
       <div>🧪 紙上倉（對照組）權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b>${PX.pct(a.total_return_pct)}</b> · 現金 ${Number(a.cash_pct || 0).toFixed(1)}%</div>
       <div style="margin-top:6px">${top.length ? `🚀 今日高潛力 Top ${top.length}：<b>${top.map(x => PX.esc(x.ticker)).join(' · ')}</b>` : '🚀 今日冇名單過晒濾網（唔入場都係決定）'}</div>
       <div class="muted" style="margin-top:6px">VIX ${mk.vix ?? '—'} ${PX.esc(mk.regime_emoji || '')}${PX.esc(mk.regime || '')} · SPY ${PX.pct(mk.spy_change)} · QQQ ${PX.pct(mk.qqq_change)}</div></div>
+    <div class="card"><h2>🗺 今日板塊熱力圖 <a class="muted" href="heatmap.html">詳情 →</a></h2>
+      ${hm && hm.schema === 'heatmap_v1' ? `<div class="muted">${PX.esc(hm.date_label || '')} · 更新 ${PX.esc(hm.generated_hkt || '')}</div>
+      <div style="margin-top:6px">觀察名單 <b>${(hm.counts||{}).up||0} 升</b>／<b>${(hm.counts||{}).down||0} 跌</b>（共 ${(hm.counts||{}).total||0} 隻）· SPY ${PX.pct((hm.index&&hm.index.SPY||{}).chg_pct)} · QQQ ${PX.pct((hm.index&&hm.index.QQQ||{}).chg_pct)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">${(hm.sectors||[]).slice().sort((a,b)=>((b.chg_pct==null)-(a.chg_pct==null))||((b.chg_pct||0)-(a.chg_pct||0))).slice(0,6).map(s=>`<span style="background:${s.color||'#dfe2e6'};color:${s.text_color||'#222'};padding:4px 8px;border-radius:6px;font-size:13px"><b>${PX.esc(s.zh)}</b> ${PX.esc(s.label)}</span>`).join('')}</div>
+      <div class="muted" style="margin-top:6px">紅＝升　綠＝跌　格越大＝公司越大 · <a href="heatmap.html">睇完整熱力圖 →</a></div>`
+      : '<div class="empty">熱力圖數據暫缺（美股開市時段會自動更新）· <a href="heatmap.html">睇頁面 →</a></div>'}</div>
     <div class="stats">
       <div class="stat"><div class="stat-label">💰 紙上權益</div><div class="stat-value">${PX.usd(a.equity_usd)}</div><div class="muted">${PX.hkd(a.equity_usd * fx)}（起始 ${PX.usd(a.start_equity_usd)}）</div></div>
       <div class="stat"><div class="stat-label">📈 總 P&L（已計費用＋FX）</div><div class="stat-value ${PX.cls(a.total_pnl_usd)}">${PX.pct(a.total_return_pct)}</div><div class="muted">${PX.usd(a.total_pnl_usd)} · 已實現 ${PX.usd(a.realized_pnl_usd)}</div></div>

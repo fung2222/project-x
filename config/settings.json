@@ -567,5 +567,21 @@
     "DRONES_DEFENSE": "ITA",
     "BIOTECH_AI": "XBI",
     "INTERNET": "FDN"
+  },
+  "heatmap": {
+    "_comment": "Stock heatmap (px/heatmap.py -> data/heatmap.json -> heatmap.html). Refresh every 30 min during the US session + one final run at 17:00 ET after close. NEVER sends Telegram. Market caps from Finnhub (cached 7 days). Failures never block other jobs.",
+    "enabled": true,
+    "first_et": "10:00",
+    "every_min": 30,
+    "last_before_close_min": 30,
+    "final_et": "17:00",
+    "final_until_et": "20:30",
+    "slot_grace_min": 25,
+    "max_attempts": 2,
+    "mcap_cache_days": 7,
+    "mcap_floor_usd": 1000000000,
+    "finnhub_mcap_per_run": 20,
+    "full_colour_pct": 5.0,
+    "flat_pct": 0.1
   }
 }

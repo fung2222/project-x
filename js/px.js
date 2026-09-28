@@ -21,7 +21,7 @@ const PX = {
     return age > tol ? `<div class="fresh-warn">⚠️ ${label}已經 ${Math.round(age)} 小時冇更新（${PX.esc(iso)}）— 可能漏跑，請睇 🩺 系統健康</div>` : '';
   },
   nav() {
-    const pages = [['index.html','🏠','首頁'],['opportunities.html','🚀','機會掃描'],['signals.html','📊','信號'],
+    const pages = [['index.html','🏠','首頁'],['heatmap.html','🗺','熱力圖'],['opportunities.html','🚀','機會掃描'],['signals.html','📊','信號'],
                    ['portfolio.html','💼','組合'],['reports.html','📰','報告'],['learn.html','📚','學習']];
     const cur = location.pathname.split('/').pop() || 'index.html';
     document.getElementById('px-header').innerHTML = `
@@ -29,7 +29,7 @@ const PX = {
       <div class="update-time" id="update-time">載入中…</div></div></header>
       <nav><div class="nav-inner">${pages.map(([h,i,t]) => `<a href="${h}" class="nav-link${h === cur ? ' active' : ''}"><span class="nav-icon">${i}</span>${t}</a>`).join('')}</div></nav>`;
     document.getElementById('px-footer').innerHTML = `<p>⚠️ 教育／模擬用途，唔係投資建議。所有預測都係情境參考，唔係保證。真倉由 Roy 自己喺富途落單（系統只記錄同提醒）；紙上組合由系統自動執行，做對照組。</p>
-      <p>數據：Yahoo Finance（yfinance）、Finnhub（真倉 5 分鐘報價、報價後備、業績日、新聞）、Marketaux（新聞後備）。指標用已收市日 bar；攞唔到嘅數據會寫「數據暫缺」，唔會估。</p>`;
+      <p>數據：Yahoo Finance（yfinance）、Finnhub（真倉 5 分鐘報價、報價後備、業績日、新聞、熱力圖市值）、Marketaux（新聞後備）。指標用已收市日 bar；攞唔到嘅數據會寫「數據暫缺」，唔會估。</p>`;
   },
   // ISO timestamp -> 'YYYY-MM-DD HH:MM HKT' (naive timestamps are box-local HKT)
   hkt(iso) {

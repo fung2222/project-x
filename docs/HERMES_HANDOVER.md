@@ -57,6 +57,7 @@ cron (每分鐘) ──> ops/hermes/px_job.sh tick ──> python run.py tick
                      │     ├─ 寫 portfolio.json、daily_report.json、data/*.json、data/reports/、state/
                      │     └─ Telegram Bot API → 群組「Project X Nas」（文字＋圖）
                      ├─ realwatch（2026-09-28）：開市時每 5 分鐘睇 Roy 真倉（冇真倉＝0 call；唔 commit；見 §13）
+                     ├─ heatmap（2026-09-28）：開市時每 30 分鐘＋收市後再跑 → data/heatmap.json（唔 Telegram；失敗唔阻其他 job；見 R41）
                      ├─ watchdog：漏咗／fail → 窗口內重跑；過咗窗口 → 1 條 🛠 alert
                      └─ git commit + push → GitHub Pages 網站自動更新
 ```
@@ -83,7 +84,7 @@ chmod 600 /opt/data/.env
 # 4. 檢查（全部唔會 send Telegram）
 export PX_ENV_FILE=/opt/data/.env
 .venv/bin/python run.py status                   # secret 有冇（唔顯示數值）、今日排程、run ledger
-.venv/bin/python -m unittest discover -s tests   # 應該 50 個測試全部 OK
+.venv/bin/python -m unittest discover -s tests   # 全部 OK（2026-09-28 起 ≥115）
 .venv/bin/python run.py daily --dry-run --force  # 睇 4 條每日訊息（唔 send、唔寫檔）
 .venv/bin/python run.py tgcheck                  # bot username＋群組資料（唔 send）
 chmod +x ops/hermes/px_job.sh
@@ -105,6 +106,7 @@ chmod +x ops/hermes/px_job.sh
 | `morning` | 隔夜複盤（香港早晨，唔係盤前） | —— | 08:30 | 08:30 | HKT 星期二至六，而且前一個美股日係交易日（例：2026-11-27 早上唔跑，因為 11-26 感恩節休市） | `python run.py morning --push` | **1**：「🌅 早晨｜美股 日期 收市回顧」 | `portfolio.json`、`data/reports/morning_report_*`、`state/` |
 | `weekly` | 每週回顧 | —— | 星期一 09:44 | 星期一 09:44 | 每個 HKT 星期一（美國假期都照跑） | `python run.py weekly --push` | **1**：「📊 每週回顧」 | `Reports/WeeklyReport_*.json`、`Reports/WeeklySummary_*.txt`、`data/reports/weekly_report_*`、`state/` |
 | `realwatch` | 真倉 5 分鐘監察（**唔係排程 slot**，由 `tick` 喺排程之前叫；watchdog 唔管；唔 commit） | 開市時每 5 分鐘 | 21:30–04:00 | 22:30–05:00 | NYSE 開市時段 | （自動，經 `tick`） | 平時 **0**；真倉觸發條件先 send「🚨 真倉即時警報」（每次最多 1 條） | `state/realwatch.json`、`state/job_runs.json`（`real` 去重） |
+| `heatmap` | 股票熱力圖 JSON（網站 `heatmap.html`；**唔係排程 slot**，由 `tick` 喺 push jobs 之後叫；watchdog 唔管；唔 send Telegram） | 開市時每 30 分鐘＋收市後 17:00 ET | 22:00–04:00 ＋ 05:00 | 23:00–05:00 ＋ 06:00 | NYSE 交易日（半日市縮短） | `python run.py heatmap --force`（人手）／自動經 `tick` | **0**（永遠唔 push Telegram） | `data/heatmap.json`、`state/heatmap_state.json`、`state/heatmap_mcap.json` |
 | `tick` | **建議嘅唯一 cron 入口**：先跑 realwatch，再到期就跑上面嘅 job，再做 watchdog | —— | 每分鐘 | 每分鐘 | 永遠 | `ops/hermes/px_job.sh tick` | 冇（除非 watchdog alert） | 同上 |
 | `check` | watchdog（淨係漏跑偵測）；用 Option B/C 先需要 | —— | 每 30 分鐘 | 每 30 分鐘 | 永遠 | `ops/hermes/px_job.sh check` | 漏跑過咗窗口：每個 slot **最多 1 條**「🛠 Project X 漏跑/失敗」 | `state/run_ledger.json` |
 
@@ -345,6 +347,8 @@ CRON_TZ=Asia/Hong_Kong
 檔案：`data/futu_positions.json`（schema `real_positions_v2`：`positions[]` 持倉、`closed_trades[]` 已實現紀錄——**唔好刪**，20–30 筆檢討要用、`real_start_date` 第一筆真倉日）。寫入係 atomic＋file lock；jobs 會自動更新 `last_price`（畀網站用）。唔好人手改呢個檔。
 
 ## §13 真倉 5 分鐘監察（realwatch）＋ API 用量（2026-09-28）
+
+> 另見 **R41 股票熱力圖**：由同一個 `tick` 喺 push jobs 之後刷新 `data/heatmap.json`（每 30 分鐘＋收市）；唔 Telegram、唔阻其他 job。
 
 **做咩**：美股開市期間，`run.py tick`（每分鐘）喺跑排程之前叫 `px/jobs/realwatch.py`。距離上次 ≥5 分鐘先真係做嘢（`state/realwatch.json`）。
 - **冇真倉 ＝ 0 個 API call**（只讀 `data/futu_positions.json`）。

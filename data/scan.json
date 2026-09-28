@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-28T11:26:21+08:00",
+ "generated_at": "2026-09-28T21:53:16+08:00",
  "bar_date": "2026-09-25",
- "equity_usd": 1291.81,
- "fx_usdhkd": 7.8,
- "max_position_usd": 322.95,
- "risk_per_trade_usd": 25.84,
+ "equity_usd": 1288.43,
+ "fx_usdhkd": 7.8443,
+ "max_position_usd": 322.11,
+ "risk_per_trade_usd": 25.77,
  "universe_size": 54,
  "scanned": 54,
  "passed": 2,
@@ -43,20 +43,20 @@
    "atr_pct": 6.11,
    "shares": 3,
    "cost_usd": 136.44,
-   "cost_hkd": 1064.0,
+   "cost_hkd": 1070.0,
    "risk_usd": 25.01,
    "fee_drag_pct": 2.94,
-   "earnings_days": 29,
+   "earnings_days": 27,
    "why": [
     "相對 QQQ：20日 +3.9pp / 60日 -14.2pp",
     "結構：價 > MA20，MA20 < MA50，MA50 向下",
     "RSI 63，setup：趨勢延續，ATR 6.1%"
    ],
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "bar_date": "2026-09-25",
    "theme": "QUANTUM",
-   "live_price": 45.48,
-   "live_change_pct": 0.0
+   "live_price": 47.24,
+   "live_change_pct": 3.87
   },
   {
    "ticker": "RKLB",
@@ -92,20 +92,20 @@
    "atr_pct": 5.36,
    "shares": 2,
    "cost_usd": 147.9,
-   "cost_hkd": 1154.0,
+   "cost_hkd": 1160.0,
    "risk_usd": 23.77,
    "fee_drag_pct": 2.71,
-   "earnings_days": 32,
+   "earnings_days": 30,
    "why": [
     "相對 QQQ：20日 +6.3pp / 60日 -28.8pp",
     "結構：價 > MA20，MA20 < MA50，MA50 向下",
     "RSI 59，setup：趨勢延續，ATR 5.4%"
    ],
-   "earnings_date": "2026-11-10",
+   "earnings_date": "2026-11-09",
    "bar_date": "2026-09-25",
    "theme": "SPACE",
-   "live_price": 73.95,
-   "live_change_pct": 0.0
+   "live_price": 72.34,
+   "live_change_pct": -2.17
   }
  ],
  "near_misses": [
@@ -145,16 +145,16 @@
    "atr_pct": 6.71,
    "shares": 2,
    "cost_usd": 88.25,
-   "cost_hkd": 688.0,
+   "cost_hkd": 692.0,
    "risk_usd": 17.65,
    "fee_drag_pct": 4.54,
-   "earnings_days": 30,
+   "earnings_days": 28,
    "why": [
     "相對 QQQ：20日 +5.6pp / 60日 -0.8pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
     "RSI 51，setup：上升趨勢回踩MA20，ATR 6.7%"
    ],
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "bar_date": "2026-09-25",
    "theme": "BTC_MINING_HPC"
   },
@@ -194,16 +194,16 @@
    "atr_pct": 3.63,
    "shares": 1,
    "cost_usd": 189.67,
-   "cost_hkd": 1479.0,
+   "cost_hkd": 1488.0,
    "risk_usd": 20.64,
    "fee_drag_pct": 2.1,
-   "earnings_days": 27,
+   "earnings_days": 25,
    "why": [
     "相對 QQQ：20日 -1.2pp / 60日 +48.2pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
     "RSI 64，setup：趨勢延續，ATR 3.6%"
    ],
-   "earnings_date": "2026-11-03",
+   "earnings_date": "2026-11-02",
    "bar_date": "2026-09-25",
    "theme": "DATA_AI"
   },
@@ -243,10 +243,10 @@
    "atr_pct": 6.25,
    "shares": 1,
    "cost_usd": 87.59,
-   "cost_hkd": 683.0,
+   "cost_hkd": 687.0,
    "risk_usd": 16.42,
    "fee_drag_pct": 4.56,
-   "earnings_days": 33,
+   "earnings_days": 32,
    "why": [
     "相對 QQQ：20日 -2.3pp / 60日 -0.4pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -292,7 +292,7 @@
    "atr_pct": 4.5,
    "shares": 17,
    "cost_usd": 181.05,
-   "cost_hkd": 1412.0,
+   "cost_hkd": 1420.0,
    "risk_usd": 24.47,
    "fee_drag_pct": 2.26,
    "earnings_days": null,
@@ -341,10 +341,10 @@
    "atr_pct": 4.85,
    "shares": 4,
    "cost_usd": 166.2,
-   "cost_hkd": 1296.0,
+   "cost_hkd": 1304.0,
    "risk_usd": 24.2,
    "fee_drag_pct": 2.41,
-   "earnings_days": 28,
+   "earnings_days": 27,
    "why": [
     "相對 QQQ：20日 -7.7pp / 60日 +35.0pp",
     "結構：價 < MA20，MA20 > MA50，MA50 向上",
@@ -369,7 +369,7 @@
    "rr": 1.16,
    "setup": "放量突破20日高",
    "theme": "AI_CLOUD_INFRA",
-   "earnings_date": "2026-11-04",
+   "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": 9.24,
    "ex_qqq_60d_pp": 53.79,
    "dollar_vol20_musd": 1492.9
@@ -387,7 +387,7 @@
    "rr": 0.79,
    "setup": "上升趨勢回踩MA20",
    "theme": "CRYPTO",
-   "earnings_date": "2026-10-30",
+   "earnings_date": "2026-10-29",
    "ex_qqq_20d_pp": -0.94,
    "ex_qqq_60d_pp": 19.86,
    "dollar_vol20_musd": 1861.9
@@ -405,7 +405,7 @@
    "rr": 0.39,
    "setup": "上升趨勢回踩MA20",
    "theme": "FINTECH",
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": 5.54,
    "ex_qqq_60d_pp": 7.23,
    "dollar_vol20_musd": 2662.9
@@ -422,7 +422,7 @@
    "rr": 3.01,
    "setup": "上升趨勢回踩MA20",
    "theme": "BTC_MINING_HPC",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": 5.63,
    "ex_qqq_60d_pp": -0.81,
    "dollar_vol20_musd": 1709.7
@@ -457,7 +457,7 @@
    "rr": 2.5,
    "setup": "趨勢延續",
    "theme": "DATA_AI",
-   "earnings_date": "2026-11-03",
+   "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -1.23,
    "ex_qqq_60d_pp": 48.19,
    "dollar_vol20_musd": 4705.4
@@ -492,7 +492,7 @@
    "rr": 1.59,
    "setup": "上升趨勢回踩MA20",
    "theme": "BTC_MINING_HPC",
-   "earnings_date": "2026-10-30",
+   "earnings_date": "2026-10-29",
    "ex_qqq_20d_pp": 6.91,
    "ex_qqq_60d_pp": -6.67,
    "dollar_vol20_musd": 356.9
@@ -510,7 +510,7 @@
    "rr": 1.44,
    "setup": "趨勢延續",
    "theme": "CRYPTO",
-   "earnings_date": "2026-10-30",
+   "earnings_date": "2026-10-29",
    "ex_qqq_20d_pp": 12.19,
    "ex_qqq_60d_pp": 67.17,
    "dollar_vol20_musd": 3554.4
@@ -528,7 +528,7 @@
    "rr": 1.55,
    "setup": "上升趨勢回踩MA20",
    "theme": "BTC_MINING_HPC",
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": 2.49,
    "ex_qqq_60d_pp": -8.8,
    "dollar_vol20_musd": 550.2
@@ -581,7 +581,7 @@
    "rr": 2.5,
    "setup": "離MA20太遠（追高風險）",
    "theme": "AI_SOFTWARE",
-   "earnings_date": "2026-11-04",
+   "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": 17.01,
    "ex_qqq_60d_pp": 35.34,
    "dollar_vol20_musd": 502.4
@@ -631,7 +631,7 @@
    "rr": 3.38,
    "setup": "趨勢延續",
    "theme": "QUANTUM",
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": 3.87,
    "ex_qqq_60d_pp": -14.18,
    "dollar_vol20_musd": 968.5
@@ -665,7 +665,7 @@
    "rr": 3.82,
    "setup": "趨勢延續",
    "theme": "QUANTUM",
-   "earnings_date": "2026-11-11",
+   "earnings_date": "2026-11-10",
    "ex_qqq_20d_pp": -1.91,
    "ex_qqq_60d_pp": -13.48,
    "dollar_vol20_musd": 263.9
@@ -682,7 +682,7 @@
    "rr": 1.14,
    "setup": "趨勢延續",
    "theme": "INTERNET",
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": -1.56,
    "ex_qqq_60d_pp": 11.44,
    "dollar_vol20_musd": 181.3
@@ -697,7 +697,7 @@
    "rr": 6.48,
    "setup": "趨勢延續",
    "theme": "SPACE",
-   "earnings_date": "2026-11-10",
+   "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": 6.26,
    "ex_qqq_60d_pp": -28.77,
    "dollar_vol20_musd": 1331.7
@@ -749,7 +749,7 @@
    "rr": 1.89,
    "setup": "趨勢延續",
    "theme": "EVTOL",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -8.64,
    "ex_qqq_60d_pp": 11.36,
    "dollar_vol20_musd": 133.6
@@ -785,7 +785,7 @@
    "rr": 1.81,
    "setup": "趨勢延續",
    "theme": "HEALTH_CONSUMER",
-   "earnings_date": "2026-11-10",
+   "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": -10.32,
    "ex_qqq_60d_pp": -24.36,
    "dollar_vol20_musd": 280.8
@@ -857,7 +857,7 @@
    "rr": 4.69,
    "setup": "趨勢延續",
    "theme": "AI_CLOUD_INFRA",
-   "earnings_date": "2026-10-09",
+   "earnings_date": "2026-10-08",
    "ex_qqq_20d_pp": -7.58,
    "ex_qqq_60d_pp": -28.76,
    "dollar_vol20_musd": 413.3
@@ -875,7 +875,7 @@
    "rr": 1.78,
    "setup": "趨勢延續",
    "theme": "FINTECH",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -10.95,
    "ex_qqq_60d_pp": -17.37,
    "dollar_vol20_musd": 448.4
@@ -892,7 +892,7 @@
    "rr": 2.35,
    "setup": "趨勢延續",
    "theme": "EV",
-   "earnings_date": "2026-11-04",
+   "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": -11.16,
    "ex_qqq_60d_pp": -12.62,
    "dollar_vol20_musd": 336.4
@@ -909,7 +909,7 @@
    "rr": 3.5,
    "setup": "趨勢延續",
    "theme": "MATERIALS_URANIUM",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -20.52,
    "ex_qqq_60d_pp": -12.71,
    "dollar_vol20_musd": 251.4
@@ -945,7 +945,7 @@
    "rr": 3.49,
    "setup": "趨勢延續",
    "theme": "NUCLEAR",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -16.8,
    "ex_qqq_60d_pp": -19.71,
    "dollar_vol20_musd": 337.3
@@ -981,7 +981,7 @@
    "rr": 1.78,
    "setup": "趨勢延續",
    "theme": "INTERNET",
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": -17.57,
    "ex_qqq_60d_pp": -2.43,
    "dollar_vol20_musd": 157.9
@@ -998,7 +998,7 @@
    "rr": 4.74,
    "setup": "趨勢延續",
    "theme": "AI_SOFTWARE",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -19.45,
    "ex_qqq_60d_pp": -12.1,
    "dollar_vol20_musd": 135.8
@@ -1015,7 +1015,7 @@
    "rr": 2.29,
    "setup": "趨勢延續",
    "theme": "HEALTH_CONSUMER",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -12.33,
    "ex_qqq_60d_pp": -17.22,
    "dollar_vol20_musd": 295.9
@@ -1033,7 +1033,7 @@
    "rr": 2.52,
    "setup": "趨勢延續",
    "theme": "INTERNET",
-   "earnings_date": "2026-10-30",
+   "earnings_date": "2026-10-29",
    "ex_qqq_20d_pp": -5.91,
    "ex_qqq_60d_pp": -26.9,
    "dollar_vol20_musd": 729.1
@@ -1086,7 +1086,7 @@
    "rr": 7.2,
    "setup": "趨勢延續",
    "theme": "CLEAN_ENERGY",
-   "earnings_date": "2026-11-10",
+   "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": -16.02,
    "ex_qqq_60d_pp": -27.67,
    "dollar_vol20_musd": 97.6
@@ -1139,7 +1139,7 @@
    "rr": 6.91,
    "setup": "趨勢延續",
    "theme": "EVTOL",
-   "earnings_date": "2026-11-05",
+   "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": -14.85,
    "ex_qqq_60d_pp": -31.17,
    "dollar_vol20_musd": 166.6
@@ -1190,7 +1190,7 @@
    "rr": 6.83,
    "setup": "趨勢延續",
    "theme": "MATERIALS_URANIUM",
-   "earnings_date": "2026-11-03",
+   "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -31.13,
    "ex_qqq_60d_pp": -22.85,
    "dollar_vol20_musd": 87.0
@@ -1207,7 +1207,7 @@
    "rr": 6.31,
    "setup": "趨勢延續",
    "theme": "EV",
-   "earnings_date": "2026-10-22",
+   "earnings_date": "2026-10-21",
    "ex_qqq_20d_pp": -20.02,
    "ex_qqq_60d_pp": -38.15,
    "dollar_vol20_musd": 59.3
@@ -1224,7 +1224,7 @@
    "rr": 3.46,
    "setup": "趨勢延續",
    "theme": "FINTECH",
-   "earnings_date": "2026-11-04",
+   "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": -25.08,
    "ex_qqq_60d_pp": -36.05,
    "dollar_vol20_musd": 114.8
@@ -1241,7 +1241,7 @@
    "rr": 5.97,
    "setup": "趨勢延續",
    "theme": "HEALTH_CONSUMER",
-   "earnings_date": "2026-11-11",
+   "earnings_date": "2026-11-10",
    "ex_qqq_20d_pp": -26.2,
    "ex_qqq_60d_pp": -38.01,
    "dollar_vol20_musd": 194.4
@@ -1277,7 +1277,7 @@
    "rr": 6.93,
    "setup": "趨勢延續",
    "theme": "INTERNET",
-   "earnings_date": "2026-11-06",
+   "earnings_date": "2026-11-05",
    "ex_qqq_20d_pp": -27.21,
    "ex_qqq_60d_pp": -50.64,
    "dollar_vol20_musd": 86.7

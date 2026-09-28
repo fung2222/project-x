@@ -21,6 +21,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     ctx = Ctx(JOB, dry_run, force, legacy, now)
     et = ctx.now_et
     session = et.date()  # 08:30 HKT = previous evening ET -> the session being reviewed
+    if force or os.environ.get("PX_RERUN") == "1":
+        # forced / late re-run before today's ET session has closed: review the last COMPLETED session instead
+        while not clock.is_trading_day(session) or (session == et.date() and not clock.session_closed(et)):
+            session -= dt.timedelta(days=1)
     if not force:
         if not clock.is_trading_day(session):
             return {"status": "skipped", "reason": f"no US session on {session} ET ({clock.holiday_name(session) or 'weekend'})"}

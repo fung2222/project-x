@@ -115,7 +115,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     n_b = sum(1 for t in trades if t.get("action") == "BUY")
     n_s = sum(1 for t in trades if t.get("action") == "SELL")
     L += ["", plain.paper_line(acct, len(pf.get("positions", [])), paper_max_positions(regime), spy_ret, qqq_ret,
-                               [f"本週買 {n_b}／賣 {n_s}"] if trades else None), "", plain.footer_line()]
+                               [f"買 {n_b}／賣 {n_s}"] if trades else None, label="本週"), "", plain.footer_line()]
     msg = "\n".join(L)
     wait = data_wait(JOB)
     if wait:

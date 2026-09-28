@@ -66,7 +66,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         notes.append(f"權益 {day_chg:+.2f} 美元")
     spy_ret, qqq_ret = paper_bench()
     dw = plain.day_word(mk.get("session_date"), ctx.now)
-    L = [f"<b>🌙 收市報告 {ctx.session}</b>（美股已收市）",
+    L = [f"<b>🌙 收市報告 {mk.get('session_date') or ctx.session}</b>（美股已收市）",
          "🌍 " + " ".join(plain.market_lines(mk.get("spy_chg_pct"), mk.get("qqq_chg_pct"), mk.get("vix"), rs.market_headline(), when=dw)), ""]
     L += plain.real_block(real_ev, rsn, trends, dw)
     if real_al:
@@ -108,7 +108,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             hist_now = archive.load_pnl() if not dry_run else hist
             if len(hist_now) >= 2:
                 img = charts.equity_chart(hist_now, archive.path_chart(f"equity_{ctx.session}.png") if not dry_run else "/tmp/px_equity_preview.png")
-                okc, rc = telegram.send_photo(img, caption=f"📈 紙上倉（對照組）同 SPY 比較（{hist_now[0]['date']} → {ctx.session}）· "
+                okc, rc = telegram.send_photo(img, caption=f"📈 紙上倉（對照組）同 SPY 比較（{hist_now[0]['date']} → {hist_now[-1]['date']}）· "
                                               f"而家 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）",
                                               dry_run=dry_run, label="close/chart")
                 results["chart"] = "ok" if okc else f"failed: {rc}"

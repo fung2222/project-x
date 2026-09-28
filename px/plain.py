@@ -22,7 +22,7 @@ def usd(x, signed=False, nd=0):
     except Exception:
         return MISSING
     if signed:
-        return f"{'+' if v >= 0 else '−'}US${abs(v):,.{nd}f}"
+        return f"{'+' if v >= 0 else '-'}US${abs(v):,.{nd}f}"
     return f"US${v:,.{nd}f}"
 
 
@@ -32,7 +32,7 @@ def hkd(x, fx, signed=False):
     except Exception:
         return MISSING
     if signed:
-        return f"{'+' if v >= 0 else '−'}HK${abs(v):,.0f}"
+        return f"{'+' if v >= 0 else '-'}HK${abs(v):,.0f}"
     return f"HK${v:,.0f}"
 
 
@@ -204,8 +204,11 @@ def buy_suggestion(ev, scan, regime=None, market_open=True):
             continue
         when = "" if market_open else "今晚開市後"
         zone = f"（價錢喺 {price(lo)}–{price(hi)} 之間先買，唔好追高）" if not market_open or not live else ""
+        sl_pct = (float(x["stop"]) / entry - 1) * 100
+        tp_pct = (float(x["target"]) / entry - 1) * 100
+        far = "，係之前高位、好遠，唔一定去到" if tp_pct > 30 else ""
         return [f"🛒 {when}考慮買入 {esc(name_of(t))}：建議買 {sh} 股約 {usd(sh * entry)}（{hkd(sh * entry, fx)}），"
-                f"止蝕 {price(x['stop'])}，止賺 {price(x['target'])}{zone}",
+                f"止蝕 {price(x['stop'])}（{sl_pct:+.0f}%），止賺 {price(x['target'])}（{tp_pct:+.0f}%{far}）{zone}",
                 "　（落咗單就話 Hermes：「買咗 " + esc(t) + " N 股 @價，止蝕…，止賺…」）"], t
     return ["今日唔建議買新股：" + "；".join(why_not[:3]) + "。"], None
 
@@ -250,6 +253,6 @@ def picks_block(scan, news=None, n=3, title="⭐ 潛力股"):
 
 
 # ---------------------------------------------------------------- paper book (one line)
-def paper_line(acct, n_pos, max_pos, spy_ret=None, qqq_ret=None, actions=None):
+def paper_line(acct, n_pos, max_pos, spy_ret=None, qqq_ret=None, actions=None, label="今日"):
     from .messages import paper_brief
-    return paper_brief(acct, n_pos, max_pos, spy_ret, qqq_ret, actions)[0]
+    return paper_brief(acct, n_pos, max_pos, spy_ret, qqq_ret, actions, label=label)[0]

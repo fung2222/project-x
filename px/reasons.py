@@ -319,8 +319,12 @@ def market_headline(min_score=MARKET_HEADLINE_MIN_SCORE):
         else:
             items = [{"headline": x.get("headline"), "source": x.get("source"), "url": x.get("url"), "ts": x.get("datetime")}
                      for x in d if x.get("headline")][:40]
-            c["__general__"] = {"ts": time.time(), "items": items}
-            _save(c)
+            if items:
+                c["__general__"] = {"ts": time.time(), "items": items}
+                _save(c)
+            else:  # Finnhub sometimes answers 200 [] — never cache "no news" as fresh; retry next run, use the old items meanwhile
+                print("[reasons] general news came back empty; not cached")
+                items = (e or {}).get("items") or []
     return pick_market_headline(items, min_score)
 
 

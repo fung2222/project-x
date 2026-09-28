@@ -491,6 +491,19 @@ class TestMarketHeadlineRelevance(unittest.TestCase):
         self.assertLess(reasons.market_relevance("Dollar near two-month high as US-Iran stalemate bolsters oil, Fed rate hike bets"),
                         reasons.market_relevance("Wall St futures drop as oil spikes after Trump rejects Iran peace proposal"))
 
+    def test_empty_general_news_is_not_cached(self):
+        from px import finnhub
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as td, mock.patch.object(reasons, "STATE_DIR", td), \
+                mock.patch.object(reasons, "network_off", return_value=False):
+            with mock.patch.object(finnhub, "get", return_value=([], None)) as g:
+                self.assertIsNone(reasons.market_headline())
+                self.assertNotIn("__general__", reasons._load())
+            fresh = [{"headline": "Wall Street closes higher as tech stocks rally", "datetime": time.time() - 60}]
+            with mock.patch.object(finnhub, "get", return_value=(fresh, None)) as g:
+                self.assertEqual(reasons.market_headline()["headline"], fresh[0]["headline"])  # retried, not stuck on the empty answer
+                g.assert_called_once()
+
     def test_stale_headline_ignored_and_no_line_when_none(self):
         items = [{"headline": "Treasury yields climb after strong jobs report", "ts": self.NOW - 30 * 3600}]
         self.assertIsNone(reasons.pick_market_headline(items, now=self.NOW))

@@ -76,3 +76,59 @@ def send(text, silent=False, dry_run=None, label=""):
             return False, _redact(res)
         ids.append(res)
     return True, ids
+
+
+def send_photo(path, caption="", dry_run=None, label=""):
+    """Send a PNG/JPG to the configured chat (group ids like -100... work the same). Returns (ok, id|error)."""
+    dry = is_dry_run() if dry_run is None else dry_run
+    if dry or telegram_disabled():
+        print(f"----- [{'DRY-RUN' if dry else 'TELEGRAM-DISABLED'}] Telegram photo {label}: {path} ({len(caption)} chars caption) -----")
+        return True, ["DRY-RUN"]
+    token = get_secret("TELEGRAM_BOT_TOKEN")
+    chat = get_secret("TELEGRAM_CHAT_ID")
+    if not token or not chat:
+        return False, "Telegram not configured (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID)"
+    res = None
+    for wait in (0, 3, 8):
+        if wait:
+            time.sleep(wait)
+        try:
+            with open(path, "rb") as f:
+                r = requests.post(f"https://api.telegram.org/bot{token}/sendPhoto",
+                                  data={"chat_id": chat, "caption": caption[:1000], "parse_mode": "HTML"},
+                                  files={"photo": (path.split("/")[-1], f, "image/png")}, timeout=30)
+            d = r.json()
+            if d.get("ok"):
+                return True, [d.get("result", {}).get("message_id")]
+            res = d.get("description", f"HTTP {r.status_code}")
+            if r.status_code in (400, 401, 403):
+                break
+        except Exception as e:
+            res = f"{type(e).__name__}: {_redact(e)}"
+    return False, _redact(res)
+
+
+def get_me():
+    """Bot identity for cutover checks (username only; token never printed)."""
+    token = get_secret("TELEGRAM_BOT_TOKEN")
+    if not token:
+        return None
+    try:
+        d = requests.get(f"https://api.telegram.org/bot{token}/getMe", timeout=15).json()
+        r = d.get("result") or {}
+        return {"ok": d.get("ok"), "username": r.get("username"), "id": r.get("id"), "name": r.get("first_name")}
+    except Exception as e:
+        return {"ok": False, "error": _redact(e)}
+
+
+def get_chat():
+    """Chat type/title of TELEGRAM_CHAT_ID (e.g. group 'Project X Nas'); id never printed."""
+    token, chat = get_secret("TELEGRAM_BOT_TOKEN"), get_secret("TELEGRAM_CHAT_ID")
+    if not token or not chat:
+        return None
+    try:
+        d = requests.get(f"https://api.telegram.org/bot{token}/getChat", params={"chat_id": chat}, timeout=15).json()
+        r = d.get("result") or {}
+        return {"ok": d.get("ok"), "type": r.get("type"), "title": r.get("title"), "error": None if d.get("ok") else d.get("description")}
+    except Exception as e:
+        return {"ok": False, "error": _redact(e)}

@@ -1,0 +1,82 @@
+{
+  "account": {
+    "name": "Project X Sim Portfolio",
+    "initial_hkd": 5000,
+    "initial_usd": 641.03,
+    "fx_rate_at_open": 7.8,
+    "start_date": "2026-07-08",
+    "phase": "PHASE 1 - 觀察者學習期"
+  },
+  "positions": [
+    {
+      "ticker": "NVDA",
+      "shares": 0.5,
+      "entry_price": 196.93,
+      "entry_date": "2026-07-08",
+      "cost_basis_usd": 98.47,
+      "rationale": "AI 晶片龍頭，平均分第一注，建立基本倉位觀察",
+      "current_price": 225.07,
+      "pnl_pct": 14.29,
+      "value_usd": 112.53,
+      "last_updated": "2026-09-28T08:30:32.989370",
+      "stop_loss": 177.24,
+      "take_profit": 236.32,
+      "dist_to_sl_pp": 24.29,
+      "dist_to_tp_pp": 5.71,
+      "risk_flag": "OK"
+    },
+    {
+      "ticker": "TSLA",
+      "shares": 0.5,
+      "entry_price": 402.9,
+      "entry_date": "2026-07-08",
+      "cost_basis_usd": 201.45,
+      "rationale": "平均分第一注，學習情緒對股價影響",
+      "current_price": 372.11,
+      "pnl_pct": -7.64,
+      "value_usd": 186.06,
+      "last_updated": "2026-09-28T08:30:33.089895",
+      "stop_loss": 362.61,
+      "take_profit": 483.48,
+      "dist_to_sl_pp": 2.36,
+      "dist_to_tp_pp": 27.64,
+      "risk_flag": "WARN"
+    },
+    {
+      "ticker": "RKLB",
+      "shares": 1.0,
+      "entry_price": 83.41,
+      "entry_date": "2026-07-08",
+      "cost_basis_usd": 83.41,
+      "rationale": "平均分第一注，高波動股適合學止損",
+      "current_price": 73.95,
+      "pnl_pct": -11.34,
+      "value_usd": 73.95,
+      "last_updated": "2026-09-28T08:30:33.183280",
+      "stop_loss": 75.07,
+      "take_profit": 100.09,
+      "dist_to_sl_pp": -1.34,
+      "dist_to_tp_pp": 31.34,
+      "risk_flag": "STOP"
+    }
+  ],
+  "cash_usd": 257.7,
+  "stop_loss_pct": 10,
+  "take_profit_pct": 20,
+  "add_position_rules": {
+    "buy_signal": "RSI<35 + 股價低於MA50 → 加 0.5 注（如現金 > 20%）",
+    "hold_signal": "中性區間 → 維持",
+    "caution_signal": "RSI>65 → 唔加，可能減 0.25 注"
+  },
+  "trade_log": [
+    {
+      "date": "2026-07-08",
+      "action": "OPEN PORTFOLIO",
+      "details": "平均分 0.5/0.5/1.0 注，留 47% 現金等信號"
+    }
+  ],
+  "total_value_usd": 630.24,
+  "total_pnl_usd": -10.79,
+  "total_pnl_pct": -1.68,
+  "last_updated": "2026-09-28T08:30:33.183301"
+}

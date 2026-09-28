@@ -1,0 +1,105 @@
+{
+  "date": "2026-09-28 05:00 HKT",
+  "data_cutoff_note": "⚠️ 數據來自 yfinance 真實報價；開盤時段波動大",
+  "vix": 14.87,
+  "spy": 771.35,
+  "fx_usdhkd": 7.8434,
+  "regime": "正常市場",
+  "portfolio_bias": "組合偏多：可持有強勢股，弱勢股單獨管理",
+  "signals": [
+    {
+      "ticker": "NVDA",
+      "price": 225.07,
+      "change_pct": 0.22,
+      "signal": "偏多持有/可分批佈局",
+      "trend": "上升趨勢",
+      "trend_score": 5,
+      "action": "趨勢偏多：可持有；若未持倉可等回踩 MA20 分批觀察",
+      "confidence": 73,
+      "reason": "趨勢=上升趨勢（score +5）。中期偏強(價>MA50)；短期上升結構；RSI健康(55.3)。",
+      "stop_loss_suggested": 202.56,
+      "take_profit_suggested": 270.08,
+      "indicators": {
+        "price": 225.07,
+        "ma50": 215.79,
+        "ma20": 221.65,
+        "price_vs_ma50_pct": 4.3,
+        "price_vs_ma20_pct": 1.54,
+        "ma20_vs_ma50_pct": 2.72,
+        "chg_5d_pct": 1.26,
+        "chg_20d_pct": -1.17,
+        "rsi14": 55.3,
+        "volume_ratio": 0.77,
+        "trend": "高於",
+        "rsi_zone": "中性"
+      }
+    },
+    {
+      "ticker": "TSLA",
+      "price": 372.11,
+      "change_pct": -1.54,
+      "signal": "偏多持有/可分批佈局",
+      "trend": "上升趨勢",
+      "trend_score": 5,
+      "action": "趨勢偏多：可持有；若未持倉可等回踩 MA20 分批觀察",
+      "confidence": 73,
+      "reason": "趨勢=上升趨勢（score +5）。中期偏強(價>MA50)；短期上升結構；RSI健康(55.3)。",
+      "stop_loss_suggested": 334.9,
+      "take_profit_suggested": 446.53,
+      "indicators": {
+        "price": 372.11,
+        "ma50": 348.25,
+        "ma20": 365.68,
+        "price_vs_ma50_pct": 6.85,
+        "price_vs_ma20_pct": 1.76,
+        "ma20_vs_ma50_pct": 5.01,
+        "chg_5d_pct": 2.15,
+        "chg_20d_pct": 4.88,
+        "rsi14": 55.3,
+        "volume_ratio": 1.16,
+        "trend": "高於",
+        "rsi_zone": "中性"
+      }
+    },
+    {
+      "ticker": "RKLB",
+      "price": 73.95,
+      "change_pct": 0.46,
+      "signal": "偏多持有/可分批佈局",
+      "trend": "上升趨勢",
+      "trend_score": 5,
+      "action": "趨勢偏多：可持有；若未持倉可等回踩 MA20 分批觀察",
+      "confidence": 73,
+      "reason": "趨勢=上升趨勢（score +5）。中期偏強(價>MA50)；短線回穩；RSI健康(59.4)；5日+14.53%。",
+      "stop_loss_suggested": 66.56,
+      "take_profit_suggested": 88.74,
+      "indicators": {
+        "price": 73.95,
+        "ma50": 69.49,
+        "ma20": 65.89,
+        "price_vs_ma50_pct": 6.42,
+        "price_vs_ma20_pct": 12.23,
+        "ma20_vs_ma50_pct": -5.17,
+        "chg_5d_pct": 14.53,
+        "chg_20d_pct": 9.51,
+        "rsi14": 59.4,
+        "volume_ratio": 0.93,
+        "trend": "高於",
+        "rsi_zone": "中性"
+      }
+    }
+  ],
+  "secondary": [
+    {
+      "ticker": "AMD",
+      "price": 630.63,
+      "change_pct": 0.22
+    },
+    {
+      "ticker": "MSFT",
+      "price": 516.17,
+      "change_pct": 3.66
+    }
+  ],
+  "learning_focus": "今日重點：趨勢(score) + MA20/MA50 結構 + 止損距離，先守紀律再談進場"
+}

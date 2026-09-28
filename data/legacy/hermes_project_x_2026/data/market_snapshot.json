@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-09-28T08:30:33.782843",
+  "label": "overnight_review",
+  "vix": 14.87,
+  "fx": 7.8435,
+  "quotes": {
+    "SPY": {
+      "price": 771.35,
+      "prev_close": 767.18,
+      "change_pct": 0.54
+    },
+    "NVDA": {
+      "price": 225.07,
+      "prev_close": 224.58,
+      "change_pct": 0.22
+    },
+    "TSLA": {
+      "price": 372.11,
+      "prev_close": 377.94,
+      "change_pct": -1.54
+    },
+    "RKLB": {
+      "price": 73.95,
+      "prev_close": 73.61,
+      "change_pct": 0.46
+    }
+  }
+}

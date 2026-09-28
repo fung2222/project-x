@@ -3,7 +3,7 @@
 Ported from Hermes's 05:00 close report, rebuilt on the px engine:
   msg 1  🌙 收市報告 — equity USD/HKD, day change, total P&L vs start (fees+FX included), SPY/QQQ/VIX, cash
   msg 2  📈 持倉結算 — close price, P&L, distance to SL/TP, risk flag (SL/TP auto-executed on paper)
-  msg 3  🧭 趨勢 + 大型科技股背景 (Mag7 context only) + 今日最強/最弱
+  msg 3  🧭 趨勢 + 今日掃描池最強/最弱 (Mag7 observer retired by Roy 2026-09-28)
   msg 4  🚀 明日觀察 Top 5 (opportunity scan on today's completed bar) + 🩺 health line
 Writes data/pnl_history.json, data/scan.json, data/reports/close_report_<date>.*, portfolio.json."""
 import json
@@ -73,10 +73,6 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         if "error" in sg:
             continue
         T.append(f"{t}：{sg['trend_label']}（分 {sg['trend_score']:+d}）RSI {f2(sg['rsi'], 0)} · {esc(sg['action'])}")
-    m7 = engine.mag7_context(ctx.now)
-    if m7["items"]:
-        T.append(f"\n<b>🏛 大型科技股背景（只作市場氣氛，唔係買入名單）</b>：{m7['mood']}（{m7['up']} 升／{m7['down']} 跌趨勢）")
-        T.append(" · ".join(f"{x['ticker']} {pct(x['change_pct'], 1)}" for x in m7["items"]))
     res = scan.run_scan(ctx.now, acct["equity_usd"], fx)
     allx = [x for x in res.get("all", []) if x.get("close")]
     try:
@@ -111,9 +107,24 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         results[part] = "ok" if ok_ else f"failed: {r}"
         if ok_ and not dry_run:
             guard.mark_sent(ctx.session, JOB, part, r)
+    # equity chart (photo) after the text parts; config-driven, guarded once per session
+    if s["telegram"].get("send_charts", True) and not guard.was_sent(ctx.session, JOB, "chart"):
+        try:
+            from .. import charts
+            hist_now = archive.load_pnl() if not dry_run else hist
+            if len(hist_now) >= 2:
+                img = charts.equity_chart(hist_now, archive.path_chart(f"equity_{ctx.session}.png") if not dry_run else "/tmp/px_equity_preview.png")
+                okc, rc = telegram.send_photo(img, caption=f"📈 紙上權益 vs SPY（{hist_now[0]['date']} → {ctx.session}）· "
+                                              f"權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）",
+                                              dry_run=dry_run, label="close/chart")
+                results["chart"] = "ok" if okc else f"failed: {rc}"
+                if okc and not dry_run:
+                    guard.mark_sent(ctx.session, JOB, "chart", rc)
+        except Exception as e:
+            results["chart"] = f"failed: {type(e).__name__}"
     if dry_run or legacy:
         for p in PARTS:
             print(archive.strip_html(msgs[p]), "\n")
     print(json.dumps({"session": ctx.session, "telegram": results, "exits": [t["id"] for t in executed]}, ensure_ascii=False))
-    good = all(v in ("ok", "already-sent") for v in results.values())
+    good = all(v in ("ok", "already-sent") for k, v in results.items() if k != "chart")
     return {"status": "ok" if good else "telegram_failed", "telegram": results, "messages": msgs}

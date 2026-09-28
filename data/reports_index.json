@@ -1,0 +1,203 @@
+{
+ "reports": [
+  {
+   "date": "2026-09-14",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-14.html",
+   "md": "reports/daily_report_2026-09-14.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-14",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-14",
+   "kind": "weekly",
+   "kind_zh": "週報",
+   "file": "reports/weekly_report_2026-09-14.html",
+   "md": "reports/weekly_report_2026-09-14.md",
+   "summary": "（Grok Bot 時期）📊 Project X - 每週績效報告",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-15.html",
+   "md": "reports/daily_report_2026-09-15.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-15",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-16",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-16.html",
+   "md": "reports/daily_report_2026-09-16.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-16",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-17",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-17.html",
+   "md": "reports/daily_report_2026-09-17.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-17",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-18",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-18.html",
+   "md": "reports/daily_report_2026-09-18.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-18",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-21",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-21.html",
+   "md": "reports/daily_report_2026-09-21.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-21",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-21",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-21.html",
+   "md": "reports/open_report_2026-09-21.md",
+   "summary": "（Grok Bot 時期）🔔 開市監控 2026-09-21 22:19 HKT",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-21",
+   "kind": "weekly",
+   "kind_zh": "週報",
+   "file": "reports/weekly_report_2026-09-21.html",
+   "md": "reports/weekly_report_2026-09-21.md",
+   "summary": "（Grok Bot 時期）📊 Project X - 每週績效報告",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-22.html",
+   "md": "reports/daily_report_2026-09-22.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-22",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-22",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-22.html",
+   "md": "reports/open_report_2026-09-22.md",
+   "summary": "（Grok Bot 時期）🔔 開市監控 2026-09-22 22:15 HKT",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-23",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-23.html",
+   "md": "reports/daily_report_2026-09-23.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-23",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-23",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-23.html",
+   "md": "reports/open_report_2026-09-23.md",
+   "summary": "（Grok Bot 時期）🔔 開市監控 2026-09-23 22:13 HKT",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-24",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-24.html",
+   "md": "reports/daily_report_2026-09-24.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-24",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-24",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-24.html",
+   "md": "reports/open_report_2026-09-24.md",
+   "summary": "（Grok Bot 時期）🔔 開市監控 2026-09-24 22:04 HKT",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-25",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-09-25.html",
+   "md": "reports/daily_report_2026-09-25.md",
+   "summary": "（Grok Bot 時期）Project X 每日決策簡報 — 2026-09-25",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-25",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-25.html",
+   "md": "reports/open_report_2026-09-25.md",
+   "summary": "（Grok Bot 時期）🔔 開市監控 2026-09-25 21:39 HKT",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  },
+  {
+   "date": "2026-09-28",
+   "kind": "weekly",
+   "kind_zh": "週報",
+   "file": "reports/weekly_report_2026-09-28.html",
+   "md": "reports/weekly_report_2026-09-28.md",
+   "summary": "（Grok Bot 時期）📊 Project X - 每週績效報告",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T11:12:59+08:00"
+  }
+ ],
+ "updated": "2026-09-28T11:12:59+08:00"
+}

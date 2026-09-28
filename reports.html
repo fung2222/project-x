@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>報告 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+(async () => {
+  const [idx, lidx] = await Promise.all([PX.json('data/reports_index.json'), PX.json('data/legacy/hermes_project_x_2026/data/reports_index.json')]);
+  const px = ((idx && idx.reports) || []).slice().reverse();
+  const lg = ((lidx && lidx.reports) || []).slice().reverse();
+  PX.setUpdated(`報告：${(idx && idx.updated) || '—'}`);
+  const kinds = [...new Set(px.map(r => r.kind))];
+  document.getElementById('content').innerHTML = `
+    <div class="card"><h2>📰 Project X 報告存檔</h2><div class="muted">每份推送到 Telegram 嘅報告都有一份文字副本（開市監控／每日分析／收市報告／隔夜複盤／週報）。</div>
+      <div id="flt" style="margin:8px 0">${['all', ...kinds].map(k => `<a href="#" data-k="${k}" class="badge">${k === 'all' ? '全部' : PX.esc((px.find(r => r.kind === k) || {}).kind_zh || k)}</a>`).join('')}</div>
+      <div id="list">${px.length ? '' : '<div class="empty">今晚開始累積</div>'}</div></div>
+    <details class="card"><summary>🗄 Legacy：Hermes 報告（${lg.length} 份，2026-07-09 → 2026-09-28，唯讀）</summary>
+      ${lg.map(r => `<div><a href="data/legacy/hermes_project_x_2026/data/${PX.esc(r.file)}">${PX.esc(r.date)}</a> <span class="muted">${PX.esc(r.summary || '')}</span></div>`).join('')}</details>`;
+  const render = k => { document.getElementById('list').innerHTML = px.filter(r => k === 'all' || r.kind === k).map(r =>
+    `<div class="position-row"><div><a href="data/${PX.esc(r.file)}">${PX.esc(r.date)} · ${PX.esc(r.kind_zh || r.kind)}</a><div class="position-detail">${PX.esc(r.summary || '')}</div></div>
+     <div><a class="muted" href="data/${PX.esc(r.md)}">txt</a></div></div>`).join(''); };
+  if (px.length) render('all');
+  document.getElementById('flt').addEventListener('click', e => { const k = e.target.dataset.k; if (k) { e.preventDefault(); render(k); } });
+})();
+</script></body></html>

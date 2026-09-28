@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>學習 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+PX.setUpdated('學習中心');
+document.getElementById('content').innerHTML = `
+<div class="card hero"><h2>📚 學習中心</h2><p>由零開始，每日學少少。呢度嘅規則同系統程式入面用緊嘅一樣。</p></div>
+<div class="card"><h2>📖 必學術語</h2>
+<p><b>RSI(14)</b>：0–100 動能指標（Wilder 算法）。&lt;30 超賣、&gt;70 超買。超賣唔等於要買，要睇趨勢。</p>
+<p><b>MA20 / MA50 / MA200</b>：20／50／200 日平均收市價。價 &gt; MA20 &gt; MA50 而且 MA50 向上 = 上升結構。</p>
+<p><b>ATR(14)</b>：平均真實波幅。高波幅股嘅止損要按 ATR 放闊，唔係一刀切 −10%。</p>
+<p><b>相對強度（vs QQQ）</b>：隻股 20／60 日升幅減 QQQ 升幅。跑贏大市嘅股先值得研究。</p>
+<p><b>R:R（回報／風險）</b>：(目標 − 入場) ÷ (入場 − 止損)。少過 2 唔值得做。</p>
+<p><b>VIX</b>：&lt;20 正常（最多 3 隻、信心 ≥75%）；20–30 謹慎（最多 2 隻、≥80%）；&gt;30 防禦（最多 1 隻、≥85%）。</p>
+<p><b>成交量比</b>：最後一日（已收市）成交量 ÷ 之前 20 日平均。</p>
+<p><b>業績日（催化劑）</b>：業績前後股價可以跳空，系統喺業績前 5 個交易日唔開新倉。</p></div>
+<div class="card"><h2>🎯 Roy 嘅規則（程式強制）</h2><ol style="padding-left:18px">
+<li>資金約 HKD 10,000（≈ US$1,280），富途；紙上組合同實盤對齊。</li>
+<li>最多 3 隻；每隻 ≤ 25%；現金 ≥ 20%；每注最大風險 2%。</li>
+<li>信心 ≥ 75% 先考慮；每單一定預設止損＋止盈。</li>
+<li>唔攤平、唔加倉；止盈後唔 FOMO 追返（冷靜期）；大跌穿止損即走。</li>
+<li>唔好頻繁細額加減倉：每單來回手續費最少 US$2，細資金好易被食晒。</li>
+<li>揀高潛力、股價適中嘅細中型股；Mag7 呢類大股一股都太貴，只作大市參考。</li>
+<li>所有預測都係情境（基準／樂觀／悲觀），唔係保證。最終落單由 Roy 自己決定。</li></ol></div>
+<div class="card"><h2>📱 富途落單 checklist</h2><ol style="padding-left:18px">
+<li>睇 Top 5：現價喺唔喺「入場區」？唔喺就唔追。</li>
+<li>用限價單，股數跟「建議注碼」。</li>
+<li>即刻設止損（條件單）同止盈價。</li>
+<li>買完喺 Telegram／Hermes 更新 futu_positions（網站「Roy 富途倉」會顯示）。</li>
+<li>業績前、VIX &gt; 30、或者已經 3 隻持倉 → 唔開新倉。</li></ol></div>
+<div class="card"><h2>❌ 常見錯誤</h2><p>追高殺低 · 唔設止損 · 過度交易（手續費食晒利潤）· 單一股票 all-in · FOMO · 攤平蝕錢股。</p></div>
+<div class="card card-soft"><h2>🎓 階段</h2><p>現階段：紙上組合＋每日報告＋富途模擬／細注實盤（2026 年 10 月初開始真錢 HKD 10k）。先守紀律，再談回報。</p></div>`;
+</script></body></html>

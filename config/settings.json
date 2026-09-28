@@ -99,16 +99,7 @@
       "QQQ",
       "^VIX"
     ],
-    "fx": "HKD=X",
-    "mag7_context": [
-      "AAPL",
-      "MSFT",
-      "GOOGL",
-      "AMZN",
-      "META",
-      "NVDA",
-      "TSLA"
-    ]
+    "fx": "HKD=X"
   },
   "names": {
     "NVDA": "NVIDIA",
@@ -340,9 +331,10 @@
   "telegram": {
     "enabled": true,
     "site_url": "https://fung2222.github.io/project-x-minimax/",
-    "max_daily_messages": 3,
     "hourly_first_of_session_status": true,
-    "footer": "紙上模擬；真錢落單由你喺富途執行。"
+    "footer": "紙上模擬；真錢落單由你喺富途執行。",
+    "send_charts": true,
+    "_destination": "After cutover: Roy's Telegram group 'Project X Nas' via Hermes's bot (see docs/HERMES_HANDOVER.md). Chat id + token ONLY via env (TELEGRAM_CHAT_ID / TELEGRAM_BOT_TOKEN); never commit them."
   },
   "legacy": {
     "grokbot_state_path": "/home/box/sand-data/agents/5ae81f5d-f7a3-4247-9353-f342b925b25b/automations/position_tracker_state.json",

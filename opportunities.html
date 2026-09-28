@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>機會掃描 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+(async () => {
+  const [scan, bt, pf] = await Promise.all([PX.json('data/scan.json'), PX.json('data/backtest/scan_variants_2026-09-28.json'), PX.json('portfolio.json')]);
+  const fx = (scan && scan.fx_usdhkd) || 7.8;
+  PX.setUpdated(`掃描：${(scan && scan.generated_at) || '—'}`);
+  if (!scan) { document.getElementById('content').innerHTML = '<div class="empty">未有掃描數據（收市報告／每日分析會生成）</div>'; return; }
+  const live = bt && bt.live; const sl = live && live.signal_level; const ps = live && live.portfolio_sim; const bm = live && live.benchmarks;
+  const all = scan.all || [];
+  document.getElementById('content').innerHTML = `
+    ${PX.freshness(scan.generated_at, 30, '機會掃描')}
+    <div class="card hero"><h2>🚀 高潛力機會掃描（核心產品）</h2>
+      <div>揀細中型高增長／動能股：流動性（20日成交額 ≥ US$20M）、股價 ≥ $2、交易所上市（冇 OTC）、每注 ≤ 25%（${PX.usd(scan.max_position_usd, 0)}）買得起 ≥ 2 股、
+      價 > MA50、R:R ≥ 2、唔追高（離 MA20 ≤ 3 ATR）、業績前 5 個交易日唔開新倉、每個主題最多 1 隻。</div>
+      <div style="margin-top:6px;font-size:12px;opacity:.85">掃 ${scan.scanned} 隻 · ${scan.passed} 隻過濾 · 每注最大風險 ${PX.usd(scan.risk_per_trade_usd, 0)}（2%）· ${PX.esc(scan.bar_date)} 收市數據</div></div>
+    <div class="card"><h2>🏆 今日 Top ${(scan.top || []).length}</h2>${(scan.top || []).length ? scan.top.map((x, i) => PX.oppCard(x, i, fx)).join('') : '<div class="empty">今日冇名單</div>'}
+      ${(scan.near_misses || []).length ? `<div class="muted" style="margin-top:8px">差少少：${scan.near_misses.map(m => `${PX.esc(m.ticker)}（${PX.esc((m.fail || [])[0])}）`).join('；')}</div>` : ''}</div>
+    <div class="card card-soft"><h2>🧪 回測（誠實版）</h2>${live ? `
+      <div>期間 ${PX.esc(live.period.from)} → ${PX.esc(live.period.to)}（${live.period.trading_days} 個交易日），同一套規則，下一日開市價入場。</div>
+      <div class="tbl-wrap"><table class="tbl"><tr><th></th><th>次數</th><th>勝率</th><th>命中目標</th><th>平均 R</th><th>最大回撤（R）</th></tr>
+      <tr><td>每日 Top 1</td><td>${sl.top1_each_day.n}</td><td>${(sl.top1_each_day.win_rate * 100).toFixed(0)}%</td><td>${(sl.top1_each_day.target_hit_rate * 100).toFixed(0)}%</td><td>${sl.top1_each_day.avg_r}</td><td>${sl.top1_each_day.max_drawdown_r}</td></tr>
+      <tr><td>每日 Top 5</td><td>${sl.top5_each_day.n}</td><td>${(sl.top5_each_day.win_rate * 100).toFixed(0)}%</td><td>${(sl.top5_each_day.target_hit_rate * 100).toFixed(0)}%</td><td>${sl.top5_each_day.avg_r}</td><td>${sl.top5_each_day.max_drawdown_r}</td></tr>
+      <tr><td>基準：所有流動股（冇評分）</td><td>${sl.baseline_all_liquid_names_same_exits.n}</td><td>${(sl.baseline_all_liquid_names_same_exits.win_rate * 100).toFixed(0)}%</td><td>${(sl.baseline_all_liquid_names_same_exits.target_hit_rate * 100).toFixed(0)}%</td><td>${sl.baseline_all_liquid_names_same_exits.avg_r}</td><td>${sl.baseline_all_liquid_names_same_exits.max_drawdown_r}</td></tr></table></div>
+      <div style="margin-top:8px">組合模擬（US$1,280、最多 3 隻、每日最多 1 次開倉、計手續費）：<b class="${PX.cls(ps.return_pct)}">${PX.pct(ps.return_pct)}</b>，最大回撤 ${PX.pct(ps.max_drawdown_pct)}，${ps.trades} 單，勝率 ${(ps.win_rate * 100).toFixed(0)}%。
+      同期 QQQ ${PX.pct(bm.QQQ_buy_hold_pct_and_mdd[0])}（回撤 ${PX.pct(bm.QQQ_buy_hold_pct_and_mdd[1])}）、SPY ${PX.pct(bm.SPY_buy_hold_pct_and_mdd[0])}、股票池平均持有 ${PX.pct(bm.universe_equal_weight_buy_hold_pct)}。</div>
+      <div class="fresh-warn" style="margin-top:8px">結論：呢套掃描喺過去一年<b>冇證明到有優勢</b>（跑輸 QQQ 買入持有；比冇評分嘅基準只係好少少）。Top 5 係「值得研究嘅名單」，唔係買入訊號。倖存者偏差、冇模擬業績日、日線次序未知。詳見 docs/AUDIT.md。</div>` : '<div class="empty">未有回測數據</div>'}</div>
+    <div class="card"><h2>📋 全部掃描結果</h2><div class="tbl-wrap"><table class="tbl"><tr><th>股票</th><th>分數</th><th>過濾</th><th>價</th><th>RSI</th><th>R:R</th><th>vs QQQ 20/60日</th><th>成交額</th><th>業績日</th><th>未過原因</th></tr>
+      ${all.map(x => `<tr><td><b>${PX.esc(x.ticker)}</b> <span class="muted">${PX.esc(x.theme || '')}</span></td><td>${x.score ?? '—'}</td><td>${x.pass ? '<span class="badge badge-ok">✓</span>' : '<span class="badge badge-bad">✗</span>'}</td>
+      <td>${PX.usd(x.close)}</td><td>${x.rsi ?? '—'}</td><td>${x.rr ?? '—'}</td><td>${x.ex_qqq_20d_pp ?? '—'} / ${x.ex_qqq_60d_pp ?? '—'}</td><td>${x.dollar_vol20_musd != null ? '$' + x.dollar_vol20_musd + 'M' : '—'}</td>
+      <td>${PX.esc(x.earnings_date || '—')}</td><td class="muted">${PX.esc((x.fail || []).join('；'))}</td></tr>`).join('')}</table></div></div>`;
+})();
+</script></body></html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>信號 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+(async () => {
+  const [rep, scan] = await Promise.all([PX.json('daily_report.json'), PX.json('data/scan.json')]);
+  if (!rep) { document.getElementById('content').innerHTML = '<div class="empty">未有每日分析</div>'; return; }
+  PX.setUpdated(`更新：${rep.timestamp || rep.date}`);
+  const earn = {}; ((scan && scan.all) || []).forEach(x => { if (x.earnings_date) earn[x.ticker] = x.earnings_date; });
+  const row = s => { const ind = s.indicators || {}; const ed = s.earnings_date || earn[s.ticker];
+    return `<tr><td><b>${PX.esc(s.ticker)}</b>${s.is_owned ? ' <span class="badge badge-ok">持有</span>' : ''}</td><td>${PX.usd(s.price)}</td><td class="${PX.cls(s.change_pct)}">${PX.pct(s.change_pct)}</td>
+    <td>${PX.esc(s.signal)}</td><td>${s.confidence ?? '—'}%</td><td>${s.rsi ?? '—'}</td><td>${s.trend_score != null ? (s.trend_score > 0 ? '+' : '') + s.trend_score : '—'} ${PX.esc(s.trend_label || '')}</td>
+    <td>${ind.price_vs_ma20_pct != null ? PX.pct(ind.price_vs_ma20_pct, 1) : '—'} / ${ind.price_vs_ma50_pct != null ? PX.pct(ind.price_vs_ma50_pct, 1) : '—'}</td>
+    <td>${s.vol_ratio ?? '—'}</td><td>${PX.esc(ed ? String(ed).slice(0, 10) : '—')}</td><td class="muted">${PX.esc((s.reasons || []).join('；'))}</td></tr>`; };
+  const head = '<tr><th>股票</th><th>價</th><th>變幅</th><th>信號</th><th>信心</th><th>RSI</th><th>趨勢</th><th>vs MA20/MA50</th><th>量比</th><th>業績日</th><th>理由</th></tr>';
+  const v3 = rep.v3 || {};
+  document.getElementById('content').innerHTML = `
+    ${PX.freshness(rep.timestamp, 30, '每日分析')}
+    <div class="card card-soft"><h2>📊 核心＋次要股信號</h2><div class="muted">${PX.esc(rep.data_note || '')}｜買入門檻：信心 ≥ ${Math.round(((rep.guardrail || {}).min_confidence || 0.75) * 100)}%，仲要過晒 gates（setup、成交量、趨勢、組合限制、冷靜期）。</div></div>
+    <div class="card"><div class="tbl-wrap"><table class="tbl">${head}${(rep.signals || []).map(row).join('')}</table></div></div>
+    ${(rep.opportunity_signals || []).length ? `<div class="card"><h2>🔎 舊機會名單信號（RSI 模型）</h2><div class="tbl-wrap"><table class="tbl">${head}${rep.opportunity_signals.map(row).join('')}</table></div></div>` : ''}
+    ${v3.teaching ? `<div class="card"><h2>🎓 今日教學</h2><p>${PX.esc(v3.teaching)}</p></div>` : ''}
+    ${v3.scenarios ? `<div class="card"><h2>🔮 情境（唔係保證）</h2><p><b>基準</b>：${PX.esc(v3.scenarios.base)}</p><p><b>樂觀</b>：${PX.esc(v3.scenarios.bull)}</p><p><b>悲觀</b>：${PX.esc(v3.scenarios.bear)}</p>
+      ${(v3.invalidation || []).length ? `<p><b>失效條件</b>：${v3.invalidation.map(PX.esc).join('；')}</p>` : ''}</div>` : ''}
+    ${v3.gates ? `<div class="card"><h2>🚦 專業過濾（gates）</h2>${(v3.decisions && v3.decisions.skipped || []).map(x => `<div>${PX.esc(x.ticker)} ${x.confidence}% → ${PX.esc(x.why)}</div>`).join('') || '<div class="empty">今日冇 BUY 候選</div>'}</div>` : ''}`;
+})();
+</script></body></html>

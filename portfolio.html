@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>組合 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+(async () => {
+  const [pf, hist, futu, lpf, lhist] = await Promise.all([PX.json('portfolio.json'), PX.json('data/pnl_history.json'), PX.json('data/futu_positions.json'),
+    PX.json('data/legacy/hermes_project_x_2026/data/portfolio.json'), PX.json('data/legacy/hermes_project_x_2026/data/pnl_history.json')]);
+  const a = (pf && pf.account) || {}; const fx = a.fx_usdhkd || 7.8; const h = hist || [];
+  PX.setUpdated(`更新：${(pf && pf.updated) || '—'}`);
+  const pos = (pf && pf.positions) || [];
+  const trades = ((pf && pf.trade_log) || []).slice().reverse();
+  const r = (pf && pf.rules) || {};
+  const bar = p => { const sl = p.stop_loss_price, tp = p.take_profit_price, px = p.current_price; if (!sl || !tp || !px) return '';
+    const f = Math.max(0, Math.min(1, (px - sl) / (tp - sl))); return `<div class="bar" title="SL→TP"><i style="left:0;width:${(f * 100).toFixed(0)}%"></i></div><div class="muted">SL ${PX.usd(sl)} ←→ TP ${PX.usd(tp)}</div>`; };
+  const fAge = futu && futu.last_synced ? futu.last_synced : null;
+  document.getElementById('content').innerHTML = `
+    <div class="card hero"><h2>💼 紙上組合（HKD 10,000 ≈ US$1,280，${PX.esc(a.rebase_date || '')} 起）</h2>
+      <div>權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b>${PX.usd(a.total_pnl_usd)}（${PX.pct(a.total_return_pct)}）</b></div>
+      <div style="font-size:12px;opacity:.85;margin-top:4px">已實現 ${PX.usd(a.realized_pnl_usd)} · 未實現 ${PX.usd(a.unrealized_pnl_usd)} · 費用 ${PX.usd(a.total_fees_usd)} · FX ${fx} · 現金 ${PX.usd(a.cash_usd)}（${Number(a.cash_pct || 0).toFixed(1)}%）</div></div>
+    <div class="card"><h2>📊 持倉（${pos.length}/3）</h2>${pos.length ? pos.map(p => `
+      <div class="position-row" style="display:block"><div style="display:flex;justify-content:space-between"><div><b>${PX.esc(p.ticker)}</b> × ${p.shares} @ ${PX.usd(p.entry_price)} <span class="muted">${PX.esc(p.entry_date || '')} · ${PX.esc(p.theme || '')}</span></div>
+      <div class="${PX.cls(p.pnl_pct)}" style="font-weight:700">${PX.pct(p.pnl_pct)} (${PX.usd(p.pnl_usd)})</div></div>
+      <div class="muted">現價 ${PX.usd(p.current_price)} · 市值 ${PX.usd(p.value_usd)}（${a.equity_usd ? (p.value_usd / a.equity_usd * 100).toFixed(1) : '—'}%）· 距 SL ${p.dist_to_sl_pct ?? '—'}% · 距 TP ${p.dist_to_tp_pct ?? '—'}%</div>${bar(p)}</div>`).join('') : '<div class="empty">空倉</div>'}</div>
+    <div class="card"><h2>📈 權益曲線 vs SPY</h2><div class="chart">${h.length > 1 ? PX.lineChart([h.map(x => x.equity_usd), h.map(x => x.spy_close ? x.spy_close / h[0].spy_close * h[0].equity_usd : null)], h.map(x => x.date)) : '<div class="empty">未夠數據</div>'}</div></div>
+    <div class="card"><h2>🧾 交易紀錄</h2><div class="tbl-wrap"><table class="tbl"><tr><th>ID</th><th>日期</th><th>股票</th><th>動作</th><th>股數</th><th>入場</th><th>出場</th><th>費用</th><th>淨 P&L</th><th>原因</th></tr>
+      ${trades.map(t => `<tr><td>${PX.esc(t.id)}</td><td>${PX.esc(t.date)}</td><td>${PX.esc(t.ticker)}</td><td>${PX.esc(t.action)}</td><td>${t.shares ?? ''}</td><td>${PX.usd(t.entry_price)}</td><td>${t.exit_price ? PX.usd(t.exit_price) : '—'}</td><td>${t.fee_usd != null ? PX.usd(t.fee_usd) : '—'}</td>
+      <td class="${PX.cls(t.net_pnl_usd)}">${t.net_pnl_usd != null ? PX.usd(t.net_pnl_usd) : '—'}</td><td class="muted">${PX.esc((t.reason || t.exit_reason || '').toString().slice(0, 60))}</td></tr>`).join('')}</table></div></div>
+    <div class="card"><h2>🏦 Roy 富途倉（手動鏡像，唔係系統持倉）</h2>
+      ${futu ? `<div class="muted">${PX.esc(futu.platform || '')} · ${PX.esc(futu.account_type || '')} · 最後同步 ${PX.esc(fAge || '—')}</div>
+      ${PX.freshness(fAge && fAge.replace(' HKT', '+08:00').replace('T', 'T'), 24 * 7, '富途鏡像')}
+      ${(futu.positions || []).map(p => `<div class="position-row"><div><b>${PX.esc(p.ticker)}</b> × ${p.shares} @ ${PX.usd(p.entry_price)}<div class="position-detail">${PX.esc(p.rationale || '')}（同步時價 ${PX.usd(p.current_price)}）</div></div><div class="${PX.cls(p.pnl_pct)}">${PX.pct(p.pnl_pct)}</div></div>`).join('') || '<div class="empty">冇持倉紀錄</div>'}
+      ${(futu.pending_actions || []).length ? `<div class="muted">待辦：${futu.pending_actions.map(PX.esc).join('；')}</div>` : ''}
+      <div class="muted" style="margin-top:6px">由 Roy 提供、Hermes 人手更新 data/futu_positions.json；系統永遠唔會自動落單。</div>` : '<div class="empty">未有富途鏡像</div>'}</div>
+    <div class="card card-soft"><h2>⚙️ 規則（程式強制）</h2><div class="kv">
+      <div><span>最多持倉</span>${r.max_positions ?? 3} 隻</div><div><span>單一股票上限</span>${Math.round((r.max_position_pct ?? .25) * 100)}%</div>
+      <div><span>現金下限</span>${Math.round((r.min_cash_pct ?? .2) * 100)}%</div><div><span>最低信心</span>${Math.round((r.min_confidence ?? .75) * 100)}%</div>
+      <div><span>每注風險</span>≤ ${Math.round((r.risk_per_trade_pct ?? .02) * 100)}%</div><div><span>每日新倉</span>≤ ${r.max_new_entries_per_day ?? 1}</div>
+      <div><span>攤平／加倉</span>禁止</div><div><span>冷靜期</span>止損後 ${r.cooldown_after_sl_days ?? 5} / 止盈後 ${r.cooldown_after_tp_days ?? 3} 交易日</div>
+      <div><span>手續費模型</span>max(US$1, 0.5%)</div><div><span>SL/TP</span>每單預設，觸發自動執行</div></div></div>
+    <details class="card"><summary>🗄 Legacy：Hermes 舊模擬倉（HKD 5k，2026-07-08 起，唯讀）</summary>
+      <p class="muted" style="margin:8px 0">止損只標記從未執行（RKLB 07-16 起跌穿 −10% 仍持有；TSLA 曾 −24.7%）。唔同 Project X 合併計算。</p>
+      ${lpf ? `<div>總值 ${PX.usd(lpf.total_value_usd)}（${PX.pct(lpf.total_pnl_pct)}）· 現金 ${PX.usd(lpf.cash_usd)} · ${(lpf.positions || []).map(p => `${PX.esc(p.ticker)} ${p.shares}股 ${PX.pct(p.pnl_pct)}`).join(' · ')}</div>` : ''}
+      <div class="chart">${lhist && lhist.length > 1 ? PX.lineChart([lhist.map(x => x.total_value_usd)], lhist.map(x => x.date), ['#94a3b8']) : ''}</div></details>`;
+})();
+</script></body></html>

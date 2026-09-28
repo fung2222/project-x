@@ -12,7 +12,7 @@ import os
 import re
 
 from . import clock
-from .config import path
+from .config import path  # noqa: F401 (re-exported)
 
 DATA = path("data")
 REPORTS = os.path.join(DATA, "reports")
@@ -94,6 +94,12 @@ def save_scan(result):
                                            "earnings_date", "ex_qqq_20d_pp", "ex_qqq_60d_pp", "dollar_vol20_musd")}
                    for x in result.get("all", [])]
     _save(SCAN, slim)
+
+
+def path_chart(name):
+    d = os.path.join(DATA, "charts")
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, name)
 
 
 def load_scan():

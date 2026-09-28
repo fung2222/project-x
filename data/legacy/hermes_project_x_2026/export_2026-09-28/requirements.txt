@@ -1,0 +1,22 @@
+# Project X 模擬系統依賴
+# Python 3.13 (uv venv @ /opt/data/project_x_learning/.venv)
+# 安裝方法：uv venv .venv && uv pip install -r requirements.txt
+
+# --- project_x_learning/ ---
+yfinance>=0.2.40
+pandas>=2.0
+numpy>=1.24
+requests>=2.31
+pytz>=2024.1
+curl-cffi>=0.7
+
+# --- mag7_observer/ ---
+Pillow>=10.0
+cairosvg>=2.7
+markdown-it-py>=3.0
+websockets>=12.0
+
+# --- shared / system ---
+# Telegram: curl 連 https://api.telegram.org（已內建）
+# Git push: 已內建或用 GitHub token
+# uv (for venv): https://docs.astral.sh/uv/

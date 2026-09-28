@@ -1,0 +1,346 @@
+{
+  "reports": [
+    {
+      "date": "2026-07-09",
+      "file": "close_report_2026-07-09.html",
+      "summary": "收市報告 · 持倉總值 $640.14 (-0.14%) · VIX 16.9",
+      "pnl": -0.14
+    },
+    {
+      "date": "2026-07-10",
+      "file": "daily_report_2026-07-10.html",
+      "summary": "開盤報告 · 總值 $645.74 (+0.73%) · VIX 15.74",
+      "pnl": 0.73
+    },
+    {
+      "date": "2026-07-13",
+      "file": "daily_report_2026-07-13.html",
+      "summary": "Open report · Total $641.83 (+0.12%) · VIX 15.03",
+      "pnl": 0.12
+    },
+    {
+      "date": "2026-07-14",
+      "file": "daily_report_2026-07-14.html",
+      "summary": "開盤報告 · 總值 $639.10 (-0.30%) · VIX 16.78",
+      "pnl": -0.3
+    },
+    {
+      "date": "2026-07-15",
+      "file": "daily_report_2026-07-15.html",
+      "summary": "Open report - Total $644.77 (+0.58%) - VIX 17.16",
+      "pnl": 0.58
+    },
+    {
+      "date": "2026-07-16",
+      "file": "daily_report_2026-07-16.html",
+      "summary": "開盤趨勢 ·  (-1.40%) · VIX 16.17",
+      "pnl": -1.4
+    },
+    {
+      "date": "2026-07-17",
+      "file": "daily_report_2026-07-17.html",
+      "summary": "開盤趨勢 ·  (-3.89%) · VIX 19.06",
+      "pnl": -3.89
+    },
+    {
+      "date": "2026-07-20",
+      "file": "daily_report_2026-07-20.html",
+      "summary": "開盤趨勢 ·  (-2.99%) · VIX 18.14",
+      "pnl": -2.99
+    },
+    {
+      "date": "2026-07-21",
+      "file": "daily_report_2026-07-21.html",
+      "summary": "開盤趨勢 ·  (-4.86%) · VIX 17.83",
+      "pnl": -4.86
+    },
+    {
+      "date": "2026-07-22",
+      "file": "daily_report_2026-07-22.html",
+      "summary": "開盤趨勢 ·  (-3.24%) · VIX 17.36",
+      "pnl": -3.24
+    },
+    {
+      "date": "2026-07-23",
+      "file": "daily_report_2026-07-23.html",
+      "summary": "開盤趨勢 ·  (-6.46%) · VIX 19.29",
+      "pnl": -6.46
+    },
+    {
+      "date": "2026-07-24",
+      "file": "daily_report_2026-07-24.html",
+      "summary": "開盤趨勢 ·  (-7.81%) · VIX 18.89",
+      "pnl": -7.81
+    },
+    {
+      "date": "2026-07-27",
+      "file": "daily_report_2026-07-27.html",
+      "summary": "開盤趨勢 ·  (-9.01%) · VIX 17.69",
+      "pnl": -9.01
+    },
+    {
+      "date": "2026-07-28",
+      "file": "daily_report_2026-07-28.html",
+      "summary": "開盤趨勢 ·  (-10.86%) · VIX 18.67",
+      "pnl": -10.86
+    },
+    {
+      "date": "2026-07-29",
+      "file": "daily_report_2026-07-29.html",
+      "summary": "開盤趨勢 ·  (-10.49%) · VIX 18.92",
+      "pnl": -10.49
+    },
+    {
+      "date": "2026-07-30",
+      "file": "daily_report_2026-07-30.html",
+      "summary": "開盤趨勢 ·  (-11.62%) · VIX 18.91",
+      "pnl": -11.62
+    },
+    {
+      "date": "2026-07-31",
+      "file": "daily_report_2026-07-31.html",
+      "summary": "開盤趨勢 ·  (-9.85%) · VIX 17.08",
+      "pnl": -9.85
+    },
+    {
+      "date": "2026-08-03",
+      "file": "daily_report_2026-08-03.html",
+      "summary": "開盤趨勢 ·  (-10.33%) · VIX 16.0",
+      "pnl": -10.33
+    },
+    {
+      "date": "2026-08-04",
+      "file": "daily_report_2026-08-04.html",
+      "summary": "開盤趨勢 ·  (-6.54%) · VIX 15.57",
+      "pnl": -6.54
+    },
+    {
+      "date": "2026-08-05",
+      "file": "daily_report_2026-08-05.html",
+      "summary": "開盤趨勢 ·  (-5.95%) · VIX 16.93",
+      "pnl": -5.95
+    },
+    {
+      "date": "2026-08-06",
+      "file": "daily_report_2026-08-06.html",
+      "summary": "開盤趨勢 ·  (-6.53%) · VIX 16.02",
+      "pnl": -6.53
+    },
+    {
+      "date": "2026-08-07",
+      "file": "daily_report_2026-08-07.html",
+      "summary": "開盤趨勢 ·  (-5.02%) · VIX 15.28",
+      "pnl": -5.02
+    },
+    {
+      "date": "2026-08-10",
+      "file": "daily_report_2026-08-10.html",
+      "summary": "開盤趨勢 ·  (-3.49%) · VIX 15.43",
+      "pnl": -3.49
+    },
+    {
+      "date": "2026-08-11",
+      "file": "daily_report_2026-08-11.html",
+      "summary": "開盤趨勢 ·  (-4.49%) · VIX 15.55",
+      "pnl": -4.49
+    },
+    {
+      "date": "2026-08-12",
+      "file": "daily_report_2026-08-12.html",
+      "summary": "開盤趨勢 ·  (-4.11%) · VIX 15.28",
+      "pnl": -4.11
+    },
+    {
+      "date": "2026-08-13",
+      "file": "daily_report_2026-08-13.html",
+      "summary": "開盤趨勢 ·  (-4.67%) · VIX 14.44",
+      "pnl": -4.67
+    },
+    {
+      "date": "2026-08-14",
+      "file": "daily_report_2026-08-14.html",
+      "summary": "開盤趨勢 ·  (-2.63%) · VIX 14.51",
+      "pnl": -2.63
+    },
+    {
+      "date": "2026-08-17",
+      "file": "daily_report_2026-08-17.html",
+      "summary": "開盤趨勢 ·  (-2.88%) · VIX 15.04",
+      "pnl": -2.88
+    },
+    {
+      "date": "2026-08-18",
+      "file": "daily_report_2026-08-18.html",
+      "summary": "開盤趨勢 ·  (-4.53%) · VIX 14.25",
+      "pnl": -4.53
+    },
+    {
+      "date": "2026-08-19",
+      "file": "daily_report_2026-08-19.html",
+      "summary": "開盤趨勢 ·  (-4.07%) · VIX 15.15",
+      "pnl": -4.07
+    },
+    {
+      "date": "2026-08-20",
+      "file": "daily_report_2026-08-20.html",
+      "summary": "開盤趨勢 ·  (-3.61%) · VIX 15.88",
+      "pnl": -3.61
+    },
+    {
+      "date": "2026-08-21",
+      "file": "daily_report_2026-08-21.html",
+      "summary": "開盤趨勢 ·  (-3.90%) · VIX 15.49",
+      "pnl": -3.9
+    },
+    {
+      "date": "2026-08-24",
+      "file": "daily_report_2026-08-24.html",
+      "summary": "開盤趨勢 ·  (-4.16%) · VIX 15.86",
+      "pnl": -4.16
+    },
+    {
+      "date": "2026-08-25",
+      "file": "daily_report_2026-08-25.html",
+      "summary": "開盤趨勢 ·  (-5.21%) · VIX 15.85",
+      "pnl": -5.21
+    },
+    {
+      "date": "2026-08-26",
+      "file": "daily_report_2026-08-26.html",
+      "summary": "開盤趨勢 ·  (-6.17%) · VIX 15.71",
+      "pnl": -6.17
+    },
+    {
+      "date": "2026-08-27",
+      "file": "daily_report_2026-08-27.html",
+      "summary": "開盤趨勢 ·  (-4.98%) · VIX 15.03",
+      "pnl": -4.98
+    },
+    {
+      "date": "2026-08-28",
+      "file": "daily_report_2026-08-28.html",
+      "summary": "開盤趨勢 ·  (-4.47%) · VIX 14.57",
+      "pnl": -4.47
+    },
+    {
+      "date": "2026-08-31",
+      "file": "daily_report_2026-08-31.html",
+      "summary": "開盤趨勢 ·  (-5.69%) · VIX 15.32",
+      "pnl": -5.69
+    },
+    {
+      "date": "2026-09-01",
+      "file": "daily_report_2026-09-01.html",
+      "summary": "開盤趨勢 ·  (-4.91%) · VIX 15.98",
+      "pnl": -4.91
+    },
+    {
+      "date": "2026-09-02",
+      "file": "daily_report_2026-09-02.html",
+      "summary": "開盤趨勢 ·  (-4.98%) · VIX 16.21",
+      "pnl": -4.98
+    },
+    {
+      "date": "2026-09-03",
+      "file": "close_report_2026-09-03.html",
+      "summary": "收市趨勢 ·  (-4.61%) · VIX 15.2",
+      "pnl": -4.61
+    },
+    {
+      "date": "2026-09-04",
+      "file": "daily_report_2026-09-04.html",
+      "summary": "開盤趨勢 ·  (-2.67%) · VIX 14.14",
+      "pnl": -2.67
+    },
+    {
+      "date": "2026-09-07",
+      "file": "daily_report_2026-09-07.html",
+      "summary": "開盤趨勢 ·  (-4.19%) · VIX 15.14",
+      "pnl": -4.19
+    },
+    {
+      "date": "2026-09-08",
+      "file": "daily_report_2026-09-08.html",
+      "summary": "開盤趨勢 ·  (-4.19%) · VIX 15.41",
+      "pnl": -4.19
+    },
+    {
+      "date": "2026-09-09",
+      "file": "daily_report_2026-09-09.html",
+      "summary": "開盤趨勢 ·  (-2.96%) · VIX 16.18",
+      "pnl": -2.96
+    },
+    {
+      "date": "2026-09-10",
+      "file": "daily_report_2026-09-10.html",
+      "summary": "開盤趨勢 ·  (-4.96%) · VIX 17.64",
+      "pnl": -4.96
+    },
+    {
+      "date": "2026-09-11",
+      "file": "daily_report_2026-09-11.html",
+      "summary": "開盤趨勢 ·  (-4.57%) · VIX 16.16",
+      "pnl": -4.57
+    },
+    {
+      "date": "2026-09-14",
+      "file": "daily_report_2026-09-14.html",
+      "summary": "開盤趨勢 ·  (-5.75%) · VIX 17.72",
+      "pnl": -5.75
+    },
+    {
+      "date": "2026-09-15",
+      "file": "daily_report_2026-09-15.html",
+      "summary": "開盤趨勢 ·  (-5.08%) · VIX 16.89",
+      "pnl": -5.08
+    },
+    {
+      "date": "2026-09-16",
+      "file": "daily_report_2026-09-16.html",
+      "summary": "開盤趨勢 ·  (-5.39%) · VIX 16.73",
+      "pnl": -5.39
+    },
+    {
+      "date": "2026-09-17",
+      "file": "close_report_2026-09-17.html",
+      "summary": "收市趨勢 · $607.39 (-5.25%) · VIX 17.71",
+      "pnl": -5.25
+    },
+    {
+      "date": "2026-09-21",
+      "file": "daily_report_2026-09-21.html",
+      "summary": "開盤趨勢 ·  (-3.20%) · VIX 14.87",
+      "pnl": -3.2
+    },
+    {
+      "date": "2026-09-22",
+      "file": "daily_report_2026-09-22.html",
+      "summary": "開盤趨勢 · $632.08 (-1.40%) · VIX 14.64",
+      "pnl": -1.4
+    },
+    {
+      "date": "2026-09-23",
+      "file": "daily_report_2026-09-23.html",
+      "summary": "開盤趨勢 · $635.00 (-0.94%) · VIX 14.28",
+      "pnl": -0.94
+    },
+    {
+      "date": "2026-09-24",
+      "file": "daily_report_2026-09-24.html",
+      "summary": "開盤趨勢 · $627.02 (-2.19%) · VIX 15.91",
+      "pnl": -2.19
+    },
+    {
+      "date": "2026-09-25",
+      "file": "daily_report_2026-09-25.html",
+      "summary": "開盤趨勢 · $632.57 (-1.32%) · VIX 15.13",
+      "pnl": -1.32
+    },
+    {
+      "date": "2026-09-28",
+      "file": "close_report_2026-09-28.html",
+      "summary": "收市趨勢 · $630.24 (-1.68%) · VIX 14.87",
+      "pnl": -1.68
+    }
+  ]
+}

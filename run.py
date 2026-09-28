@@ -10,6 +10,8 @@
     python run.py check   [--dry-run]                      # watchdog: re-run missed/failed slots, else 1 alert
     python run.py scan                                      # print today's opportunity Top 5 (no Telegram)
     python run.py status                                    # config/secrets presence, schedule, run ledger
+    python run.py tgcheck                                   # getMe + getChat (bot username, chat type/title; no send)
+    python run.py tgtest --yes                              # cutover test: 1 text + 1 chart image to TELEGRAM_CHAT_ID
 
 --dry-run : no Telegram, no file/ledger writes, no git (prints messages instead)
 --force   : ignore holiday/time-window checks and the duplicate-send guard
@@ -91,7 +93,8 @@ def _status():
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Project X jobs")
-    ap.add_argument("job", choices=list(JOBS) + ["status", "check", "scan"])
+    ap.add_argument("job", choices=list(JOBS) + ["status", "check", "scan", "tgcheck", "tgtest"])
+    ap.add_argument("--yes", action="store_true", help="confirm tgtest (sends 2 real Telegram messages)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--push", action="store_true")
@@ -105,6 +108,22 @@ def main(argv=None):
         return _check(a.dry_run)
     if a.job == "scan":
         return _scan()
+    if a.job == "tgcheck":
+        print(json.dumps({"getMe": telegram.get_me(), "getChat": telegram.get_chat()}, ensure_ascii=False))
+        return 0
+    if a.job == "tgtest":
+        if not a.yes and not a.dry_run:
+            print("tgtest sends 1 text + 1 image to TELEGRAM_CHAT_ID. Re-run with --yes to confirm.")
+            return 1
+        from px import charts, archive
+        me = telegram.get_me() or {}
+        ok1, r1 = telegram.send(f"✅ Project X 測試訊息（cutover）— bot @{me.get('username')}，{clock.now_hkt():%Y-%m-%d %H:%M} HKT",
+                                dry_run=a.dry_run, label="tgtest")
+        hist = archive.load_pnl()
+        img = charts.equity_chart(hist, "/tmp/px_tgtest.png") if len(hist) >= 2 else charts.line_chart("/tmp/px_tgtest.png", [[1, 2, 3, 2, 4]], ["a", "b"])
+        ok2, r2 = telegram.send_photo(img, caption="✅ Project X 測試圖表（cutover）", dry_run=a.dry_run, label="tgtest")
+        print(json.dumps({"text": ok1, "photo": ok2, "text_err": None if ok1 else r1, "photo_err": None if ok2 else r2}, ensure_ascii=False))
+        return 0 if (ok1 and ok2) else 2
     fn = _job_fn(a.job)
     try:
         res = schedule.run_job(a.job, fn, via="manual" if a.force else "cron", dry_run=a.dry_run, force=a.force)

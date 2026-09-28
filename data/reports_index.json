@@ -189,6 +189,17 @@
   },
   {
    "date": "2026-09-28",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-28.html",
+   "md": "reports/open_report_2026-09-28.md",
+   "summary": "開市監控 · 正常市場（VIX 16.01）",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-28T21:35:03+08:00"
+  },
+  {
+   "date": "2026-09-28",
    "kind": "weekly",
    "kind_zh": "週報",
    "file": "reports/weekly_report_2026-09-28.html",
@@ -199,5 +210,5 @@
    "generated_at": "2026-09-28T11:12:59+08:00"
   }
  ],
- "updated": "2026-09-28T11:12:59+08:00"
+ "updated": "2026-09-28T21:35:03+08:00"
 }

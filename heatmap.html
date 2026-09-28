@@ -98,7 +98,7 @@ PX.nav();
       ・成個板塊（同一組）一齊紅或一齊綠，通常係大環境／成個行業嘅消息，唔係隻股自己出事。<br>
       ・隔籬全部紅，淨係自己隻股獨自綠＝要睇返佢自己有冇新聞。
     </div>
-    <div class="hm-foot">資料來源：Yahoo Finance 日線（市值：Finnhub，只用嚟定格大細）。只供參考，唔係買賣建議。 · <a href="index.html">返去首頁</a></div>`;
+    <div class="hm-foot">資料來源：${PX.esc((d.sources&&d.sources.prices)||'Yahoo Finance／Finnhub')}；VIX：${PX.esc((d.sources&&d.sources.vix)||'重用')}；市值：Finnhub（只用嚟定格大細）。只供參考，唔係買賣建議。 · <a href="index.html">返去首頁</a></div>`;
 
   // Build the treemap from the small JSON (plotly loaded once from CDN — never inlined).
   const ids = [], labels = [], parents = [], values = [], colors = [], tcolors = [], texts = [], hovers = [];

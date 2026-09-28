@@ -31,3 +31,4 @@ state/news_cache.json
 state/realwatch.json
 state/heatmap_state.json
 state/heatmap_mcap.json
+state/vix_last.json

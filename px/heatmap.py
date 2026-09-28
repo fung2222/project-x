@@ -12,20 +12,25 @@ Colours: RED = up, GREEN = down (HK convention); full colour at ±5 %; |chg| < 0
 Missing / stale / insane data (last bar not on the reference session, or a jump > rules.max_price_sanity_jump_pct)
 -> chg None -> grey "數據暫缺". Never guessed.
 
-Data sources / API budget:
-  * Prices: histories already downloaded in this process by the scan/close jobs (px.marketdata._hist_cache) are
-    reused; the rest come from ONE batched yfinance download (period 5d). Yahoo cooldown respected (no run while
-    px.marketdata.yahoo_blocked()); a rate limit hit here sets the shared cooldown like every other Yahoo caller.
-  * Market caps (box size only): Finnhub /stock/profile2 through px.finnhub (counted in state/api_state.json,
-    429 cooldown shared), cached 7 days in state/heatmap_mcap.json, at most heatmap.finnhub_mcap_per_run calls per
-    run. No cap -> median-size box (listed in no_mcap). No Yahoo fallback (keeps Yahoo usage down).
+Data sources / API budget (Roy 2026-09-28: no core push may ever be missed -> keep Yahoo load minimal):
+  * Intraday (market open): Finnhub /quote only (0 Yahoo): universe + 12 sector ETFs + SPY/QQQ (~68 calls/run),
+    paced at heatmap.finnhub_calls_per_min (default 40/min, leaves >=20/min headroom for realwatch) through
+    px.finnhub (429 / X-Ratelimit handling + daily counter). Quotes older than quote_max_age_min (15) or moving more than
+    rules.max_price_sanity_jump_pct (50 %) are rejected -> grey. Finnhub cooling down -> slot skipped quietly.
+  * VIX: never fetched here. The last VIX another job already fetched (state/vix_last.json, written by
+    px.marketdata.vix()) is reused when fresh; else '數據暫缺'.
+  * After close (17:00 ET, same tick as the close job): the close job's in-process Yahoo downloads are reused
+    (0 extra Yahoo); only if <= close_max_yahoo_batch symbols are missing (the sector ETFs) ONE batched Yahoo download;
+    anything still missing -> Finnhub /quote of that session.
+  * Market caps (box size only): Finnhub /stock/profile2, cached 7 days (state/heatmap_mcap.json), paced like quotes.
 
 Schedule (px.heatmap.slots; called from `run.py tick` AFTER the push jobs, like realwatch it is NOT a watchdog
 slot, so a failure never alerts, never blocks another job and never pushes anything):
-  NYSE trading days only (px.clock calendar, DST aware): every 30 min from 10:00 ET while the session is open
-  (last slot 30 min before the close; half days end 12:30 ET) + one "close" run at 17:00 ET right after the close
-  job in the same tick (reuses the close job's price downloads). Per slot: at most heatmap.max_attempts attempts
-  (state/heatmap_state.json); Yahoo cooldown -> deferred, no attempt used."""
+  NYSE trading days only (px.clock calendar, DST aware): hourly intraday runs at the hourly job's own minute
+  (10:06 ... 15:06 ET; half days 10:06-12:06), i.e. in the same tick right after the hourly job -> the heatmap JSON goes
+  out in the hourly job's commit; + one "close" run at 17:00 ET right after the close job (same commit).
+  A heatmap run never starts when a push slot is due within core_slot_guard_min (5) minutes (deferred, retried).
+  Per slot: at most heatmap.max_attempts attempts (state/heatmap_state.json)."""
 import datetime as dt
 import json
 import math
@@ -64,9 +69,11 @@ UP_LIGHT, UP_DEEP = "#f6c9c4", "#a3111b"   # red family = UP
 DN_LIGHT, DN_DEEP = "#c6e8cc", "#0b6b2f"   # green family = DOWN
 FLAT, MISSING = "#dfe2e6", "#b9bec5"
 
-DEFAULTS = {"enabled": True, "first_et": "10:00", "every_min": 30, "last_before_close_min": 30,
+DEFAULTS = {"enabled": True, "first_et": "10:06", "every_min": 60, "last_before_close_min": 30,
             "final_et": "17:00", "final_until_et": "20:30", "slot_grace_min": 25, "max_attempts": 2,
             "mcap_cache_days": 7, "mcap_floor_usd": 1e9, "finnhub_mcap_per_run": 20,
+            "finnhub_calls_per_min": 40, "finnhub_min_remaining": 15, "quote_max_age_min": 15, "max_run_s": 240,
+            "close_max_yahoo_batch": 15, "vix_max_age_min": 75, "core_slot_guard_min": 5,
             "full_colour_pct": 5.0, "flat_pct": 0.1}
 
 
@@ -212,7 +219,7 @@ def universe_and_flags():
     return universe, s.get("themes") or {}, paper, real
 
 
-# ---------------------------------------------------------------- prices
+# ---------------------------------------------------------------- prices: shared helpers
 def _to_series(closes):
     try:
         s = closes.dropna()
@@ -231,7 +238,7 @@ def _from_process_cache(sym):
 
 
 def _batch_download(symbols):
-    """One batched yfinance download (period 5d). Returns ({sym: Series}, error or None)."""
+    """ONE batched yfinance download (period 5d). Returns ({sym: Series}, error or None)."""
     from . import apistate, marketdata
     if not symbols:
         return {}, None
@@ -242,7 +249,7 @@ def _batch_download(symbols):
     try:
         yf = marketdata._yf()
         df = yf.download(symbols, period="5d", interval="1d", auto_adjust=False, group_by="ticker",
-                         threads=4, progress=False)
+                         threads=False, progress=False)
     except Exception as e:
         if marketdata._is_rate_limit(e):
             marketdata._mark_yahoo_limited("heatmap batch")
@@ -273,20 +280,6 @@ def _batch_download(symbols):
     return out, None
 
 
-def load_series(symbols):
-    """Reuse this process's scan/close downloads, batch-download only the rest."""
-    series, need = {}, []
-    for sym in symbols:
-        s = _from_process_cache(sym)
-        if s is not None:
-            series[sym] = s
-        else:
-            need.append(sym)
-    got, err = _batch_download(need)
-    series.update(got)
-    return series, {"reused": len(symbols) - len(need), "downloaded": len(need), "error": err}
-
-
 def reference_session(series, now=None):
     """The ET session to show: most common latest bar date, never later than today ET."""
     today = clock.to_et(now or clock.now_hkt()).date()
@@ -307,10 +300,179 @@ def day_change(s, ref, sanity_pct=50.0):
     return last, chg
 
 
+def _sanity():
+    return float((load_settings().get("rules") or {}).get("max_price_sanity_jump_pct", 50.0))
+
+
+class _Pacer:
+    """Keeps heatmap Finnhub calls at <= finnhub_calls_per_min and backs off when X-Ratelimit-Remaining is low,
+    so realwatch always has headroom. abort() is set on cooldown / 429 / time cap."""
+
+    def __init__(self, sleep=time.sleep, now_fn=time.time):
+        c = cfg()
+        self.gap = 60.0 / max(1.0, float(c["finnhub_calls_per_min"]))
+        self.min_rem = int(c["finnhub_min_remaining"])
+        self.cap = float(c["max_run_s"])
+        self.sleep, self.now_fn = sleep, now_fn
+        self.t0 = now_fn()
+        self.last = None
+        self.calls = 0
+        self.aborted = None
+
+    def before_call(self):
+        from . import apistate, finnhub
+        if apistate.in_cooldown("finnhub"):
+            self.aborted = "finnhub cooldown"
+            return False
+        if self.now_fn() - self.t0 > self.cap:
+            self.aborted = f"time cap {self.cap:.0f}s"
+            return False
+        r = finnhub.rate
+        if r.get("remaining") is not None and r["remaining"] < self.min_rem and self.now_fn() - float(r.get("at") or 0) < 60:
+            self.sleep(min(max(float(r.get("reset") or 0) - self.now_fn(), 1.0), 60.0))
+            r["remaining"] = None
+        if self.last is not None:
+            wait = self.gap - (self.now_fn() - self.last)
+            if wait > 0:
+                self.sleep(wait)
+        self.last = self.now_fn()
+        self.calls += 1
+        return True
+
+    def after_error(self, err):
+        if err and ("429" in err or "cooldown" in err or "no FINNHUB" in err or "network off" in err):
+            self.aborted = err
+            return True
+        return False
+
+
+def _finnhub_change(sym, q, session, sanity):
+    """(last, chg) from a Finnhub quote when it belongs to `session` (ET date) and passes the jump check."""
+    if not q or not q.get("price"):
+        return None, None
+    t = q.get("t")
+    if not t or dt.datetime.fromtimestamp(float(t), clock.ET).date() != session:
+        return None, None
+    chg = q.get("change_pct")
+    if chg is None or not math.isfinite(float(chg)) or abs(float(chg)) > sanity:
+        return None, None
+    return float(q["price"]), float(chg)
+
+
+def collect_intraday(symbols, now=None, pacer=None):
+    """Market open: Finnhub /quote per symbol (0 Yahoo). Returns ({sym: (last, chg)}, meta)."""
+    from . import apistate, finnhub
+    c = cfg()
+    now = now or clock.now_hkt()
+    today = clock.to_et(now).date()
+    sanity = _sanity()
+    max_age = float(c["quote_max_age_min"]) * 60
+    pacer = pacer or _Pacer()
+    out, meta = {}, {"source": "finnhub", "stale_or_failed": [], "rejected_jump": [], "calls": 0, "aborted": None}
+    for sym in symbols:
+        if sym.startswith("^"):
+            continue  # indices (VIX) are not on Finnhub free; VIX comes from the cache
+        if not pacer.before_call():
+            break
+        q, err = finnhub.quote(sym, max_age_s=max_age)
+        if q is None:
+            meta["stale_or_failed"].append(sym)
+            if pacer.after_error(err):
+                break
+            continue
+        last, chg = _finnhub_change(sym, q, today, sanity)
+        if last is None:
+            (meta["rejected_jump"] if q.get("change_pct") is not None and abs(float(q["change_pct"])) > sanity
+             else meta["stale_or_failed"]).append(sym)
+            continue
+        out[sym] = (last, chg)
+    meta["calls"], meta["aborted"] = pacer.calls, pacer.aborted
+    try:
+        if pacer.calls:
+            apistate.count("finnhub_heatmap", pacer.calls)
+    except Exception:
+        pass
+    return out, meta
+
+
+def _last_session(now):
+    et = clock.to_et(now)
+    d = et.date()
+    if clock.is_trading_day(d) and clock.session_closed(et):
+        return d
+    return clock.previous_trading_day(d)
+
+
+def collect_close(symbols, now=None, pacer=None):
+    """After the close: reuse this process's Yahoo downloads (close job), ONE small Yahoo batch for a few missing
+    symbols (the sector ETFs), Finnhub /quote of that session for anything else. Returns (changes, ref, meta)."""
+    from . import finnhub
+    c = cfg()
+    now = now or clock.now_hkt()
+    sanity = _sanity()
+    syms = [s for s in symbols if not s.startswith("^")]
+    series = {}
+    for sym in syms:
+        sr = _from_process_cache(sym)
+        if sr is not None:
+            series[sym] = sr
+    meta = {"source": "close", "reused": len(series), "yahoo_batch": 0, "finnhub": 0, "aborted": None}
+    missing = [s for s in syms if s not in series]
+    if missing and len(missing) <= int(c["close_max_yahoo_batch"]):
+        got, err = _batch_download(missing)
+        series.update(got)
+        meta["yahoo_batch"] = len(missing) if err is None else 0
+    ref = reference_session(series, now) or _last_session(now)
+    changes = {}
+    for sym in syms:
+        last, chg = day_change(series.get(sym), ref, sanity)
+        if last is not None:
+            changes[sym] = (last, chg)
+    rest = [s for s in syms if s not in changes]
+    if rest:
+        pacer = pacer or _Pacer()
+        for sym in rest:
+            if not pacer.before_call():
+                break
+            q, err = finnhub.quote(sym)
+            if q is None:
+                if pacer.after_error(err):
+                    break
+                continue
+            last, chg = _finnhub_change(sym, q, ref, sanity)
+            if last is not None:
+                changes[sym] = (last, chg)
+        meta["finnhub"], meta["aborted"] = pacer.calls, pacer.aborted
+    return changes, ref, meta
+
+
+def vix_from_cache(ref, phase, now=None):
+    """(level, chg %) of the last VIX another job fetched, when it belongs to the shown session and is fresh
+    (intraday: <= vix_max_age_min old; close: fetched after that session's close). Else (None, None)."""
+    from . import marketdata
+    v = marketdata.last_vix() or {}
+    if not v.get("price") or not ref or v.get("session_date") != ref.isoformat():
+        return None, None
+    try:
+        at = dt.datetime.fromisoformat(v["at"])
+    except Exception:
+        return None, None
+    now = now or clock.now_hkt()
+    if phase == "intraday":
+        if (now - at).total_seconds() > float(cfg()["vix_max_age_min"]) * 60:
+            return None, None
+    else:
+        close_dt = dt.datetime.combine(ref, clock.close_time(ref), tzinfo=clock.ET)
+        if at < close_dt:
+            return None, None  # an intraday VIX must not be shown as the closing value
+    chg = v.get("change_pct")
+    return float(v["price"]), (float(chg) if chg is not None else None)
+
+
 # ---------------------------------------------------------------- market caps (Finnhub, cached 7 days)
-def market_caps(tickers, now_ts=None):
+def market_caps(tickers, now_ts=None, pacer=None):
     """{ticker: mcap_usd} from the 7-day cache, topping up at most finnhub_mcap_per_run names via Finnhub
-    /stock/profile2 (counted in state/api_state.json). Returns (caps, missing, n_finnhub_calls)."""
+    /stock/profile2 (paced, counted in state/api_state.json). Returns (caps, missing, n_finnhub_calls)."""
     c = cfg()
     now_ts = now_ts or time.time()
     p = os.path.join(STATE_DIR, MCAP_NAME)
@@ -326,11 +488,14 @@ def market_caps(tickers, now_ts=None):
     calls = 0
     if need and not network_off():
         from . import finnhub
+        pacer = pacer or _Pacer()
         for t in need[: int(c["finnhub_mcap_per_run"])]:
+            if not pacer.before_call():
+                break
             d, err = finnhub.get("stock/profile2", {"symbol": t})
             calls += 1
             if d is None:
-                if err and ("429" in err or "cooldown" in err or "no FINNHUB" in err):
+                if pacer.after_error(err):
                     break
                 continue
             mc = (d or {}).get("marketCapitalization")
@@ -346,25 +511,49 @@ def market_caps(tickers, now_ts=None):
 
 
 # ---------------------------------------------------------------- build
-def build(now=None, series=None, caps=None, holdings=None, as_of=None):
-    """Pure-ish builder (series/caps/holdings injectable for tests). Returns the heatmap_v1 dict.
-    as_of = when the prices were fetched (defaults to now; only differs when re-rendering a saved download)."""
+def build(now=None, series=None, caps=None, holdings=None, as_of=None, changes=None, ref=None, phase=None,
+          vix=None, meta=None):
+    """Returns the heatmap_v1 dict.
+    Inputs (for tests / re-rendering) in priority order: `changes` {sym: (last, chg)} + `ref` + `phase`;
+    or `series` {sym: daily close Series} (ref from the bars); or nothing -> collect live (intraday = Finnhub,
+    after close = reuse + small batch). as_of = when the prices were fetched (defaults to now)."""
     c = cfg()
     now = now or clock.now_hkt()
     as_of = as_of or now
-    s_all = load_settings()
-    sanity = float((s_all.get("rules") or {}).get("max_price_sanity_jump_pct", 50.0))
+    sanity = _sanity()
     universe, themes, paper, real = holdings or universe_and_flags()
     idx_syms = [t for t, _ in INDEX]
     etf_syms = [t for t, _ in SECTOR_ETFS]
     symbols = list(dict.fromkeys(universe + idx_syms + etf_syms))
-    meta = {"reused": 0, "downloaded": 0, "error": None}
-    if series is None:
-        series, meta = load_series(symbols)
-    ref = reference_session({k: v for k, v in series.items() if k in universe or k in idx_syms}, as_of)
+    meta = dict(meta or {})
+    pacer = None
+    if changes is None and series is not None:
+        ref = reference_session({k: v for k, v in series.items() if k in universe or k in idx_syms}, as_of)
+        changes = {}
+        for sym in symbols:
+            last, chg = day_change(series.get(sym), ref, 1000.0 if sym == "^VIX" else sanity)
+            if last is not None:
+                changes[sym] = (last, chg)
+        if phase is None:
+            phase = "intraday" if (ref == clock.to_et(as_of).date() and clock.market_is_open(as_of)) else "close"
+    elif changes is None:
+        pacer = _Pacer()
+        if clock.market_is_open(as_of):
+            phase = "intraday"
+            ref = clock.to_et(as_of).date()
+            changes, meta = collect_intraday(symbols, as_of, pacer)
+        else:
+            phase = "close"
+            changes, ref, meta = collect_close(symbols, as_of, pacer)
+    phase = phase or "close"
+    if "^VIX" not in changes:
+        v = vix if vix is not None else vix_from_cache(ref, phase, as_of)
+        if v and v[0] is not None:
+            changes = dict(changes)
+            changes["^VIX"] = v
     n_calls = 0
     if caps is None:
-        caps, no_cap, n_calls = market_caps(universe)
+        caps, no_cap, n_calls = market_caps(universe, pacer=pacer)
     else:
         no_cap = [t for t in universe if not caps.get(t)]
     full, flat = float(c["full_colour_pct"]), float(c["flat_pct"])
@@ -372,9 +561,12 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
     med = sorted(caps[t] for t in universe if caps.get(t))
     med = med[len(med) // 2] if med else floor
 
+    def ch(sym):
+        return changes.get(sym, (None, None))
+
     stocks = []
     for t in universe:
-        last, chg = day_change(series.get(t), ref, sanity)
+        last, chg = ch(t)
         bg, fg = colour(chg, full, flat)
         mc = caps.get(t)
         stocks.append({"t": t, "g": group_of(t, themes), "last": None if last is None else round(last, 4),
@@ -394,7 +586,7 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
 
     index = {}
     for t, zh in INDEX:
-        last, chg = day_change(series.get(t), ref, 1000.0 if t == "^VIX" else sanity)
+        last, chg = ch(t)
         key = "VIX" if t == "^VIX" else t
         bg, fg = colour(chg, full, flat) if t != "^VIX" else ("#ffffff", "#1d2129")
         index[key] = {"name": zh, "last": None if last is None else round(last, 4),
@@ -402,7 +594,7 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
                       "label": fmt_pct(chg)}
     sectors = []
     for t, zh in SECTOR_ETFS:
-        last, chg = day_change(series.get(t), ref, sanity)
+        last, chg = ch(t)
         bg, fg = colour(chg, full, flat)
         sectors.append({"t": t, "zh": zh, "last": None if last is None else round(last, 4),
                         "chg_pct": None if chg is None else round(chg, 3), "color": bg, "text_color": fg,
@@ -411,9 +603,8 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
     missing = [r["t"] for r in stocks if r["chg_pct"] is None]
     up = sum(1 for r in stocks if r["chg_pct"] is not None and r["chg_pct"] >= flat)
     down = sum(1 for r in stocks if r["chg_pct"] is not None and r["chg_pct"] <= -flat)
+    live = phase == "intraday"
     now_et = clock.to_et(as_of)
-    live = ref is not None and ref == now_et.date() and clock.market_is_open(as_of)
-    phase = "intraday" if live else "close"
     wk = "一二三四五六日"[ref.weekday()] if ref else ""
     if ref is None:
         date_label = MISSING_TEXT
@@ -421,6 +612,7 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
         date_label = f"美股 {ref.isoformat()}（星期{wk}）盤中，截至 {now_et:%H:%M} 美東（{clock.to_hkt(as_of):%H:%M} 香港時間）"
     else:
         date_label = f"美股 {ref.isoformat()}（星期{wk}）收市"
+    src_prices = ("Finnhub 即時報價（15 分鐘內）" if live else "Yahoo Finance 日線（yfinance；收市後重用收市報告已下載數據）")
     return {
         "schema": SCHEMA,
         "generated_at": clock.to_hkt(now).isoformat(timespec="seconds"),
@@ -431,7 +623,7 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
         "date_label": date_label,
         "colour": {"up": "red", "down": "green", "full_at_pct": full, "flat_pct": flat,
                    "legend": "紅＝升　綠＝跌　格越大＝公司越大",
-                   "scale": [{"pct": v, "color": colour(v if v else None, full, flat)[0] if v else FLAT} for v in (-5, -3, -1, 0, 1, 3, 5)]},
+                   "scale": [{"pct": v, "color": colour(v, full, flat)[0] if v else FLAT} for v in (-5, -3, -1, 0, 1, 3, 5)]},
         "size_rule": "cube_root_mcap_usd_bn_floor_1bn",
         "index": index,
         "sectors": sectors,
@@ -443,9 +635,9 @@ def build(now=None, series=None, caps=None, holdings=None, as_of=None):
         "no_mcap": no_cap,
         "paper": paper,
         "real": real,
-        "sources": {"prices": "Yahoo Finance 日線（yfinance）", "mcap": "Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）",
-                    "prices_reused": meta.get("reused", 0), "prices_downloaded": meta.get("downloaded", 0),
-                    "finnhub_mcap_calls": n_calls},
+        "sources": {"prices": src_prices, "vix": "其他報告最近攞過嘅 VIX（唔另外 call）",
+                    "mcap": "Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）",
+                    "finnhub_mcap_calls": n_calls, **{k: v for k, v in meta.items() if k != "stale_or_failed"}},
     }
 
 
@@ -462,6 +654,21 @@ def close_link(session_date, site_url=None, p=None):
     return f'🗺 今日板塊熱力圖：<a href="{site}heatmap.html">{site}heatmap.html</a>'
 
 
+def core_slot_soon(now=None, minutes=None):
+    """'job HH:MM' when any push-job slot (open/daily/hourly/close/morning/weekly) starts within the next `minutes`
+    (core_slot_guard_min): the heatmap then waits, so it can never hold the tick lock when a push is due."""
+    from . import schedule
+    now = now or clock.now_hkt()
+    minutes = float(cfg()["core_slot_guard_min"] if minutes is None else minutes)
+    for job, jc in schedule.jobs().items():
+        local = now.astimezone(schedule._tz(jc))
+        for day in (local.date(), local.date() + dt.timedelta(days=1)):
+            for sl in schedule.expected_slots(job, day):
+                if local < sl <= local + dt.timedelta(minutes=minutes):
+                    return f"{job} {sl:%H:%M}"
+    return None
+
+
 # ---------------------------------------------------------------- run (called from run.py tick / run.py heatmap)
 def run(now=None, dry_run=False, force=False, out=None):
     """Build + write data/heatmap.json for the due slot. NEVER sends Telegram. Never raises for data problems.
@@ -476,12 +683,18 @@ def run(now=None, dry_run=False, force=False, out=None):
         if due is None:
             return {"status": "skipped", "reason": "no heatmap slot now"}
         e = (_read(_state_path(), {}).get("slots") or {}).get(slot_key(due[1])) or {}
-        if e.get("status") == "ok":
+        if e.get("status") in ("ok", "skipped"):
             return {"status": "duplicate", "slot": slot_key(due[1])}
         if e.get("attempts", 0) >= int(c["max_attempts"]):
             return {"status": "gave_up", "slot": slot_key(due[1])}
-        if marketdata.yahoo_blocked():
+        from . import apistate
+        if due[0] == "intraday" and apistate.in_cooldown("finnhub"):
+            return {"status": "deferred", "reason": "Finnhub cooldown (skipped quietly)", "slot": slot_key(due[1])}
+        if due[0] == "close" and marketdata.yahoo_blocked() and not marketdata._hist_cache:
             return {"status": "deferred", "reason": "Yahoo cooldown", "slot": slot_key(due[1])}
+        busy = core_slot_soon(now)
+        if busy:
+            return {"status": "deferred", "reason": f"push slot {busy} due soon", "slot": slot_key(due[1])}
     key = slot_key(due[1]) if due else "manual"
     if not dry_run:
         _record(key, "running", "started")
@@ -491,6 +704,11 @@ def run(now=None, dry_run=False, force=False, out=None):
         if not dry_run:
             _record(key, "failed", f"{type(e).__name__}: {e}")
         return {"status": "failed", "reason": f"{type(e).__name__}", "slot": key}
+    if (data.get("sources") or {}).get("aborted"):
+        # Finnhub cooled down / time cap mid-run: keep the last good file, skip this slot quietly
+        if not dry_run:
+            _record(key, "skipped", data["sources"]["aborted"])
+        return {"status": "skipped", "reason": data["sources"]["aborted"], "slot": key}
     if data["counts"]["total"] and data["counts"]["missing"] == data["counts"]["total"]:
         # nothing usable: keep the last good file (it carries its own date) instead of an all-grey page
         if not dry_run:

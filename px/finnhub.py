@@ -12,6 +12,7 @@ from .config import get_secret, network_off
 
 BASE = "https://finnhub.io/api/v1/"
 _last_call = [0.0]
+rate = {"remaining": None, "reset": None, "at": 0.0}  # last X-Ratelimit-* headers seen (heatmap pacing)
 MIN_GAP_S = 0.12  # stay far below the 30 calls/second cap
 
 
@@ -56,6 +57,8 @@ def get(path, params=None, timeout=10):
         return None, f"HTTP {r.status_code}"
     try:
         rem = r.headers.get("X-Ratelimit-Remaining")
+        if rem is not None:
+            rate.update(remaining=int(rem), reset=float(r.headers.get("X-Ratelimit-Reset") or 0) or None, at=time.time())
         if rem is not None and int(rem) <= 2:  # about to hit the per-minute cap: pause until reset
             reset = float(r.headers.get("X-Ratelimit-Reset") or 0)
             if reset > time.time():

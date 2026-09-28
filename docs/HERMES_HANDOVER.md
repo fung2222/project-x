@@ -57,7 +57,7 @@ cron (每分鐘) ──> ops/hermes/px_job.sh tick ──> python run.py tick
                      │     ├─ 寫 portfolio.json、daily_report.json、data/*.json、data/reports/、state/
                      │     └─ Telegram Bot API → 群組「Project X Nas」（文字＋圖）
                      ├─ realwatch（2026-09-28）：開市時每 5 分鐘睇 Roy 真倉（冇真倉＝0 call；唔 commit；見 §13）
-                     ├─ heatmap（2026-09-28）：開市時每 30 分鐘＋收市後再跑 → data/heatmap.json（唔 Telegram；失敗唔阻其他 job；見 R41）
+                     ├─ heatmap（2026-09-28）：盤中每粒鐘（跟 hourly）＋收市後再跑 → data/heatmap.json（盤中 Finnhub／收市重用 Yahoo；唔 Telegram；失敗唔阻其他 job；見 R41）
                      ├─ watchdog：漏咗／fail → 窗口內重跑；過咗窗口 → 1 條 🛠 alert
                      └─ git commit + push → GitHub Pages 網站自動更新
 ```
@@ -106,7 +106,7 @@ chmod +x ops/hermes/px_job.sh
 | `morning` | 隔夜複盤（香港早晨，唔係盤前） | —— | 08:30 | 08:30 | HKT 星期二至六，而且前一個美股日係交易日（例：2026-11-27 早上唔跑，因為 11-26 感恩節休市） | `python run.py morning --push` | **1**：「🌅 早晨｜美股 日期 收市回顧」 | `portfolio.json`、`data/reports/morning_report_*`、`state/` |
 | `weekly` | 每週回顧 | —— | 星期一 09:44 | 星期一 09:44 | 每個 HKT 星期一（美國假期都照跑） | `python run.py weekly --push` | **1**：「📊 每週回顧」 | `Reports/WeeklyReport_*.json`、`Reports/WeeklySummary_*.txt`、`data/reports/weekly_report_*`、`state/` |
 | `realwatch` | 真倉 5 分鐘監察（**唔係排程 slot**，由 `tick` 喺排程之前叫；watchdog 唔管；唔 commit） | 開市時每 5 分鐘 | 21:30–04:00 | 22:30–05:00 | NYSE 開市時段 | （自動，經 `tick`） | 平時 **0**；真倉觸發條件先 send「🚨 真倉即時警報」（每次最多 1 條） | `state/realwatch.json`、`state/job_runs.json`（`real` 去重） |
-| `heatmap` | 股票熱力圖 JSON（網站 `heatmap.html`；**唔係排程 slot**，由 `tick` 喺 push jobs 之後叫；watchdog 唔管；唔 send Telegram） | 開市時每 30 分鐘＋收市後 17:00 ET | 22:00–04:00 ＋ 05:00 | 23:00–05:00 ＋ 06:00 | NYSE 交易日（半日市縮短） | `python run.py heatmap --force`（人手）／自動經 `tick` | **0**（永遠唔 push Telegram） | `data/heatmap.json`、`state/heatmap_state.json`、`state/heatmap_mcap.json` |
+| `heatmap` | 股票熱力圖 JSON（網站 `heatmap.html`；**唔係排程 slot**，由 `tick` 喺 push jobs 之後叫；watchdog 唔管；唔 send Telegram） | 盤中每粒鐘跟 hourly（10:06–15:06）＋收市後 17:00 ET | 22:06–03:06 ＋ 05:00 | 23:06–04:06 ＋ 06:00 | NYSE 交易日（半日市到 12:06） | `python run.py heatmap --force`（人手）／自動經 `tick` | **0**（永遠唔 push Telegram；JSON 跟 hourly／close 同一個 `--push` commit） | `data/heatmap.json`、`state/heatmap_state.json`、`state/heatmap_mcap.json`、`state/vix_last.json` |
 | `tick` | **建議嘅唯一 cron 入口**：先跑 realwatch，再到期就跑上面嘅 job，再做 watchdog | —— | 每分鐘 | 每分鐘 | 永遠 | `ops/hermes/px_job.sh tick` | 冇（除非 watchdog alert） | 同上 |
 | `check` | watchdog（淨係漏跑偵測）；用 Option B/C 先需要 | —— | 每 30 分鐘 | 每 30 分鐘 | 永遠 | `ops/hermes/px_job.sh check` | 漏跑過咗窗口：每個 slot **最多 1 條**「🛠 Project X 漏跑/失敗」 | `state/run_ledger.json` |
 
@@ -348,7 +348,7 @@ CRON_TZ=Asia/Hong_Kong
 
 ## §13 真倉 5 分鐘監察（realwatch）＋ API 用量（2026-09-28）
 
-> 另見 **R41 股票熱力圖**：由同一個 `tick` 喺 push jobs 之後刷新 `data/heatmap.json`（每 30 分鐘＋收市）；唔 Telegram、唔阻其他 job。
+> 另見 **R41 股票熱力圖**：由同一個 `tick` 喺 push jobs 之後刷新 `data/heatmap.json`（盤中每粒鐘跟 hourly、Finnhub /quote；收市重用 close 嘅 Yahoo；唔 Telegram、唔阻其他 job）。
 
 **做咩**：美股開市期間，`run.py tick`（每分鐘）喺跑排程之前叫 `px/jobs/realwatch.py`。距離上次 ≥5 分鐘先真係做嘢（`state/realwatch.json`）。
 - **冇真倉 ＝ 0 個 API call**（只讀 `data/futu_positions.json`）。
@@ -366,11 +366,11 @@ CRON_TZ=Asia/Hong_Kong
 
 | 來源 | 上限（免費） | 而家估計用量 | 備註 |
 |---|---|---|---|
-| Finnhub | 60 call／分鐘（+30／秒） | 業績日曆 ~10–15（每日一次，唔完整每粒鐘重試）＋ 公司新聞 ≤120 上限（實際 ~15–25，cache 6 粒鐘）＋ 大市新聞 ~4 ＋ realwatch 每隻真倉 ≤78（6.5 粒鐘 × 12 次；3 隻 = ≤234）＋ 報價後備少量 | 冇真倉：~30–45／日；3 隻真倉：~260–280／日，每分鐘最多 ~3–4 個，遠低過 60／分鐘 |
+| Finnhub | 60 call／分鐘（+30／秒） | 業績日曆 ~10–15（每日一次，唔完整每粒鐘重試）＋ 公司新聞 ≤120 上限（實際 ~15–25，cache 6 粒鐘）＋ 大市新聞 ~4 ＋ realwatch 每隻真倉 ≤78（6.5 粒鐘 × 12 次；3 隻 = ≤234）＋ **heatmap 盤中 ~410**（6 × ~68 `/quote`，≤40／分鐘）＋ 報價後備少量 | 冇真倉：~440–460／日；3 隻真倉：~670–700／日；每分鐘峰值：heatmap ~40 ＋ realwatch ~3–4，仲喺 60／分鐘之內 |
 | Marketaux | 100 request／日 | **硬上限 60／日**（`api_budget.marketaux_per_day`，`state/api_state.json` 計數）；實際通常 <10（淨係 Finnhub 冇新聞先用） | 429 → 冷卻 1 粒鐘 |
-| Yahoo（非官方） | 冇公開上限；撞 429 就停 15 分鐘 | 約 200–260 request／交易日（以前 400–510）：每隻股每個 process 一次 2 年日線；daily ≈ 核心＋機會＋掃描 54 隻＋SPY/QQQ/VIX＋板塊 ETF＋舊版 profiles（9 隻 info／news）＋業績後備 ~5 | realwatch 平時唔用 Yahoo |
+| Yahoo（非官方） | 冇公開上限；撞 429 就停 15 分鐘 | 約 200–275 request／交易日：每隻股每個 process 一次 2 年日線；daily／close ≈ 核心＋機會＋掃描 54 隻＋SPY/QQQ/VIX＋板塊 ETF＋舊版 profiles＋業績後備；**heatmap 盤中 0 Yahoo**，收市通常 0（重用 close），最差一批 ≤15 隻 ETF | realwatch 平時唔用 Yahoo；heatmap 唔會搶 Yahoo 配額 |
 
-新 state 檔（全部 gitignore，唔會 commit）：`state/api_state.json`（冷卻＋計數）、`state/earnings_cache.json`、`state/news_cache.json`、`state/realwatch.json`；`state/lesson_history.json`（今日學一樣，30 日唔重複）。網站讀 `data/reasons.json`（原因）。
+新 state 檔（全部 gitignore，唔會 commit）：`state/api_state.json`（冷卻＋計數）、`state/earnings_cache.json`、`state/news_cache.json`、`state/realwatch.json`、`state/vix_last.json`（heatmap 重用）、`state/heatmap_state.json`／`heatmap_mcap.json`；`state/lesson_history.json`（今日學一樣，30 日唔重複）。網站讀 `data/reasons.json`（原因）。
 
 ---
 ## 切換紀錄

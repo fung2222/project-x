@@ -147,10 +147,43 @@ def quote(ticker, now=None):
     return q
 
 
+VIX_CACHE_NAME = "vix_last.json"
+
+
 def vix():
-    """VIX level or None (Yahoo ^VIX only: Finnhub's free plan has no index quotes; no proxy is substituted)."""
+    """VIX level or None (Yahoo ^VIX only: Finnhub's free plan has no index quotes; no proxy is substituted).
+    A good value is also saved to state/vix_last.json so the heatmap can reuse it without another Yahoo call."""
     q = quote("^VIX")
-    return q["price"] if q.get("ok") and q.get("price") else None
+    ok = bool(q.get("ok") and q.get("price"))
+    if ok:
+        save_vix(q)
+    return q["price"] if ok else None
+
+
+def save_vix(q):
+    import json
+    import os
+    from .config import STATE_DIR
+    try:
+        os.makedirs(STATE_DIR, exist_ok=True)
+        p = os.path.join(STATE_DIR, VIX_CACHE_NAME)
+        with open(p + ".tmp", "w", encoding="utf-8") as f:
+            json.dump({k: q.get(k) for k in ("price", "prev_close", "change_pct", "session_date", "at")}, f)
+        os.replace(p + ".tmp", p)
+    except Exception as e:
+        print(f"[marketdata] vix cache write failed: {type(e).__name__}")
+
+
+def last_vix():
+    """The last good VIX saved by vix() (any job/process) or None."""
+    import json
+    import os
+    from .config import STATE_DIR
+    try:
+        with open(os.path.join(STATE_DIR, VIX_CACHE_NAME), encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return None
 
 
 def regime_for(vix_value):

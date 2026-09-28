@@ -13,9 +13,9 @@
     "cash_hkd": 8896.37,
     "equity_usd": 1291.81,
     "total_invested_usd": 156.5,
-    "total_pnl_usd": -5.25,
-    "total_pnl_pct": -3.35,
-    "total_fees_usd": 4.13,
+    "total_pnl_usd": 11.81,
+    "total_pnl_pct": 0.92,
+    "total_fees_usd": 3.04,
     "last_decision": {
       "date": "2026-09-25",
       "style": "professional_filter_observation",
@@ -37,7 +37,20 @@
         "現金緩衝 ~88.2%；VIX 15.24 正常；SPY/QQQ 微升；無新開倉"
       ]
     },
-    "updated": "2026-09-25"
+    "updated": "2026-09-25",
+    "start_equity_usd": 1280.0,
+    "rebase_date": "2026-09-13",
+    "equity_hkd": 10076.12,
+    "fx_usdhkd": 7.8,
+    "realized_pnl_usd": 18.06,
+    "unrealized_pnl_usd": -5.25,
+    "open_entry_fees_usd": 1.0,
+    "total_return_usd": 11.81,
+    "total_return_pct": 0.92,
+    "total_fees_scope": "trades since rebase 2026-09-13",
+    "cash_pct": 88.29,
+    "deployed_pct": 11.71,
+    "pnl_formula": "total_pnl = realized + unrealized - open_entry_fees = equity - start_equity"
   },
   "positions": [
     {
@@ -54,7 +67,13 @@
       "stop_loss_price": 5.76,
       "take_profit_price": 6.89,
       "thesis": "tactical oversold satellite; reject other 95% clones to avoid spray",
-      "last_updated": "2026-09-28T04:15:22.933799"
+      "last_updated": "2026-09-28T04:15:22.933799",
+      "dist_to_sl_pct": 4.79,
+      "dist_to_tp_pct": 13.88,
+      "theme": "AI_SPEECH",
+      "bucket": "opportunity",
+      "held_trading_days": 10,
+      "risk_flag": "OK"
     }
   ],
   "trade_log": [
@@ -108,12 +127,13 @@
       "cost_hkd": 1473.03,
       "reason": "CORE: RSI超賣+MACD轉強+太空核心持倉；低於MA50故半倉起步，待站回MA50再考慮加倉。分析師潛在上行約74%。",
       "status": "closed",
-      "pnl_usd": 19.06,
-      "pnl_pct": 10.09,
+      "pnl_usd": 18.06,
+      "pnl_pct": 9.51,
       "decision_note": "Professional filter 2026-09-13: rejected META(no short), NVDA/TSLA(HOLD/expensive), and spray-buying all opportunity 95% names (LUNR/JOBY/IONQ/BBAI/ASTS) due to below-MA50 + speculative correlation.",
       "closed_by": "T005",
       "exit_date": "2026-09-21",
-      "exit_price": 69.65
+      "exit_price": 69.65,
+      "correction_note": "2026-09-28: pnl corrected 19.06 -> 18.06 (buy fee USD 1.00 was omitted); pct vs cost basis 189.85"
     },
     {
       "id": "T004",
@@ -151,10 +171,11 @@
       "proceeds_hkd": 1621.7,
       "gross_pnl_usd": 20.1,
       "gross_pnl_pct": 10.64,
-      "net_pnl_usd": 19.06,
-      "net_pnl_pct": 10.09,
+      "net_pnl_usd": 18.06,
+      "net_pnl_pct": 9.51,
       "status": "closed",
-      "decision_note": "Hourly check ~23:51 HKT 2026-09-21: RKLB @ 69.65 above TP 69.25 (+10.64% vs entry 62.95). Paper TAKE_PROFIT; SOUN stays open. Observation mode."
+      "decision_note": "Hourly check ~23:51 HKT 2026-09-21: RKLB @ 69.65 above TP 69.25 (+10.64% vs entry 62.95). Paper TAKE_PROFIT; SOUN stays open. Observation mode.",
+      "correction_note": "2026-09-28: net P&L corrected 19.06 -> 18.06 = 208.95 - 1.04 (sell fee) - 188.85 - 1.00 (buy fee); cash was already correct"
     }
   ],
   "watchlist": {
@@ -199,18 +220,24 @@
     "stop_loss_type": "ATR",
     "stop_loss_atr_mult": 2.0,
     "take_profit_pct": 0.1,
-    "max_trades_per_day": 2,
-    "position_sizing": "fixed_fractional"
+    "position_sizing": "fixed_fractional",
+    "risk_per_trade_pct": 0.02,
+    "max_new_entries_per_day": 1,
+    "one_position_per_theme": true,
+    "allow_averaging_down": false,
+    "cooldown_after_sl_days": 5,
+    "cooldown_after_tp_days": 3,
+    "source_of_truth": "config/settings.json"
   },
   "vix_guardrails": {
     "NORMAL": {
       "max_positions": 3,
-      "min_confidence": 0.7,
+      "min_confidence": 0.75,
       "description": "VIX < 20 — 正常操作，風險敞口全開"
     },
     "CAUTION": {
       "max_positions": 2,
-      "min_confidence": 0.75,
+      "min_confidence": 0.8,
       "description": "VIX 20-30 — 謹慎操作，收窄持倉，提高信心門檻"
     },
     "DEFENSIVE": {
@@ -265,5 +292,13 @@
       }
     ]
   },
-  "last_tracker_update": "2026-09-28T04:15:22.933817"
+  "last_tracker_update": "2026-09-28T04:15:22.933817",
+  "corrections": [
+    {
+      "date": "2026-09-28",
+      "by": "px v3-core migration",
+      "what": "RKLB round trip T003/T005 net P&L 19.06 -> 18.06 (buy fee 1.00 had been omitted). Cash unaffected (1140.56 already net of both fees).",
+      "also": "account.total_pnl_usd now = realized + unrealized - open entry fees (= equity - start 1280); previously it showed only SOUN's open loss (-5.25). total_fees_usd now counts only trades since rebase 2026-09-13 (3.04); old-era T002 fee 1.09 excluded."
+    }
+  ]
 }

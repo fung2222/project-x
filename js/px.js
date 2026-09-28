@@ -71,7 +71,7 @@ const PX = {
       <div><span>目標（${PX.esc(x.target_mode)}）</span><b class="up">${PX.usd(x.target)}</b>（+${Number(x.target_pct).toFixed(1)}%）</div>
       <div><span>回報／風險</span>R:R ${Number(x.rr).toFixed(1)}</div>
       <div><span>建議注碼</span>${x.shares} 股 ≈ ${PX.usd(x.cost_usd, 0)} / ${PX.hkd(x.cost_hkd)}</div>
-      <div><span>最大風險（2%）</span>${PX.usd(x.risk_usd, 0)} · 費用 ${x.fee_drag_pct != null ? Number(x.fee_drag_pct).toFixed(1) + '%' : '—'}</div></div>
+      <div><span>最大風險（2%）</span>${PX.usd(x.risk_usd, 0)} · 來回手續費 ${x.fee_drag_pct != null ? Number(x.fee_drag_pct).toFixed(1) + '%（要升過呢個先打和）' : '—'}</div></div>
       <div>${cat}</div><div class="why" style="margin-top:6px">💡 ${PX.esc((x.why || []).join('；'))}</div></div>`;
   },
 };

@@ -7,7 +7,9 @@
     python run.py close   [--dry-run] [--force] [--push]   # ET 17:00  (HKT 05:00 EDT / 06:00 EST)
     python run.py morning [--dry-run] [--force] [--push]   # HKT 08:30 Tue-Sat after a US session
     python run.py weekly  [--dry-run] [--force] [--push]   # HKT Monday 09:44
-    python run.py check   [--dry-run]                      # watchdog: re-run missed/failed slots, else 1 alert
+    python run.py tick    [--dry-run] [--push]             # RECOMMENDED cron entry, every minute, any host TZ:
+                                                            #   runs every due slot once, then the watchdog pass
+    python run.py check   [--dry-run] [--push]             # watchdog only: re-run missed/failed slots, else 1 alert
     python run.py scan                                      # print today's opportunity Top 5 (no Telegram)
     python run.py status                                    # config/secrets presence, schedule, run ledger
     python run.py tgcheck                                   # getMe + getChat (bot username, chat type/title; no send)
@@ -54,6 +56,34 @@ def _rerun(job, slot):
         os.environ.pop("PX_RERUN", None)
 
 
+def _tick_run(job, slot):
+    try:
+        res = schedule.run_job(job, _job_fn(job), via="tick", dry_run=False, force=False)
+        return (res or {}).get("status", "ok")
+    except Exception as e:
+        print(f"[tick] {job} failed: {type(e).__name__}: {telegram._redact(str(e))[:200]}")
+        try:
+            if not schedule.get(job, slot):  # run_job records failures itself; only cover pre-run errors
+                schedule.record(job, slot, "failed", f"{type(e).__name__}", via="tick")
+        except Exception:
+            pass
+        return "failed"
+
+
+def _tick(dry_run, push=False):
+    def runner(job, slot):
+        # first attempt of a slot = normal run; later attempts come from the watchdog (window bypass)
+        e = schedule.get(job, slot)
+        return _rerun(job, slot) if e else _tick_run(job, slot)
+    acts = schedule.tick(runner=runner, alert=_alert, dry_run=dry_run)
+    if acts:
+        print(json.dumps({"now_hkt": clock.now_hkt().isoformat(timespec="minutes"), "actions": acts}, ensure_ascii=False, indent=1))
+    if push and not dry_run and any(a.get("action") in ("run", "rerun") for a in acts):
+        from px import gitops
+        gitops.commit_and_push(f"px tick: {clock.now_hkt():%Y-%m-%d %H:%M} HKT")
+    return 0
+
+
 def _check(dry_run, push=False):
     acts = schedule.check(runner=_rerun, alert=_alert, dry_run=dry_run)
     print(json.dumps({"now_hkt": clock.now_hkt().isoformat(timespec="minutes"), "actions": acts}, ensure_ascii=False, indent=1))
@@ -96,7 +126,7 @@ def _status():
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description="Project X jobs")
-    ap.add_argument("job", choices=list(JOBS) + ["status", "check", "scan", "tgcheck", "tgtest"])
+    ap.add_argument("job", choices=list(JOBS) + ["status", "tick", "check", "scan", "tgcheck", "tgtest"])
     ap.add_argument("--yes", action="store_true", help="confirm tgtest (sends 2 real Telegram messages)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true")
@@ -109,6 +139,8 @@ def main(argv=None):
         os.environ["PX_DRY_RUN"] = "1"
     if a.job == "check":
         return _check(a.dry_run, a.push)
+    if a.job == "tick":
+        return _tick(a.dry_run, a.push)
     if a.job == "scan":
         return _scan()
     if a.job == "tgcheck":

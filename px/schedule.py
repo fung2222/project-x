@@ -178,6 +178,32 @@ def due_slots(now=None, lookback_hours=30):
     return sorted(out, key=lambda x: x[1])
 
 
+def due_now(now=None):
+    """Slots that are due right now and were never attempted: slot <= now <= slot + grace."""
+    now = now or clock.now_hkt()
+    out = []
+    for job, c in jobs().items():
+        local = now.astimezone(_tz(c))
+        for day in (local.date(), local.date() - dt.timedelta(days=1)):
+            for s in expected_slots(job, day):
+                if s <= local <= s + dt.timedelta(minutes=c["grace_min"]) and not get(job, s):
+                    out.append((job, s))
+    return sorted(out, key=lambda x: x[1])
+
+
+def tick(now=None, runner=None, alert=None, dry_run=False):
+    """ONE entry point for a dumb every-minute cron (any host timezone, DST-proof):
+    run every slot that is due and not yet attempted, then do a watchdog pass (re-runs/alerts)."""
+    now = now or clock.now_hkt()
+    actions = []
+    for job, slot in due_now(now):
+        actions.append({"job": job, "slot": key(job, slot), "action": "run"})
+        if not dry_run and runner is not None:
+            actions[-1]["result"] = runner(job, slot)
+    actions += check(now, runner=runner, alert=alert, dry_run=dry_run)
+    return actions
+
+
 def check(now=None, runner=None, alert=None, dry_run=False):
     """Watchdog pass. runner(job, slot) -> status str; alert(text) -> bool. Returns list of actions."""
     now = now or clock.now_hkt()

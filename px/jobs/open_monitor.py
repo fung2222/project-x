@@ -90,6 +90,11 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if not dry_run:
         write_json(path("_last_open_monitor.json"), out)
         write_text(report_path(f"OpenMonitor_{ctx.now.date().isoformat()}.txt"), msg)
+        try:
+            from .. import archive
+            archive.save_report("open", ctx.session, [msg], summary=f"開市監控 · {mkt['regime_zh']}（VIX {mkt['vix']}）")
+        except Exception as e:
+            print("[open] archive failed:", type(e).__name__)
     if legacy:
         print(json.dumps(out, ensure_ascii=False, indent=2, default=str))
         print("---MSG---")

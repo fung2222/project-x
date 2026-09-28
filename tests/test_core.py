@@ -16,7 +16,7 @@ import pandas as pd
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 
-from px import clock, decide, guard, indicators, ledger, signals  # noqa: E402
+from px import archive, clock, decide, guard, indicators, ledger, signals  # noqa: E402
 
 ET = clock.ET
 
@@ -223,6 +223,10 @@ class T11_Idempotency(unittest.TestCase):
             mock.patch.object(ledger, "PORTFOLIO_PATH", self.pf_path),
             mock.patch.object(guard, "PATH", os.path.join(self.tmp, "job_runs.json")),
             mock.patch.object(guard, "STATE_DIR", self.tmp),
+            mock.patch.object(archive, "REPORTS", os.path.join(self.tmp, "reports")),
+            mock.patch.object(archive, "INDEX", os.path.join(self.tmp, "reports_index.json")),
+            mock.patch.object(archive, "PNL", os.path.join(self.tmp, "pnl_history.json")),
+            mock.patch.object(archive, "SCAN", os.path.join(self.tmp, "scan.json")),
         ]
         for p in self.patches:
             p.start()

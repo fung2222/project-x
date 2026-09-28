@@ -88,6 +88,11 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         ledger.save(pf)
         write_json(report_path(f"WeeklyReport_{today}.json"), out)
         write_text(report_path(f"WeeklySummary_{today}.txt"), strip_html(msg))
+        try:
+            from .. import archive
+            archive.save_report("weekly", str(today), [msg], summary=f"每週回顧 {start} 至 {today}")
+        except Exception as e:
+            print("[weekly] archive failed:", type(e).__name__)
         if tg_ok:
             guard.mark_sent(week_key, JOB, "main", tg_res)
         guard.update(week_key, JOB, status="ok" if tg_ok else "telegram_failed", _inc_runs=True,

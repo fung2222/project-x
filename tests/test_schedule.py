@@ -169,5 +169,62 @@ class TestWatchdog(unittest.TestCase):
         self.assertIn("hourly 0/7⚠️", line)
 
 
+class TestTick(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+        self.ps = [mock.patch.object(schedule, "LEDGER", os.path.join(self.tmp, "run_ledger.json")),
+                   mock.patch.object(schedule, "STATE_DIR", self.tmp)]
+        for p in self.ps:
+            p.start()
+        with open(os.path.join(self.tmp, "run_ledger.json"), "w") as f:
+            json.dump({"_meta": {"watch_since": "2026-01-01T00:00+08:00"}}, f)
+        self.calls = []
+
+    def tearDown(self):
+        for p in self.ps:
+            p.stop()
+
+    def runner_at(self, now):
+        def r(job, slot):
+            self.calls.append((job, slot.strftime("%Y-%m-%d %H:%M")))
+            schedule.record(job, slot, "ok", now=now)
+            return "ok"
+        return r
+
+    def _tick(self, now):
+        with mock.patch.object(clock, "now_hkt", return_value=now):
+            return schedule.tick(now=now, runner=self.runner_at(now), alert=lambda t: True)
+
+    def test_open_runs_once_edt(self):
+        self._tick(hkt(2026, 10, 2, 21, 34))
+        self.assertEqual(self.calls, [])
+        self._tick(hkt(2026, 10, 2, 21, 35))
+        self._tick(hkt(2026, 10, 2, 21, 36))
+        self.assertEqual(self.calls, [("open", "2026-10-02 09:35")])
+
+    def test_open_after_dst_is_2235_hkt(self):
+        self._tick(hkt(2026, 11, 2, 21, 35))
+        self.assertEqual(self.calls, [])
+        self._tick(hkt(2026, 11, 2, 22, 35))
+        self.assertEqual(self.calls, [("open", "2026-11-02 09:35")])
+
+    def test_friday_second_half_runs_on_saturday_hkt(self):
+        self._tick(hkt(2026, 10, 3, 0, 6))  # Sat 00:06 HKT = Fri 12:06 ET
+        self.assertIn(("hourly", "2026-10-02 12:06"), self.calls)
+
+    def test_holiday_nothing(self):
+        for h, m in ((22, 35), (22, 53), (23, 6)):
+            self._tick(hkt(2026, 11, 26, h, m))  # Thanksgiving (EST)
+        self.assertEqual([c for c in self.calls if c[0] in ("open", "daily", "hourly")], [])
+
+    def test_morning_saturday_not_monday(self):
+        self._tick(hkt(2026, 10, 3, 8, 30))  # Sat after Fri session
+        self._tick(hkt(2026, 10, 5, 8, 30))  # Mon after weekend -> no morning; weekly at 09:44
+        self._tick(hkt(2026, 10, 5, 9, 44))
+        self.assertIn(("morning", "2026-10-03 08:30"), self.calls)
+        self.assertNotIn(("morning", "2026-10-05 08:30"), self.calls)
+        self.assertIn(("weekly", "2026-10-05 09:44"), self.calls)
+
+
 if __name__ == "__main__":
     unittest.main()

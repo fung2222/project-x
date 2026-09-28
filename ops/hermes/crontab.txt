@@ -1,0 +1,34 @@
+# Project X — Hermes crontab (install with:  crontab -l | cat - ops/hermes/crontab.txt | crontab - )
+# See docs/HERMES_HANDOVER.md §3. Pick ONE option. Never run two options (or Grok Bot routines) at the same time.
+# All jobs are plain Python (no LLM). The duplicate-send guard makes accidental double runs harmless.
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+PX_HOME=/opt/data/project-x
+PX_ENV_FILE=/opt/data/.env
+
+# ---- OPTION A (RECOMMENDED): one line, works in ANY host timezone, DST/holiday/weekday-proof.
+# `tick` runs every scheduled slot once when due (open 09:35 ET, daily 09:53 ET, hourly :06 10-16 ET,
+# close 17:00 ET, morning 08:30 HKT Tue-Sat, weekly Mon 09:44 HKT) and then the watchdog (re-run / 1 alert).
+* * * * * /opt/data/project-x/ops/hermes/px_job.sh tick
+
+# ---- OPTION B: explicit lines in America/New_York (only if your cron supports CRON_TZ, e.g. cronie)
+# CRON_TZ=America/New_York
+# 35 9 * * 1-5      /opt/data/project-x/ops/hermes/px_job.sh open
+# 53 9 * * 1-5      /opt/data/project-x/ops/hermes/px_job.sh daily
+# 6 10-16 * * 1-5   /opt/data/project-x/ops/hermes/px_job.sh hourly
+# 0 17 * * 1-5      /opt/data/project-x/ops/hermes/px_job.sh close
+# CRON_TZ=Asia/Hong_Kong
+# 30 8 * * *        /opt/data/project-x/ops/hermes/px_job.sh morning
+# 44 9 * * 1        /opt/data/project-x/ops/hermes/px_job.sh weekly
+# 20,50 * * * *     /opt/data/project-x/ops/hermes/px_job.sh check
+
+# ---- OPTION C: host timezone = Asia/Hong_Kong, no CRON_TZ: "DST superset" (fires at BOTH the EDT and
+# the EST time, every day; run.py skips quietly outside the ET window / on non-trading days).
+# Verified by tests/test_crontab.py across 2026-11-01 and 2027-03-14.
+# 35 21,22 * * *                 /opt/data/project-x/ops/hermes/px_job.sh open
+# 53 21,22 * * *                 /opt/data/project-x/ops/hermes/px_job.sh daily
+# 6 22,23,0,1,2,3,4,5 * * *      /opt/data/project-x/ops/hermes/px_job.sh hourly
+# 0 5,6 * * *                    /opt/data/project-x/ops/hermes/px_job.sh close
+# 30 8 * * *                     /opt/data/project-x/ops/hermes/px_job.sh morning
+# 44 9 * * 1                     /opt/data/project-x/ops/hermes/px_job.sh weekly
+# 20,50 * * * *                  /opt/data/project-x/ops/hermes/px_job.sh check

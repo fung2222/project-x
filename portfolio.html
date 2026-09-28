@@ -50,7 +50,7 @@ PX.nav();
       <div><span>現金下限</span>${Math.round((r.min_cash_pct ?? .2) * 100)}%</div><div><span>最低信心</span>${Math.round((r.min_confidence ?? .75) * 100)}%</div>
       <div><span>每注風險</span>≤ ${Math.round((r.risk_per_trade_pct ?? .02) * 100)}%</div><div><span>每日新倉</span>≤ ${r.max_new_entries_per_day ?? 1}</div>
       <div><span>攤平／加倉</span>禁止</div><div><span>冷靜期</span>止損後 ${r.cooldown_after_sl_days ?? 5} / 止盈後 ${r.cooldown_after_tp_days ?? 3} 交易日</div>
-      <div><span>手續費模型</span>max(US$1, 0.5%)</div><div><span>SL/TP</span>每單預設，觸發自動執行</div></div></div>
+      <div><span>手續費模型</span>富途美股固定式：每單約 US$2（佣金 0.99＋平台費 1.00 最低＋交收費；賣出加 TAF）。09-28 前嘅紙上交易用舊 US$1 模型入帳</div><div><span>SL/TP</span>每單預設，觸發自動執行</div></div></div>
     <details class="card"><summary>🗄 Legacy：Hermes 舊模擬倉（HKD 5k，2026-07-08 起，唯讀）</summary>
       <p class="muted" style="margin:8px 0">止損只標記從未執行（RKLB 07-16 起跌穿 −10% 仍持有；TSLA 曾 −24.7%）。唔同 Project X 合併計算。</p>
       ${lpf ? `<div>總值 ${PX.usd(lpf.total_value_usd)}（${PX.pct(lpf.total_pnl_pct)}）· 現金 ${PX.usd(lpf.cash_usd)} · ${(lpf.positions || []).map(p => `${PX.esc(p.ticker)} ${p.shares}股 ${PX.pct(p.pnl_pct)}`).join(' · ')}</div>` : ''}

@@ -59,13 +59,13 @@ class _Resp:
 
 # ---------------------------------------------------------------- 1B Finnhub 429 cooldown
 class TestFinnhub(_TmpState):
-    def _env(self):
+    def _patches(self):
         return [mock.patch.object(finnhub, "network_off", return_value=False),
                 mock.patch.object(finnhub, "get_secret", return_value="k")]
 
     def test_429_sets_cooldown_from_reset_header_and_skips_next_calls(self):
         reset = time.time() + 40
-        with self._env()[0], self._env()[1], redirect_stdout(io.StringIO()), \
+        with self._patches()[0], self._patches()[1], redirect_stdout(io.StringIO()), \
                 mock.patch.object(finnhub.requests, "get", return_value=_Resp(429, {}, {"X-Ratelimit-Reset": str(reset)})) as g:
             d, err = finnhub.get("quote", {"symbol": "IONQ"})
             self.assertIsNone(d)
@@ -78,7 +78,7 @@ class TestFinnhub(_TmpState):
             self.assertEqual(g.call_count, 1)  # no HTTP during cooldown
 
     def test_errors_are_explicit_and_counted(self):
-        with self._env()[0], self._env()[1], redirect_stdout(io.StringIO()) as out, \
+        with self._patches()[0], self._patches()[1], redirect_stdout(io.StringIO()) as out, \
                 mock.patch.object(finnhub.requests, "get", return_value=_Resp(500, {})):
             d, err = finnhub.get("quote", {"symbol": "IONQ"})
         self.assertIsNone(d)
@@ -88,7 +88,7 @@ class TestFinnhub(_TmpState):
 
     def test_stale_quote_rejected(self):
         old = time.time() - 3600
-        with self._env()[0], self._env()[1], \
+        with self._patches()[0], self._patches()[1], \
                 mock.patch.object(finnhub.requests, "get", return_value=_Resp(200, {"c": 40, "pc": 41, "dp": -2.4, "t": old})):
             q, err = finnhub.quote("IONQ", max_age_s=15 * 60)
         self.assertIsNone(q)

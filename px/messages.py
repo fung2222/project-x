@@ -92,3 +92,37 @@ def scenarios(ctx, pf, entry):
     bear += "；VIX >30 → 防禦模式、暫停新倉"
     invalid.append("VIX > 30 → 防禦模式：只准 setup A 且信心 ≥85%")
     return {"base": base, "bull": bull, "bear": bear}, invalid
+
+
+# ---------------------------------------------------------------- opportunity scan (Top 5)
+def scan_message(scan, title="🚀 高潛力機會掃描 Top 5", show_misses=True):
+    """Ranked watchlist with entry zone / stop / target / R:R / size (shares + HKD) / why / catalyst."""
+    if not scan or not scan.get("top") and not scan.get("near_misses"):
+        return f"<b>{title}</b>\n今日冇數據（掃描失敗），請睇網站。"
+    fx = scan.get("fx_usdhkd") or 7.8
+    L = [f"<b>{title}</b>（{esc(scan.get('bar_date') or '')} 收市數據；掃 {scan.get('scanned', 0)} 隻，"
+         f"{scan.get('passed', 0)} 隻過濾）",
+         f"每注上限 US${f2(scan.get('max_position_usd'), 0)}（25%）· 每注最大風險 US${f2(scan.get('risk_per_trade_usd'), 0)}（2%）"]
+    if not scan.get("top"):
+        L.append("今日冇一隻同時過晒趨勢／流動性／R:R≥2 條件 → 唔入場都係一種決定。")
+    for i, x in enumerate(scan.get("top", []), 1):
+        live = f"（現 ${f2(x.get('live_price'))} {pct(x.get('live_change_pct'))}）" if x.get("live_price") else ""
+        cat = ""
+        if x.get("earnings_date"):
+            cat = f"｜📅 業績 {x['earnings_date']}" + (f"（{x['earnings_days']} 個交易日後）" if x.get("earnings_days") is not None else "")
+        L.append(
+            f"\n<b>{i}. {esc(x['ticker'])}</b> {esc(load_settings()['names'].get(x['ticker'], ''))} · 分數 {f2(x['score'], 0)} · {esc(x['setup'])}{live}\n"
+            f"入場區 ${f2(x['entry_zone'][0])}–{f2(x['entry_zone'][1])} · 止損 ${f2(x['stop'])}（−{f2(x['stop_pct'], 1)}%）· "
+            f"目標 ${f2(x['target'])}（+{f2(x['target_pct'], 1)}%，{esc(x['target_mode'])}）· R:R {f2(x['rr'], 1)}\n"
+            f"注碼：{x['shares']} 股 ≈ US${f2(x['cost_usd'], 0)} / HK${x['cost_hkd']:,.0f}（風險 US${f2(x['risk_usd'], 0)}，來回費用 {f2(x.get('fee_drag_pct'), 1)}%）{cat}\n"
+            f"點解：{esc('；'.join(x.get('why', [])))}")
+    if show_misses and scan.get("near_misses"):
+        L.append("\n<i>差少少：" + "；".join(f"{esc(m['ticker'])}（{esc(m['fail'][0])}）" for m in scan["near_misses"][:4]) + "</i>")
+    L.append("\n<i>情境參考，唔係保證：入場區內先考慮、跌穿止損即走、業績前唔開新倉。回測結果見網站（edge 未證實）。</i>")
+    return "\n".join(L)
+
+
+def catalyst_text(earnings_date, days):
+    if not earnings_date:
+        return "—"
+    return f"{earnings_date}" + (f"（{days}日）" if days is not None else "")

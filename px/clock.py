@@ -159,7 +159,7 @@ def in_window(window, now=None):
     start, end = _t(window[0]), _t(window[1])
     # respect early close: shrink end to close+45min
     ct = close_time(now.date())
-    if ct == EARLY_CLOSE:
+    if ct == EARLY_CLOSE and start < ct:  # intraday windows shrink on half days; post-close windows don't
         end = min(end, dt.time(13, 45))
     return start <= now.time() <= end
 
@@ -169,3 +169,8 @@ def et_to_hkt_str(et_hhmm, on_date):
     t = dt.datetime.combine(on_date, _t(et_hhmm), tzinfo=ET).astimezone(HKT)
     plus = " (+1)" if t.date() > on_date else ""
     return t.strftime("%H:%M") + plus
+
+
+def in_window_hkt(window, now=None):
+    now = to_hkt(now or now_hkt())
+    return _t(window[0]) <= now.time() <= _t(window[1])

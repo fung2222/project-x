@@ -1,0 +1,119 @@
+"""close job (ET 17:00 = HKT 05:00 EDT / 06:00 EST; trading days only).
+
+Ported from Hermes's 05:00 close report, rebuilt on the px engine:
+  msg 1  🌙 收市報告 — equity USD/HKD, day change, total P&L vs start (fees+FX included), SPY/QQQ/VIX, cash
+  msg 2  📈 持倉結算 — close price, P&L, distance to SL/TP, risk flag (SL/TP auto-executed on paper)
+  msg 3  🧭 趨勢 + 大型科技股背景 (Mag7 context only) + 今日最強/最弱
+  msg 4  🚀 明日觀察 Top 5 (opportunity scan on today's completed bar) + 🩺 health line
+Writes data/pnl_history.json, data/scan.json, data/reports/close_report_<date>.*, portfolio.json."""
+import json
+
+from .. import archive, clock, engine, guard, ledger, marketdata, scan, schedule, telegram
+from ..config import load_settings
+from ..messages import esc, f2, pct, footer, money, scan_message
+from .common import Ctx, refresh_positions
+
+JOB = "close"
+PARTS = ("summary", "positions", "trend", "scan")
+
+
+def _flag(p):
+    pnl = p.get("pnl_pct") or 0
+    d = p.get("dist_sl_pct")
+    if d is not None and d < 2:
+        return "🔴"
+    if pnl <= -7:
+        return "🟠"
+    return "🟢"
+
+
+def run(dry_run=False, force=False, legacy=False, now=None):
+    ctx = Ctx(JOB, dry_run, force, legacy, now)
+    d = ctx.now_et.date()
+    import os
+    if not force:
+        if not clock.is_trading_day(d):
+            return {"status": "skipped", "reason": f"US market closed on {d} ET ({clock.holiday_name(d) or 'weekend'})"}
+        if not clock.session_closed(ctx.now_et) and os.environ.get("PX_RERUN") != "1":
+            return {"status": "skipped", "reason": "session not closed yet"}
+        if all(guard.was_sent(ctx.session, JOB, p) for p in PARTS):
+            return {"status": "duplicate", "reason": f"close already sent for {ctx.session}"}
+    s = load_settings()
+    pf = ledger.load()
+    rows, executed, acct = refresh_positions(ctx, pf)
+    mk = engine.market_context()
+    hist = archive.load_pnl()
+    prev = next((h for h in reversed(hist) if h.get("date") < ctx.session), None)
+    day_chg = acct["equity_usd"] - prev["equity_usd"] if prev else None
+    fx = acct.get("fx_usdhkd") or mk["fx_usdhkd"]
+    L = [f"<b>🌙 Project X 收市報告 — {ctx.session}</b>（美東收市後）",
+         f"💼 權益 {money(acct['equity_usd'], fx)}" + (f"｜今日 {day_chg:+.2f}" if day_chg is not None else ""),
+         f"📊 總 P&L {acct['total_pnl_usd']:+.2f}（{pct(acct['total_return_pct'])} vs 起始 US${f2(s['account']['start_equity_usd'])}；已計手續費＋匯率 {f2(fx, 3)}）",
+         f"已實現 {acct['realized_pnl_usd']:+.2f} · 未實現 {acct['unrealized_pnl_usd']:+.2f} · 現金 {f2(acct['cash_pct'], 1)}%",
+         f"🌍 SPY ${f2(mk['spy'])}（{pct(mk['spy_chg_pct'])}）· QQQ ${f2(mk['qqq'])}（{pct(mk['qqq_chg_pct'])}）· VIX {f2(mk['vix'])} {mk['emoji']}{esc(mk['regime_zh'])}"]
+    m1 = "\n".join(L)
+    P = ["<b>📈 持倉結算</b>"]
+    for tr in executed:
+        P.append(f"✅ 紙上{'止損' if tr['reason'] == 'STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
+    for r in rows:
+        if r["action"].endswith("_EXECUTED"):
+            continue
+        p = ledger.position(pf, r["ticker"]) or {}
+        P.append(f"{_flag(r)} {r['ticker']} x{r['shares']}：${f2(r['entry'])}→${f2(r['px'])}（{pct(r['pnl_pct'])}，今日 {pct(r.get('chg_vs_prev'))}）"
+                 f"· SL ${f2(r['sl'])}（距 {f2(r.get('dist_sl_pct'), 1)}%）· TP ${f2(r['tp'])}")
+    if len(P) == 1:
+        P.append("空倉（現金 100%）")
+    m2 = "\n".join(P)
+    # trend + mag7 context + movers
+    T = ["<b>🧭 趨勢狀態（已收市日 bar）</b>"]
+    core = s["universe"]["core"] + [p["ticker"] for p in pf.get("positions", []) if p["ticker"] not in s["universe"]["core"]]
+    movers = []
+    for t in core:
+        sg = engine.build_signal(t, mk["regime"], ledger.position(pf, t) is not None, ctx.now)
+        if "error" in sg:
+            continue
+        T.append(f"{t}：{sg['trend_label']}（分 {sg['trend_score']:+d}）RSI {f2(sg['rsi'], 0)} · {esc(sg['action'])}")
+    m7 = engine.mag7_context(ctx.now)
+    if m7["items"]:
+        T.append(f"\n<b>🏛 大型科技股背景（只作市場氣氛，唔係買入名單）</b>：{m7['mood']}（{m7['up']} 升／{m7['down']} 跌趨勢）")
+        T.append(" · ".join(f"{x['ticker']} {pct(x['change_pct'], 1)}" for x in m7["items"]))
+    res = scan.run_scan(ctx.now, acct["equity_usd"], fx)
+    allx = [x for x in res.get("all", []) if x.get("close")]
+    try:
+        chg = []
+        for x in allx:
+            df = marketdata.history(x["ticker"], period=s["scan"]["history_period"])
+            c = df["Close"].dropna()
+            chg.append((x["ticker"], (float(c.iloc[-1]) / float(c.iloc[-2]) - 1) * 100))
+        chg.sort(key=lambda y: y[1])
+        if chg:
+            T.append(f"\n🏆 掃描池今日最強：{', '.join(f'{t} {v:+.1f}%' for t, v in chg[-3:][::-1])}")
+            T.append(f"🥶 最弱：{', '.join(f'{t} {v:+.1f}%' for t, v in chg[:3])}")
+    except Exception as e:
+        print("movers skipped", type(e).__name__)
+    m3 = "\n".join(T)
+    health = schedule.health_line(clock.to_et(ctx.now).date(), ctx.now, exclude=("close",))
+    m4 = scan_message(res, title="🚀 明日觀察 Top 5") + "\n\n" + health + "\n\n" + footer()
+    msgs = dict(zip(PARTS, (m1, m2, m3, m4)))
+    if not dry_run:
+        ledger.save(pf)
+        archive.append_pnl(ctx.session, acct, pf.get("positions", []), mk["spy"], mk["qqq"])
+        archive.save_scan(res)
+        archive.save_report(JOB, ctx.session, [msgs[p] for p in PARTS],
+                            summary=f"收市 · 權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）· VIX {f2(mk['vix'])}",
+                            pnl=acct["total_return_pct"])
+    results = {}
+    for part in PARTS:
+        if guard.was_sent(ctx.session, JOB, part) and not force:
+            results[part] = "already-sent"
+            continue
+        ok_, r = telegram.send(msgs[part], dry_run=dry_run, label=f"close/{part}")
+        results[part] = "ok" if ok_ else f"failed: {r}"
+        if ok_ and not dry_run:
+            guard.mark_sent(ctx.session, JOB, part, r)
+    if dry_run or legacy:
+        for p in PARTS:
+            print(archive.strip_html(msgs[p]), "\n")
+    print(json.dumps({"session": ctx.session, "telegram": results, "exits": [t["id"] for t in executed]}, ensure_ascii=False))
+    good = all(v in ("ok", "already-sent") for v in results.values())
+    return {"status": "ok" if good else "telegram_failed", "telegram": results, "messages": msgs}

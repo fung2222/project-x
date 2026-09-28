@@ -230,3 +230,23 @@ def hit_rate(signals, perf):
                     "miss_rate_pct": round(misses / total * 100, 1)})
     out["label"] = "信號命中率樣本（唔係實際交易筆數）"
     return out
+
+
+def mag7_context(now=None):
+    """Mega-cap context only (NOT trade candidates): price, day change, trend label on completed bars."""
+    s = load_settings()
+    out = []
+    for t in s["universe"].get("mag7_context", []):
+        try:
+            ind = indicators.compute(marketdata.history(t), now, s["indicators"]["min_bars"])
+            if "error" in ind:
+                continue
+            out.append({"ticker": t, "close": ind["close"], "change_pct": ind["change_pct"], "rsi": ind["rsi14"],
+                        "trend_score": ind["trend_score"], "trend_label": ind["trend_label"],
+                        "vs_ma50_pct": ind["price_vs_ma50_pct"], "bar_date": ind["bar_date"]})
+        except Exception as e:
+            print("mag7", t, type(e).__name__)
+    up = sum(1 for x in out if x["trend_score"] >= 3)
+    down = sum(1 for x in out if x["trend_score"] <= -3)
+    mood = "偏強" if up >= 4 else ("偏弱" if down >= 4 else "分化")
+    return {"items": out, "mood": mood, "up": up, "down": down}

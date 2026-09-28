@@ -1,0 +1,449 @@
+{
+ "_note": "All a-priori variants run 2026-09-28 on the same data (yfinance 2y download, 300 test days 2025-07-17..2026-09-24). 'live' = settings.json as committed (3xATR stop capped 20%, 30-day time stop, fee-drag filter, no chasing >3 ATR above MA20). Choosing live among variants is an in-sample choice -> results are optimistic. trend_trail and trend_trail_wide are identical because live already uses the 3xATR stop.",
+ "v1_2atr": {
+  "variant_params": {
+   "sl_atr_mult": 2.0,
+   "sl_max_pct": 0.15,
+   "time_stop_days": 20
+  },
+  "exit_mode": "fixed",
+  "period": {
+   "from": "2025-07-17",
+   "to": "2026-09-24",
+   "trading_days": 300
+  },
+  "signal_level": {
+   "top1_each_day": {
+    "n": 124,
+    "target_hit_rate": 0.153,
+    "win_rate": 0.282,
+    "avg_r": -0.134,
+    "median_r": -1.0,
+    "total_r": -16.57,
+    "max_drawdown_r": -27.11,
+    "avg_days": 10.4,
+    "outcomes": {
+     "target": 19,
+     "trail": 0,
+     "stop": 74,
+     "stop_gap": 5,
+     "time": 22,
+     "open_at_end": 4
+    }
+   },
+   "top5_each_day": {
+    "n": 322,
+    "target_hit_rate": 0.183,
+    "win_rate": 0.36,
+    "avg_r": 0.046,
+    "median_r": -1.0,
+    "total_r": 14.91,
+    "max_drawdown_r": -60.0,
+    "avg_days": 11.2,
+    "outcomes": {
+     "target": 59,
+     "trail": 0,
+     "stop": 153,
+     "stop_gap": 27,
+     "time": 72,
+     "open_at_end": 11
+    }
+   },
+   "baseline_all_liquid_names_same_exits": {
+    "n": 1164,
+    "target_hit_rate": 0.169,
+    "win_rate": 0.402,
+    "avg_r": 0.006,
+    "median_r": -0.903,
+    "total_r": 7.37,
+    "max_drawdown_r": -154.58,
+    "avg_days": 11.4,
+    "outcomes": {
+     "target": 197,
+     "trail": 0,
+     "stop": 498,
+     "stop_gap": 81,
+     "time": 347,
+     "open_at_end": 41
+    }
+   }
+  },
+  "portfolio_sim": {
+   "start_equity_usd": 1280.0,
+   "end_equity_usd": 1095.52,
+   "return_pct": -14.41,
+   "max_drawdown_pct": -27.41,
+   "trades": 72,
+   "win_rate": 0.306,
+   "fees_note": "fees included",
+   "open_positions_at_end": 3
+  },
+  "benchmarks": {
+   "QQQ_buy_hold_pct_and_mdd": [
+    31.92,
+    -12.19
+   ],
+   "SPY_buy_hold_pct_and_mdd": [
+    22.15,
+    -9.13
+   ],
+   "universe_equal_weight_buy_hold_pct": 8.73
+  }
+ },
+ "live": {
+  "variant_params": {},
+  "exit_mode": "fixed",
+  "period": {
+   "from": "2025-07-17",
+   "to": "2026-09-24",
+   "trading_days": 300
+  },
+  "signal_level": {
+   "top1_each_day": {
+    "n": 108,
+    "target_hit_rate": 0.167,
+    "win_rate": 0.352,
+    "avg_r": 0.044,
+    "median_r": -0.71,
+    "total_r": 4.79,
+    "max_drawdown_r": -26.98,
+    "avg_days": 18.1,
+    "outcomes": {
+     "target": 18,
+     "trail": 0,
+     "stop": 48,
+     "stop_gap": 3,
+     "time": 28,
+     "open_at_end": 11
+    }
+   },
+   "top5_each_day": {
+    "n": 220,
+    "target_hit_rate": 0.159,
+    "win_rate": 0.345,
+    "avg_r": 0.004,
+    "median_r": -0.681,
+    "total_r": 0.81,
+    "max_drawdown_r": -37.58,
+    "avg_days": 18.3,
+    "outcomes": {
+     "target": 35,
+     "trail": 0,
+     "stop": 92,
+     "stop_gap": 13,
+     "time": 66,
+     "open_at_end": 14
+    }
+   },
+   "baseline_all_liquid_names_same_exits": {
+    "n": 718,
+    "target_hit_rate": 0.212,
+    "win_rate": 0.453,
+    "avg_r": 0.011,
+    "median_r": -0.211,
+    "total_r": 7.77,
+    "max_drawdown_r": -103.84,
+    "avg_days": 17.8,
+    "outcomes": {
+     "target": 152,
+     "trail": 0,
+     "stop": 246,
+     "stop_gap": 39,
+     "time": 238,
+     "open_at_end": 43
+    }
+   }
+  },
+  "portfolio_sim": {
+   "start_equity_usd": 1280.0,
+   "end_equity_usd": 1323.35,
+   "return_pct": 3.39,
+   "max_drawdown_pct": -24.29,
+   "trades": 42,
+   "win_rate": 0.357,
+   "fees_note": "fees included",
+   "open_positions_at_end": 3
+  },
+  "benchmarks": {
+   "QQQ_buy_hold_pct_and_mdd": [
+    31.92,
+    -12.19
+   ],
+   "SPY_buy_hold_pct_and_mdd": [
+    22.15,
+    -9.13
+   ],
+   "universe_equal_weight_buy_hold_pct": 8.73
+  }
+ },
+ "pullback_only": {
+  "variant_params": {
+   "allowed_setups": [
+    "上升趨勢回踩MA20"
+   ]
+  },
+  "exit_mode": "fixed",
+  "period": {
+   "from": "2025-07-17",
+   "to": "2026-09-24",
+   "trading_days": 300
+  },
+  "signal_level": {
+   "top1_each_day": {
+    "n": 64,
+    "target_hit_rate": 0.062,
+    "win_rate": 0.297,
+    "avg_r": -0.293,
+    "median_r": -1.0,
+    "total_r": -18.78,
+    "max_drawdown_r": -20.61,
+    "avg_days": 17.9,
+    "outcomes": {
+     "target": 4,
+     "trail": 0,
+     "stop": 30,
+     "stop_gap": 5,
+     "time": 19,
+     "open_at_end": 6
+    }
+   },
+   "top5_each_day": {
+    "n": 89,
+    "target_hit_rate": 0.056,
+    "win_rate": 0.281,
+    "avg_r": -0.309,
+    "median_r": -1.0,
+    "total_r": -27.49,
+    "max_drawdown_r": -30.54,
+    "avg_days": 19.4,
+    "outcomes": {
+     "target": 5,
+     "trail": 0,
+     "stop": 45,
+     "stop_gap": 4,
+     "time": 28,
+     "open_at_end": 7
+    }
+   },
+   "baseline_all_liquid_names_same_exits": {
+    "n": 718,
+    "target_hit_rate": 0.212,
+    "win_rate": 0.453,
+    "avg_r": 0.011,
+    "median_r": -0.211,
+    "total_r": 7.77,
+    "max_drawdown_r": -103.84,
+    "avg_days": 17.8,
+    "outcomes": {
+     "target": 152,
+     "trail": 0,
+     "stop": 246,
+     "stop_gap": 39,
+     "time": 238,
+     "open_at_end": 43
+    }
+   }
+  },
+  "portfolio_sim": {
+   "start_equity_usd": 1280.0,
+   "end_equity_usd": 1264.24,
+   "return_pct": -1.23,
+   "max_drawdown_pct": -22.7,
+   "trades": 29,
+   "win_rate": 0.276,
+   "fees_note": "fees included",
+   "open_positions_at_end": 3
+  },
+  "benchmarks": {
+   "QQQ_buy_hold_pct_and_mdd": [
+    31.92,
+    -12.19
+   ],
+   "SPY_buy_hold_pct_and_mdd": [
+    22.15,
+    -9.13
+   ],
+   "universe_equal_weight_buy_hold_pct": 8.73
+  }
+ },
+ "trend_trail": {
+  "variant_params": {
+   "exit_mode": "ma20_trail",
+   "time_stop_days": 60
+  },
+  "exit_mode": "ma20_trail",
+  "period": {
+   "from": "2025-07-17",
+   "to": "2026-09-24",
+   "trading_days": 300
+  },
+  "signal_level": {
+   "top1_each_day": {
+    "n": 134,
+    "target_hit_rate": 0.037,
+    "win_rate": 0.343,
+    "avg_r": 0.108,
+    "median_r": -0.199,
+    "total_r": 14.52,
+    "max_drawdown_r": -16.81,
+    "avg_days": 9.7,
+    "outcomes": {
+     "target": 5,
+     "trail": 115,
+     "stop": 7,
+     "stop_gap": 0,
+     "time": 0,
+     "open_at_end": 7
+    }
+   },
+   "top5_each_day": {
+    "n": 324,
+    "target_hit_rate": 0.028,
+    "win_rate": 0.355,
+    "avg_r": 0.039,
+    "median_r": -0.192,
+    "total_r": 12.62,
+    "max_drawdown_r": -42.27,
+    "avg_days": 9.0,
+    "outcomes": {
+     "target": 9,
+     "trail": 294,
+     "stop": 11,
+     "stop_gap": 0,
+     "time": 0,
+     "open_at_end": 10
+    }
+   },
+   "baseline_all_liquid_names_same_exits": {
+    "n": 2678,
+    "target_hit_rate": 0.013,
+    "win_rate": 0.392,
+    "avg_r": 0.001,
+    "median_r": -0.077,
+    "total_r": 4.01,
+    "max_drawdown_r": -101.29,
+    "avg_days": 4.0,
+    "outcomes": {
+     "target": 36,
+     "trail": 2590,
+     "stop": 22,
+     "stop_gap": 5,
+     "time": 0,
+     "open_at_end": 25
+    }
+   }
+  },
+  "portfolio_sim": {
+   "start_equity_usd": 1280.0,
+   "end_equity_usd": 1237.34,
+   "return_pct": -3.33,
+   "max_drawdown_pct": -35.22,
+   "trades": 101,
+   "win_rate": 0.287,
+   "fees_note": "fees included",
+   "open_positions_at_end": 3
+  },
+  "benchmarks": {
+   "QQQ_buy_hold_pct_and_mdd": [
+    31.92,
+    -12.19
+   ],
+   "SPY_buy_hold_pct_and_mdd": [
+    22.15,
+    -9.13
+   ],
+   "universe_equal_weight_buy_hold_pct": 8.73
+  }
+ },
+ "trend_trail_wide": {
+  "variant_params": {
+   "exit_mode": "ma20_trail",
+   "time_stop_days": 60,
+   "sl_atr_mult": 3.0,
+   "sl_max_pct": 0.2
+  },
+  "exit_mode": "ma20_trail",
+  "period": {
+   "from": "2025-07-17",
+   "to": "2026-09-24",
+   "trading_days": 300
+  },
+  "signal_level": {
+   "top1_each_day": {
+    "n": 134,
+    "target_hit_rate": 0.037,
+    "win_rate": 0.343,
+    "avg_r": 0.108,
+    "median_r": -0.199,
+    "total_r": 14.52,
+    "max_drawdown_r": -16.81,
+    "avg_days": 9.7,
+    "outcomes": {
+     "target": 5,
+     "trail": 115,
+     "stop": 7,
+     "stop_gap": 0,
+     "time": 0,
+     "open_at_end": 7
+    }
+   },
+   "top5_each_day": {
+    "n": 324,
+    "target_hit_rate": 0.028,
+    "win_rate": 0.355,
+    "avg_r": 0.039,
+    "median_r": -0.192,
+    "total_r": 12.62,
+    "max_drawdown_r": -42.27,
+    "avg_days": 9.0,
+    "outcomes": {
+     "target": 9,
+     "trail": 294,
+     "stop": 11,
+     "stop_gap": 0,
+     "time": 0,
+     "open_at_end": 10
+    }
+   },
+   "baseline_all_liquid_names_same_exits": {
+    "n": 2678,
+    "target_hit_rate": 0.013,
+    "win_rate": 0.392,
+    "avg_r": 0.001,
+    "median_r": -0.077,
+    "total_r": 4.01,
+    "max_drawdown_r": -101.29,
+    "avg_days": 4.0,
+    "outcomes": {
+     "target": 36,
+     "trail": 2590,
+     "stop": 22,
+     "stop_gap": 5,
+     "time": 0,
+     "open_at_end": 25
+    }
+   }
+  },
+  "portfolio_sim": {
+   "start_equity_usd": 1280.0,
+   "end_equity_usd": 1237.34,
+   "return_pct": -3.33,
+   "max_drawdown_pct": -35.22,
+   "trades": 101,
+   "win_rate": 0.287,
+   "fees_note": "fees included",
+   "open_positions_at_end": 3
+  },
+  "benchmarks": {
+   "QQQ_buy_hold_pct_and_mdd": [
+    31.92,
+    -12.19
+   ],
+   "SPY_buy_hold_pct_and_mdd": [
+    22.15,
+    -9.13
+   ],
+   "universe_equal_weight_buy_hold_pct": 8.73
+  }
+ }
+}

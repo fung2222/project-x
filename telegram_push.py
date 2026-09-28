@@ -591,7 +591,7 @@ def build_daily_message():
 
 
 def send_daily_push():
-    """發送每日推送 — v3: ONE compact signals message, at most once per US session."""
+    """發送每日推送 — v3: signals message + opportunity-scan Top 5 message, each at most once per US session."""
     from px import config as _pxconfig
     from px.jobs import daily as _daily
     if not _pxconfig.get_secret("TELEGRAM_BOT_TOKEN") or not _pxconfig.get_secret("TELEGRAM_CHAT_ID"):

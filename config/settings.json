@@ -5,15 +5,15 @@
     "mode": "paper",
     "phase": "PHASE_4_LIVE_PREP",
     "capital_hkd": 10000,
-    "start_equity_usd": 1280.00,
+    "start_equity_usd": 1280.0,
     "rebase_date": "2026-09-13",
-    "fx_fallback_usdhkd": 7.80
+    "fx_fallback_usdhkd": 7.8
   },
   "rules": {
     "min_confidence": 0.75,
     "max_positions": 3,
     "max_position_pct": 0.25,
-    "min_cash_pct": 0.20,
+    "min_cash_pct": 0.2,
     "risk_per_trade_pct": 0.02,
     "max_new_entries_per_day": 1,
     "one_position_per_theme": true,
@@ -22,8 +22,8 @@
     "min_notional_usd": 50,
     "sl_atr_mult": 2.0,
     "sl_min_pct": 0.05,
-    "sl_max_pct": 0.10,
-    "tp_pct": 0.10,
+    "sl_max_pct": 0.1,
+    "tp_pct": 0.1,
     "tp_mode": "fixed",
     "tp_mode_options": "fixed (current) | partial_trail (OPTION for Roy: at +10% sell half, move stop to entry, trail rest) -- NOT implemented as default; requires Roy approval",
     "cooldown_after_sl_days": 5,
@@ -34,46 +34,309 @@
     "open_move_alert_pct": 2.0,
     "time_review_days": 15,
     "max_price_sanity_jump_pct": 50.0,
-    "fee": {"min_usd": 1.00, "rate": 0.005}
+    "fee": {
+      "min_usd": 1.0,
+      "rate": 0.005
+    }
   },
   "regimes": {
-    "NORMAL":    {"vix_max": 20,  "max_positions": 3, "min_confidence": 0.75, "confidence_adj": 0,   "emoji": "🟢", "title": "正常市場"},
-    "CAUTION":   {"vix_max": 30,  "max_positions": 2, "min_confidence": 0.80, "confidence_adj": -10, "emoji": "🟡", "title": "謹慎市場"},
-    "DEFENSIVE": {"vix_max": 999, "max_positions": 1, "min_confidence": 0.85, "confidence_adj": -20, "emoji": "🔴", "title": "防禦市場", "setups": ["A"]}
+    "NORMAL": {
+      "vix_max": 20,
+      "max_positions": 3,
+      "min_confidence": 0.75,
+      "confidence_adj": 0,
+      "emoji": "🟢",
+      "title": "正常市場"
+    },
+    "CAUTION": {
+      "vix_max": 30,
+      "max_positions": 2,
+      "min_confidence": 0.8,
+      "confidence_adj": -10,
+      "emoji": "🟡",
+      "title": "謹慎市場"
+    },
+    "DEFENSIVE": {
+      "vix_max": 999,
+      "max_positions": 1,
+      "min_confidence": 0.85,
+      "confidence_adj": -20,
+      "emoji": "🔴",
+      "title": "防禦市場",
+      "setups": [
+        "A"
+      ]
+    }
   },
   "universe": {
-    "core": ["NVDA", "TSLA", "RKLB"],
-    "secondary": ["AMD", "MSFT", "GOOGL", "META", "PLTR", "ARM"],
-    "opportunity": ["SOUN", "BBAI", "IONQ", "ASTS", "LUNR", "SOFI", "HOOD", "RIVN", "JOBY", "SMCI"],
-    "index": ["SPY", "QQQ", "^VIX"],
-    "fx": "HKD=X"
+    "core": [
+      "NVDA",
+      "TSLA",
+      "RKLB"
+    ],
+    "secondary": [
+      "AMD",
+      "MSFT",
+      "GOOGL",
+      "META",
+      "PLTR",
+      "ARM"
+    ],
+    "opportunity": [
+      "SOUN",
+      "BBAI",
+      "IONQ",
+      "ASTS",
+      "LUNR",
+      "SOFI",
+      "HOOD",
+      "RIVN",
+      "JOBY",
+      "SMCI"
+    ],
+    "index": [
+      "SPY",
+      "QQQ",
+      "^VIX"
+    ],
+    "fx": "HKD=X",
+    "mag7_context": [
+      "AAPL",
+      "MSFT",
+      "GOOGL",
+      "AMZN",
+      "META",
+      "NVDA",
+      "TSLA"
+    ]
   },
   "names": {
-    "NVDA": "NVIDIA", "TSLA": "Tesla", "RKLB": "Rocket Lab", "AMD": "Adv. Micro Devices",
-    "MSFT": "Microsoft", "GOOGL": "Alphabet", "META": "Meta Platforms", "PLTR": "Palantir",
-    "ARM": "Arm Holdings", "SOUN": "SoundHound AI", "BBAI": "BigBear.ai", "IONQ": "IonQ",
-    "ASTS": "AST SpaceMobile", "LUNR": "Intuitive Machines", "SOFI": "SoFi Technologies",
-    "HOOD": "Robinhood", "RIVN": "Rivian", "JOBY": "Joby Aviation", "SMCI": "Super Micro Computer"
+    "NVDA": "NVIDIA",
+    "TSLA": "Tesla",
+    "RKLB": "Rocket Lab",
+    "AMD": "Adv. Micro Devices",
+    "MSFT": "Microsoft",
+    "GOOGL": "Alphabet",
+    "META": "Meta Platforms",
+    "PLTR": "Palantir",
+    "ARM": "Arm Holdings",
+    "SOUN": "SoundHound AI",
+    "BBAI": "BigBear.ai",
+    "IONQ": "IonQ",
+    "ASTS": "AST SpaceMobile",
+    "LUNR": "Intuitive Machines",
+    "SOFI": "SoFi Technologies",
+    "HOOD": "Robinhood",
+    "RIVN": "Rivian",
+    "JOBY": "Joby Aviation",
+    "SMCI": "Super Micro Computer",
+    "RGTI": "Rigetti Computing",
+    "QBTS": "D-Wave Quantum",
+    "ACHR": "Archer Aviation",
+    "OKLO": "Oklo",
+    "SMR": "NuScale Power",
+    "HIMS": "Hims & Hers",
+    "AFRM": "Affirm",
+    "UPST": "Upstart",
+    "PATH": "UiPath",
+    "AI": "C3.ai",
+    "APLD": "Applied Digital",
+    "IREN": "IREN",
+    "CIFR": "Cipher Mining",
+    "MARA": "MARA Holdings",
+    "RIOT": "Riot Platforms",
+    "CLSK": "CleanSpark",
+    "WULF": "TeraWulf",
+    "CORZ": "Core Scientific",
+    "HUT": "Hut 8",
+    "CRWV": "CoreWeave",
+    "TEM": "Tempus AI",
+    "OPEN": "Opendoor",
+    "DKNG": "DraftKings",
+    "U": "Unity Software",
+    "SNAP": "Snap",
+    "LYFT": "Lyft",
+    "NIO": "NIO",
+    "PLUG": "Plug Power",
+    "QS": "QuantumScape",
+    "RCAT": "Red Cat",
+    "ONDS": "Ondas",
+    "MP": "MP Materials",
+    "UUUU": "Energy Fuels",
+    "RDDT": "Reddit",
+    "COIN": "Coinbase",
+    "MSTR": "Strategy (MicroStrategy)",
+    "SHOP": "Shopify",
+    "CAVA": "CAVA Group",
+    "CELH": "Celsius",
+    "RXRX": "Recursion",
+    "SERV": "Serve Robotics",
+    "LAES": "SEALSQ",
+    "AAPL": "Apple",
+    "AMZN": "Amazon"
   },
   "themes": {
-    "AI_SPEECH": ["SOUN", "BBAI"],
-    "SPACE": ["RKLB", "ASTS", "LUNR"],
-    "QUANTUM": ["IONQ"],
-    "FINTECH": ["SOFI", "HOOD"],
-    "EV": ["TSLA", "RIVN"],
-    "EVTOL": ["JOBY"],
-    "AI_INFRA": ["NVDA", "AMD", "SMCI", "ARM"],
-    "MEGA_SOFT": ["MSFT", "GOOGL", "META"],
-    "DATA_AI": ["PLTR"]
+    "AI_SOFTWARE": [
+      "SOUN",
+      "BBAI",
+      "AI",
+      "PATH",
+      "TEM"
+    ],
+    "DATA_AI": [
+      "PLTR"
+    ],
+    "SPACE": [
+      "RKLB",
+      "ASTS",
+      "LUNR"
+    ],
+    "QUANTUM": [
+      "IONQ",
+      "RGTI",
+      "QBTS",
+      "LAES"
+    ],
+    "NUCLEAR": [
+      "OKLO",
+      "SMR"
+    ],
+    "FINTECH": [
+      "SOFI",
+      "HOOD",
+      "AFRM",
+      "UPST"
+    ],
+    "CRYPTO": [
+      "COIN",
+      "MSTR"
+    ],
+    "BTC_MINING_HPC": [
+      "IREN",
+      "CIFR",
+      "MARA",
+      "RIOT",
+      "CLSK",
+      "WULF",
+      "CORZ",
+      "HUT"
+    ],
+    "AI_CLOUD_INFRA": [
+      "CRWV",
+      "APLD",
+      "SMCI"
+    ],
+    "EV": [
+      "TSLA",
+      "RIVN",
+      "NIO",
+      "QS"
+    ],
+    "EVTOL": [
+      "JOBY",
+      "ACHR"
+    ],
+    "AI_CHIPS": [
+      "NVDA",
+      "AMD",
+      "ARM"
+    ],
+    "MEGA_SOFT": [
+      "MSFT",
+      "GOOGL",
+      "META",
+      "AAPL",
+      "AMZN"
+    ],
+    "DRONES_DEFENSE": [
+      "RCAT",
+      "ONDS"
+    ],
+    "MATERIALS_URANIUM": [
+      "MP",
+      "UUUU"
+    ],
+    "HEALTH_CONSUMER": [
+      "HIMS",
+      "CELH",
+      "CAVA",
+      "DKNG"
+    ],
+    "INTERNET": [
+      "SNAP",
+      "LYFT",
+      "RDDT",
+      "SHOP",
+      "U",
+      "OPEN"
+    ],
+    "ROBOTICS": [
+      "SERV"
+    ],
+    "CLEAN_ENERGY": [
+      "PLUG"
+    ],
+    "BIOTECH_AI": [
+      "RXRX"
+    ]
   },
-  "indicators": {"history_period": "1y", "min_bars": 120},
+  "indicators": {
+    "history_period": "1y",
+    "min_bars": 120
+  },
   "schedule_et": {
     "_comment": "America/New_York. Jobs exit quietly on NYSE holidays / outside window unless --force.",
-    "open":   {"time": "09:35", "window": ["09:30", "11:00"]},
-    "daily":  {"time": "10:00", "window": ["09:45", "16:30"], "no_new_entries_after": "15:00"},
-    "hourly": {"times": ["10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:10"], "window": ["09:30", "16:45"]}
+    "open": {
+      "time": "09:35",
+      "window": [
+        "09:30",
+        "11:00"
+      ]
+    },
+    "daily": {
+      "time": "09:53",
+      "window": [
+        "09:45",
+        "16:30"
+      ],
+      "no_new_entries_after": "15:00"
+    },
+    "hourly": {
+      "times": [
+        "10:06",
+        "11:06",
+        "12:06",
+        "13:06",
+        "14:06",
+        "15:06",
+        "16:06"
+      ],
+      "window": [
+        "09:30",
+        "16:45"
+      ]
+    },
+    "close": {
+      "time": "17:00",
+      "window": [
+        "16:05",
+        "23:59"
+      ]
+    }
   },
-  "schedule_hkt": {"weekly": {"weekday": "MON", "time": "09:45"}},
+  "schedule_hkt": {
+    "weekly": {
+      "weekday": "MON",
+      "time": "09:44"
+    },
+    "morning": {
+      "time": "08:30",
+      "window": [
+        "07:00",
+        "12:00"
+      ]
+    }
+  },
   "telegram": {
     "enabled": true,
     "site_url": "https://fung2222.github.io/project-x-minimax/",
@@ -84,5 +347,147 @@
   "legacy": {
     "grokbot_state_path": "/home/box/sand-data/agents/5ae81f5d-f7a3-4247-9353-f342b925b25b/automations/position_tracker_state.json",
     "fetch_profiles": true
+  },
+  "scan": {
+    "_comment": "Opportunity scan v2 (px/scan.py). Universe = exchange-listed (NYSE/Nasdaq, no OTC) small/mid growth & momentum names; filters decide what is tradable each day. Backtest: scripts/backtest_scan.py",
+    "universe": [
+      "SOUN",
+      "BBAI",
+      "IONQ",
+      "ASTS",
+      "LUNR",
+      "SOFI",
+      "HOOD",
+      "RIVN",
+      "JOBY",
+      "SMCI",
+      "RKLB",
+      "PLTR",
+      "RGTI",
+      "QBTS",
+      "ACHR",
+      "OKLO",
+      "SMR",
+      "HIMS",
+      "AFRM",
+      "UPST",
+      "PATH",
+      "AI",
+      "APLD",
+      "IREN",
+      "CIFR",
+      "MARA",
+      "RIOT",
+      "CLSK",
+      "WULF",
+      "CORZ",
+      "HUT",
+      "CRWV",
+      "TEM",
+      "OPEN",
+      "DKNG",
+      "U",
+      "SNAP",
+      "LYFT",
+      "NIO",
+      "PLUG",
+      "QS",
+      "RCAT",
+      "ONDS",
+      "MP",
+      "UUUU",
+      "RDDT",
+      "COIN",
+      "MSTR",
+      "SHOP",
+      "CAVA",
+      "CELH",
+      "RXRX",
+      "SERV",
+      "LAES"
+    ],
+    "history_period": "2y",
+    "min_bars": 200,
+    "min_price": 2.0,
+    "min_dollar_vol_usd": 20000000,
+    "min_shares": 2,
+    "max_rsi": 78,
+    "sl_atr_mult": 3.0,
+    "sl_min_pct": 0.05,
+    "sl_max_pct": 0.2,
+    "near_high_pct": 0.05,
+    "breakout_rr": 2.5,
+    "min_rr": 2.0,
+    "time_stop_days": 30,
+    "earnings_blackout_days": 5,
+    "top_n": 5,
+    "paper_entry_min_score": 75,
+    "yf_earnings_fallback": true,
+    "max_per_theme": 1,
+    "_backtest_note": "2026-09-28: 3xATR stop (max 20%) / 30-day time stop chosen among 5 a-priori variants (see docs/AUDIT.md §backtest); in-sample choice, edge NOT proven.",
+    "max_fee_drag_pct": 2.0
+  },
+  "schedule": {
+    "_comment": "MASTER push schedule. ET jobs run on NYSE trading days only (px/clock.py holiday + early-close calendar). HKT jobs: morning = after a completed US session; weekly = every Monday HKT. Cron lines for Hermes: docs/HERMES_HANDOVER.md §3. `python run.py check` (watchdog) re-runs missed/failed slots inside rerun windows, else sends ONE alert.",
+    "open": {
+      "tz": "ET",
+      "times": [
+        "09:35"
+      ],
+      "days": "trading",
+      "grace_min": 20,
+      "rerun_until": "10:45"
+    },
+    "daily": {
+      "tz": "ET",
+      "times": [
+        "09:53"
+      ],
+      "days": "trading",
+      "grace_min": 25,
+      "rerun_until": "15:00"
+    },
+    "hourly": {
+      "tz": "ET",
+      "times": [
+        "10:06",
+        "11:06",
+        "12:06",
+        "13:06",
+        "14:06",
+        "15:06",
+        "16:06"
+      ],
+      "days": "trading",
+      "grace_min": 20,
+      "rerun_minutes": 50
+    },
+    "close": {
+      "tz": "ET",
+      "times": [
+        "17:00"
+      ],
+      "days": "trading",
+      "grace_min": 25,
+      "rerun_until": "20:30"
+    },
+    "morning": {
+      "tz": "HKT",
+      "times": [
+        "08:30"
+      ],
+      "days": "after_trading",
+      "grace_min": 25,
+      "rerun_until": "11:30"
+    },
+    "weekly": {
+      "tz": "HKT",
+      "times": [
+        "09:44"
+      ],
+      "days": "monday",
+      "grace_min": 30,
+      "rerun_until": "13:00"
+    }
   }
 }

@@ -14,10 +14,12 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from px import schedule  # noqa: E402
 from px.jobs import hourly  # noqa: E402
 
 if __name__ == "__main__":
-    res = hourly.run(dry_run="--dry-run" in sys.argv, force="--force" in sys.argv, legacy=True)
+    res = schedule.run_job("hourly", hourly.run, via="legacy", dry_run="--dry-run" in sys.argv,
+                           force="--force" in sys.argv, legacy=True)
     if res.get("status") == "skipped":
         import json
         print(json.dumps({"skipped": True, "reason": res.get("reason"), "alerts": [], "need_push": False,

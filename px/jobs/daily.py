@@ -1,16 +1,18 @@
 """daily job (ET 10:00): full-universe indicators/signals on completed bars, SL/TP,
 deterministic gates -> at most 1 paper entry, decisions/teaching/scenarios,
-<= 3 Telegram messages (decision / signals / teaching). Idempotent per session:
+4 Telegram messages (decision / signals / opportunity Top 5 / teaching+scenarios).
+Paper entry: gated legacy BUY signal first; otherwise the top opportunity-scan candidate with
+score >= scan.paper_entry_min_score (forward test of the scan), both through ledger rules. Idempotent per session:
 each message part is sent at most once; the 1-entry-per-day rule is enforced by the ledger."""
 import json
 
-from .. import clock, decide, guard, ledger, marketdata, telegram, engine
+from .. import archive, clock, decide, guard, ledger, marketdata, telegram, engine, scan
 from ..config import load_settings, path
-from ..messages import esc, f2, pct, footer, money, daily_teaching, scenarios
+from ..messages import esc, f2, pct, footer, money, daily_teaching, scenarios, scan_message
 from .common import Ctx, gate_run, refresh_positions, write_text, report_path, strip_html
 
 JOB = "daily"
-PARTS = ("decision", "signals", "teaching")
+PARTS = ("decision", "signals", "scan", "teaching")
 
 
 def owned_news(tickers, max_items=3):
@@ -96,6 +98,43 @@ def run(dry_run=False, force=False, legacy=False, now=None):
                                              chosen["tp"], regime, reason, chosen["setup"], sig["confidence"], ctx.now)
             except ledger.RuleViolation as e:
                 entry_err = str(e)
+    # ---------- opportunity scan (core product) + optional paper entry from it
+    try:
+        scan_res = scan.run_scan(ctx.now, ledger.recompute(pf)["equity_usd"], report["market"]["fx_usdhkd"])
+    except Exception as e:
+        print("[daily] scan failed:", type(e).__name__, e)
+        scan_res = {"top": [], "near_misses": [], "error": f"{type(e).__name__}"}
+    min_sc = s["scan"].get("paper_entry_min_score", 75)
+    min_conf = report["guardrail"]["min_confidence"] * 100 if report["guardrail"]["min_confidence"] <= 1 else report["guardrail"]["min_confidence"]
+    cutoff = s["schedule_et"]["daily"].get("no_new_entries_after", "15:00")
+    ov = decide.load_overrides()
+    scan_entry_ok = (clock.market_is_open(ctx.now) and ctx.now_et.strftime("%H:%M") < cutoff
+                     and not ov.get("pause_new_entries"))
+    if not chosen and not entry and scan_entry_ok:
+        for x in scan_res.get("top", []):
+            if x["score"] < max(min_sc, min_conf) or x["ticker"] in owned or x["ticker"] in (ov.get("blocklist") or []):
+                continue
+            if x.get("earnings_days") is not None and x["earnings_days"] <= s["scan"]["earnings_blackout_days"]:
+                continue
+            q = marketdata.quote(x["ticker"])
+            px_ = q["price"] if q.get("ok") else x["entry"]
+            if not (x["entry_zone"][0] * 0.99 <= px_ <= x["entry_zone"][1] * 1.02):
+                x.setdefault("paper_note", f"現價 {px_:.2f} 唔喺入場區，唔追")
+                continue
+            sl_, tp_ = x["stop"], x["target"]
+            shares, _caps = ledger.size_position(ledger.recompute(pf)["equity_usd"], ledger.recompute(pf)["cash_usd"], px_, sl_)
+            reason = (f"SCAN_ENTRY: {x['ticker']} 分數 {x['score']:.0f}，{x['setup']}，R:R {x['rr']:.1f}，"
+                      f"SL {sl_:.2f} / TP {tp_:.2f}")
+            if dry_run:
+                entry = {"ticker": x["ticker"], "shares": shares, "entry_price": px_, "setup": "SCAN",
+                         "stop_loss_price": sl_, "take_profit_price": tp_, "confidence": x["score"], "dry_run": True}
+                break
+            try:
+                entry = ledger.execute_entry(pf, x["ticker"], px_, shares, sl_, tp_, regime, reason, "SCAN", x["score"], ctx.now)
+                break
+            except ledger.RuleViolation as e:
+                x["paper_note"] = f"規則阻止：{e}"
+                entry_err = str(e)
     acct = ledger.recompute(pf)
     skipped = []
     for e in sorted(evals, key=lambda y: y["confidence"], reverse=True):
@@ -143,7 +182,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     m3 = "\n".join([f"<b>🎓 今日教學</b>\n{esc(teach)}", "",
                     f"<b>🔮 情境</b>\n<b>基準</b>：{esc(sc['base'])}\n<b>樂觀</b>：{esc(sc['bull'])}\n<b>悲觀</b>：{esc(sc['bear'])}", "",
                     "<b>⛔ 失效條件</b>\n" + "\n".join(f"• {esc(i)}" for i in invalid), "", footer()])
-    msgs = dict(zip(PARTS, (m1, m2, m3)))
+    m_scan = scan_message(scan_res)
+    msgs = dict(zip(PARTS, (m1, m2, m_scan, m3)))
     # ---------- persist
     report["v3"] = {
         "session_date": ctx.session, "job": JOB, "generated_at": clock.now_hkt().isoformat(timespec="seconds"),
@@ -153,6 +193,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             "total_return_pct")} | {"positions": len(pf.get("positions", [])), "spy_return_pct": spy_ret},
         "teaching": teach, "scenarios": sc, "invalidation": invalid,
     }
+    report["opportunity_scan"] = {k: scan_res.get(k) for k in ("generated_at", "bar_date", "top", "near_misses", "passed",
+                                                               "scanned", "max_position_usd", "risk_per_trade_usd", "method")}
     if not dry_run:
         pf["account"]["last_decision"] = {"date": ctx.session, "style": "px_gates_v3", "actions": actions,
                                           "skipped": [f"{x['ticker']} {x['confidence']:.0f}%：{x['why']}" for x in skipped[:5]],
@@ -161,6 +203,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         pf["updated"] = ctx.session
         ledger.save(pf)
         engine.save_json(engine.REPORT_PATH, report)
+        if scan_res.get("top") is not None and not scan_res.get("error"):
+            archive.save_scan(scan_res)
     results = {}
     for part in PARTS:
         if guard.was_sent(ctx.session, JOB, part) and not force:
@@ -173,6 +217,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if not dry_run:
         brief = "\n\n".join(strip_html(msgs[p]) for p in PARTS)
         write_text(report_path(f"DailyBrief_{ctx.session}.txt"), brief)
+        archive.save_report(JOB, ctx.session, [msgs[p] for p in PARTS],
+                            summary=f"每日分析 · 權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）· Top: "
+                                    + ", ".join(x["ticker"] for x in scan_res.get("top", [])),
+                            pnl=acct["total_return_pct"])
         guard.update(ctx.session, JOB, status="ok" if all(v in ("ok", "already-sent") for v in results.values()) else "partial",
                      finished=clock.now_hkt().isoformat(timespec="seconds"), telegram=results,
                      entry=entry.get("id") if entry and not dry_run else None, _inc_runs=True)
@@ -220,8 +268,38 @@ def legacy_signals_push(dry_run=None):
         evals = []
     news = owned_news(sorted({p["ticker"] for p in pf.get("positions", [])}))
     msg = signals_message(report, evals, news) + "\n\n" + footer()
-    ok, res = telegram.send(msg, dry_run=dry_run, label="daily/signals (legacy)")
     from ..config import is_dry_run
-    if ok and not (dry_run if dry_run is not None else is_dry_run()):
+    live = not (dry_run if dry_run is not None else is_dry_run())
+    ok, res = telegram.send(msg, dry_run=dry_run, label="daily/signals (legacy)")
+    if ok and live:
         guard.mark_sent(session, JOB, "signals", res)
-    return ok, ("1/1 parts sent" if ok else f"0/1 parts sent: {res}")
+    sent = 1 if ok else 0
+    total = 1
+    # opportunity scan Top 5 (core product) — its own message, guarded separately
+    if not guard.was_sent(session, JOB, "scan"):
+        total += 1
+        try:
+            acct = ledger.recompute(pf)
+            sc = scan.run_scan(now, acct["equity_usd"], report.get("market", {}).get("fx_usdhkd") or acct.get("fx_usdhkd"))
+            if live:
+                archive.save_scan(sc)
+                report["opportunity_scan"] = {k: sc.get(k) for k in ("generated_at", "bar_date", "top", "near_misses",
+                                                                     "passed", "scanned", "max_position_usd",
+                                                                     "risk_per_trade_usd", "method")}
+                engine.save_json(engine.REPORT_PATH, report)
+            ok2, res2 = telegram.send(scan_message(sc) + "\n\n" + footer(), dry_run=dry_run, label="daily/scan (legacy)")
+            if ok2 and live:
+                guard.mark_sent(session, JOB, "scan", res2)
+            sent += 1 if ok2 else 0
+            ok = ok and ok2
+        except Exception as e:
+            print("[daily/scan] failed:", type(e).__name__, e)
+            ok = False
+    if live:
+        try:
+            from .. import schedule
+            schedule.record("daily", schedule.slot_for("daily", now), "ok" if ok else "telegram_failed",
+                            f"legacy telegram_push {sent}/{total}", via="legacy")
+        except Exception as e:
+            print("[daily] run-ledger record failed:", type(e).__name__)
+    return ok, (f"{sent}/{total} parts sent" if ok else f"{sent}/{total} parts sent (see log)")

@@ -13,9 +13,11 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from px import schedule  # noqa: E402
 from px.jobs import open_monitor  # noqa: E402
 
 if __name__ == "__main__":
-    res = open_monitor.run(dry_run="--dry-run" in sys.argv, force="--force" in sys.argv, legacy=True)
+    res = schedule.run_job("open", open_monitor.run, via="legacy", dry_run="--dry-run" in sys.argv,
+                           force="--force" in sys.argv, legacy=True)
     if res.get("status") in ("skipped", "duplicate"):
         print("---TG--- skipped", res.get("reason"))

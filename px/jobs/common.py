@@ -26,6 +26,8 @@ def gate_run(ctx, window_key):
     if not clock.is_trading_day(d):
         name = clock.holiday_name(d) or "weekend"
         return False, f"US market closed on {d} ET ({name}) — skipping quietly"
+    if os.environ.get("PX_RERUN") == "1":  # watchdog re-run: trading-day check only, window bypassed
+        return True, "watchdog rerun"
     win = load_settings()["schedule_et"][window_key]["window"]
     if not clock.in_window(win, ctx.now_et):
         return False, (f"outside {window_key} window {win[0]}-{win[1]} ET (now {ctx.now_et.strftime('%H:%M')} ET)"

@@ -56,12 +56,29 @@ def _rerun(job, slot):
         os.environ.pop("PX_RERUN", None)
 
 
+def _error_alert(job, e):
+    """One immediate 🛠 alert per job per US session when a job raises (both manual and tick runs)."""
+    err = telegram._redact(f"{type(e).__name__}: {e}")[:300]
+    sess = clock.session_date().isoformat()
+    try:
+        if not guard.was_sent(sess, job, "error"):
+            ok, ids = telegram.send(f"<b>🛠 Project X 系統警告</b> {job} 失敗（{sess} ET）：{err}\n"
+                                    f"watchdog 會喺窗口內自動重試；請 Hermes 睇 logs/ 同 HERMES_HANDOVER §10。", label="error")
+            if ok:
+                guard.mark_sent(sess, job, "error", ids)
+        guard.update(sess, job, status="failed", error=err, _inc_runs=True)
+    except Exception as e2:
+        print("[run.py] error alert failed:", type(e2).__name__)
+
+
 def _tick_run(job, slot):
     try:
         res = schedule.run_job(job, _job_fn(job), via="tick", dry_run=False, force=False)
         return (res or {}).get("status", "ok")
     except Exception as e:
+        traceback.print_exc()
         print(f"[tick] {job} failed: {type(e).__name__}: {telegram._redact(str(e))[:200]}")
+        _error_alert(job, e)
         try:
             if not schedule.get(job, slot):  # run_job records failures itself; only cover pre-run errors
                 schedule.record(job, slot, "failed", f"{type(e).__name__}", via="tick")
@@ -164,15 +181,8 @@ def main(argv=None):
         res = schedule.run_job(a.job, fn, via="manual" if a.force else "cron", dry_run=a.dry_run, force=a.force)
     except Exception as e:
         traceback.print_exc()
-        err = telegram._redact(f"{type(e).__name__}: {e}")[:300]
         if not a.dry_run:
-            sess = clock.session_date().isoformat()
-            if not guard.was_sent(sess, a.job, "error"):
-                ok, ids = telegram.send(f"<b>🛠 Project X 系統警告</b> {a.job} 失敗（{sess} ET）：{err}\n"
-                                        f"請 Hermes 睇 log 同按 HERMES_HANDOVER 重跑。", label="error")
-                if ok:
-                    guard.mark_sent(sess, a.job, "error", ids)
-            guard.update(sess, a.job, status="failed", error=err, _inc_runs=True)
+            _error_alert(a.job, e)
         return 1
     status = res.get("status")
     print(f"[run.py] {a.job}: {status}")

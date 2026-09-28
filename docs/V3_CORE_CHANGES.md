@@ -1,7 +1,7 @@
 # Project X v3-core 改動紀錄（2026-09-28 HKT）
 
-> 狀態：**過渡版**。呢次只做咗同 Hermes 數據無關嘅部分（安全、指標、規則、帳目、Telegram、CLI）。
-> 網站重做、`data/legacy/` 匯入、`HERMES_HANDOVER.md` 正式版、文件重寫 → **等 Hermes 匯出佢嘅 live pipeline／數據之後先做**。
+> 狀態：**歷史紀錄（2026-09-28 早段嘅 v3-core 改動）**。之後已完成網站重做、`data/legacy/` 匯入、`HERMES_HANDOVER.md`、`AUDIT.md`、`REQUIREMENTS.md`。
+> ⚠️ 下面 §2 時間表、§8 Telegram 數目、§11「未做」已經過時：最新排程睇 `docs/HERMES_HANDOVER.md §3`（open 09:35 ET、daily 09:53 ET、hourly :06 10–16 ET、close 17:00 ET、morning 08:30 HKT、weekly 星期一 09:44 HKT）；手續費已改富途真實收費（`docs/AUDIT.md` F-01）。
 > 解釋用繁體中文；指令、路徑用英文。所有時間 HKT，除非寫明 ET。
 
 ## 1. 入口（Hermes 之後只需要呢幾個指令）

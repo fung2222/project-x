@@ -261,3 +261,97 @@ s6-rc-bundle update add svc-px-tick default
 - `/opt/data/profiles/gushen/.env` 嘅 token 今朝未更新
 - local HEAD 仍 `115da4c`, 等新 token 到位即可 push
 - 等你 reply 講邊個 env file + token value, 我即刻 `git push` + `git log origin/main -3` verify
+
+
+---
+
+## §5 切換前最後準備（安裝 + 測試，不啟動真 tick）
+
+### 1) Symlink ✅
+
+- `/opt/data/project-x` 之前不存在 ✅
+- 創建 symlink: `ln -s /opt/data/github-repos/project-x /opt/data/project-x`
+- `realpath /opt/data/project-x/ops/hermes/crontab.txt` → `/opt/data/github-repos/project-x/ops/hermes/crontab.txt`
+- 所有 px_runner_install.sh / crontab.txt / s6 service run file 路徑統一用 `/opt/data/project-x`
+
+### 2) 持久性發現 + 修正路線
+
+#### 2c) Container 重開 vs Image 重建
+
+**`/etc/s6-overlay/` 持久性矩陣**：
+
+| 重啟類型 | `/etc/s6-overlay` 入面 s6 service files 保留？ |
+|---------|----------------------------------------------|
+| `docker restart`（普通重啟） | ⚠️ **only if 之前有 write**。Hermes user 冇 root → 我哋根本寫唔入去；之前寫嘅嘢全部喺 upper diff layer |
+| `docker compose up` / image `pull + recreate` | ❌ **完全消失**（image layer rebuild） |
+| `docker stop / start`（唔 recreate） | ⚠️ upper diff 保留（我哋冇嘢喺度） |
+
+**結論**：spec §5 step 2a 推薦嘅 s6 service 路線喺 Hermes user 權限下**不可行**：
+- UID 10000 (hermes)，冇 `sudo`，無 setuid caps
+- `/etc/s6-overlay/s6-rc.d/` 由 root 擁有，`os.access(..., W_OK) = False`
+- 確認過：嘗試寫入 `Permission denied`
+
+**改用 Hermes cron fallback（spec §5 step 2b 預留方案）**：
+- supercronic binary 由 hermes 自己管
+- watch script 由 Hermes cron `*/10 * * * *` 啟動，純 script、0 LLM call
+- 失效 detection = `kill -0 $PID_FILE_PID`；失效就 `nohup supercronic &` 重啟
+- log 寫到 `/opt/data/project-x/logs/px_tick_watch.log`
+- 全部由 hermes UID 10000 寫入 `/opt/data/...`，**完全 bypass `/etc`**
+
+### 3) 安裝 + 測試
+
+**a) supercronic -test 通過** ✅
+```
+$ /opt/data/bin/supercronic -test /opt/data/project-x/ops/hermes/crontab.txt
+crontab is valid
+```
+
+**b) supercronic 3 分鐘臨時測試** ✅
+- 寫 `/tmp/_supercronic_test.crontab` 每分鐘跑 `px_job.sh status`
+- supercronic 啟動 05:14:42 UTC, fire 05:15:00, 05:16:00, 05:17:00 (每次 60s 精準)
+- 3 次 job exit 0, log 落 `/opt/data/project-x/logs/2026-09-28_status.log`
+- 測試完刪 `/tmp/_supercronic_test.crontab`, kill supercronic
+- **真實 svc-px-tick 保持 down** (per spec §5 step 3c)
+
+### 4) 寫到嘅文件（已 commit + push）
+
+- `/opt/data/bin/px_runner_install.sh` (mode 755, 221 lines) — idempotent install
+  - subcmd: `install` / `check` / `uninstall`
+  - ensure_symlink / download_supercronic / validate_crontab / try_s6_install / write_watch_script / status
+  - 已 commit `cdefe2e`
+- `/opt/data/bin/px_tick_watch.sh` (mode 755, 42 lines) — Hermes cron watchdog
+  - exit 0 if supercronic alive, else nohup supercronic + write PID
+  - log 寫到 `/opt/data/project-x/logs/px_tick_watch.log`
+- 兩個 file 同步 commit 入 `ops/hermes/`
+
+### 5) GitHub push — 全部成功 ✅
+
+```
+git log origin/main -3
+cdefe2e ops/§5: add px_runner_install.sh (idempotent) + px_tick_watch.sh (Hermes cron fallback when s6 not writable)
+dc5ca63 docs/§4 prep: Mag7 paused + tick trigger investigation + rec (supercronic+s6) + push still pending
+115da4c docs/§3 prep: gushen cron list + chat_id set+verified + push pending (token revoked)
+```
+
+(15b9c34 之前已經 push + 960c50a 之前嘅 commit 都 push 咗。)
+
+### 6) 遵守嘅規則
+
+- ❌ 冇 install 真 svc-px-tick (supercronic 都未啟動)
+- ❌ 冇 install 真 Hermes cron fallback (spec §5 講「後備都要等 §5 先啟用」)
+- ❌ 冇 send 任何 Telegram 訊息
+- ❌ 冇停 4 個 PX cron
+- ❌ 冇改 §11 列明嘅嘢
+- ✅ install script idempotent、commit 入 repo
+- ✅ 臨時測試完完全 clean up (刪 temp crontab, kill supercronic)
+- ✅ 絕無 print token 真實值、chat ID 真實值
+
+### 7) §5 正式切換前要 Roy 同意嘅事項
+
+1. **s6 service 改 Hermes cron fallback**：spec §5 step 2a 寫嘅 s6 路線喺 Hermes user 環境不可行。改用 2b fallback。s6 service file 路徑（即將來若有 root 權限嘅 image）已留 script。
+2. **真正嘅 tick 啟動時間**：install script 已經 ready (`/opt/data/bin/px_runner_install.sh install`)，但 spec §5 step 3c 講「等我話 §5 第 6 步先開」。等 Roy 通知先跑。
+3. **Hermes cron fallback watch**：spec §5 step 2b 要「每 10 分鐘執行一次」。Hermes cron `--script --no-agent` 完全支援，但 script path 限定 `~/.hermes/scripts/` (`/opt/data/.hermes/scripts/`)。需要：
+   - `mkdir -p /opt/data/.hermes/scripts`
+   - `ln -s /opt/data/bin/px_tick_watch.sh /opt/data/.hermes/scripts/px_tick_watch.sh`
+   - `hermes -p gushen cron create --script px_tick_watch.sh --schedule "*/10 * * * *" --no-agent`
+   - 等等 Roy 同意先做

@@ -195,10 +195,11 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     spy_ret, qqq_ret = paper_bench()
     news = pick_news(scan_res)
     annotate_scan(scan_res, news)
-    mood = plain.market_lines(mk.get("spy_change"), mk.get("qqq_change"), mk.get("vix"), rs.market_headline())
+    dw = plain.day_word(mk.get("quote_session"), ctx.now)
+    mood = plain.market_lines(mk.get("spy_change"), mk.get("qqq_change"), mk.get("vix"), rs.market_headline(), when=dw)
     lesson = lessons.pick(clock.session_date(ctx.now), save=not dry_run)
     L = [f"<b>📘 每日報告 {ctx.session}</b>（開市半個鐘）"]
-    L += plain.real_block(real_ev, rsn, trends, "今日")
+    L += plain.real_block(real_ev, rsn, trends, dw)
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", report["market"].get("fx_live", True))))

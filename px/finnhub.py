@@ -8,7 +8,7 @@ import time
 import requests
 
 from . import apistate
-from .config import get_secret
+from .config import get_secret, network_off
 
 BASE = "https://finnhub.io/api/v1/"
 _last_call = [0.0]
@@ -16,6 +16,8 @@ MIN_GAP_S = 0.12  # stay far below the 30 calls/second cap
 
 
 def get(path, params=None, timeout=10):
+    if network_off():
+        return None, "network off"
     key = get_secret("FINNHUB_API_KEY")
     if not key:
         return None, "no FINNHUB_API_KEY"

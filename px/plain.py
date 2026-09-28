@@ -76,6 +76,15 @@ def vix_words(vix):
     return f"恐慌指數 {v:.0f}，{mood}"
 
 
+def day_word(session_date, now=None):
+    """'今日' if the quote's session is today's ET session, else '上個交易日（MM-DD）' — never mislabel old data."""
+    from . import clock
+    if not session_date:
+        return "今日"
+    today = clock.to_et(now).date().isoformat() if now else clock.now_et().date().isoformat()
+    return "今日" if session_date == today else f"上個交易日（{session_date[5:]}）"
+
+
 def market_lines(spy_chg, qqq_chg, vix, headline=None, when="今日"):
     """1–3 plain sentences on market mood."""
     L = []
@@ -194,7 +203,7 @@ def buy_suggestion(ev, scan, regime=None, market_open=True):
             why_not.append(f"{t}：{why}")
             continue
         when = "" if market_open else "今晚開市後"
-        zone = f"（{when}價錢喺 {price(lo)}–{price(hi)} 之間先買）" if not market_open or not live else ""
+        zone = f"（價錢喺 {price(lo)}–{price(hi)} 之間先買，唔好追高）" if not market_open or not live else ""
         return [f"🛒 {when}考慮買入 {esc(name_of(t))}：建議買 {sh} 股約 {usd(sh * entry)}（{hkd(sh * entry, fx)}），"
                 f"止蝕 {price(x['stop'])}，止賺 {price(x['target'])}{zone}",
                 "　（落咗單就話 Hermes：「買咗 " + esc(t) + " N 股 @價，止蝕…，止賺…」）"], t
@@ -208,9 +217,10 @@ SETUP_WORDS = {"放量突破20日高": "啱啱帶量升穿 20 日高位", "上�
 
 def pick_reason(x, news_text=None):
     parts = []
-    ex = x.get("ex_qqq_60d_pp")
-    if ex is not None:
-        parts.append(f"近 3 個月{'跑贏' if ex >= 0 else '跑輸'}納指 {abs(ex):.0f}%")
+    e20, e60 = x.get("ex_qqq_20d_pp"), x.get("ex_qqq_60d_pp")
+    rel = [f"近{lbl}{'比納指強' if v >= 0 else '比納指弱'} {abs(v):.0f}%" for lbl, v in (("1個月", e20), ("3個月", e60)) if v is not None]
+    if rel:
+        parts.append("、".join(rel))
     sw = SETUP_WORDS.get(x.get("setup"))
     if sw:
         parts.append(sw)

@@ -51,7 +51,7 @@ def cfg():
     return w
 
 
-def fetch_quote(ticker, max_age_s, jump_pct):
+def fetch_quote(ticker, max_age_s, jump_pct, now=None):
     """{ok, price, prev_close, change_pct, source} — Finnhub first; yfinance only if Finnhub fails. Never a fake price."""
     from .. import finnhub
     q, err = finnhub.quote(ticker, max_age_s=max_age_s)
@@ -64,8 +64,9 @@ def fetch_quote(ticker, max_age_s, jump_pct):
     print(f"[realwatch] {ticker}: Finnhub unusable ({err}) -> yfinance fallback")
     try:
         from .. import marketdata
-        y = marketdata.quote(ticker)
-        if y.get("ok") and y.get("session_date") == clock.now_et().date().isoformat():
+        y = marketdata.quote(ticker, now=now)
+        today = (clock.to_et(now) if now else clock.now_et()).date().isoformat()
+        if y.get("ok") and y.get("session_date") == today:  # today's bar only (never yesterday's close as "live")
             return {"ok": True, "price": y["price"], "prev_close": y.get("prev_close"), "change_pct": y.get("change_pct"),
                     "source": "yfinance"}
         print(f"[realwatch] {ticker}: yfinance fallback unusable ({y.get('source')})")
@@ -109,7 +110,7 @@ def run(now=None, dry_run=None, force=False):
         return {"status": "no_positions"}
     save_state(st)  # record the attempt before any network call (a crash never causes a request storm)
     jump = float(load_settings()["rules"]["max_price_sanity_jump_pct"])
-    quotes = {p["ticker"]: fetch_quote(p["ticker"], float(w["max_quote_age_min"]) * 60, jump) for p in positions}
+    quotes = {p["ticker"]: fetch_quote(p["ticker"], float(w["max_quote_age_min"]) * 60, jump, now) for p in positions}
     from .. import marketdata
     fx = marketdata.fx_info()["rate"] if any(q.get("ok") for q in quotes.values()) else None
     ev = realpos.evaluate(book, quotes, fx)

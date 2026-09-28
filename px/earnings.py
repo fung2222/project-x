@@ -12,6 +12,7 @@ import datetime as dt
 import json
 import os
 import tempfile
+import time
 
 from . import clock
 from .config import STATE_DIR, load_settings, network_off
@@ -88,53 +89,59 @@ def _fetch_finnhub(today, horizon, window):
 
 
 def _yf_date(ticker, today, horizon):
+    """(date|None, ok). ok=True only when Yahoo actually returned an earnings calendar for the name
+    (then None = no earnings inside the horizon); ok=False = Yahoo failed / had nothing -> unknown."""
     import yfinance as yf
     cal = yf.Ticker(ticker).calendar
     ds = cal.get("Earnings Date") if isinstance(cal, dict) else None
     if not ds:
-        return None
+        return None, False
     fut = sorted(d for d in ds if d >= today)
     if fut and (fut[0] - today).days <= horizon:
-        return fut[0].isoformat()
-    return None
+        return fut[0].isoformat(), True
+    return None, True
 
 
 def lookup(tickers, today=None, refresh=False):
+    """{ticker: {date, source, known}}. Finnhub weekly-window calendar first (cached once per HKT day; retried hourly
+    if the day's fetch was incomplete), yfinance .calendar per missing name as fallback (cached for the day).
+    known=False ("業績日未知") when neither source could answer — Finnhub's calendar is NOT exhaustive (2026-09-28:
+    it missed LUNR/HUT which Yahoo lists), so "not listed on Finnhub" alone never counts as "no earnings"."""
     c = cfg()
     today = today or clock.now_et().date()
     key = clock.now_hkt().date().isoformat()
     d = _load()
-    if d.get("day") != key or refresh:
-        d = {"day": key, "today_et": today.isoformat(), "finnhub": {}, "finnhub_ok": False, "yf": {}, "yf_tried": []}
+    stale_incomplete = (d.get("day") == key and not d.get("finnhub_ok")
+                        and time.time() - float(d.get("ts") or 0) > 3600)
+    if d.get("day") != key or refresh or (stale_incomplete and not network_off()):
+        keep_yf = d.get("day") == key
+        d = {"day": key, "today_et": today.isoformat(), "finnhub": {}, "finnhub_ok": False, "ts": time.time(),
+             "yf": d.get("yf", {}) if keep_yf else {}, "yf_ok": d.get("yf_ok", {}) if keep_yf else {},
+             "yf_tried": d.get("yf_tried", []) if keep_yf else []}
         if not network_off():
             cal, complete = _fetch_finnhub(today, int(c["horizon_days"]), int(c["window_days"]))
             d["finnhub"], d["finnhub_ok"] = cal, bool(cal) and complete
         _save(d)
+    d.setdefault("yf_ok", {})
     out, dirty = {}, False
     for t in tickers:
         if t in d["finnhub"]:
             out[t] = {"date": d["finnhub"][t], "source": "finnhub", "known": True}
             continue
-        if t in d["yf"]:
-            v = d["yf"][t]
-            out[t] = {"date": v, "source": "yfinance" if v else None, "known": bool(v) or d.get("finnhub_ok", False)}
-            continue
         if t not in d["yf_tried"] and not network_off():
-            v = None
+            v, ok = None, False
             try:
                 from . import marketdata
                 if not marketdata.yahoo_blocked():
-                    v = _yf_date(t, today, int(c["horizon_days"]))
+                    v, ok = _yf_date(t, today, int(c["horizon_days"]))
+                    d["yf_tried"].append(t)  # only a real attempt is cached; blocked -> retried next call
             except Exception as e:
                 print(f"[earnings] yfinance calendar {t} failed: {type(e).__name__}")
-            d["yf"][t] = v
-            d["yf_tried"].append(t)
+                d["yf_tried"].append(t)
+            d["yf"][t], d["yf_ok"][t] = v, ok
             dirty = True
-            out[t] = {"date": v, "source": "yfinance" if v else None,
-                      # a complete Finnhub horizon that doesn't list the name = no earnings inside the horizon (known)
-                      "known": bool(v) or d.get("finnhub_ok", False)}
-        else:
-            out[t] = {"date": None, "source": None, "known": d.get("finnhub_ok", False)}
+        v, ok = d["yf"].get(t), d["yf_ok"].get(t, False)
+        out[t] = {"date": v, "source": "yfinance" if ok else None, "known": bool(ok)}
     if dirty:
         _save(d)
     return out

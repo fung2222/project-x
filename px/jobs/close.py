@@ -65,9 +65,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if day_chg is not None:
         notes.append(f"權益 {day_chg:+.2f} 美元")
     spy_ret, qqq_ret = paper_bench()
+    dw = plain.day_word(mk.get("session_date"), ctx.now)
     L = [f"<b>🌙 收市報告 {ctx.session}</b>（美股已收市）",
-         "🌍 " + " ".join(plain.market_lines(mk.get("spy_chg_pct"), mk.get("qqq_chg_pct"), mk.get("vix"), rs.market_headline())), ""]
-    L += plain.real_block(real_ev, rsn, trends, "今日")
+         "🌍 " + " ".join(plain.market_lines(mk.get("spy_chg_pct"), mk.get("qqq_chg_pct"), mk.get("vix"), rs.market_headline(), when=dw)), ""]
+    L += plain.real_block(real_ev, rsn, trends, dw)
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", True)))

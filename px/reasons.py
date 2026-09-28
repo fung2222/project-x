@@ -37,7 +37,11 @@ TAGS = [  # (regex on lower-case headline, Chinese tag) — first match wins
     (r"\b(insider|ceo|cfo) (buys?|sells?|sold|bought)\b", "管理層買賣"),
 ]
 GENERIC = re.compile(r"(\b\d+\s+(top\s+)?(stocks?|picks|etfs)\b|stocks? to (buy|watch|sell)|\bbest\b.*\bstocks?\b|"
-                     r"\bmarket (wrap|update)\b|\bmoving (in|after)\b|\bmovers\b|\bpremarket\b|\bwhy .* stock\b.*\?$)")
+                     r"\bmarket (wrap|update)\b|\bmoving (in|after)\b|\bmovers\b|\bpremarket\b|\bwhy .* stock\b.*\?$|"
+                     r"\bin focus\b|\bwatch:|\bstocks? (are|is) (moving|trading|higher|lower)\b|\bhot stocks\b)")
+# general-news headline must be about markets/economy to be shown as the 大市 頭條
+MARKET_WORDS = re.compile(r"\b(stocks?|wall street|s&p|nasdaq|dow|fed|federal reserve|powell|treasur(y|ies)|yields?|"
+                          r"inflation|cpi|jobs report|payrolls|rates?|tariffs?|oil|recession|gdp|earnings|markets?)\b")
 
 
 def _cfg():
@@ -279,7 +283,8 @@ def market_headline():
     for x in items:
         if x.get("ts") and now - float(x["ts"]) > 24 * 3600:
             continue
-        if GENERIC.search((x.get("headline") or "").lower()):
+        h = (x.get("headline") or "").lower()
+        if GENERIC.search(h) or not MARKET_WORDS.search(h):
             continue
         return x
     return None

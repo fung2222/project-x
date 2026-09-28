@@ -1,0 +1,227 @@
+"""daily job (ET 10:00): full-universe indicators/signals on completed bars, SL/TP,
+deterministic gates -> at most 1 paper entry, decisions/teaching/scenarios,
+<= 3 Telegram messages (decision / signals / teaching). Idempotent per session:
+each message part is sent at most once; the 1-entry-per-day rule is enforced by the ledger."""
+import json
+
+from .. import clock, decide, guard, ledger, marketdata, telegram, engine
+from ..config import load_settings, path
+from ..messages import esc, f2, pct, footer, money, daily_teaching, scenarios
+from .common import Ctx, gate_run, refresh_positions, write_text, report_path, strip_html
+
+JOB = "daily"
+PARTS = ("decision", "signals", "teaching")
+
+
+def owned_news(tickers, max_items=3):
+    out = []
+    try:
+        import yfinance as yf
+        for t in tickers:
+            for item in (yf.Ticker(t).news or [])[:2]:
+                c = item.get("content", item)
+                title = c.get("title")
+                if title:
+                    out.append(f"{t}: {title[:110]}")
+                if len(out) >= max_items:
+                    return out
+    except Exception:
+        pass
+    return out
+
+
+def signals_message(report, evals=None, news=None):
+    """Message 2: one line per core/secondary name + opportunity BUY candidates with failed gates."""
+    L = [f"<b>📊 信號</b> {report.get('session_date', report.get('date'))}（指標：已收市日 bar，1年數據）"]
+    rows = []
+    for x in report.get("signals", []):
+        tag = x["signal"]
+        if x["signal"] == "SELL" and not x.get("is_owned"):
+            tag = "SELL(冇倉)"
+        rows.append(f"{x['ticker']:<5} {x['price']:>8.2f} RSI{x['rsi']:>5.1f} 趨勢{x.get('trend_score', 0):+d} {tag} {x['confidence']:.0f}%")
+    if rows:
+        L.append("<pre>" + esc("\n".join(rows)) + "</pre>")
+    opp = sorted(report.get("opportunity_signals", []), key=lambda y: y["confidence"], reverse=True)
+    ev = {e["ticker"]: e for e in (evals or report.get("gates", []) or [])}
+    cands = [x for x in opp if x.get("raw_signal") == "BUY"]
+    top = cands[:4] if cands else opp[:3]
+    if top:
+        L.append("<b>💡 機會掃描</b>")
+        for x in top:
+            e = ev.get(x["ticker"])
+            gates = ("✓ 全部 gates 通過" if e and e["passed"] else ("✗" + " ✗".join(e["failed"]) if e else ""))
+            L.append(f"• {x['ticker']} ${f2(x['price'])} {x.get('raw_signal', x['signal'])} {x['confidence']:.0f}% "
+                     f"RSI {f2(x['rsi'],0)} 趨勢 {x.get('trend_score', 0):+d} {gates}")
+    if news:
+        L.append("<b>📰 持倉新聞</b>")
+        L += [f"• {esc(n)}" for n in news[:3]]
+    L.append("<i>G1信心 G2 setup G3成交量 G4趨勢 G5組合 G6注碼 G8冷靜期 G9暫停</i>")
+    return "\n".join(L)
+
+
+def run(dry_run=False, force=False, legacy=False, now=None):
+    ctx = Ctx(JOB, dry_run, force, legacy, now)
+    ok, why = gate_run(ctx, "daily")
+    if not ok:
+        print(f"[daily] {why}")
+        return {"status": "skipped", "reason": why}
+    sent_all = all(guard.was_sent(ctx.session, JOB, p) for p in PARTS)
+    if sent_all and not force:
+        msg = f"[daily] all {len(PARTS)} messages already sent for session {ctx.session} — nothing to do (use --force)"
+        print(msg)
+        return {"status": "duplicate", "reason": msg}
+    s = load_settings()
+    print(f"[daily] session {ctx.session} ET, now {ctx.now.strftime('%Y-%m-%d %H:%M')} HKT, dry_run={dry_run}")
+    report, sigs = engine.analyze(ctx.now, write_files=not dry_run)
+    pf = ledger.load()
+    rows, executed, acct = refresh_positions(ctx, pf)
+    regime = report["guardrail"]["regime"]
+    owned = {p["ticker"] for p in pf.get("positions", [])}
+    for x in sigs:
+        x["is_owned"] = x["ticker"] in owned
+    chosen, evals = decide.run_gates(pf, sigs, regime, ctx.now)
+    entry = None
+    entry_err = None
+    if chosen:
+        sig = next(x for x in sigs if x["ticker"] == chosen["ticker"])
+        reason = (f"ENTRY_{chosen['setup']}: {sig['name']} 信心 {sig['confidence']:.0f}%，RSI {sig['rsi']:.0f}，"
+                  f"趨勢 {sig['trend_score']:+d}，vol×{f2(sig['vol_ratio'])}")
+        if dry_run:
+            entry = {"ticker": chosen["ticker"], "shares": chosen["shares"], "entry_price": sig["price"],
+                     "setup": chosen["setup"], "stop_loss_price": chosen["sl"], "take_profit_price": chosen["tp"],
+                     "confidence": sig["confidence"], "dry_run": True}
+        else:
+            try:
+                entry = ledger.execute_entry(pf, chosen["ticker"], sig["price"], chosen["shares"], chosen["sl"],
+                                             chosen["tp"], regime, reason, chosen["setup"], sig["confidence"], ctx.now)
+            except ledger.RuleViolation as e:
+                entry_err = str(e)
+    acct = ledger.recompute(pf)
+    skipped = []
+    for e in sorted(evals, key=lambda y: y["confidence"], reverse=True):
+        if chosen and e["ticker"] == chosen["ticker"] and entry:
+            continue
+        skipped.append({"ticker": e["ticker"], "confidence": e["confidence"], "failed": e["failed"],
+                        "why": decide.why_text(e) or (entry_err or "")})
+    # ---------- message 1: decision
+    mk = report["market"]
+    L = [f"<b>📘 Project X 每日決策 — {ctx.session}</b>（{mk['regime_emoji']} VIX {f2(mk['vix'])} {esc(mk['regime'])}）",
+         "<b>✅ 今日動作</b>"]
+    actions = []
+    for tr in executed:
+        actions.append(f"紙上{'止損' if tr['reason']=='STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
+    if entry:
+        pos_pct = entry["entry_price"] * entry["shares"] / acct["equity_usd"] * 100
+        actions.append(f"{'（dry-run）' if dry_run else ''}紙上買入 {entry['ticker']} x{entry['shares']} @ ${f2(entry['entry_price'])}"
+                       f"（setup {entry['setup']}，信心 {f2(entry.get('confidence'),0)}%，SL ${f2(entry['stop_loss_price'])} / "
+                       f"TP ${f2(entry['take_profit_price'])}，佔 {pos_pct:.1f}%）")
+    for p in pf.get("positions", []):
+        if entry and p["ticker"] == entry["ticker"]:
+            continue
+        actions.append(f"HOLD {p['ticker']} @ {f2(p.get('current_price'))}（{pct(p.get('pnl_pct'))}，距SL {f2(p.get('dist_to_sl_pct'),1)}%，唔攤平）")
+    if not entry:
+        if skipped:
+            top = skipped[0]
+            actions.append(f"冇新倉：最高 {top['ticker']} {top['confidence']:.0f}% → {top['why']}")
+        else:
+            actions.append("冇新倉：今日冇 BUY 候選")
+    L += [f"• {esc(a)}" for a in actions]
+    spy_ret = spy_return_since_rebase()
+    L.append(f"<b>💼 組合</b> 權益 {money(acct['equity_usd'], acct['fx_usdhkd'])}（{pct(acct['total_return_pct'])} vs 起始"
+             f"{'；SPY ' + pct(spy_ret) if spy_ret is not None else ''}）· 現金 {f2(acct['cash_pct'],1)}% · "
+             f"持倉 {len(pf.get('positions', []))}/{report['guardrail']['max_positions']}")
+    L.append(f"已實現 {acct['realized_pnl_usd']:+.2f} · 未實現 {acct['unrealized_pnl_usd']:+.2f} · 總 P&L {acct['total_pnl_usd']:+.2f}")
+    m1 = "\n".join(L)
+    # ---------- message 2: signals
+    news = owned_news(sorted({p["ticker"] for p in pf.get("positions", [])}))
+    m2 = signals_message(report, evals, news)
+    # ---------- message 3: teaching + scenarios
+    overbought = len([x for x in report.get("signals", []) if (x.get("rsi") or 0) > 68])
+    teach = daily_teaching({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry, executed,
+                           skipped[0] if skipped else None, overbought)
+    sc, invalid = scenarios({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry)
+    m3 = "\n".join([f"<b>🎓 今日教學</b>\n{esc(teach)}", "",
+                    f"<b>🔮 情境</b>\n<b>基準</b>：{esc(sc['base'])}\n<b>樂觀</b>：{esc(sc['bull'])}\n<b>悲觀</b>：{esc(sc['bear'])}", "",
+                    "<b>⛔ 失效條件</b>\n" + "\n".join(f"• {esc(i)}" for i in invalid), "", footer()])
+    msgs = dict(zip(PARTS, (m1, m2, m3)))
+    # ---------- persist
+    report["v3"] = {
+        "session_date": ctx.session, "job": JOB, "generated_at": clock.now_hkt().isoformat(timespec="seconds"),
+        "decisions": {"actions": actions, "entries": [entry] if entry else [], "exits": executed, "skipped": skipped},
+        "gates": evals, "portfolio_summary": {k: acct.get(k) for k in (
+            "equity_usd", "cash_usd", "cash_pct", "realized_pnl_usd", "unrealized_pnl_usd", "total_pnl_usd",
+            "total_return_pct")} | {"positions": len(pf.get("positions", [])), "spy_return_pct": spy_ret},
+        "teaching": teach, "scenarios": sc, "invalidation": invalid,
+    }
+    if not dry_run:
+        pf["account"]["last_decision"] = {"date": ctx.session, "style": "px_gates_v3", "actions": actions,
+                                          "skipped": [f"{x['ticker']} {x['confidence']:.0f}%：{x['why']}" for x in skipped[:5]],
+                                          "cash_pct": acct["cash_pct"], "deployed_pct": acct["deployed_pct"]}
+        pf["account"]["updated"] = ctx.session
+        pf["updated"] = ctx.session
+        ledger.save(pf)
+        engine.save_json(engine.REPORT_PATH, report)
+    results = {}
+    for part in PARTS:
+        if guard.was_sent(ctx.session, JOB, part) and not force:
+            results[part] = "already-sent"
+            continue
+        ok_, res = telegram.send(msgs[part], dry_run=dry_run, label=f"daily/{part}")
+        results[part] = "ok" if ok_ else f"failed: {res}"
+        if ok_ and not dry_run:
+            guard.mark_sent(ctx.session, JOB, part, res)
+    if not dry_run:
+        brief = "\n\n".join(strip_html(msgs[p]) for p in PARTS)
+        write_text(report_path(f"DailyBrief_{ctx.session}.txt"), brief)
+        guard.update(ctx.session, JOB, status="ok" if all(v in ("ok", "already-sent") for v in results.values()) else "partial",
+                     finished=clock.now_hkt().isoformat(timespec="seconds"), telegram=results,
+                     entry=entry.get("id") if entry and not dry_run else None, _inc_runs=True)
+    print(json.dumps({"session": ctx.session, "telegram": results, "entry": entry, "exits": [t["id"] for t in executed],
+                      "skipped": skipped[:5], "equity_usd": acct["equity_usd"]}, ensure_ascii=False, indent=2, default=str))
+    return {"status": "ok" if all(v in ("ok", "already-sent") for v in results.values()) else "telegram_failed",
+            "telegram": results, "messages": msgs, "entry": entry, "exits": executed}
+
+
+def spy_return_since_rebase():
+    try:
+        rb = load_settings()["account"]["rebase_date"]
+        df = marketdata.history("SPY")
+        import datetime as dt
+        d0 = dt.date.fromisoformat(rb)
+        before = df[[i.date() < d0 for i in df.index]]
+        base = float(before["Close"].iloc[-1])
+        last = marketdata.quote("SPY").get("price") or float(df["Close"].iloc[-1])
+        return round((last / base - 1) * 100, 2)
+    except Exception:
+        return None
+
+
+def legacy_signals_push(dry_run=None):
+    """Used by telegram_push.send_daily_push(): send ONLY the signals message (the Grok Bot routine
+    adds its own decision/teaching messages). Guarded: at most once per session."""
+    now = clock.now_hkt()
+    session = clock.session_date(now).isoformat()
+    if guard.was_sent(session, JOB, "signals"):
+        print(f"[daily/signals] already sent for session {session}; skipping")
+        return True, "0/0 parts sent (already sent)"
+    report = engine.load_json(engine.REPORT_PATH, {})
+    pf = ledger.load()
+    try:
+        _, sigs = None, report.get("signals", []) + report.get("opportunity_signals", [])
+        regime = report.get("guardrail", {}).get("regime", "NORMAL")
+        owned = {p["ticker"] for p in pf.get("positions", [])}
+        for x in sigs:
+            x["is_owned"] = x["ticker"] in owned
+            x.setdefault("indicators", {})
+        evals = [decide.evaluate(pf, x, regime, now) for x in sigs if x.get("raw_signal") == "BUY" and not x["is_owned"]
+                 and x.get("indicators", {}).get("close")]
+    except Exception as e:
+        print("gate preview skipped:", type(e).__name__, e)
+        evals = []
+    news = owned_news(sorted({p["ticker"] for p in pf.get("positions", [])}))
+    msg = signals_message(report, evals, news) + "\n\n" + footer()
+    ok, res = telegram.send(msg, dry_run=dry_run, label="daily/signals (legacy)")
+    from ..config import is_dry_run
+    if ok and not (dry_run if dry_run is not None else is_dry_run()):
+        guard.mark_sent(session, JOB, "signals", res)
+    return ok, ("1/1 parts sent" if ok else f"0/1 parts sent: {res}")

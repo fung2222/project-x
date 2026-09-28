@@ -104,6 +104,13 @@ def evaluate_all_positions(current_prices):
         atr = sig.get("atr", pos["entry_price"] * 0.03) if sig else pos["entry_price"] * 0.03
         sl = check_stop_loss(pos, cur, atr)
         tp = check_take_profit(pos, cur)
+        if pos.get("stop_loss_price"):  # fixed stop recorded at entry wins over recomputed ATR stop
+            sl["stop_price"] = pos["stop_loss_price"]
+            sl["triggered"] = cur <= pos["stop_loss_price"]
+            sl["distance_to_stop_pct"] = round((cur - pos["stop_loss_price"]) / cur * 100, 1)
+        if pos.get("take_profit_price"):
+            tp["target_price"] = pos["take_profit_price"]
+            tp["triggered"] = cur >= pos["take_profit_price"]
         add = check_add_position(pos, cur, sig or {})
         pnl_pct = (cur - pos["entry_price"]) / pos["entry_price"] * 100
         pnl_usd = (cur - pos["entry_price"]) * pos["shares"]
@@ -112,8 +119,7 @@ def evaluate_all_positions(current_prices):
             action = "STOP_LOSS"
         elif tp["triggered"]:
             action = "TAKE_PROFIT"
-        elif add["condition_met"] and add["can_add"] and add["shares_to_add"] > 0:
-            action = "ADD_POSITION"
+        # ADD_POSITION disabled by rule (no averaging down / no add)
         results.append({
             "ticker": ticker,
             "shares": pos["shares"],
@@ -130,102 +136,24 @@ def evaluate_all_positions(current_prices):
 
 
 def execute_action(ticker, action, current_price):
-    """執行交易動作（止損/止盈/加倉），更新 portfolio.json"""
-    import datetime as dt
-    pf = load_portfolio()
-    positions = pf.get("positions", [])
-    trade_log = pf.get("trade_log", [])
-    # 模擬交易費 1%（買 + 賣各 0.5%）
-    FEE_RATE = 0.005
+    """執行交易動作 → px ledger (v3-core).
 
-    if action == "STOP_LOSS" or action == "TAKE_PROFIT":
-        # 平倉
-        pos = next((p for p in positions if p["ticker"] == ticker), None)
-        if not pos:
+    STOP_LOSS / TAKE_PROFIT: paper exit with fee = max(1.00, 0.5%) and net P&L that deducts BOTH
+    the buy and the sell fee (fixes the old bug that booked RKLB at +19.06 instead of +18.06).
+    ADD_POSITION: refused — averaging down / adding is disabled by rule (config rules.allow_add=false).
+    """
+    import sys as _sys
+    _sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from px import ledger
+    if action in ("STOP_LOSS", "TAKE_PROFIT"):
+        pf = ledger.load()
+        if not ledger.position(pf, ticker):
             return False, "持倉不存在"
-        gross_pnl_usd = (current_price - pos["entry_price"]) * pos["shares"]
-        fee_usd = current_price * pos["shares"] * FEE_RATE
-        net_pnl_usd = gross_pnl_usd - fee_usd
-        gross_pnl_pct = (current_price - pos["entry_price"]) / pos["entry_price"] * 100
-        net_pnl_pct = net_pnl_usd / (pos["entry_price"] * pos["shares"]) * 100
-        proceeds_usd = current_price * pos["shares"] - fee_usd
-        proceeds_hkd = round(proceeds_usd * 7.8, 2)
-        trade = {
-            "id": f"T{len(trade_log)+1:03d}",
-            "date": dt.date.today().isoformat(),
-            "timestamp": dt.datetime.now().isoformat(),
-            "ticker": ticker,
-            "action": "SELL",
-            "reason": action,
-            "shares": pos["shares"],
-            "entry_price": pos["entry_price"],
-            "exit_price": round(current_price, 2),
-            "entry_date": pos.get("entry_date"),
-            "exit_date": dt.date.today().isoformat(),
-            "gross_proceeds_usd": round(current_price * pos["shares"], 2),
-            "fee_usd": round(fee_usd, 2),
-            "proceeds_usd": round(proceeds_usd, 2),
-            "proceeds_hkd": proceeds_hkd,
-            "gross_pnl_usd": round(gross_pnl_usd, 2),
-            "gross_pnl_pct": round(gross_pnl_pct, 2),
-            "net_pnl_usd": round(net_pnl_usd, 2),
-            "net_pnl_pct": round(net_pnl_pct, 2),
-            "status": "closed"
-        }
-        trade_log.append(trade)
-        # 移除持倉
-        pf["positions"] = [p for p in positions if p["ticker"] != ticker]
-        # 更新現金（已扣手續費）
-        pf["account"]["cash_usd"] = round(pf["account"].get("cash_usd", 0) + proceeds_usd, 2)
-        pf["account"]["cash_hkd"] = round(pf["account"]["cash_usd"] * 7.8, 2)
-        pf["account"]["total_fees_usd"] = round(pf["account"].get("total_fees_usd", 0) + fee_usd, 2)
-        # 更新交易統計（用 net）
-        update_performance_stats(pf, trade)
-        save_portfolio(pf)
+        trade = ledger.execute_exit(pf, ticker, float(current_price), action, note="risk_manager.execute_action")
+        ledger.save(pf)
         return True, trade
-
-    elif action == "ADD_POSITION":
-        pos = next((p for p in positions if p["ticker"] == ticker), None)
-        if not pos:
-            return False, "持倉不存在"
-        sig, _ = get_position_with_indicators(ticker)
-        add = check_add_position(pos, current_price, sig or {})
-        shares_to_add = add["shares_to_add"]
-        if shares_to_add <= 0:
-            return False, "無足夠現金加倉"
-        cost_usd = shares_to_add * current_price
-        fee_usd = cost_usd * FEE_RATE
-        cost_hkd = round((cost_usd + fee_usd) * 7.8, 2)
-        trade = {
-            "id": f"T{len(trade_log)+1:03d}",
-            "date": dt.date.today().isoformat(),
-            "timestamp": dt.datetime.now().isoformat(),
-            "ticker": ticker,
-            "action": "BUY",
-            "reason": "ADD_POSITION",
-            "shares": shares_to_add,
-            "entry_price": round(current_price, 2),
-            "entry_date": dt.date.today().isoformat(),
-            "cost_usd": round(cost_usd, 2),
-            "fee_usd": round(fee_usd, 2),
-            "total_cost_usd": round(cost_usd + fee_usd, 2),
-            "cost_hkd": cost_hkd,
-            "status": "open"
-        }
-        trade_log.append(trade)
-        # 加倉平均成本
-        total_shares = pos["shares"] + shares_to_add
-        avg_cost = (pos["entry_price"] * pos["shares"] + current_price * shares_to_add) / total_shares
-        pos["shares"] = total_shares
-        pos["entry_price"] = round(avg_cost, 2)
-        pos["entry_date"] = dt.date.today().isoformat()
-        pos["current_price"] = current_price
-        pf["account"]["cash_usd"] = round(pf["account"].get("cash_usd", 0) - cost_usd - fee_usd, 2)
-        pf["account"]["cash_hkd"] = round(pf["account"]["cash_usd"] * 7.8, 2)
-        pf["account"]["total_fees_usd"] = round(pf["account"].get("total_fees_usd", 0) + fee_usd, 2)
-        save_portfolio(pf)
-        return True, trade
-
+    if action == "ADD_POSITION":
+        return False, "規則禁止加倉／攤平（rules.allow_add=false）"
     return False, "不支援嘅動作"
 
 

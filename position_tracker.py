@@ -42,47 +42,30 @@ def fetch_latest_quote(ticker):
 
 
 def update_positions():
-    """更新所有持倉嘅當前價格"""
-    with open(PORTFOLIO_PATH, encoding="utf-8") as f:
-        pf = json.load(f)
+    """更新所有持倉嘅當前價格 + 重算帳戶（px ledger；報價失敗保留舊價）。
+    Mark-to-market only — SL/TP execution happens in run.py open/hourly/daily."""
+    from px import ledger, marketdata
+    pf = ledger.load()
     positions = pf.get("positions", [])
     if not positions:
+        ledger.recompute(pf)
+        ledger.save(pf)
         print(f"[{datetime.datetime.now()}] 無持倉，跳過")
         return
-    updates = []
-    total_value = 0
-    total_pnl = 0
-    got_any = False
+    prices, updates = {}, []
     for pos in positions:
-        ticker = pos["ticker"]
-        price = fetch_latest_quote(ticker)
-        if price:
-            got_any = True
-            pos["current_price"] = price
-            pos["value_usd"] = round(price * pos["shares"], 2)
-            pos["pnl_usd"] = round((price - pos["entry_price"]) * pos["shares"], 2)
-            pos["pnl_pct"] = round((price - pos["entry_price"]) / pos["entry_price"] * 100, 2)
-            pos["last_updated"] = datetime.datetime.now().isoformat()
-            updates.append(f"{ticker} ${price:.2f} ({pos['pnl_pct']:+.2f}%)")
-        # 用現有／成本價計市值，避免報價全失敗時 equity 被清成純現金
-        px = pos.get("current_price") or pos["entry_price"]
-        val = round(px * pos["shares"], 2)
-        pos["value_usd"] = val
-        pos["pnl_usd"] = round((px - pos["entry_price"]) * pos["shares"], 2)
-        pos["pnl_pct"] = round((px - pos["entry_price"]) / pos["entry_price"] * 100, 2)
-        total_value += val
-        total_pnl += pos["pnl_usd"]
-    if not got_any:
-        print(f"[{datetime.datetime.now()}] 報價失敗，保留舊價；持倉市值 ${total_value:.2f}")
-    pf["account"]["equity_usd"] = round(total_value + pf["account"].get("cash_usd", 0), 2)
-    pf["account"]["total_pnl_usd"] = round(total_pnl, 2)
-    cost = sum(p["entry_price"] * p["shares"] for p in positions) or 1
-    pf["account"]["total_pnl_pct"] = round(total_pnl / cost * 100, 2)
-    pf["account"]["total_invested_usd"] = round(cost, 2)
+        q = marketdata.quote(pos["ticker"])
+        if q.get("ok"):
+            prices[pos["ticker"]] = q["price"]
+    ledger.mark(pf, prices)
+    acct = ledger.recompute(pf)
+    for pos in pf["positions"]:
+        updates.append(f"{pos['ticker']} ${float(pos.get('current_price') or 0):.2f} ({pos['pnl_pct']:+.2f}%)")
+    if not prices:
+        print(f"[{datetime.datetime.now()}] 報價失敗，保留舊價；權益 ${acct['equity_usd']:.2f}")
     pf["last_tracker_update"] = datetime.datetime.now().isoformat()
-    with open(PORTFOLIO_PATH, "w", encoding="utf-8") as f:
-        json.dump(pf, f, ensure_ascii=False, indent=2)
-    print(f"[{datetime.datetime.now()}] 更新 {len(positions)} 持倉: {' '.join(updates) if updates else '(no fresh quotes)'}")
+    ledger.save(pf)
+    print(f"[{datetime.datetime.now()}] 更新 {len(positions)} 持倉: {' '.join(updates)}")
 
 
 if __name__ == "__main__":

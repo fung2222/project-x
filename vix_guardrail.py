@@ -2,29 +2,31 @@
 VIX Guardrail 機制 — Project X
 根據市場波動情況自動調整風險參數
 """
-import json, os, datetime
+import json, os, sys, datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(BASE_DIR, "portfolio.json")
+sys.path.insert(0, BASE_DIR)
+from px import config as _pxconfig  # thresholds: config/settings.json (single source of truth)
 
 REGIME_DESCRIPTIONS = {
     "NORMAL": {
         "emoji": "🟢",
         "title": "正常市場",
         "color": "#27AE60",
-        "description": "VIX 低於 20，波動性低，風險偏好高。適合積極操作，可以建立最多 3 個持倉，信心度門檻 70%。",
+        "description": "VIX 低於 20，波動性低，風險偏好高。適合積極操作，可以建立最多 3 個持倉，信心度門檻 75%。",
         "action": "正常操作，可以考慮買入信號",
         "max_positions": 3,
-        "min_confidence": 0.70
+        "min_confidence": 0.75
     },
     "CAUTION": {
         "emoji": "🟡",
         "title": "謹慎市場",
         "color": "#F39C12",
         "description": "VIX 處於 20-30，市場波動中等。建議收窄持倉，提高信心度要求。",
-        "action": "謹慎操作，優先高信心度信號，減少持倉至 2 個",
+        "action": "謹慎操作，優先高信心度信號（≥80%），減少持倉至 2 個",
         "max_positions": 2,
-        "min_confidence": 0.75
+        "min_confidence": 0.80
     },
     "DEFENSIVE": {
         "emoji": "🔴",
@@ -43,18 +45,20 @@ def load_portfolio():
 
 def check_guardrail(vix_value=None, regime=None):
     """檢查 VIX Guardrail，返回調整後的風險參數"""
+    regs = _pxconfig.load_settings()["regimes"]
+    floor = _pxconfig.load_settings()["rules"]["min_confidence"]
     if regime is None:
         if vix_value is None:
             regime = "NORMAL"
-        elif vix_value < 20:
+        elif vix_value < regs["NORMAL"]["vix_max"]:
             regime = "NORMAL"
-        elif vix_value < 30:
+        elif vix_value < regs["CAUTION"]["vix_max"]:
             regime = "CAUTION"
         else:
             regime = "DEFENSIVE"
 
-    portfolio = load_portfolio()
-    guardrails = portfolio["vix_guardrails"]  # top-level key
+    guardrails = {k: {"max_positions": v["max_positions"], "min_confidence": max(floor, v["min_confidence"])}
+                  for k, v in regs.items()}
     settings = guardrails[regime]
     desc = REGIME_DESCRIPTIONS[regime]
 

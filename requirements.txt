@@ -1,0 +1,6 @@
+# Project X runtime (Python 3.11+; tested on 3.13)
+yfinance>=0.2.54
+pandas>=2.2
+numpy>=1.26
+requests>=2.31
+# tests: python -m unittest discover -s tests   (pytest optional)

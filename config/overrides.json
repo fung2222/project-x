@@ -1,0 +1,6 @@
+{
+  "_comment": "Manual overrides (change only on Roy's instruction). pause_new_entries=true blocks all new paper entries; blocklist blocks tickers.",
+  "pause_new_entries": false,
+  "blocklist": [],
+  "notes": []
+}

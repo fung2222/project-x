@@ -1,0 +1,59 @@
+# OPTIONAL backup runner for Project X. Manual trigger only (workflow_dispatch).
+# The primary scheduler is Hermes (Roy's desktop) running `python run.py <job>`.
+# DO NOT uncomment the schedule block while Hermes or the Grok Bot routines are running the jobs,
+# otherwise messages/trades could be doubled (the state/job_runs.json guard only helps if state is pushed).
+#
+# Repo secrets used (Settings -> Secrets and variables -> Actions):
+#   FINNHUB_API_KEY, MARKETAUX_API_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+name: px-backup-runner
+on:
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "open | daily | hourly | weekly"
+        required: true
+        default: "daily"
+      dry_run:
+        description: "true = no Telegram, no writes, no push"
+        required: true
+        default: "true"
+      force:
+        description: "true = ignore holiday/time window + duplicate guard"
+        required: true
+        default: "false"
+  # schedule:   # (ET-aware jobs exit quietly outside their windows; times below are UTC)
+  #   - cron: "37 13 * * 1-5"            # open   (09:37 EDT; use 14:37 UTC in EST)
+  #   - cron: "2 14 * * 1-5"             # daily  (10:02 EDT; use 15:02 UTC in EST)
+  #   - cron: "32 14-19 * * 1-5"         # hourly (EDT; shift +1h in EST)
+  #   - cron: "45 1 * * 1"               # weekly (Mon 09:45 HKT)
+permissions:
+  contents: write
+concurrency:
+  group: px-main
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+      MARKETAUX_API_KEY: ${{ secrets.MARKETAUX_API_KEY }}
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: unit tests
+        run: python -m unittest discover -s tests -v
+      - name: run job
+        run: |
+          ARGS=""
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; else ARGS="$ARGS --push"; fi
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="$ARGS --force"; fi
+          git config user.name  "px-bot"
+          git config user.email "px-bot@users.noreply.github.com"
+          python run.py "${{ inputs.job }}" $ARGS

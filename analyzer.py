@@ -1,6 +1,8 @@
 """
-Project X — 每日分析引擎 v2（使用 yfinance 真實數據）
-完整流程：VIX Guardrail → 真實報價 → 技術分析 → 生成信號 → 記錄命中率
+Project X — 每日分析引擎（legacy entry point; engine = px/engine.py, v3-core）
+完整流程：VIX Guardrail → 真實報價 → 技術分析（已收市日 bar，1年數據）→ 生成信號 → 記錄命中率
+`python analyzer.py` still writes daily_report.json / signals.json / profiles.json for the website.
+It does NOT open paper trades (use `python run.py daily` for the full job with code-enforced gates).
 """
 import json, os, datetime, sys
 
@@ -38,9 +40,10 @@ STOCK_NAMES = {
     "SMCI": "Super Micro Computer",
 }
 
-# Max price for 1 share ≈ 25% of ~USD 1280 capital
-OPP_MAX_PRICE = 320.0
-OPP_MIN_CONFIDENCE = 70.0
+from px import config as _pxconfig, engine as _engine, clock as _clock
+# Max price for 1 share ≈ 25% of ~USD 1280 capital; min confidence = config rules.min_confidence (0.75)
+OPP_MAX_PRICE = _pxconfig.load_settings()["rules"]["max_position_pct"] * _pxconfig.load_settings()["account"]["start_equity_usd"]
+OPP_MIN_CONFIDENCE = _pxconfig.load_settings()["rules"]["min_confidence"] * 100
 
 
 def load_json(path):
@@ -89,11 +92,8 @@ def generate_signal(ticker, quote, tech, gr):
     # 使用 finnhub_api 計算的信心度
     confidence = tech.get("confidence", 50)
 
-    # VIX Guardrail 調整
-    if regime == "DEFENSIVE":
-        confidence -= 20
-    elif regime == "CAUTION":
-        confidence -= 10
+    # VIX Guardrail 調整（config regimes.*.confidence_adj）
+    confidence += _pxconfig.load_settings()["regimes"].get(regime, {}).get("confidence_adj", 0)
 
     confidence = max(20, min(95, confidence))
 
@@ -210,13 +210,15 @@ def get_cached_report(max_age_minutes=30):
         if not os.path.exists(REPORT_PATH):
             return None
         report = load_json(REPORT_PATH)
-        if report.get("date") != datetime.date.today().isoformat():
+        if report.get("date") != _clock.now_hkt().date().isoformat():
             return None
         ts = report.get("timestamp", "")
         if ts:
             try:
                 report_time = datetime.datetime.fromisoformat(ts)
-                age = datetime.datetime.now() - report_time
+                if report_time.tzinfo is None:
+                    report_time = report_time.replace(tzinfo=_clock.HKT)
+                age = _clock.now_hkt() - report_time
                 if age.total_seconds() > max_age_minutes * 60:
                     return None
                 return report
@@ -241,117 +243,23 @@ def analyze_day(quiet=False):
 
 
 def _analyze_impl():
-    """Actual analysis logic"""
+    """Actual analysis logic -> px.engine.analyze (writes daily_report.json, signals.json, profiles.json)."""
     print("=" * 60)
-    print("Project X — 每日分析引擎 v2")
-    print(f"時間：{__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M')}")
-    print("數據來源：Yahoo Finance (yfinance)")
+    print("Project X — 每日分析引擎 (px v3-core)")
+    print(f"時間：{_clock.now_hkt().strftime('%Y-%m-%d %H:%M')} HKT")
+    print("數據來源：Yahoo Finance (yfinance)；指標用已收市日 bar（1年）")
     print("=" * 60)
-
-    print("\n1️⃣ VIX Guardrail 檢查...")
-    regime, vix = finnhub_api.get_vix_regime()
-    gr = vix_guardrail.check_guardrail(vix_value=vix, regime=regime)
-    print(vix_guardrail.format_guardrail_report(gr))
-
-    print("\n2️⃣ 取得真實報價（Yahoo Finance）...")
-    quotes = finnhub_api.get_all_quotes()
-
-    print("\n3️⃣ 技術指標計算...")
-    tech_batch = finnhub_api.get_full_tech_batch()
-
-    print("\n4️⃣ 基本面資料（分析師評級、目標價、業績日期）...") 
-    profiles = finnhub_api.get_all_profiles()
-    for ticker, prof in profiles.items():
-        if "error" not in prof:
-            print(f"  {prof['analyst_emoji']} {ticker}: {prof['analyst_consensus']}（{prof['num_analysts']}位分析師）")
-
-    print("\n5️⃣ 信號生成...")
-    signals = []
-    all_tickers = finnhub_api.WATCH_PRIMARY + finnhub_api.WATCH_SECONDARY
-
-    for ticker in all_tickers:
-        quote = quotes.get(ticker, {})
-        tech = tech_batch.get(ticker, {})
-        if "error" in tech:
-            print(f"  ⚠️ {ticker}: {tech['error']}")
-            continue
-        sig = generate_signal(ticker, quote, tech, gr)
-        if sig:
-            # 合併基本面資料
-            prof = profiles.get(ticker, {})
-            if prof and "error" not in prof:
-                sig["analyst_consensus"] = prof.get("analyst_consensus", "")
-                sig["analyst_emoji"] = prof.get("analyst_emoji", "")
-                sig["analyst_rating_str"] = prof.get("analyst_rating_str", "")
-                sig["num_analysts"] = prof.get("num_analysts", 0)
-                sig["target_mean"] = prof.get("target_mean")
-                sig["target_high"] = prof.get("target_high")
-                sig["target_low"] = prof.get("target_low")
-                sig["upside_pct"] = prof.get("upside_pct")
-                sig["earnings_date"] = prof.get("earnings_date")
-                sig["earnings_days"] = prof.get("earnings_days")
-                sig["pe_ratio"] = prof.get("pe_ratio")
-                sig["forward_pe"] = prof.get("forward_pe")
-                sig["profit_margin_pct"] = prof.get("profit_margin_pct")
-                sig["revenue_growth_pct"] = prof.get("revenue_growth_pct")
-                sig["earnings_growth_pct"] = prof.get("earnings_growth_pct")
-                sig["industry"] = prof.get("industry", "")
-                sig["sector"] = prof.get("sector", "")
-                sig["analyst_news"] = prof.get("news", [])
-            signals.append(sig)
+    report, sigs = _engine.analyze(write_files=True)
+    gr = report["guardrail"]
+    print(f"VIX: {report['market']['vix']} → {gr['title']}（門檻 {gr['min_confidence']*100:.0f}%，最多 {gr['max_positions']} 隻）")
+    for sig in report["signals"] + report.get("opportunity_signals", []):
         sig_icon = "🟢" if sig["signal"] == "BUY" else "🔴" if sig["signal"] == "SELL" else "🟡"
-        ma_arrow = "↑" if sig["above_ma50"] else "↓"
-        macd_icon = "↗" if tech.get("macd_bullish") else "↘"
-        vol = tech.get("vol_ratio", 1.0)
-        vol_icon = "▲" if vol >= 1.2 else "▼" if vol < 0.7 else "▬"
-        print(f"  {sig_icon} {ticker:4} | ${sig['price']:7.2f} | RSI:{sig['rsi']:5.1f} | MACD:{macd_icon} | vol:{vol_icon}{vol:.1f} | {sig['confidence']:3.0f}% | {sig['action']}")
-
-    print("\n6️⃣ 機會掃描（小資金，不入核心自動邏輯）...")
-    opportunity_picks = build_opportunity_picks(quotes, tech_batch, profiles, gr)
-    for p in opportunity_picks:
-        print(f"  💡 {p['ticker']:4} | ${p['price']:7.2f} | conf:{p['confidence']:3.0f}% | {p.get('action','')}")
-    if not opportunity_picks:
-        print("  （今日無符合條件的機會標的）")
-
-    print("\n7️⃣ 保存信號記錄...")
-    sig_data = load_json(SIGNALS_PATH)
-    today_str = datetime.date.today().isoformat()
-    # Core only — opportunity tickers stay out of signals.json / hit-rate / auto portfolio
-    sig_data["signals"] = [s for s in sig_data["signals"] if s.get("date") != today_str]
-    for sig in signals:
-        sig["date"] = today_str
-        sig_data["signals"].append(sig)
-    sig_data["last_updated"] = datetime.datetime.now().isoformat()
-    sig_data["vix_regime"] = gr["title"]
-    sig_data["vix_value"] = round(vix, 2)
-    save_json(SIGNALS_PATH, sig_data)
-
-    print("\n8️⃣ 生成每日報告...")
-    core_tickers = set(finnhub_api.WATCH_PRIMARY + finnhub_api.WATCH_SECONDARY)
-    profiles_clean = {t: p for t, p in profiles.items() if "error" not in p and t in core_tickers}
-    # Keep opportunity profiles available under report but not required for core dashboard profiles.json
-    report = generate_report(signals, quotes, gr, vix, regime, profiles_clean, opportunity_picks=opportunity_picks)
-    save_json(REPORT_PATH, report)
-    save_json(os.path.join(BASE_DIR, "profiles.json"), profiles_clean)
-
-    update_hit_rate()
-
-    print("\n" + "=" * 60)
-    print("📋 每日摘要")
-    print("=" * 60)
-    print(f"VIX: {vix:.2f} → {gr['title']}")
-    buys = [s for s in signals if s["signal"] == "BUY"]
-    holds = [s for s in signals if s["signal"] == "HOLD"]
-    sells = [s for s in signals if s["signal"] == "SELL"]
-    print(f"\n📡 信號摘要：")
-    print(f"   買入候選：{len(buys)} 隻")
-    print(f"   觀望：{len(holds)} 隻")
-    print(f"   考慮止盈：{len(sells)} 隻")
-    perf = sig_data["performance"]
-    total = perf.get("total_signals", 0)
-    if total > 0:
-        print(f"\n📊 命中率：{perf.get('hit_rate_pct',0):.0f}%（{total}筆交易）")
-    print(f"\n💡 機會掃描候選：{len(opportunity_picks)} 隻")
+        print(f"  {sig_icon} {sig['ticker']:5} | ${sig['price']:8.2f} | RSI:{sig['rsi']:5.1f} | MA50:{sig['ma50']:8.2f} | "
+              f"vol:{(sig['vol_ratio'] or 0):.2f} | trend:{sig['trend_score']:+d} | {sig['confidence']:3.0f}% | {sig['action']}")
+    print(f"\n💡 機會掃描候選：{len(report.get('opportunity_picks', []))} 隻")
+    perf = load_json(SIGNALS_PATH).get("performance", {})
+    if perf.get("total_signals"):
+        print(f"📊 信號命中率樣本：{perf.get('hit_rate_pct', 0):.0f}%（樣本 {perf['total_signals']}）")
     print("\n✅ 分析完成！")
     return report
 
@@ -418,65 +326,10 @@ def generate_report(signals, quotes, gr, vix, regime, profiles=None, opportunity
 
 
 def update_hit_rate():
-    """更新命中率統計"""
+    """更新命中率統計（signal hit-rate sample; see px.engine.hit_rate）"""
     sig_data = load_json(SIGNALS_PATH)
-    signals = sig_data.get("signals", [])
-    if len(signals) < 2:
-        return
-
-    # 按日期分組
-    by_date = {}
-    for s in signals:
-        d = s.get("date")
-        if d:
-            if d not in by_date:
-                by_date[d] = []
-            by_date[d].append(s)
-
-    dates = sorted(by_date.keys())
-    if len(dates) < 2:
-        return
-
-    hits = partials = misses = neutrals = 0
-
-    for i in range(len(dates) - 1):
-        day_signals = by_date[dates[i]]
-        next_day_signals = {s["ticker"]: s for s in by_date[dates[i + 1]]}
-
-        for sig in day_signals:
-            if sig["signal"] != "BUY":
-                continue
-
-            ticker = sig["ticker"]
-            entry_price = sig["price"]
-
-            result_sig = next_day_signals.get(ticker)
-            if not result_sig:
-                continue
-
-            exit_price = result_sig.get("price", entry_price)
-            pct_chg = (exit_price - entry_price) / entry_price * 100 if entry_price else 0
-
-            if pct_chg >= 2:
-                hits += 1
-            elif pct_chg >= 0:
-                partials += 1
-            elif pct_chg <= -2:
-                misses += 1
-            else:
-                neutrals += 1
-
-    total = hits + partials + misses
-    if total > 0:
-        sig_data["performance"]["total_signals"] = total
-        sig_data["performance"]["hits"] = hits
-        sig_data["performance"]["partials"] = partials
-        sig_data["performance"]["misses"] = misses
-        sig_data["performance"]["neutrals"] = neutrals
-        sig_data["performance"]["hit_rate_pct"] = round(hits / total * 100, 1)
-        sig_data["performance"]["partial_rate_pct"] = round(partials / total * 100, 1)
-        sig_data["performance"]["miss_rate_pct"] = round(misses / total * 100, 1)
-        save_json(SIGNALS_PATH, sig_data)
+    sig_data["performance"] = _engine.hit_rate(sig_data.get("signals", []), sig_data.get("performance", {}))
+    save_json(SIGNALS_PATH, sig_data)
 
 
 if __name__ == "__main__":

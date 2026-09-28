@@ -1,6 +1,5 @@
 """
-Project X — 每週績效報告
-每週日自動生成，回顧過去一週的市場和系統表現
+Project X — 每週績效報告 (legacy helper; full weekly job = `python run.py weekly`)
 """
 import json, os, datetime, sys
 
@@ -144,10 +143,9 @@ def format_weekly_message(report):
     if total == 0:
         lines.append("尚無足夠交易數據")
     else:
-        lines.append(f"總交易: {total} 筆")
-        lines.append(f"✅ 獲利: {hits} 筆")
-        lines.append(f"❌ 虧損: {misses} 筆")
-        lines.append(f"總命中率: <b>{hit_rate:.0f}%</b>")
+        lines.append(f"信號命中率樣本: {total} 個（唔係交易筆數）")
+        lines.append(f"✅ 命中: {hits} · ❌ 失誤: {misses}")
+        lines.append(f"信號命中率: <b>{hit_rate:.0f}%</b>")
     lines.append("")
 
     # 每日信號回顧

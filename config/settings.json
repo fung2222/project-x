@@ -1,0 +1,88 @@
+{
+  "_comment": "Project X single source of truth for rules/universe/schedule. Edit here (not in code). Test with `python run.py <job> --dry-run` before committing.",
+  "version": 3,
+  "account": {
+    "mode": "paper",
+    "phase": "PHASE_4_LIVE_PREP",
+    "capital_hkd": 10000,
+    "start_equity_usd": 1280.00,
+    "rebase_date": "2026-09-13",
+    "fx_fallback_usdhkd": 7.80
+  },
+  "rules": {
+    "min_confidence": 0.75,
+    "max_positions": 3,
+    "max_position_pct": 0.25,
+    "min_cash_pct": 0.20,
+    "risk_per_trade_pct": 0.02,
+    "max_new_entries_per_day": 1,
+    "one_position_per_theme": true,
+    "allow_averaging_down": false,
+    "allow_add": false,
+    "min_notional_usd": 50,
+    "sl_atr_mult": 2.0,
+    "sl_min_pct": 0.05,
+    "sl_max_pct": 0.10,
+    "tp_pct": 0.10,
+    "tp_mode": "fixed",
+    "tp_mode_options": "fixed (current) | partial_trail (OPTION for Roy: at +10% sell half, move stop to entry, trail rest) -- NOT implemented as default; requires Roy approval",
+    "cooldown_after_sl_days": 5,
+    "cooldown_after_tp_days": 3,
+    "auto_execute_exits": true,
+    "near_sl_alert_pct": 2.0,
+    "big_move_alert_pct": 3.0,
+    "open_move_alert_pct": 2.0,
+    "time_review_days": 15,
+    "max_price_sanity_jump_pct": 50.0,
+    "fee": {"min_usd": 1.00, "rate": 0.005}
+  },
+  "regimes": {
+    "NORMAL":    {"vix_max": 20,  "max_positions": 3, "min_confidence": 0.75, "confidence_adj": 0,   "emoji": "🟢", "title": "正常市場"},
+    "CAUTION":   {"vix_max": 30,  "max_positions": 2, "min_confidence": 0.80, "confidence_adj": -10, "emoji": "🟡", "title": "謹慎市場"},
+    "DEFENSIVE": {"vix_max": 999, "max_positions": 1, "min_confidence": 0.85, "confidence_adj": -20, "emoji": "🔴", "title": "防禦市場", "setups": ["A"]}
+  },
+  "universe": {
+    "core": ["NVDA", "TSLA", "RKLB"],
+    "secondary": ["AMD", "MSFT", "GOOGL", "META", "PLTR", "ARM"],
+    "opportunity": ["SOUN", "BBAI", "IONQ", "ASTS", "LUNR", "SOFI", "HOOD", "RIVN", "JOBY", "SMCI"],
+    "index": ["SPY", "QQQ", "^VIX"],
+    "fx": "HKD=X"
+  },
+  "names": {
+    "NVDA": "NVIDIA", "TSLA": "Tesla", "RKLB": "Rocket Lab", "AMD": "Adv. Micro Devices",
+    "MSFT": "Microsoft", "GOOGL": "Alphabet", "META": "Meta Platforms", "PLTR": "Palantir",
+    "ARM": "Arm Holdings", "SOUN": "SoundHound AI", "BBAI": "BigBear.ai", "IONQ": "IonQ",
+    "ASTS": "AST SpaceMobile", "LUNR": "Intuitive Machines", "SOFI": "SoFi Technologies",
+    "HOOD": "Robinhood", "RIVN": "Rivian", "JOBY": "Joby Aviation", "SMCI": "Super Micro Computer"
+  },
+  "themes": {
+    "AI_SPEECH": ["SOUN", "BBAI"],
+    "SPACE": ["RKLB", "ASTS", "LUNR"],
+    "QUANTUM": ["IONQ"],
+    "FINTECH": ["SOFI", "HOOD"],
+    "EV": ["TSLA", "RIVN"],
+    "EVTOL": ["JOBY"],
+    "AI_INFRA": ["NVDA", "AMD", "SMCI", "ARM"],
+    "MEGA_SOFT": ["MSFT", "GOOGL", "META"],
+    "DATA_AI": ["PLTR"]
+  },
+  "indicators": {"history_period": "1y", "min_bars": 120},
+  "schedule_et": {
+    "_comment": "America/New_York. Jobs exit quietly on NYSE holidays / outside window unless --force.",
+    "open":   {"time": "09:35", "window": ["09:30", "11:00"]},
+    "daily":  {"time": "10:00", "window": ["09:45", "16:30"], "no_new_entries_after": "15:00"},
+    "hourly": {"times": ["10:30", "11:30", "12:30", "13:30", "14:30", "15:30", "16:10"], "window": ["09:30", "16:45"]}
+  },
+  "schedule_hkt": {"weekly": {"weekday": "MON", "time": "09:45"}},
+  "telegram": {
+    "enabled": true,
+    "site_url": "https://fung2222.github.io/project-x-minimax/",
+    "max_daily_messages": 3,
+    "hourly_first_of_session_status": true,
+    "footer": "紙上模擬；真錢落單由你喺富途執行。"
+  },
+  "legacy": {
+    "grokbot_state_path": "/home/box/sand-data/agents/5ae81f5d-f7a3-4247-9353-f342b925b25b/automations/position_tracker_state.json",
+    "fetch_profiles": true
+  }
+}

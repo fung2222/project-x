@@ -5,35 +5,27 @@
 + Finnhub API（新聞 + 詳細分析師評級）
 """
 import yfinance as yf
-import json, os, datetime, requests
+import json, os, sys, datetime, requests
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, BASE_DIR)
+from px import config as _pxconfig  # env-first secrets (FINNHUB_API_KEY / MARKETAUX_API_KEY)
 
 # 觀察名單（AI + 太空 + 馬斯克生態）
-WATCH_PRIMARY = ["NVDA", "TSLA", "RKLB"]     # 核心3隻
-WATCH_SECONDARY = ["AMD", "MSFT", "GOOGL", "META", "PLTR", "ARM"]  # 擴展觀察
+_U = _pxconfig.load_settings()["universe"]  # single source: config/settings.json
+WATCH_PRIMARY = list(_U["core"])            # 核心3隻
+WATCH_SECONDARY = list(_U["secondary"])     # 擴展觀察
 # 小資金機會掃描（非核心持倉；AI / 太空 / fintech / EV）
-WATCH_OPPORTUNITY = ["SOUN", "BBAI", "IONQ", "ASTS", "LUNR", "SOFI", "HOOD", "RIVN", "JOBY", "SMCI"]
-WATCH_INDEX = ["SPY", "QQQ", "^VIX"]
+WATCH_OPPORTUNITY = list(_U["opportunity"])
+WATCH_INDEX = list(_U["index"])
 
 # Finnhub API 配置
 FINNHUB_CONFIG_PATH = os.path.join(BASE_DIR, "finnhub_config.json")
-FINNHUB_API_KEY = os.environ.get("FINNHUB_API_KEY", "")
 
 
 def load_finnhub_key():
-    """由 config 文件或環境變數載入 Finnhub API key"""
-    global FINNHUB_API_KEY
-    if FINNHUB_API_KEY:
-        return FINNHUB_API_KEY
-    try:
-        if os.path.exists(FINNHUB_CONFIG_PATH):
-            cfg = json.load(open(FINNHUB_CONFIG_PATH, encoding="utf-8"))
-            FINNHUB_API_KEY = cfg.get("api_key", "")
-            return FINNHUB_API_KEY
-    except Exception:
-        pass
-    return ""
+    """Env var FINNHUB_API_KEY first, then local (git-ignored) finnhub_config.json."""
+    return _pxconfig.get_secret("FINNHUB_API_KEY")
 ALL_TICKERS = WATCH_PRIMARY + WATCH_SECONDARY + WATCH_OPPORTUNITY + WATCH_INDEX
 
 
@@ -103,174 +95,43 @@ def get_vix_regime():
 
 
 def get_tech_indicators(ticker):
-    """計算簡單技術指標"""
+    """Technical indicators + signal (legacy dict shape), computed by px engine.
+
+    v3 fixes: 1y history on COMPLETED daily bars, Wilder RSI(14), real MA20/MA50,
+    proper MACD 12/26/9, Wilder ATR, volume ratio on last completed bar,
+    NO unconditional +5 confidence bump (regime adjustment is applied by analyzer).
+    """
     try:
-        tk = yf.Ticker(ticker)
-        # 取最近 20 個交易日
-        hist = tk.history(period="1mo")
-
-        if hist.empty or len(hist) < 15:
-            return None
-
-        closes = hist["Close"].values
-        highs = hist["High"].values
-        lows = hist["Low"].values
-        volumes = hist["Volume"].values if "Volume" in hist.columns else [1000000] * len(closes)
-
-        # 現價
-        price = closes[-1]
-
-        # ── RSI (14日) ──────────────────────────────────────────────
-        gains = []
-        losses = []
-        for i in range(1, min(15, len(closes))):
-            diff = closes[-i] - closes[-i-1]
-            gains.append(diff if diff > 0 else 0)
-            losses.append(abs(diff) if diff < 0 else 0)
-        avg_gain = sum(gains) / len(gains) if gains else 0
-        avg_loss = sum(losses) / len(losses) if losses else 0
-        rs = avg_gain / avg_loss if avg_loss > 0 else 100
-        rsi = round(100 - (100 / (1 + rs)), 1)
-
-        # ── MACD (12 EMA / 26 EMA / Signal 9) ─────────────────────
-        def ema(data, period):
-            k = 2 / (period + 1)
-            ema_val = data[0]
-            for d in data[1:]:
-                ema_val = d * k + ema_val * (1 - k)
-            return ema_val
-
-        ema12 = ema(closes, 12) if len(closes) >= 12 else closes[-1]
-        ema26 = ema(closes, 26) if len(closes) >= 26 else closes[-1]
-        macd_line = ema12 - ema26
-        # Signal line = 9-period EMA of MACD (simplified: use last 9 closes)
-        signal_val = macd_line * 0.8  # simplified fallback
-        if len(closes) >= 9:
-            macd_hist_vals = []
-            for i in range(9):
-                e12 = ema(closes[:len(closes)-i], 12) if len(closes[:len(closes)-i]) >= 12 else closes[0]
-                e26 = ema(closes[:len(closes)-i], 26) if len(closes[:len(closes)-i]) >= 26 else closes[0]
-                macd_hist_vals.append(e12 - e26)
-            signal_val = ema(macd_hist_vals, 9) if len(macd_hist_vals) >= 9 else sum(macd_hist_vals)/len(macd_hist_vals)
-        macd_histogram = round(macd_line - signal_val, 4)
-        macd_bullish = macd_histogram > 0  # MACD above signal = bullish
-
-        # ── 成交量確認 ──────────────────────────────────────────────
-        avg_vol = sum(volumes[-20:]) / min(20, len(volumes)) if len(volumes) >= 5 else sum(volumes)/len(volumes)
-        vol_ratio = round(volumes[-1] / avg_vol, 2) if avg_vol > 0 else 1.0
-        vol_confirmed = vol_ratio >= 0.8  # Volume at least 80% of average
-
-        # ── 50日均線 ──────────────────────────────────────────────
-        ma50 = sum(closes[-50:]) / min(50, len(closes)) if len(closes) >= 50 else sum(closes) / len(closes)
-
-        # ── ATR 估算 ──────────────────────────────────────────────
-        trs = []
-        for i in range(1, min(15, len(closes))):
-            hl = highs[-i] - lows[-i]
-            hc = abs(highs[-i] - closes[-i-1])
-            lc = abs(lows[-i] - closes[-i-1])
-            trs.append(max(hl, hc, lc))
-        atr = round(sum(trs) / len(trs), 2) if trs else round(price * 0.02, 2)
-
-        # 方向
-        price_vs_ma = price - ma50
-        regime = "bullish" if price_vs_ma > 0 else "bearish"
-
-        # ── 信號生成（含 MACD + 成交量確認）───────────────────────
-        signal = "HOLD"
-        action = "觀望"
-        confidence = 50
-        signal_reasons = []
-
-        # RSI 評估
-        if rsi < 30:
-            signal = "BUY"
-            action = "超賣區域，強烈買入信號"
-            confidence = min(90, 70 + (30 - rsi) * 2)
-            signal_reasons.append(f"RSI {rsi:.0f} 超賣")
-        elif rsi < 40:
-            signal = "BUY"
-            action = "偏低，買入機會"
-            confidence = min(80, 60 + (40 - rsi))
-            signal_reasons.append(f"RSI {rsi:.0f} 偏低")
-        elif rsi < 45:
-            signal = "HOLD"
-            action = "中性偏低，觀望"
-            confidence = 55
-            signal_reasons.append(f"RSI {rsi:.0f} 中性")
-        elif rsi > 75:
-            signal = "SELL"
-            action = "嚴重超買，止盈"
-            confidence = min(90, 60 + (rsi - 75) * 2)
-            signal_reasons.append(f"RSI {rsi:.0f} 嚴重超買")
-        elif rsi > 68:
-            signal = "SELL"
-            action = "超買，考慮止盈"
-            confidence = min(80, 55 + (rsi - 68))
-            signal_reasons.append(f"RSI {rsi:.0f} 超買")
-        elif rsi > 62:
-            signal = "HOLD"
-            action = "偏高，觀望"
-            confidence = 55
-            signal_reasons.append(f"RSI {rsi:.0f} 偏高")
-        else:
-            confidence = 50
-            signal_reasons.append(f"RSI {rsi:.0f} 中性")
-
-        # MACD 調整（MACD 高於信號線 = 額外確認）
-        if macd_bullish and signal == "BUY":
-            confidence = min(95, confidence + 8)
-            signal_reasons.append("MACD 看漲確認")
-        elif not macd_bullish and signal == "BUY":
-            confidence = max(35, confidence - 10)
-            signal_reasons.append("⚠️ MACD 尚在看跌")
-        elif not macd_bullish and signal == "SELL":
-            confidence = min(95, confidence + 5)
-            signal_reasons.append("MACD 看跌確認")
-
-        # 成交量調整
-        if vol_ratio >= 1.2 and signal == "BUY":
-            confidence = min(95, confidence + 5)
-            signal_reasons.append(f"放量確認 (vol×{vol_ratio:.1f})")
-        elif vol_ratio < 0.5 and signal == "BUY":
-            confidence = max(30, confidence - 8)
-            signal_reasons.append("⚠️ 成交量不足")
-
-        # MA50 調整
-        if price > ma50 and signal == "BUY":
-            confidence = min(95, confidence + 5)
-            signal_reasons.append("價格高於 MA50")
-        elif price < ma50 and signal == "BUY":
-            confidence = max(30, confidence - 5)
-            signal_reasons.append("⚠️ 價格低於 MA50")
-
-        # PLTR 特殊調整
-        if ticker == "PLTR" and signal == "BUY":
-            confidence = min(confidence, 75)
-            action = action + "（PLTR波動大，控制注碼）"
-
-        # 低VIX環境加成
-        confidence = min(95, confidence + 5)
-
+        from px import indicators as _ind, marketdata as _md, signals as _sig
+        s = _pxconfig.load_settings()
+        ind = _ind.compute(_md.history(ticker), None, s["indicators"]["min_bars"])
+        if "error" in ind:
+            return {"symbol": ticker, "error": ind["error"]}
+        sc = _sig.score(ind, "NORMAL", owned=False)  # regime adj applied in analyzer.generate_signal
+        price = ind["close"]
         return {
             "symbol": ticker,
             "price": round(price, 2),
-            "rsi": rsi,
-            "macd": round(macd_line, 4),
-            "macd_signal": round(signal_val, 4),
-            "macd_histogram": macd_histogram,
-            "macd_bullish": macd_bullish,
-            "vol_ratio": vol_ratio,
-            "vol_confirmed": vol_confirmed,
-            "ma50": round(ma50, 2),
-            "atr": atr,
-            "signal": signal,
-            "action": action,
-            "confidence": confidence,
-            "regime": regime,
-            "above_ma50": price > ma50,
-            "change_pct": round(((price - closes[-2]) / closes[-2]) * 100, 2) if len(closes) > 1 else 0,
-            "signal_reasons": signal_reasons,
+            "rsi": ind["rsi14"],
+            "macd": ind["macd"],
+            "macd_signal": ind["macd_signal"],
+            "macd_histogram": ind["macd_hist"],
+            "macd_bullish": (ind["macd_hist"] or 0) > 0,
+            "vol_ratio": ind["vol_ratio"],
+            "vol_confirmed": (ind["vol_ratio"] or 0) >= 0.8,
+            "ma20": ind["ma20"],
+            "ma50": ind["ma50"],
+            "atr": ind["atr14"],
+            "trend_score": ind["trend_score"],
+            "trend_label": ind["trend_label"],
+            "signal": sc["signal"],
+            "action": sc["action"],
+            "confidence": sc["confidence"],
+            "regime": "bullish" if price > ind["ma50"] else "bearish",
+            "above_ma50": price > ind["ma50"],
+            "change_pct": ind["change_pct"],
+            "signal_reasons": sc["reasons"],
+            "indicators": ind,
             "timestamp": datetime.datetime.now().isoformat()
         }
     except Exception as e:
@@ -617,22 +478,11 @@ def fetch_finnhub_company_news_general(category="general", count=10):
 # ── MARKETAUX API 整合 ──
 
 MARKETAUX_CONFIG_PATH = os.path.join(BASE_DIR, "marketaux_config.json")
-MARKETAUX_API_KEY = os.environ.get("MARKETAUX_API_KEY", "")
 
 
 def load_marketaux_key():
-    """由 config 文件或環境變數載入 Marketaux API key"""
-    global MARKETAUX_API_KEY
-    if MARKETAUX_API_KEY:
-        return MARKETAUX_API_KEY
-    try:
-        if os.path.exists(MARKETAUX_CONFIG_PATH):
-            cfg = json.load(open(MARKETAUX_CONFIG_PATH, encoding="utf-8"))
-            MARKETAUX_API_KEY = cfg.get("api_key", "")
-            return MARKETAUX_API_KEY
-    except Exception:
-        pass
-    return ""
+    """Env var MARKETAUX_API_KEY first, then local (git-ignored) marketaux_config.json."""
+    return _pxconfig.get_secret("MARKETAUX_API_KEY")
 
 
 def fetch_marketaux_news(ticker, limit=5, days_back=3):

@@ -1,6 +1,12 @@
 """
-Project X — 每日 Telegram 推送 (HTML版)
-包含：市場分析 + 新聞摘要 + 自我檢討
+Project X — 每日 Telegram 推送 (legacy entry point)
+
+v3-core (2026-09-28): the old 12-part daily push is replaced.
+- `python telegram_push.py` / send_daily_push(): refreshes the analysis if stale and sends ONE
+  compact signals message (guarded: once per US session). The Grok Bot routine's own
+  decision/teaching messages stay as before, so the nightly total drops from ~15 to ~4.
+- The full new daily job (<= 3 messages incl. decisions, teaching, scenarios) is `python run.py daily`.
+- Credentials: env TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID first, else local git-ignored telegram_config.json.
 """
 import json, os, datetime, sys, requests
 
@@ -15,8 +21,18 @@ CONFIG_PATH = os.path.join(BASE_DIR, "telegram_config.json")
 
 
 def load_config():
-    with open(CONFIG_PATH, encoding="utf-8") as f:
-        return json.load(f)
+    """Telegram config (env-first). Returns dict with bot_token / chat_id (values never printed)."""
+    from px import config as _pxconfig
+    cfg = {}
+    try:
+        if os.path.exists(CONFIG_PATH):
+            with open(CONFIG_PATH, encoding="utf-8") as f:
+                cfg = json.load(f)
+    except Exception:
+        cfg = {}
+    cfg["bot_token"] = _pxconfig.get_secret("TELEGRAM_BOT_TOKEN")
+    cfg["chat_id"] = _pxconfig.get_secret("TELEGRAM_CHAT_ID")
+    return cfg
 
 
 def html_escape(text):
@@ -555,64 +571,35 @@ def send_telegram_message(token, chat_id, text):
         else:
             return False, result.get("description", "Unknown error")
     except Exception as e:
-        return False, str(e)
+        from px.telegram import _redact
+        return False, _redact(f"{type(e).__name__}: {e}")
 
 
-def build_daily_message():
-    """構建完整每日推送訊息"""
-    now = datetime.datetime.now()
-    date_str = now.strftime("%Y-%m-%d %H:%M")
-    # 緩存機制：30分鐘內重用報告，避免重複fetch
+def _ensure_fresh_report():
     report = analyzer.get_cached_report(max_age_minutes=30)
     if report is None:
         report = analyzer.analyze_day(quiet=True)
-    news = get_today_news()
+    return report
 
-    header = f"<b>📈 Project X - 每日市場報告</b>\n🕐 {html_escape(date_str)}\n━━━━━━━━━━━━━━━━━━━━"
-    market = format_market_section(report)
-    portfolio = format_portfolio_section()
-    signals = format_signals_section(report)
-    yesterday = format_yesterday_review()
-    performance = format_performance_section()
-    review_section = format_review_section(report)
-    analyst_detail = format_analyst_detail_section()
-    enhanced = format_enhanced_indicators_section()
-    news_section = format_news_section(news)
-    review = generate_self_review()
-    footer = "━━━━━━━━━━━━━━━━━━━━\n⚠️ 以上僅供參考，不構成投資建議\n🔄 系統自動生成 | Project X v3.0\n📡 數據來源: Yahoo Finance + Finnhub + Marketaux\n🧠 增強分析: 板塊輪動 / 宏觀 / 多時框"
 
-    parts = [p for p in [
-        header, market, portfolio, signals, yesterday, performance, review_section, analyst_detail, enhanced, news_section, review, footer
-    ] if p.strip()]
-    return parts
+def build_daily_message():
+    """v3: returns [signals_message] (was 12 parts)."""
+    from px.jobs import daily as _daily
+    from px import messages as _m
+    report = _ensure_fresh_report()
+    return [_daily.signals_message(report) + "\n\n" + _m.footer()]
 
 
 def send_daily_push():
-    """發送每日推送"""
-    config = load_config()
-    token = config.get("bot_token", "")
-    chat_id = config.get("chat_id", "")
-
-    if not token or token == "YOUR_TELEGRAM_BOT_TOKEN_HERE":
-        print("❌ 未配置 Telegram Bot Token")
-        return False, "Token未配置"
-    if not chat_id or chat_id == "YOUR_CHAT_ID_HERE":
-        print("❌ 未配置 Chat ID")
-        return False, "Chat ID未配置"
-
-    parts = build_daily_message()
-    success_count = 0
-    for i, part in enumerate(parts, 1):
-        if not part.strip():
-            continue
-        ok, result = send_telegram_message(token, chat_id, part)
-        if ok:
-            success_count += 1
-            print(f"✅ Part {i} sent")
-        else:
-            print(f"❌ Part {i} failed: {result}")
-
-    return success_count == len([p for p in parts if p.strip()]), f"{success_count}/{len(parts)} parts sent"
+    """發送每日推送 — v3: ONE compact signals message, at most once per US session."""
+    from px import config as _pxconfig
+    from px.jobs import daily as _daily
+    if not _pxconfig.get_secret("TELEGRAM_BOT_TOKEN") or not _pxconfig.get_secret("TELEGRAM_CHAT_ID"):
+        if not _pxconfig.is_dry_run():
+            print("❌ 未配置 Telegram（TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID）")
+            return False, "Token未配置"
+    _ensure_fresh_report()
+    return _daily.legacy_signals_push()
 
 
 if __name__ == "__main__":

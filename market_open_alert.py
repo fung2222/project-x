@@ -17,20 +17,11 @@ ALERT_THRESHOLD_PCT = 2.0
 
 
 def send_alert(message):
-    """發送 Telegram 預警"""
+    """發送 Telegram 預警 (legacy; superseded by `python run.py open`). Credentials env-first."""
     try:
-        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "telegram_config.json"), encoding="utf-8") as f:
-            config = json.load(f)
-        token = config.get("bot_token")
-        chat_id = config.get("chat_id")
-        if not token or not chat_id:
-            return False
-        import requests
-        url = f"https://api.telegram.org/bot{token}/sendMessage"
-        resp = requests.post(url, json={
-            "chat_id": chat_id, "text": message, "parse_mode": "HTML", "disable_web_page_preview": True
-        }, timeout=10)
-        return resp.json().get("ok", False)
+        from px import telegram as _tg
+        ok, _ = _tg.send(message, label="market_open_alert (legacy)")
+        return ok
     except Exception:
         return False
 

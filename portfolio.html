@@ -17,8 +17,8 @@
 <script>
 PX.nav();
 (async () => {
-  const [pf, hist, futu, lpf, lhist] = await Promise.all([PX.json('portfolio.json'), PX.json('data/pnl_history.json'), PX.json('data/futu_positions.json'),
-    PX.json('data/legacy/hermes_project_x_2026/data/portfolio.json'), PX.json('data/legacy/hermes_project_x_2026/data/pnl_history.json')]);
+  const [pf, hist, futu, lpf, lhist, rsn] = await Promise.all([PX.json('portfolio.json'), PX.json('data/pnl_history.json'), PX.json('data/futu_positions.json'),
+    PX.json('data/legacy/hermes_project_x_2026/data/portfolio.json'), PX.json('data/legacy/hermes_project_x_2026/data/pnl_history.json'), PX.json('data/reasons.json')]);
   const a = (pf && pf.account) || {}; const fx = a.fx_usdhkd || 7.8; const h = hist || [];
   PX.setUpdated(`更新：${(pf && pf.updated) || '—'}`);
   const pos = (pf && pf.positions) || [];
@@ -27,7 +27,7 @@ PX.nav();
   const bar = p => { const sl = p.stop_loss_price, tp = p.take_profit_price, px = p.current_price; if (!sl || !tp || !px) return '';
     const f = Math.max(0, Math.min(1, (px - sl) / (tp - sl))); return `<div class="bar" title="SL→TP"><i style="left:0;width:${(f * 100).toFixed(0)}%"></i></div><div class="muted">SL ${PX.usd(sl)} ←→ TP ${PX.usd(tp)}</div>`; };
   document.getElementById('content').innerHTML = `
-    ${PX.realCard(futu, fx, {history: true})}
+    ${PX.realCard(futu, fx, {history: true, reasons: rsn})}
     <div class="card"><h2>🧪 紙上倉（對照組）· HKD 10,000 ≈ US$1,280，${PX.esc(a.rebase_date || '')} 起</h2>
       <div>權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b class="${PX.cls(a.total_pnl_usd)}">${PX.usd(a.total_pnl_usd)}（${PX.pct(a.total_return_pct)}）</b></div>
       <div class="muted" style="margin-top:4px">已實現 ${PX.usd(a.realized_pnl_usd)} · 未實現 ${PX.usd(a.unrealized_pnl_usd)} · 費用 ${PX.usd(a.total_fees_usd)} · FX ${fx} · 現金 ${PX.usd(a.cash_usd)}（${Number(a.cash_pct || 0).toFixed(1)}%）· 系統自動執行，同真倉比較用</div></div>

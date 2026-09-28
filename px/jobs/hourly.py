@@ -1,15 +1,18 @@
 """hourly job (ET :06 past 10..16, trimmed on half days; see settings.schedule): MTM, SL/TP auto execution,
-alert-only Telegram (+ one status message on the first run of each session).
-Prominent alerts = Roy's REAL positions (SL / TP / near-SL / big drop; he executes on Futu, the system only
-alerts) + VIX regime change. Paper-book events are one short line in the 紙上倉（對照組） section.
-Alerts are de-duplicated per session in state/job_runs.json."""
+alert-only Telegram (+ one short status message on the first run of each session). Quiet unless something happens.
+Prominent alerts = Roy's REAL positions (SL / TP / near-SL / day drop / day surge, each with a one-line reason; he
+executes on Futu, the system only alerts) + VIX regime change. Paper-book events are one short line.
+De-dup: real-alert conditions share one per-session store with the 5-minute realwatch (guard.real_alerted), and each
+hourly slot pushes at most once ("slot@HH:MM" ET) so a re-run after a timeout can never re-push the same slot."""
 import json
 import os
 
-from .. import clock, guard, ledger, marketdata, telegram
+from .. import clock, guard, ledger, marketdata, plain, schedule, telegram
 from ..config import load_settings, path
-from ..messages import esc, f2, pct, footer, money, real_section, real_alerts, paper_brief, REAL_NOTE
-from .common import Ctx, gate_run, refresh_positions, write_json, real_snapshot, paper_bench, paper_max_positions
+from ..messages import esc, real_alerts, REAL_NOTE
+from ..plain import vix_words
+from .common import (Ctx, gate_run, refresh_positions, write_json, real_snapshot, paper_bench, paper_max_positions,
+                     real_context)
 
 JOB = "hourly"
 
@@ -36,19 +39,26 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             st.setdefault("last_regime", prev.get("regime"))
         except Exception:
             pass
-    alerted = dict(st.get("alerts", {}))
+    alerted = {**st.get("alerts", {}), **guard.real_alerted(ctx.session)}
+    slot = schedule.slot_for(JOB, ctx.now)
+    slot_key = f"slot@{slot.strftime('%H:%M')}" if slot else f"manual@{ctx.now.strftime('%H%M')}"
+    if slot and guard.was_sent(ctx.session, JOB, slot_key) and not force:
+        msg = f"[hourly] slot {slot_key} already pushed for session {ctx.session} — not pushing again"
+        print(msg)
+        return {"status": "duplicate", "reason": msg}
     pf = ledger.load()
     vix = marketdata.vix()
     regime = marketdata.regime_for(vix)
     rows, executed, acct = refresh_positions(ctx, pf)
     # ---------- REAL positions first (Roy executes on Futu; the system only alerts)
     real_book, real_ev = real_snapshot(ctx, acct.get("fx_usdhkd"))
-    real_al, alerted = real_alerts(real_ev, alerted, st.get("last_real_prices", {}))
+    real_al, _new = real_alerts(real_ev, alerted)
+    rsn, trends = {}, {}
     # ---------- paper book (control group): alerts demoted to one short line
     paper_notes = []
     for tr in executed:
         kind = "止盈" if tr["reason"] == "TAKE_PROFIT" else "止損"
-        paper_notes.append(f"✅ 紙上{kind} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
+        paper_notes.append(f"紙上{kind} {tr['ticker']}（淨 {tr['net_pnl_usd']:+.2f} 美元）")
     near_pct = s["rules"]["near_sl_alert_pct"]
     for r in rows:
         if r["action"].endswith("_EXECUTED"):
@@ -57,46 +67,50 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         d = r.get("dist_sl_pct")
         if d is not None and d < near_pct:
             paper_notes.append(f"{t} 距止損 {d:.1f}%")
-        if t in prev_px and prev_px[t]:
-            chg = (r["px"] - prev_px[t]) / prev_px[t] * 100
-            if abs(chg) >= s["rules"]["big_move_alert_pct"]:
-                paper_notes.append(f"{t} 大波動 {chg:+.1f}%")
         if not r["quote_ok"]:
-            paper_notes.append(f"{t} 報價異常，今次唔執行 SL/TP")
+            paper_notes.append(f"{t} 報價異常，今次唔執行止蝕止賺")
     market = []
     prev_regime = st.get("last_regime")
-    if prev_regime and prev_regime != regime:
-        market.append(f"🌡 VIX 市況轉變 {prev_regime} → {regime}（VIX {f2(vix)}）")
-    alerts = real_al + market  # prominent alerts = REAL positions + market regime only
+    if prev_regime and prev_regime != regime and "UNKNOWN" not in (prev_regime, regime):
+        rg = s["regimes"]
+        market.append(f"🌡 大市情緒轉變：{rg.get(prev_regime, {}).get('title', prev_regime)} → {rg[regime]['title']}（{vix_words(vix)}）")
     first = s["telegram"].get("hourly_first_of_session_status", True) and not guard.was_sent(ctx.session, JOB, "status")
-    need_push = bool(alerts) or bool(executed) or first
-    reason = "real_alerts" if real_al else ("alerts" if alerts else ("paper_exit" if executed else ("first_of_session" if first else "none")))
+    need_push = bool(real_al) or bool(market) or bool(executed) or first
+    alerts = real_al + market
+    reason = "real_alerts" if real_al else ("alerts" if market else ("paper_exit" if executed else ("first_of_session" if first else "none")))
     msg = None
     tg_ok, tg_res = False, None
     if need_push:
-        head = "<b>🚨 真倉警報</b>" if real_al else ("<b>⚠️ 市況警報</b>" if alerts else "<b>📊 持倉監控</b>")
-        L = [f"{head} {ctx.now.strftime('%Y-%m-%d %H:%M')} HKT（ET {ctx.now_et.strftime('%H:%M')}）"]
+        if real_ev.get("rows"):  # one-line reasons only when we actually push
+            _b, _e, rsn, trends = real_context(ctx, acct.get("fx_usdhkd"))
+            real_al, _new = real_alerts(real_ev, alerted, reasons=rsn)
+            alerts = real_al + market
+        head = "<b>🚨 真倉警報</b>" if real_al else ("<b>⚠️ 市況警報</b>" if market else "<b>📊 持倉監控</b>")
+        L = [f"{head} {ctx.now.strftime('%m-%d %H:%M')} HKT（{plain.session_label(ctx.now)}）"]
         L += [f"• {esc(a)}" for a in alerts]
         if real_al:
             L.append(REAL_NOTE)
-        L += real_section(real_ev)
+        L += [""] + plain.real_block(real_ev, rsn, trends, "今日")
         spy_ret, qqq_ret = paper_bench()
-        L += [""] + paper_brief(acct, len(pf.get("positions", [])), paper_max_positions(regime), spy_ret, qqq_ret, paper_notes)
-        L.append(f"VIX {f2(vix)} {regime}")
+        L += ["", plain.paper_line(acct, len(pf.get("positions", [])), paper_max_positions(regime), spy_ret, qqq_ret, paper_notes),
+              "🌍 " + vix_words(vix)]
         if not alerts and not executed:
-            L.append("✅ 持倉監控正常（今個交易時段首次；之後真倉有事先會再通知）")
-        L += ["", footer()]
+            L.append("✅ 一切正常（今個交易時段第一次報告；之後真倉有事先會再通知）")
+        L += ["", plain.footer_line()]
         msg = "\n".join(L)
         tg_ok, tg_res = telegram.send(msg, dry_run=dry_run, label="hourly")
+        if tg_ok and not dry_run:  # mark immediately: a crash/timeout after this line must not re-push
+            guard.mark_sent(ctx.session, JOB, slot_key, tg_res)
+            if first:
+                guard.mark_sent(ctx.session, JOB, "status", tg_res)
+            guard.save_real_alerted(ctx.session, {k: v for k, v in _new.items() if k.startswith("REAL:")}, by=JOB)
+    alerted = _new if (not need_push or tg_ok) else alerted
     if not dry_run:
         ledger.save(pf)
-        if need_push and tg_ok:
-            guard.mark_sent(ctx.session, JOB, "status" if first and not alerts else f"alert@{ctx.now.strftime('%H%M')}", tg_res)
-            if first and alerts:
-                guard.mark_sent(ctx.session, JOB, "status", tg_res)
         cur_px = {r["ticker"]: r["px"] for r in rows if not r["action"].endswith("_EXECUTED")}
         cur_real = {r["ticker"]: r["px"] for r in real_ev["rows"] if r.get("live")}
-        guard.update(ctx.session, JOB, last_prices=cur_px, last_real_prices=cur_real, last_regime=regime,
+        guard.update(ctx.session, JOB, last_prices=cur_px, last_real_prices=cur_real,
+                     last_regime=regime if regime != "UNKNOWN" else st.get("last_regime"),
                      alerts=alerted if (not need_push or tg_ok) else st.get("alerts", {}),
                      last_run=clock.now_hkt().isoformat(timespec="seconds"), status="ok", _inc_runs=True)
     out = {"hkt": ctx.now.isoformat(), "session_date": ctx.session, "vix": vix, "regime": regime,

@@ -220,44 +220,20 @@ def rank(cands, top_n=None, max_per_theme=None):
 
 
 # ---------------------------------------------------------------- catalysts
-def earnings_calendar(tickers, today=None, horizon_days=60):
-    """{ticker: 'YYYY-MM-DD'} next earnings date. Finnhub calendar (1 call), yfinance fallback per name."""
-    from .config import get_secret
-    today = today or clock.now_et().date()
-    out = {}
-    key = get_secret("FINNHUB_API_KEY")
-    if key:
-        try:
-            import requests
-            r = requests.get("https://finnhub.io/api/v1/calendar/earnings",
-                             params={"from": today.isoformat(), "to": (today + dt.timedelta(days=horizon_days)).isoformat(),
-                                     "token": key}, timeout=20)
-            if r.status_code == 200:
-                want = set(tickers)
-                for e in r.json().get("earningsCalendar", []) or []:
-                    sym = e.get("symbol")
-                    if sym in want and e.get("date"):
-                        if sym not in out or e["date"] < out[sym]:
-                            out[sym] = e["date"]
-        except Exception as e:
-            print("[scan] finnhub earnings calendar failed:", type(e).__name__)
-    missing = [t for t in tickers if t not in out]
-    if missing and cfg().get("yf_earnings_fallback", True):
-        try:
-            import yfinance as yf
-            for t in missing:
-                try:
-                    cal = yf.Ticker(t).calendar
-                    ds = cal.get("Earnings Date") if isinstance(cal, dict) else None
-                    if ds:
-                        fut = sorted(d for d in ds if d >= today)
-                        if fut and (fut[0] - today).days <= horizon_days:
-                            out[t] = fut[0].isoformat()
-                except Exception:
-                    continue
-        except Exception:
-            pass
+def earnings_calendar(tickers, today=None, horizon_days=None):
+    """{ticker: 'YYYY-MM-DD'} next earnings date (px.earnings: Finnhub 7-day windows, daily cache, yfinance fallback)."""
+    from . import earnings
+    out = earnings.dates(tickers, today)
+    if horizon_days is not None:
+        today = today or clock.now_et().date()
+        out = {t: d for t, d in out.items() if (dt.date.fromisoformat(d) - today).days <= horizon_days}
     return out
+
+
+def earnings_status(tickers, today=None):
+    """{ticker: {date, source, known}} — known=False means 業績日未知 (treated conservatively for entries)."""
+    from . import earnings
+    return earnings.lookup(tickers, today)
 
 
 def trading_days_until(date_str, today):
@@ -302,13 +278,14 @@ def run_scan(now=None, equity_usd=None, fx=None, with_catalysts=True):
         feats[t] = f.iloc[-1]
     rsp = rs_percentiles(feats, qqq_row)
     today = clock.to_et(now).date()
-    cal = earnings_calendar(list(feats), today) if with_catalysts else {}
+    est = earnings_status(list(feats), today) if with_catalysts else {}
     cands = []
     for t, row in feats.items():
-        ed = cal.get(t)
+        ed = (est.get(t) or {}).get("date")
         edays = trading_days_until(ed, today) if ed else None
         x = evaluate(t, row, qqq_row, equity_usd, fx, rsp.get(t), c, edays)
         x["earnings_date"] = ed
+        x["earnings_known"] = bool((est.get(t) or {}).get("known")) if with_catalysts else None
         x["bar_date"] = str(row.name.date()) if hasattr(row.name, "date") else str(row.name)
         x["theme"] = theme_of_scan(t)
         cands.append(x)

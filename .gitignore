@@ -22,3 +22,13 @@ state/.job_runs.*
 # real-positions file lock (px/realpos.py)
 data/.*.lock
 .realpos.*.tmp
+
+# px state temp files + local caches/counters (2026-09-28): never committed
+state/.*
+state/api_state.json
+state/earnings_cache.json
+state/news_cache.json
+state/realwatch.json
+state/heatmap_state.json
+state/heatmap_mcap.json
+state/vix_last.json

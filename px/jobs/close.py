@@ -1,21 +1,22 @@
 """close job (ET 17:00 = HKT 05:00 EDT / 06:00 EST; trading days only).
 
-Ported from Hermes's 05:00 close report, rebuilt on the px engine:
-  msg 1  🌙 收市報告 — Roy's REAL Futu positions first (price/cost/qty, P&L USD+HKD, dist SL/TP, days held,
-         real SL/TP/big-drop alerts; he executes manually) + SPY/QQQ/VIX
-  msg 2  🧪 紙上倉（對照組）— condensed: total P&L % vs SPY/QQQ, open count, today's paper actions (SL/TP auto on paper)
-  msg 3  🧭 趨勢 + 今日掃描池最強/最弱 (Mag7 observer retired by Roy 2026-09-28)
-  msg 4  🚀 明日觀察 Top 5 (opportunity scan on today's completed bar) + 🩺 health line
-Writes data/pnl_history.json, data/scan.json, data/reports/close_report_<date>.*, portfolio.json."""
+Plain-language close report (Roy 2026-09-28) — ONE text message + the equity chart photo:
+  🌙 收市報告: market mood (SPY/QQQ/VIX in words) -> Roy's REAL positions first (today, since buy in % + US$ + HK$,
+  trend word, one-line reason) -> 資金 -> 買賣信號 (揸住／考慮賣出／考慮買入 sized for the real account) ->
+  下次開市潛力股 (scan on today's completed bar, plain reasons) -> 紙上倉 one line -> health line -> site link.
+Writes data/pnl_history.json, data/scan.json, data/reasons.json, data/reports/close_report_<date>.*, portfolio.json.
+Yahoo rate-limited during the run -> data_wait (nothing pushed; the watchdog retries)."""
 import json
 
 from .. import archive, clock, engine, guard, ledger, marketdata, scan, schedule, telegram
 from ..config import load_settings
-from ..messages import esc, f2, pct, footer, money, scan_message, real_section, real_alerts, paper_brief, REAL_NOTE
-from .common import Ctx, refresh_positions, real_snapshot, paper_bench, paper_max_positions
+from ..messages import esc, f2, pct, real_alerts, REAL_NOTE
+from .common import (Ctx, refresh_positions, paper_bench, paper_max_positions, real_context, data_wait, pick_news,
+                     annotate_scan, save_reasons)
 
 JOB = "close"
-PARTS = ("summary", "positions", "trend", "scan")
+PARTS = ("report",)
+LEGACY_PARTS = ("summary", "positions", "trend", "scan")  # pre-2026-09-28 parts: any sent => session already reported
 
 
 def _flag(p):
@@ -41,7 +42,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         if not clock.in_window(win, ctx.now_et) and os.environ.get("PX_RERUN") != "1":
             # e.g. the 05:00 HKT line during EST = 16:00 ET: too early for final prices; the 06:00 line runs it
             return {"status": "skipped", "reason": f"outside close window {win[0]}-{win[1]} ET"}
-        if all(guard.was_sent(ctx.session, JOB, p) for p in PARTS):
+        if (all(guard.was_sent(ctx.session, JOB, p) for p in PARTS)
+                or any(guard.was_sent(ctx.session, JOB, p) for p in LEGACY_PARTS)):
             return {"status": "duplicate", "reason": f"close already sent for {ctx.session}"}
     s = load_settings()
     pf = ledger.load()
@@ -51,59 +53,47 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     prev = next((h for h in reversed(hist) if h.get("date") < ctx.session), None)
     day_chg = acct["equity_usd"] - prev["equity_usd"] if prev else None
     fx = acct.get("fx_usdhkd") or mk["fx_usdhkd"]
-    real_book, real_ev = real_snapshot(ctx, fx)
-    real_al, _ = real_alerts(real_ev)
-    L = [f"<b>🌙 Project X 收市報告 — {ctx.session}</b>（美東收市後）"]
-    L += real_section(real_ev)
-    if real_al:
-        L += [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
-    L.append(f"🌍 SPY ${f2(mk['spy'])}（{pct(mk['spy_chg_pct'])}）· QQQ ${f2(mk['qqq'])}（{pct(mk['qqq_chg_pct'])}）· VIX {f2(mk['vix'])} {mk['emoji']}{esc(mk['regime_zh'])} · 匯率 {f2(fx, 3)}")
-    m1 = "\n".join(L)
-    # paper book (control group) — condensed
-    notes = []
-    for tr in executed:
-        notes.append(f"✅ 紙上{'止損' if tr['reason'] == 'STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
-    open_rows = [r for r in rows if not r["action"].endswith("_EXECUTED")]
-    for r in open_rows:
-        notes.append(f"{_flag(r)}{r['ticker']} {pct(r['pnl_pct'], 1)}（今日 {pct(r.get('chg_vs_prev'), 1)}，距SL {f2(r.get('dist_sl_pct'), 1)}%）")
-    if day_chg is not None:
-        notes.append(f"紙上權益今日 {day_chg:+.2f} USD")
-    spy_ret, qqq_ret = paper_bench()
-    m2 = "\n".join(paper_brief(acct, len(open_rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret, notes))
-    # trend + movers (market context = SPY/QQQ/VIX only)
-    T = ["<b>🧭 趨勢狀態（已收市日 bar）</b>"]
-    core = [r["ticker"] for r in real_ev["rows"]]  # real positions first, then core, then paper holdings
-    core += [t for t in s["universe"]["core"] + [p["ticker"] for p in pf.get("positions", [])] if t not in core]
-    movers = []
-    for t in core:
-        sg = engine.build_signal(t, mk["regime"], ledger.position(pf, t) is not None, ctx.now)
-        if "error" in sg:
-            continue
-        T.append(f"{t}：{sg['trend_label']}（分 {sg['trend_score']:+d}）RSI {f2(sg['rsi'], 0)} · {esc(sg['action'])}")
+    real_book, real_ev, rsn, trends = real_context(ctx, fx)
+    real_al, _ = real_alerts(real_ev, reasons=rsn)
+    from .. import plain, reasons as rs
     res = scan.run_scan(ctx.now, acct["equity_usd"], fx)
-    allx = [x for x in res.get("all", []) if x.get("close")]
-    try:
-        chg = []
-        for x in allx:
-            df = marketdata.history(x["ticker"], period=s["scan"]["history_period"])
-            c = df["Close"].dropna()
-            chg.append((x["ticker"], (float(c.iloc[-1]) / float(c.iloc[-2]) - 1) * 100))
-        chg.sort(key=lambda y: y[1])
-        if chg:
-            T.append(f"\n🏆 掃描池今日最強：{', '.join(f'{t} {v:+.1f}%' for t, v in chg[-3:][::-1])}")
-            T.append(f"🥶 最弱：{', '.join(f'{t} {v:+.1f}%' for t, v in chg[:3])}")
-    except Exception as e:
-        print("movers skipped", type(e).__name__)
-    m3 = "\n".join(T)
+    news = pick_news(res)
+    annotate_scan(res, news)
+    notes = [f"紙上{'止損' if tr['reason'] == 'STOP_LOSS' else '止盈'} {tr['ticker']}（淨 {tr['net_pnl_usd']:+.2f} 美元）"
+             for tr in executed]
+    open_rows = [r for r in rows if not r["action"].endswith("_EXECUTED")]
+    if day_chg is not None:
+        notes.append(f"權益 {day_chg:+.2f} 美元")
+    spy_ret, qqq_ret = paper_bench()
+    dw = plain.day_word(mk.get("session_date"), ctx.now)
+    L = [f"<b>🌙 收市報告 {mk.get('session_date') or ctx.session}</b>（{plain.session_label(ctx.now)}）",
+         "🌍 " + " ".join(plain.market_lines(mk.get("spy_chg_pct"), mk.get("qqq_chg_pct"), mk.get("vix"), rs.market_headline(), when=dw)), ""]
+    L += plain.real_block(real_ev, rsn, trends, dw)
+    if real_al:
+        L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
+    L.append(plain.capital_line(real_ev, mk.get("fx_live", True)))
+    L += ["", "<b>🧭 買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
+    L += plain.buy_suggestion(real_ev, res, mk.get("regime"), market_open=False, now=ctx.now)[0]
+    L += [""] + plain.picks_block(res, news, title=f"⭐ {plain.next_open_words(ctx.now)[0]}開市潛力股")
+    L += ["", plain.paper_line(acct, len(open_rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret, notes)]
     health = schedule.health_line(clock.to_et(ctx.now).date(), ctx.now, exclude=("close",))
-    m4 = scan_message(res, title="🚀 明日觀察 Top 5") + "\n\n" + health + "\n\n" + footer()
-    msgs = dict(zip(PARTS, (m1, m2, m3, m4)))
+    L += [health]
+    from .. import heatmap as hmap
+    link = hmap.close_link(mk.get("session_date") or ctx.session, s.get("telegram", {}).get("site_url"))
+    if link:  # one short line, only when the heatmap is for this session
+        L.append(link)
+    L += ["", plain.footer_line()]
+    msgs = {"report": "\n".join(L)}
+    wait = data_wait(JOB)
+    if wait:
+        return wait
     if not dry_run:
         ledger.save(pf)
         archive.append_pnl(ctx.session, acct, pf.get("positions", []), mk["spy"], mk["qqq"],
                            real={k: real_ev.get(k) for k in ("equity_usd", "cash_usd", "unrealized_usd", "realized_usd",
                                                              "return_pct", "n_open", "n_closed", "real_start_date")})
         archive.save_scan(res)
+        save_reasons(rsn, res, news)
         archive.save_report(JOB, ctx.session, [msgs[p] for p in PARTS],
                             summary=f"收市 · 真倉 {real_ev['n_open']} 隻（{pct(real_ev['return_pct'])}）· 紙上 {pct(acct['total_return_pct'])} · VIX {f2(mk['vix'])}",
                             pnl=acct["total_return_pct"])
@@ -123,8 +113,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             hist_now = archive.load_pnl() if not dry_run else hist
             if len(hist_now) >= 2:
                 img = charts.equity_chart(hist_now, archive.path_chart(f"equity_{ctx.session}.png") if not dry_run else "/tmp/px_equity_preview.png")
-                okc, rc = telegram.send_photo(img, caption=f"📈 紙上倉（對照組）權益 vs SPY（{hist_now[0]['date']} → {ctx.session}）· "
-                                              f"權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）",
+                okc, rc = telegram.send_photo(img, caption=f"📈 紙上倉（對照組）同 SPY 比較（{hist_now[0]['date']} → {hist_now[-1]['date']}）· "
+                                              f"而家 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）",
                                               dry_run=dry_run, label="close/chart")
                 results["chart"] = "ok" if okc else f"failed: {rc}"
                 if okc and not dry_run:

@@ -19,7 +19,27 @@
     "risk_per_trade_pct": 0.02,
     "default_fee_usd": 2.0,
     "near_sl_alert_pct": 2.0,
-    "big_drop_alert_pct": 5.0
+    "big_drop_alert_pct": 5.0,
+    "intraday_watch": {
+      "_comment": "Real-position 5-minute watch (px/jobs/realwatch.py, run from `run.py tick`, NOT a schedule slot). Zero API calls when there are no real positions. Finnhub /quote first, yfinance only if Finnhub fails. Alerts once per ticker+condition per US session; re-alert only on a further step; re-arm when SL/TP change.",
+      "enabled": true,
+      "interval_min": 5,
+      "source": "finnhub",
+      "max_quote_age_min": 15,
+      "near_sl_pct": 2.0,
+      "drop_steps_pct": [
+        5.0,
+        10.0,
+        15.0,
+        20.0
+      ],
+      "surge_steps_pct": [
+        8.0,
+        15.0,
+        25.0
+      ],
+      "near_sl_restep_pct": 1.0
+    }
   },
   "rules": {
     "min_confidence": 0.75,
@@ -89,6 +109,17 @@
       "setups": [
         "A"
       ]
+    },
+    "UNKNOWN": {
+      "_comment": "VIX 攞唔到（Yahoo 失敗）：唔扮 NORMAL。紙上倉唔開新倉（ledger/decide/daily 會擋），現有倉照 SL/TP 管理；推送寫「VIX 數據暫缺」。",
+      "vix_max": null,
+      "max_positions": 3,
+      "min_confidence": 0.85,
+      "confidence_adj": -20,
+      "emoji": "⚪",
+      "title": "VIX 數據暫缺",
+      "setups": [],
+      "no_new_entries": true
     }
   },
   "universe": {
@@ -355,7 +386,7 @@
     "enabled": true,
     "site_url": "https://fung2222.github.io/project-x/",
     "hourly_first_of_session_status": true,
-    "footer": "真倉由你喺富途手動落單（系統只記錄同提醒，唔會落單）；紙上倉係自動運行嘅對照組。",
+    "footer": "真倉由你喺富途手動落單（系統只提醒，唔會落單）；紙上倉係自動運行嘅對照組。情境參考，唔係保證。",
     "send_charts": true,
     "_destination": "After cutover: Roy's Telegram group 'Project X Nas' via Hermes's bot (see docs/HERMES_HANDOVER.md). Chat id + token ONLY via env (TELEGRAM_CHAT_ID / TELEGRAM_BOT_TOKEN); never commit them."
   },
@@ -504,5 +535,60 @@
       "grace_min": 30,
       "rerun_until": "13:00"
     }
+  },
+  "api_budget": {
+    "_comment": "Hard daily caps (HKT day). Counters in state/api_state.json. Marketaux free plan = 100 requests/day; we cap at 60. Finnhub free = 60/min (no daily cap); news lookups are cached per ticker per day.",
+    "marketaux_per_day": 60,
+    "finnhub_news_per_day": 120,
+    "news_cache_hours": 6
+  },
+  "earnings": {
+    "_comment": "Earnings calendar (px/earnings.py): Finnhub /calendar/earnings in 7-day windows (a single 60-day query is truncated at 1500 rows), cached once per HKT day in state/earnings_cache.json; yfinance .calendar only for names Finnhub doesn't list. Unknown date => 業績日未知 and NO new paper entry from the scan (conservative).",
+    "horizon_days": 63,
+    "window_days": 7,
+    "unknown_blocks_entry": true
+  },
+  "sector_etfs": {
+    "_comment": "Theme -> sector ETF used only to explain moves (跟板塊). Themes without a clear ETF compare vs QQQ only.",
+    "AI_CHIPS": "SMH",
+    "AI_CLOUD_INFRA": "SMH",
+    "AI_SOFTWARE": "IGV",
+    "DATA_AI": "IGV",
+    "MEGA_SOFT": "QQQ",
+    "SPACE": "UFO",
+    "QUANTUM": "QTUM",
+    "NUCLEAR": "NLR",
+    "FINTECH": "ARKF",
+    "CRYPTO": "IBIT",
+    "BTC_MINING_HPC": "WGMI",
+    "EV": "DRIV",
+    "CLEAN_ENERGY": "ICLN",
+    "MATERIALS_URANIUM": "URA",
+    "DRONES_DEFENSE": "ITA",
+    "BIOTECH_AI": "XBI",
+    "INTERNET": "FDN"
+  },
+  "heatmap": {
+    "_comment": "Stock heatmap (px/heatmap.py -> data/heatmap.json -> heatmap.html). NEVER sends Telegram; failures never block other jobs. Intraday: HOURLY at the hourly job's minute (10:06..15:06 ET, same tick/commit as hourly), prices from Finnhub /quote only (0 Yahoo) paced at finnhub_calls_per_min (headroom for realwatch); stale (>quote_max_age_min) or >50% jumps -> grey. VIX reused from state/vix_last.json (never fetched here). After close 17:00 ET (same tick as close): reuse the close job's Yahoo data, at most ONE batch of <= close_max_yahoo_batch missing symbols, rest Finnhub. Finnhub cooling down -> slot skipped quietly. Never starts when a push slot is due within core_slot_guard_min.",
+    "enabled": true,
+    "first_et": "10:06",
+    "every_min": 60,
+    "last_before_close_min": 30,
+    "final_et": "17:00",
+    "final_until_et": "20:30",
+    "slot_grace_min": 25,
+    "max_attempts": 2,
+    "finnhub_calls_per_min": 40,
+    "finnhub_min_remaining": 15,
+    "quote_max_age_min": 15,
+    "max_run_s": 240,
+    "close_max_yahoo_batch": 15,
+    "vix_max_age_min": 75,
+    "core_slot_guard_min": 5,
+    "mcap_cache_days": 7,
+    "mcap_floor_usd": 1000000000,
+    "finnhub_mcap_per_run": 20,
+    "full_colour_pct": 5.0,
+    "flat_pct": 0.1
   }
 }

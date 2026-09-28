@@ -54,13 +54,17 @@ def market_context():
     regime = marketdata.regime_for(vix)
     reg = s["regimes"][regime]
     spy, qqq = marketdata.quote("SPY"), marketdata.quote("QQQ")
+    fxi = marketdata.fx_info()
+    spy = spy if spy.get("ok") else {}
+    qqq = qqq if qqq.get("ok") else {}
     return {
         "vix": round(vix, 2) if vix else None, "regime": regime, "regime_zh": reg["title"], "emoji": reg["emoji"],
         "max_positions": min(s["rules"]["max_positions"], reg["max_positions"]),
         "min_confidence": max(s["rules"]["min_confidence"], reg["min_confidence"]),
         "spy": spy.get("price"), "spy_chg_pct": spy.get("change_pct"),
         "qqq": qqq.get("price"), "qqq_chg_pct": qqq.get("change_pct"),
-        "fx_usdhkd": marketdata.fx_usdhkd(),
+        "fx_usdhkd": fxi["rate"], "fx_live": fxi["live"],
+        "session_date": spy.get("session_date") or qqq.get("session_date"),
     }
 
 
@@ -172,7 +176,8 @@ def analyze(now=None, write_files=True, fetch_profiles=None):
         "data_note": "指標用已收市日 bar（1年數據，Wilder RSI、真 MA20/MA50）；即時價只作 SL/TP 及顯示",
         "market": {"vix": ctx["vix"], "regime": ctx["regime_zh"], "regime_code": regime, "regime_emoji": ctx["emoji"],
                    "spy_price": ctx["spy"], "spy_change": ctx["spy_chg_pct"], "qqq_price": ctx["qqq"],
-                   "qqq_change": ctx["qqq_chg_pct"], "fx_usdhkd": ctx["fx_usdhkd"]},
+                   "qqq_change": ctx["qqq_chg_pct"], "fx_usdhkd": ctx["fx_usdhkd"], "fx_live": ctx["fx_live"],
+                   "quote_session": ctx["session_date"]},
         "guardrail": {"regime": regime, "vix_value": ctx["vix"], "emoji": ctx["emoji"], "title": ctx["regime_zh"],
                       "max_positions": ctx["max_positions"], "min_confidence": ctx["min_confidence"]},
         "signals": core_sigs,
@@ -189,6 +194,9 @@ def analyze(now=None, write_files=True, fetch_profiles=None):
         "errors": errors,
         "quotes_ts": clock.now_hkt().isoformat(timespec="seconds"),
     }
+    if write_files and marketdata.yahoo_blocked():
+        print("[analyze] Yahoo rate-limited this run — not overwriting data files with a partial report")
+        write_files = False
     if write_files:
         save_json(REPORT_PATH, report)
         if profiles:

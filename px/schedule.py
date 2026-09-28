@@ -9,8 +9,9 @@
   ok/duplicate/skipped(holiday)  -> fine
   (the first live pass only "arms" the watchdog: ledger _meta.watch_since = now;
    slots before watch_since are ignored, so a runner switch never floods alerts)
-  missing/failed/telegram_failed -> re-run once or twice while inside the slot's
-                                    rerun window (duplicate-send guard still applies)
+  missing/failed/telegram_failed/running(killed)/data_wait -> re-run once or twice while inside the
+                                    slot's rerun window (duplicate-send guard still applies; the attempt
+                                    is recorded as "running" before a job starts, so a timeout counts)
                                  -> otherwise ONE short Telegram alert per slot.
 - health_line(session): one-line summary of tonight's runs (used in the close report).
 """
@@ -112,14 +113,16 @@ def _save(d):
     os.replace(tmp, LEDGER)
 
 
-def record(job, slot, status, detail="", now=None, via="cron"):
+def record(job, slot, status, detail="", now=None, via="cron", count_attempt=True):
+    """count_attempt=False for the final status of a run whose start was already recorded as "running"."""
     now = now or clock.now_hkt()
     d = _load()
     k = key(job, slot)
     e = d.get(k, {"job": job, "slot_hkt": slot.astimezone(clock.HKT).isoformat(timespec="minutes") if slot else None,
                   "slot_local": slot.strftime("%Y-%m-%d %H:%M ") + ("ET" if slot and slot.tzinfo == clock.ET else "HKT") if slot else None,
                   "attempts": 0, "history": []})
-    e["attempts"] = e.get("attempts", 0) + 1
+    if count_attempt:
+        e["attempts"] = e.get("attempts", 0) + 1
     # Sticky success: once a slot is "ok" (messages sent), a later duplicate/skip/failed
     # run of the same slot (e.g. the DST-superset HKT cron line) must not downgrade it.
     if e.get("status") != "ok" or status == "ok":
@@ -150,15 +153,19 @@ def run_job(job, fn, now=None, via="cron", **kw):
     now_ = now or clock.now_hkt()
     slot = slot_for(job, now_)
     dry = kw.get("dry_run", False)
+    if not dry:
+        # The attempt is counted BEFORE the job starts: a run killed by the 900 s timeout (no final record)
+        # still counts, so the watchdog can never loop on it (max MAX_ATTEMPTS per slot).
+        record(job, slot, "running", "started", via=via)
     try:
         res = fn(now=now, **kw) if now is not None else fn(**kw)
     except Exception as e:
         if not dry:
-            record(job, slot, "failed", f"{type(e).__name__}: {e}", via=via)
+            record(job, slot, "failed", f"{type(e).__name__}: {e}", via=via, count_attempt=False)
         raise
     status = (res or {}).get("status", "ok")
     if not dry:
-        record(job, slot, status, (res or {}).get("reason", ""), via=via)
+        record(job, slot, status, (res or {}).get("reason", ""), via=via, count_attempt=False)
     return res
 
 
@@ -232,8 +239,8 @@ def check(now=None, runner=None, alert=None, dry_run=False):
             if not dry_run:
                 new = runner(job, slot)
                 actions[-1]["result"] = new
-                if new in OK_STATES or new == "skipped":
-                    continue
+                if new in OK_STATES or new in ("skipped", "deferred"):
+                    continue  # deferred = data source in cooldown; not an attempt, retried on a later pass
                 e = get(job, slot) or {}
                 if local <= rerun_deadline(job, slot) and e.get("attempts", 0) < MAX_ATTEMPTS:
                     continue  # next watchdog pass will retry

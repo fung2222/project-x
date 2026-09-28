@@ -20,6 +20,7 @@
 - §10 日常操作手冊
 - §11 Hermes 唔准自己改嘅嘢
 - **§12 真倉記錄（Roy 富途真錢；2026-09-28 起報告以真倉為先）**
+- **§13 真倉 5 分鐘監察（realwatch）、點停、每日 API 用量**
 
 ---
 
@@ -52,9 +53,11 @@ Hermes 2026-09-28 嘅匯出（repo B `export/2026-09-28/`，本 repo 副本 `dat
 cron (每分鐘) ──> ops/hermes/px_job.sh tick ──> python run.py tick
                      │ flock（唔會兩個 job 同時跑）、timeout 900s、log 去 logs/
                      ├─ 有到期嘅 slot → 跑 job（open/daily/hourly/close/morning/weekly）
-                     │     ├─ yfinance（主）＋ Finnhub（報價後備、業績日）＋ Marketaux（持倉新聞）
+                     │     ├─ yfinance（主）＋ Finnhub（真倉 5 分鐘報價、報價後備、業績日、新聞）＋ Marketaux（新聞後備，每日 ≤60）
                      │     ├─ 寫 portfolio.json、daily_report.json、data/*.json、data/reports/、state/
                      │     └─ Telegram Bot API → 群組「Project X Nas」（文字＋圖）
+                     ├─ realwatch（2026-09-28）：開市時每 5 分鐘睇 Roy 真倉（冇真倉＝0 call；唔 commit；見 §13）
+                     ├─ heatmap（2026-09-28）：盤中每粒鐘（跟 hourly）＋收市後再跑 → data/heatmap.json（盤中 Finnhub／收市重用 Yahoo；唔 Telegram；失敗唔阻其他 job；見 R41）
                      ├─ watchdog：漏咗／fail → 窗口內重跑；過咗窗口 → 1 條 🛠 alert
                      └─ git commit + push → GitHub Pages 網站自動更新
 ```
@@ -81,7 +84,7 @@ chmod 600 /opt/data/.env
 # 4. 檢查（全部唔會 send Telegram）
 export PX_ENV_FILE=/opt/data/.env
 .venv/bin/python run.py status                   # secret 有冇（唔顯示數值）、今日排程、run ledger
-.venv/bin/python -m unittest discover -s tests   # 應該 50 個測試全部 OK
+.venv/bin/python -m unittest discover -s tests   # 全部 OK（2026-09-28 起 ≥115）
 .venv/bin/python run.py daily --dry-run --force  # 睇 4 條每日訊息（唔 send、唔寫檔）
 .venv/bin/python run.py tgcheck                  # bot username＋群組資料（唔 send）
 chmod +x ops/hermes/px_job.sh
@@ -96,16 +99,18 @@ chmod +x ops/hermes/px_job.sh
 
 | Job | 用途 | ET | HKT（夏令 EDT） | HKT（冬令 EST） | 幾時跑 | 指令 | 訊息（數目／標題） | 更新檔案 |
 |---|---|---|---|---|---|---|---|---|
-| `open` | 開市監控：VIX 市況、SPY/QQQ、持倉 vs SL/TP、自動執行觸發咗嘅 SL/TP | 09:35 | 21:35 | 22:35 | NYSE 交易日（ET 星期一至五，唔包假期；半日市照跑） | `python run.py open --push` | **1**：「🔔 開市監控」 | `portfolio.json`、`_last_open_monitor.json`、`Reports/OpenMonitor_*.txt`、`data/reports/open_report_<ET日期>.*`、`state/` |
-| `daily` | 每日分析：決策、信號、業績日、機會掃描 Top 5、教學＋情境；最多 1 個紙上新倉 | 09:53 | 21:53 | 22:53 | NYSE 交易日 | `python run.py daily --push` | **4**：「📘 Project X 每日決策 — 日期」、「📊 信號」（含 📅 業績日（催化劑）、💡 機會掃描、📰 持倉新聞）、「🚀 高潛力機會掃描 Top 5」、「🎓 今日教學」（含情境） | `daily_report.json`、`signals.json`、`profiles.json`、`portfolio.json`、`data/scan.json`、`data/reports/daily_report_*`、`state/` |
-| `hourly` | 盤中持倉監察（alert-only）＋自動 SL/TP | 10:06, 11:06, 12:06, 13:06, 14:06, 15:06, 16:06（半日市只到 13:06） | 22:06 → 翌日 04:06 | 23:06 → 翌日 05:06 | NYSE 交易日；**星期五嘅 12:06–16:06 ET = 星期六 00:06–04:06 HKT（冬令 01:06–05:06）** | `python run.py hourly --push` | 平時 **0**；有事先 send「⚠️」alert（SL/TP 已執行、近止損、大波動、VIX 轉級）；每個交易時段第一次 send **1** 條「📊 持倉監控」狀態 | `portfolio.json`、`_last_hourly_check.json`、`state/` |
-| `close` | 收市報告：持倉結算、趨勢、明日觀察 Top 5、權益曲線圖、🩺 health line | 17:00 | 翌日 05:00 | 翌日 06:00 | NYSE 交易日（包半日市） | `python run.py close --push` | **4＋1 圖**：「🌙 Project X 收市報告 — 日期」、「📈 持倉結算」、「🧭 趨勢狀態」、「🚀 明日觀察 Top 5」、圖（權益 vs SPY） | `portfolio.json`、`data/pnl_history.json`、`data/scan.json`、`data/reports/close_report_*`、`data/charts/equity_*.png`、`state/` |
-| `morning` | 隔夜複盤（香港早晨，唔係盤前） | —— | 08:30 | 08:30 | HKT 星期二至六，而且前一個美股日係交易日（例：2026-11-27 早上唔跑，因為 11-26 感恩節休市） | `python run.py morning --push` | **1**：「🌅 Project X 隔夜複盤 — 美股 日期 收市後」 | `portfolio.json`、`data/reports/morning_report_*`、`state/` |
-| `weekly` | 每週回顧 | —— | 星期一 09:44 | 星期一 09:44 | 每個 HKT 星期一（美國假期都照跑） | `python run.py weekly --push` | **1**：「📊 Project X 每週回顧」 | `Reports/WeeklyReport_*.json`、`Reports/WeeklySummary_*.txt`、`data/reports/weekly_report_*`、`state/` |
-| `tick` | **建議嘅唯一 cron 入口**：到期就跑上面嘅 job，再做 watchdog | —— | 每分鐘 | 每分鐘 | 永遠 | `ops/hermes/px_job.sh tick` | 冇（除非 watchdog alert） | 同上 |
+| `open` | 開市監控：VIX 市況、SPY/QQQ、持倉 vs SL/TP、自動執行觸發咗嘅 SL/TP | 09:35 | 21:35 | 22:35 | NYSE 交易日（ET 星期一至五，唔包假期；半日市照跑） | `python run.py open --push` | **1**：「🔔 美股開市」（淺白：大市、真倉、資金、紙上倉一行） | `portfolio.json`、`_last_open_monitor.json`、`Reports/OpenMonitor_*.txt`、`data/reports/open_report_<ET日期>.*`、`state/` |
+| `daily` | 每日分析：決策、信號、業績日、機會掃描 Top 5、教學＋情境；最多 1 個紙上新倉 | 09:53 | 21:53 | 22:53 | NYSE 交易日 | `python run.py daily --push` | **1**：「📘 每日報告 日期」（真倉→資金→買賣信號→潛力股→大市→今日學一樣→紙上倉一行→網站）；信號表、Top 5 數字、教學＋情境喺網站 | `daily_report.json`、`signals.json`、`profiles.json`、`portfolio.json`、`data/scan.json`、`data/reports/daily_report_*`、`state/` |
+| `hourly` | 盤中持倉監察（alert-only）＋自動 SL/TP | 10:06, 11:06, 12:06, 13:06, 14:06, 15:06, 16:06（半日市只到 13:06） | 22:06 → 翌日 04:06 | 23:06 → 翌日 05:06 | NYSE 交易日；**星期五嘅 12:06–16:06 ET = 星期六 00:06–04:06 HKT（冬令 01:06–05:06）** | `python run.py hourly --push` | 平時 **0**；有事先 send「🚨 真倉警報」／「⚠️ 市況警報」（真倉跌穿止蝕／到止賺／近止蝕／急跌／急升、大市情緒轉變、紙上倉 SL/TP 已執行）；每個交易時段第一次 send **1** 條「📊 持倉監控」；每個 slot 最多 1 條 | `portfolio.json`、`_last_hourly_check.json`、`state/` |
+| `close` | 收市報告：持倉結算、趨勢、明日觀察 Top 5、權益曲線圖、🩺 health line | 17:00 | 翌日 05:00 | 翌日 06:00 | NYSE 交易日（包半日市） | `python run.py close --push` | **1＋1 圖**：「🌙 收市報告 日期」（大市、真倉、資金、買賣信號、明日潛力股、紙上倉一行、🩺 health line）、圖（紙上倉權益 vs SPY） | `portfolio.json`、`data/pnl_history.json`、`data/scan.json`、`data/reports/close_report_*`、`data/charts/equity_*.png`、`state/` |
+| `morning` | 隔夜複盤（香港早晨，唔係盤前） | —— | 08:30 | 08:30 | HKT 星期二至六，而且前一個美股日係交易日（例：2026-11-27 早上唔跑，因為 11-26 感恩節休市） | `python run.py morning --push` | **1**：「🌅 早晨｜美股 日期 收市回顧」 | `portfolio.json`、`data/reports/morning_report_*`、`state/` |
+| `weekly` | 每週回顧 | —— | 星期一 09:44 | 星期一 09:44 | 每個 HKT 星期一（美國假期都照跑） | `python run.py weekly --push` | **1**：「📊 每週回顧」 | `Reports/WeeklyReport_*.json`、`Reports/WeeklySummary_*.txt`、`data/reports/weekly_report_*`、`state/` |
+| `realwatch` | 真倉 5 分鐘監察（**唔係排程 slot**，由 `tick` 喺排程之前叫；watchdog 唔管；唔 commit） | 開市時每 5 分鐘 | 21:30–04:00 | 22:30–05:00 | NYSE 開市時段 | （自動，經 `tick`） | 平時 **0**；真倉觸發條件先 send「🚨 真倉即時警報」（每次最多 1 條） | `state/realwatch.json`、`state/job_runs.json`（`real` 去重） |
+| `heatmap` | 股票熱力圖 JSON（網站 `heatmap.html`；**唔係排程 slot**，由 `tick` 喺 push jobs 之後叫；watchdog 唔管；唔 send Telegram） | 盤中每粒鐘跟 hourly（10:06–15:06）＋收市後 17:00 ET | 22:06–03:06 ＋ 05:00 | 23:06–04:06 ＋ 06:00 | NYSE 交易日（半日市到 12:06） | `python run.py heatmap --force`（人手）／自動經 `tick` | **0**（永遠唔 push Telegram；JSON 跟 hourly／close 同一個 `--push` commit） | `data/heatmap.json`、`state/heatmap_state.json`、`state/heatmap_mcap.json`、`state/vix_last.json` |
+| `tick` | **建議嘅唯一 cron 入口**：先跑 realwatch，再到期就跑上面嘅 job，再做 watchdog | —— | 每分鐘 | 每分鐘 | 永遠 | `ops/hermes/px_job.sh tick` | 冇（除非 watchdog alert） | 同上 |
 | `check` | watchdog（淨係漏跑偵測）；用 Option B/C 先需要 | —— | 每 30 分鐘 | 每 30 分鐘 | 永遠 | `ops/hermes/px_job.sh check` | 漏跑過咗窗口：每個 slot **最多 1 條**「🛠 Project X 漏跑/失敗」 | `state/run_ledger.json` |
 
-**一個普通美股交易日（夏令）嘅推送次序（HKT）**：21:35 開市（1）→ 21:53 每日（4）→ 22:06 第一次 hourly（1 條狀態＋有事先 alert）→ 23:06 … 04:06（有事先 alert）→ 05:00 收市（4＋圖）→ 08:30 隔夜複盤（1）。星期一另加 09:44 週報（1）。冬令全部美股 job 遲 1 小時；08:30、09:44 唔變。
+**一個普通美股交易日（夏令）嘅推送次序（HKT）**：21:35 開市（1）→ 21:53 每日（1）→ 22:06 第一次 hourly（1 條狀態＋有事先 alert）→ 23:06 … 04:06（有事先 alert）→ 05:00 收市（1＋圖）→ 08:30 隔夜複盤（1）。開市期間真倉有事 realwatch 隨時（每 5 分鐘檢查）send「🚨 真倉即時警報」。星期一另加 09:44 週報（1）。冬令全部美股 job 遲 1 小時；08:30、09:44 唔變。
 
 **窗口（寫死喺 `config/settings.json`）**：
 
@@ -205,6 +210,10 @@ CRON_TZ=Asia/Hong_Kong
 - `state/run_ledger.json`：每個 slot 嘅狀態（ok／duplicate／skipped／failed／telegram_failed／missing）、嘗試次數、歷史。一個 slot 一旦 `ok`，之後嘅重複／跳過都唔會改佢（sticky）。
 - `daily` 每日最多 1 個紙上新倉（帳本強制），重跑唔會重複開倉；SL/TP 執行後持倉已經冇咗，唔會重複賣。
 - `--force` 會略過 guard：**只可以喺 Roy 要求或者確定冇 send 過先用**。
+- （2026-09-28）job 開始**之前**先喺 run ledger 記「running」＋嘗試次數：就算俾 900s timeout 殺咗，都計一次，watchdog 唔會無限重跑（每 slot 最多 3 次）。
+- hourly 每個 slot 最多 push 1 次（`state/job_runs.json` 入面 `hourly.sent.slot@HH:MM`），send 成功即刻記低，之後先做其他嘢。
+- 真倉警報（止蝕／止賺／近止蝕／急跌／急升）hourly 同 realwatch 共用一個去重記錄（`state/job_runs.json → <交易日> → real → alerts`），同一個條件每個交易時段只會報一次（再跌多一級、或者改咗止蝕／止賺先會再報）。
+- daily／close 由 4 條改做 1 條：如果某個交易日已經用舊版 send 過（decision/signals/scan/teaching 或 summary/positions/trend/scan），新版唔會再 send。
 
 ### 3.6 漏跑偵測（watchdog）
 - `tick`（Option A）每分鐘已經包；Option B/C 用 `check` 每 30 分鐘（:20、:50）。
@@ -212,7 +221,9 @@ CRON_TZ=Asia/Hong_Kong
 - job 本身出錯（exception，`tick` 或者人手跑都一樣）→ 即時 send 1 條「🛠 Project X 系統警告」（每 job 每個美股交易日最多 1 次），然後 watchdog 會喺窗口內重試。
 
 ### 3.7 API timeout／重試
-- yfinance：每個 call 最多 3 次、遞增等待（1.5s、3s）；Finnhub quote 10s timeout 做後備；業績日曆 20s。
+- yfinance：每隻股每個 process 只攞一次 2 年日線（其他 period 用切片；`quote()` 用同一份數據，唔再另外 call）；失敗最多試 2 次，中間等 1.5s，**最後一次之後唔再等**。
+- **Yahoo 限流**（YFRateLimitError／429／Too Many Requests）：即刻停晒今個 process 嘅 Yahoo request，寫 15 分鐘冷卻（`state/api_state.json`）。冷卻期間 `tick` 將 open／daily／close／morning／weekly **延後**（`deferred`，唔計嘗試次數，冷卻完 watchdog 再跑）；job 跑到一半先撞到就回 `data_wait`，**唔會推一份有窿嘅報告**。hourly 同 realwatch 照跑（用 Finnhub 報價）。
+- **Finnhub**：每個 call 經 `px/finnhub.py`：429 → 按 `X-Ratelimit-Reset` 冷卻（冇 header 就 60s，最長 15 分鐘），剩 ≤2 個 call 就自動暫停到 reset；每個錯誤都寫 log；每日計數喺 `state/api_state.json`。quote 10s timeout；業績日曆 20s。
 - Telegram：`sendMessage` 15s、`sendPhoto` 30s timeout；失敗會喺 2s、5s、10s 後再試（400／401／403 唔重試）；token 喺任何錯誤訊息都會遮住。
 - 整個 job：`px_job.sh` 用 `timeout 900`（15 分鐘）；超時會寫 log，watchdog 之後重跑。
 - 冇數據就唔開新倉（fail safe）；SL/TP 報價異常跳 >50% 唔執行。
@@ -258,6 +269,8 @@ CRON_TZ=Asia/Hong_Kong
 | `PX_DRY_RUN=1` | 唔 send、唔寫檔 | 測試用 |
 | `PX_TELEGRAM_DISABLED=1` | 照跑照寫檔，但唔 send | 維修用 |
 | `PX_HOME`、`PX_VENV`、`PX_LOG_DIR`、`PX_TIMEOUT` | `px_job.sh` 設定 | 可選 |
+| `PX_REALWATCH_DISABLED=1` | 臨時停 realwatch（永久停用改 settings，見 §13） | 可選 |
+| `PX_STATE_DIR`、`PX_REASONS_PATH`、`PX_NETWORK_OFF=1` | 測試／樣本用：state 目錄、`data/reasons.json` 位置、完全離線 | 測試用 |
 - 讀取次序：真環境變數 → `PX_ENV_FILE` → repo `.env` → 舊 `*_config.json`（Grok Bot box 先有）。`PX_` 前綴永遠贏。
 - GitHub push：用 Hermes 自己嘅 SSH key 或者 fine-grained token（只需要呢個 repo 嘅 contents:write），唔好寫入 repo。
 
@@ -299,6 +312,7 @@ CRON_TZ=Asia/Hong_Kong
 - **人手重跑漏咗嘅 job**：`ops/hermes/px_job.sh daily`（有 guard，唔會重複 send）。只有 Roy 要求先用 `--force`。
 - **暫停開新倉**：`config/overrides.json → "pause_new_entries": true`（要 Roy 指示），commit + push。封鎖某隻股：`"blocklist": ["TICKER"]`。
 - **暫停全部推送**：`PX_TELEGRAM_DISABLED=1`（寫入 env），或者 `crontab -e` 註解 tick 行。
+- **停真倉 5 分鐘監察**：見 **§13**（`real_account.intraday_watch.enabled=false` 或 env `PX_REALWATCH_DISABLED=1`）。
 - **記錄 Roy 真倉**：唔好再人手改 `data/futu_positions.json`，一律用 `python run.py pos ...`（見 **§12**）。舊 2026-07-08 富途**模擬**記錄（NVDA ×1 @194）已封存去 `data/legacy/futu_positions_2026-07-08_paper_sim.json`，唔計入真倉。**系統永遠唔會自動落真單。**
 - **Telegram fail**：`python run.py tgcheck`；bot 俾人踢出群組／token 失效 → 話俾 Roy 知。
 - **數據源 fail**（yfinance 冇數）：job 會 fail safe（唔開新倉），watchdog 會重試；持續就話俾 Roy 知。
@@ -328,9 +342,35 @@ CRON_TZ=Asia/Hong_Kong
 3. 推上 GitHub：最簡單係指令後面加 `--push`（先 `git pull --rebase`，再**淨係** commit＋push `data/futu_positions.json`，唔會 force push）。同 tick job 用同一把鎖，避免同時搞 git：
    `cd /opt/data/project-x && flock -w 600 .px.lock .venv/bin/python run.py pos add IONQ 3 44.5 --sl 37 --tp 50 --push`
    （人手做都得：`git pull --rebase` → `git add data/futu_positions.json` → `git commit -m "real pos: add IONQ 3 @44.5"` → `git push`；如果話 nothing to commit，即係 tick job 已經順手 push 咗，`git log -1 -- data/futu_positions.json` 核對。唔好 force push、唔好改 history。）
-4. 回覆 Roy，例如：「✅ 已記錄真倉：IONQ 3 股 @44.5，止蝕 37／止賺 50（費用約 US$2）。之後每個報告會先講呢隻；到止蝕／止賺我哋會提你，但落單要你自己喺富途做。」賣出就報埋淨 P&L（USD／HKD／%）。
+4. 回覆 Roy：**直接轉述 CLI 印出嚟嘅 ✅ 確認**（2026-09-28 起已經係淺白廣東話：買咗幾多股、用咗幾多錢 US$＋HK$、止蝕跌到會蝕幾多、止賺升到會賺幾多、剩低現金）。賣出嗰條有淨賺蝕（US$／HK$／%）同揸咗幾多日。有規則提示（⚠️）就照轉述。
 
 檔案：`data/futu_positions.json`（schema `real_positions_v2`：`positions[]` 持倉、`closed_trades[]` 已實現紀錄——**唔好刪**，20–30 筆檢討要用、`real_start_date` 第一筆真倉日）。寫入係 atomic＋file lock；jobs 會自動更新 `last_price`（畀網站用）。唔好人手改呢個檔。
+
+## §13 真倉 5 分鐘監察（realwatch）＋ API 用量（2026-09-28）
+
+> 另見 **R41 股票熱力圖**：由同一個 `tick` 喺 push jobs 之後刷新 `data/heatmap.json`（盤中每粒鐘跟 hourly、Finnhub /quote；收市重用 close 嘅 Yahoo；唔 Telegram、唔阻其他 job）。
+
+**做咩**：美股開市期間，`run.py tick`（每分鐘）喺跑排程之前叫 `px/jobs/realwatch.py`。距離上次 ≥5 分鐘先真係做嘢（`state/realwatch.json`）。
+- **冇真倉 ＝ 0 個 API call**（只讀 `data/futu_positions.json`）。
+- 有真倉：每隻用 Finnhub `/quote`（>15 分鐘舊嘅報價唔用、比昨收跳 >50% 唔用）；Finnhub 唔得先用 yfinance（要係今日 bar）；兩個都唔得就 send 一次「報價攞唔到，請自己喺富途睇住止蝕」— **唔會用估計價**。
+- 條件（`config/settings.json → real_account.intraday_watch`）：跌穿止蝕、到止賺、止蝕上面 2% 內、比昨收跌 ≥5%（再到 10／15／20% 再報）、升 ≥8%（再到 15／25% 再報）。每個條件每隻每個交易時段報一次（同 hourly 共用去重）；改咗止蝕／止賺會重新 arm。
+- 每次最多 1 條 Telegram（「🚨 真倉即時警報」，每個警報有一句原因）；**send 成功先記低**（失敗 5 分鐘後會再試）；唔寫 `futu_positions.json`、唔 commit、唔 push。
+- 出錯唔會影響 tick（`run.py` 包住 exception）。
+
+**點停**：
+- 永久：`config/settings.json → real_account.intraday_watch.enabled = false`（要 Roy 批准；commit＋push）。
+- 臨時：env `PX_REALWATCH_DISABLED=1`（寫入 `/opt/data/.env`）。
+- 改門檻（`near_sl_pct`、`drop_steps_pct`、`surge_steps_pct`、`interval_min`、`max_quote_age_min`）一樣要 Roy 批准。
+
+**每日 API 用量（估算，美股交易日）**：
+
+| 來源 | 上限（免費） | 而家估計用量 | 備註 |
+|---|---|---|---|
+| Finnhub | 60 call／分鐘（+30／秒） | 業績日曆 ~10–15（每日一次，唔完整每粒鐘重試）＋ 公司新聞 ≤120 上限（實際 ~15–25，cache 6 粒鐘）＋ 大市新聞 ~4 ＋ realwatch 每隻真倉 ≤78（6.5 粒鐘 × 12 次；3 隻 = ≤234）＋ **heatmap 盤中 ~410**（6 × ~68 `/quote`，≤40／分鐘）＋ 報價後備少量 | 冇真倉：~440–460／日；3 隻真倉：~670–700／日；每分鐘峰值：heatmap ~40 ＋ realwatch ~3–4，仲喺 60／分鐘之內 |
+| Marketaux | 100 request／日 | **硬上限 60／日**（`api_budget.marketaux_per_day`，`state/api_state.json` 計數）；實際通常 <10（淨係 Finnhub 冇新聞先用） | 429 → 冷卻 1 粒鐘 |
+| Yahoo（非官方） | 冇公開上限；撞 429 就停 15 分鐘 | 約 200–275 request／交易日：每隻股每個 process 一次 2 年日線；daily／close ≈ 核心＋機會＋掃描 54 隻＋SPY/QQQ/VIX＋板塊 ETF＋舊版 profiles＋業績後備；**heatmap 盤中 0 Yahoo**，收市通常 0（重用 close），最差一批 ≤15 隻 ETF | realwatch 平時唔用 Yahoo；heatmap 唔會搶 Yahoo 配額 |
+
+新 state 檔（全部 gitignore，唔會 commit）：`state/api_state.json`（冷卻＋計數）、`state/earnings_cache.json`、`state/news_cache.json`、`state/realwatch.json`、`state/vix_last.json`（heatmap 重用）、`state/heatmap_state.json`／`heatmap_mcap.json`；`state/lesson_history.json`（今日學一樣，30 日唔重複）。網站讀 `data/reasons.json`（原因）。
 
 ---
 ## 切換紀錄

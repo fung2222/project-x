@@ -306,6 +306,8 @@ def enforce_entry_rules(pf, ticker, price, shares, sl, regime, now=None):
     eq, cash = acct["equity_usd"], acct["cash_usd"]
     if position(pf, ticker):
         raise RuleViolation(f"{ticker} already held (no averaging down / no add)")
+    if s["regimes"].get(regime, {}).get("no_new_entries"):
+        raise RuleViolation(f"no new entries while market regime is {regime} (VIX data missing)")
     maxpos = min(r["max_positions"], s["regimes"][regime]["max_positions"])
     if len(pf.get("positions", [])) >= maxpos:
         raise RuleViolation(f"max positions {maxpos} reached ({regime})")

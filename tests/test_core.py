@@ -15,6 +15,8 @@ import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _env  # noqa: E402,F401  (offline + temp state dir)
 
 from px import archive, clock, decide, guard, indicators, ledger, signals  # noqa: E402
 

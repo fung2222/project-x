@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>熱力圖 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .hm-wrap { max-width: 1000px; margin: 0 auto; }
+  .hm-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+  .hm-chip { background: #fff; border-radius: 10px; padding: 8px 10px; box-shadow: 0 1px 2px #0001; }
+  .hm-chip .n { font-size: 13px; opacity: .85; }
+  .hm-chip .v { font-size: 22px; font-weight: 700; line-height: 1.2; }
+  .hm-chip .s { font-size: 12px; opacity: .85; }
+  .hm-chip .na { font-size: 17px; color: #888; }
+  .hm-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 15px; margin: 6px 0 10px; }
+  .hm-scale span { display: inline-block; padding: 2px 6px; font-size: 12px; color: #222; }
+  .hm-card { background: #fff; border-radius: 12px; padding: 10px; margin: 10px 0; box-shadow: 0 1px 2px #0001; }
+  .hm-card h2 { font-size: 18px; margin: 2px 0 8px; }
+  #hm-tm { width: 100%; min-height: 420px; }
+  .hm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .hm-tile { border-radius: 8px; padding: 8px 6px; text-align: center; }
+  .hm-tile .zh { font-size: 16px; font-weight: 700; }
+  .hm-tile .tk { font-size: 12px; opacity: .85; }
+  .hm-tile .pc { font-size: 17px; font-weight: 700; }
+  .hm-foot { font-size: 13px; color: #555; line-height: 1.6; margin-top: 8px; }
+  .hm-note { font-size: 15px; line-height: 1.7; }
+  .hm-sum { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .hm-date { font-size: 15px; color: #555; margin: 2px 0 8px; }
+  .hm-date b { color: #1d2129; }
+  @media (max-width: 600px) {
+    .hm-strip { grid-template-columns: repeat(2, 1fr); }
+    .hm-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content" class="hm-wrap"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>
+PX.nav();
+(async () => {
+  const d = await PX.json('data/heatmap.json');
+  const el = document.getElementById('content');
+  if (!d || d.schema !== 'heatmap_v1') {
+    el.innerHTML = '<div class="card empty">熱力圖數據暫缺（等系統喺美股開市時段寫入 data/heatmap.json）</div>';
+    PX.setUpdated('熱力圖：數據暫缺');
+    return;
+  }
+  PX.setUpdated(`更新：${d.generated_hkt || PX.hkt(d.generated_at)}`);
+  const idx = d.index || {};
+  const c = d.counts || {};
+  const stocks = d.stocks || [];
+  const sectors = (d.sectors || []).slice().sort((a, b) => ((b.chg_pct == null) - (a.chg_pct == null)) || ((b.chg_pct || 0) - (a.chg_pct || 0)));
+  const paper = d.paper || [], real = d.real || [];
+  const marks = `★＝紙上模擬持倉（${paper.length ? paper.join('、') : '暫時冇'}）　◆＝真錢持倉（${real.length ? real.join('、') : '暫時冇'}）`;
+  const miss = (d.missing || []).length ? `數據暫缺：${d.missing.join('、')}（灰格）` : '全部股票都有數據';
+  const noCap = (d.no_mcap || []).length ? ` 冇市值數據嘅（${d.no_mcap.join('、')}）用中位數大小。` : '';
+  const flatBit = c.flat ? `｜${c.flat} 隻持平` : '';
+  const missBit = c.missing ? `｜${c.missing} 隻暫缺` : '';
+  const chip = (key, isVix) => {
+    const x = idx[key] || {};
+    if (x.last == null && x.chg_pct == null) return `<div class="hm-chip"><div class="n">${PX.esc((x.name || key))}</div><div class="v na">數據暫缺</div></div>`;
+    if (isVix) return `<div class="hm-chip"><div class="n">${PX.esc(x.name || 'VIX')}</div><div class="v">${Number(x.last).toFixed(2)}</div><div class="s">較前日 ${x.chg_pct == null ? '—' : ((x.chg_pct > 0 ? '+' : '') + Number(x.chg_pct).toFixed(1) + '%')}</div></div>`;
+    return `<div class="hm-chip" style="background:${x.color || '#fff'};color:${x.text_color || '#1d2129'}"><div class="n">${PX.esc(x.name || key)}</div><div class="v">${PX.esc(x.label || '—')}</div><div class="s">收 ${x.last == null ? '—' : ('$' + Number(x.last).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}))}</div></div>`;
+  };
+  const tiles = sectors.map(s => `<div class="hm-tile" style="background:${s.color || '#dfe2e6'};color:${s.text_color || '#222'}"><div class="zh">${PX.esc(s.zh)}</div><div class="tk">${PX.esc(s.t)}</div><div class="pc">${PX.esc(s.label)}</div></div>`).join('');
+  const scale = (d.colour && d.colour.scale || []).map(s => {
+    if (!s.pct) return `<span style="background:${s.color || '#dfe2e6'}">0</span>`;
+    return `<span style="background:${s.color}">${s.pct > 0 ? '+' : ''}${s.pct}%</span>`;
+  }).join('');
+  el.innerHTML = `
+    <h1 style="font-size:22px;margin:4px 0 2px">🗺 Project X 股票熱力圖</h1>
+    <div class="hm-date">數據：<b>${PX.esc(d.date_label || '數據暫缺')}</b>｜同前一個交易日比｜更新：${PX.esc(d.generated_hkt || '')}</div>
+    ${PX.freshness(d.generated_at, 6, '熱力圖')}
+    <div class="hm-strip">${chip('SPY')}${chip('QQQ')}${chip('VIX', true)}
+      <div class="hm-chip"><div class="n">觀察名單</div><div class="v">${c.up || 0}升 ${c.down || 0}跌</div><div class="s">共 ${c.total || 0} 隻${flatBit}${missBit}</div></div>
+    </div>
+    <div class="hm-legend"><b>${PX.esc((d.colour && d.colour.legend) || '紅＝升　綠＝跌　格越大＝公司越大')}</b><span class="hm-scale">${scale}</span></div>
+    <div class="hm-card"><h2>觀察名單（系統每日掃描嘅 ${c.total || 0} 隻，按主題分組）</h2>
+      <div id="hm-tm"></div>
+      <div class="hm-foot">${PX.esc(marks)}<br>格大細＝按公司市值，但已壓縮（開立方）：公司大 1000 倍，格只大 10 倍（細過 10 億美元當 10 億計），細公司都睇得到。${PX.esc(noCap)}<br>顏色越深＝升跌越大（±5% 或以上最深）；灰格＝差唔多冇郁（±0.1% 內）或數據暫缺。<br>${PX.esc(miss)}</div>
+    </div>
+    <div class="hm-card"><h2>美股板塊（每格一樣大，睇錢流去邊）</h2>
+      <div class="hm-grid">${tiles}</div>
+      <div class="hm-foot">用板塊 ETF 代表：XLK 科技、SMH 半導體等；由升得最多排到跌得最多。</div>
+    </div>
+    <div class="hm-card hm-note">
+      <div class="hm-sum">今日：觀察名單 ${c.up || 0} 隻升、${c.down || 0} 隻跌${c.flat ? '、' + c.flat + ' 隻持平' : ''}${c.missing ? '、' + c.missing + ' 隻暫缺' : ''}。</div>
+      <b>點睇：</b><br>
+      ・指數升，但大部分格都係綠色＝得幾隻大股撐住個市，唔好以為樣樣都升緊。<br>
+      ・成個板塊（同一組）一齊紅或一齊綠，通常係大環境／成個行業嘅消息，唔係隻股自己出事。<br>
+      ・隔籬全部紅，淨係自己隻股獨自綠＝要睇返佢自己有冇新聞。
+    </div>
+    <div class="hm-foot">資料來源：${PX.esc((d.sources&&d.sources.prices)||'Yahoo Finance／Finnhub')}；VIX：${PX.esc((d.sources&&d.sources.vix)||'重用')}；市值：Finnhub（只用嚟定格大細）。只供參考，唔係買賣建議。 · <a href="index.html">返去首頁</a></div>`;
+
+  // Build the treemap from the small JSON (plotly loaded once from CDN — never inlined).
+  const ids = [], labels = [], parents = [], values = [], colors = [], tcolors = [], texts = [], hovers = [];
+  const byG = {};
+  stocks.forEach(r => { (byG[r.g] = byG[r.g] || []).push(r); });
+  (d.groups || Object.keys(byG).map(g => ({g, size: (byG[g] || []).reduce((a, r) => a + (r.size || 0), 0)})))
+    .slice().sort((a, b) => (b.size || 0) - (a.size || 0))
+    .forEach(gr => {
+      const g = gr.g, rs = byG[g] || [];
+      const avg = gr.avg_chg_pct;
+      const avgTxt = avg == null ? '數據暫缺' : ((avg > 0 ? '+' : '') + Number(avg).toFixed(2) + '%');
+      ids.push('G:' + g); parents.push(''); values.push(0);
+      labels.push(g); texts.push(`<b>${PX.esc(g)}</b>  平均 ${avgTxt}`);
+      colors.push('#2b2f36'); tcolors.push('#ffffff');
+      hovers.push(`${g}｜${rs.length} 隻｜平均 ${avgTxt}`);
+      rs.slice().sort((a, b) => (b.size || 0) - (a.size || 0)).forEach(r => {
+        const mark = (r.paper ? '★' : '') + (r.real ? '◆' : '');
+        ids.push(r.t); parents.push('G:' + g); labels.push(r.t);
+        values.push(r.size || 1);
+        colors.push(r.color || '#b9bec5'); tcolors.push(r.text_color || '#333');
+        texts.push(`<b>${mark}${r.t}</b><br>${PX.esc(r.label || '數據暫缺')}`);
+        const mc = r.mcap_usd ? ('$' + (r.mcap_usd / 1e9).toFixed(1) + 'B') : '市值數據暫缺（格按中位數大小）';
+        const px = r.last == null ? '數據暫缺' : ('$' + Number(r.last).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
+        hovers.push(`${mark}${r.t}｜${g}<br>收市 ${px}｜${r.label || '數據暫缺'}<br>市值 ${mc}`);
+      });
+    });
+  const trace = {
+    type: 'treemap', ids, labels, parents, values, branchvalues: 'remainder',
+    text: texts, texttemplate: '%{text}', hovertext: hovers, hovertemplate: '%{hovertext}<extra></extra>',
+    textposition: 'middle center',
+    marker: {colors, line: {color: '#ffffff', width: 1.5}, pad: {t: 24, l: 2, r: 2, b: 2}},
+    textfont: {color: tcolors, family: 'Noto Sans CJK TC, PingFang HK, Microsoft JhengHei, sans-serif', size: 15},
+    tiling: {packing: 'squarify', pad: 2}, pathbar: {visible: false}, sort: false, maxdepth: 2,
+  };
+  const tm = document.getElementById('hm-tm');
+  const w = tm.clientWidth || 900;
+  const h = w < 600 ? Math.round(w * 2.5) : Math.round(Math.max(620, w * 0.78));
+  if (w < 600) { trace.textfont.size = 12; trace.marker.pad.t = 20; }
+  if (typeof Plotly === 'undefined') {
+    tm.innerHTML = '<div class="empty">圖表庫載入失敗（請檢查網絡）；板塊數字上面仍然可用。</div>';
+  } else {
+    Plotly.newPlot(tm, [trace], {height: h, width: w, margin: {t: 4, l: 0, r: 0, b: 0}, paper_bgcolor: '#fff',
+      font: {family: 'Noto Sans CJK TC, PingFang HK, Microsoft JhengHei, sans-serif'}},
+      {displayModeBar: false, responsive: true, staticPlot: false});
+  }
+})();
+</script>
+</body>
+</html>

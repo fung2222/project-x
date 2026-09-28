@@ -34,13 +34,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from px import clock, config, guard, schedule, telegram  # noqa: E402
 
-JOBS = ("open", "daily", "hourly", "close", "morning", "weekly")
+JOBS = ("open", "daily", "hourly", "close", "morning", "weekly", "heatmap")
 
 
 def _job_fn(job):
     from px.jobs import open_monitor, daily, hourly, weekly, close, morning
+    from px import heatmap
     return {"open": open_monitor.run, "daily": daily.run, "hourly": hourly.run, "weekly": weekly.run,
-            "close": close.run, "morning": morning.run}[job]
+            "close": close.run, "morning": morning.run, "heatmap": heatmap.run}[job]
 
 
 def _alert(text):
@@ -91,15 +92,49 @@ def _tick_run(job, slot):
         return "failed"
 
 
+REPORT_JOBS = ("open", "daily", "close", "morning", "weekly")  # multi-source reports: wait out a Yahoo rate limit
+
+
+def _realwatch(dry_run):
+    """5-minute real-position watch (px/jobs/realwatch.py). Never affects the schedule tick."""
+    try:
+        from px.jobs import realwatch
+        return realwatch.run(dry_run=dry_run)
+    except Exception as e:
+        print(f"[realwatch] failed (tick continues): {type(e).__name__}: {telegram._redact(str(e))[:200]}")
+        return {"status": "failed"}
+
+
+def _heatmap(dry_run):
+    """Stock heatmap refresh (px/heatmap.py -> data/heatmap.json). Never sends Telegram; a failure never blocks other jobs."""
+    try:
+        from px import heatmap
+        res = heatmap.run(dry_run=dry_run)
+        if res and res.get("status") not in ("skipped", "duplicate", "disabled"):
+            print(f"[heatmap] {res.get('status')}: { {k: res.get(k) for k in ('slot','data_date','phase','counts','sources') if k in res} }")
+        return res
+    except Exception as e:
+        print(f"[heatmap] failed (tick continues): {type(e).__name__}: {telegram._redact(str(e))[:200]}")
+        return {"status": "failed"}
+
+
 def _tick(dry_run, push=False):
     def runner(job, slot):
+        if job in REPORT_JOBS:
+            from px import marketdata
+            if marketdata.yahoo_blocked():
+                print(f"[tick] {job}: Yahoo rate-limit cooldown active — deferred (no attempt used; retried after cooldown)")
+                return "deferred"
         # first attempt of a slot = normal run; later attempts come from the watchdog (window bypass)
         e = schedule.get(job, slot)
         return _rerun(job, slot) if e else _tick_run(job, slot)
+    _realwatch(dry_run)
     acts = schedule.tick(runner=runner, alert=_alert, dry_run=dry_run)
+    hm = _heatmap(dry_run)
     if acts:
         print(json.dumps({"now_hkt": clock.now_hkt().isoformat(timespec="minutes"), "actions": acts}, ensure_ascii=False, indent=1))
-    if push and not dry_run and any(a.get("action") in ("run", "rerun") for a in acts):
+    # push when a schedule job ran OR the heatmap wrote a fresh JSON (website update; heatmap itself never Telegrams)
+    if push and not dry_run and (any(a.get("action") in ("run", "rerun") for a in acts) or (hm or {}).get("status") == "ok"):
         from px import gitops
         gitops.commit_and_push(f"px tick: {clock.now_hkt():%Y-%m-%d %H:%M} HKT")
     return 0
@@ -142,6 +177,12 @@ def _status():
         txt = ", ".join(f"{sl:%H:%M}->{sl.astimezone(clock.HKT):%H:%M}:{(schedule.get(job, sl) or {}).get('status', '-')}" for sl in slots)
         print(f"  {job:<8} {c['tz']} {txt}")
     print(schedule.health_line(d, now))
+    try:
+        from px import heatmap as hm
+        hs = hm.slots(d)
+        print("heatmap slots today (ET):", ", ".join(f"{k}@{s:%H:%M}" for k, s in hs) if hs else "(none)")
+    except Exception as e:
+        print("heatmap:", type(e).__name__)
     print("guard today:", json.dumps(guard.get_all().get(clock.session_date(now).isoformat(), {}), ensure_ascii=False)[:1500])
 
 

@@ -178,3 +178,86 @@ getChat.error  = null
 - **commit `15b9c34` 仍然喺 local HEAD**（`git log -1` = `15b9c34 docs/H0 + H1 + §2 install + dry-run + tgcheck 答覆 (Hermes 9-28)`），等 token 更新後可立即 push
 
 **請喺 reply 講低新 token 嘅值應該 paste 落邊個 env 檔**（`/opt/data/.env` / `/opt/data/profiles/gushen/.env` / 或者新開檔）。或者你直接喺 Hermes prompt environment 注入 `GITHUB_TOKEN=ghp_...`，我哋下次跑嘢時自動收。
+
+
+---
+
+## §4 切換前最後準備答覆（2026-09-28 HKT）
+
+### 1) Mag7 已暫停 ✅
+
+`hermes -p gushen cron pause <job_id>` 對 3 個 Mag7 cron 成功：
+
+| Job ID | Cron | 之前 next_run | 狀態 |
+|--------|------|---------------|------|
+| `b655bf26892b` | mag7-premarket | 2026-09-28 16:00 HKT | ✅ **paused** — 今日 16:00 唔會觸發 |
+| `8405f161cfea` | mag7-daily | 2026-09-28 21:30 HKT | ✅ paused |
+| `46d2ea2e5114` | mag7-close | 2026-09-29 05:05 HKT | ✅ paused |
+
+`hermes -p gushen cron list` 確認 3 個 Mag7 = `[paused]`，4 個 PX 仍 `[active]`。  
+只暫停，**冇刪**——等 §5 步驟 8 正式切換先 `remove`。
+
+4 個 PX 完全無郁：依舊 `hermes -p gushen cron list` 顯示 active，今日 21:30 仍會推去 Soonoo DM。
+
+### 2) 觸發方式調查
+
+| 問題 | 結果 |
+|------|------|
+| **(a) Docker + 自動啟動?** | ✅ s6-overlay container (LinuxServer 風格); PID 1 = `s6-svscan`; per-profile gateway 已 s6-managed (`/run/service/gateway-{default,apps,gushen,media}`). 已存在嘅 supervised slots = 未來 supervisor s6 service 用得着 |
+| **(b) supercronic 可唔可以裝?** | ✅ Network 通; `https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64` HTTP 302 去 CDN; 仍未下載 binary。配合 `/run/service/super` s6 service 自動 supervise 重啟即 start |
+| **(c) Hermes cron 支持「純 script, 唔經 model」?** | ✅ `hermes cron create --script <path> --no-agent` 完全支援：stdout 直送、零 LLM call。Hermes tick interval = 60s default; `* * * * *` 自然 fit。但 `script` 嘅 path 限定 `~/.hermes/scripts/` (`/opt/data/.hermes/scripts/`)，要 mkdir/symlink 先用 |
+| **(d) apt install cron + 持久?** | ⚠️ cron package 在 Debian 13 trixie 系統透過 systemd 跑。此 container 用 s6（**無 systemd**），apt install cron 後 cron daemon 唔會自動啟動。要包 s6 service 帶起 cron daemon，唔 clean。**不建議呢條路** |
+
+**我嘅建議（單一最簡方案）**：
+
+**Step 1: 用 Hermes 自己嘅 `cron --script --no-agent`**
+- 創建 1 個唯一 cron job: `* * * * *` 跑 `/opt/data/project-x/ops/hermes/px_job.sh tick`
+- `--no-agent` = 純 script、零 LLM call、stdout 由 supercronic/Hermes 收到後**丟棄**（spec §3.2 Option A 講 tick 出嚟 stdout 可以丟)
+- 1 日 1440 次 fire，全部 script 跑，**AI call = 0**
+- script 自己有 `set -e` + `timeout 900` + flock（race-proof），guard 由 code 提供（duplicate guard + watchdog + health line）
+
+**Step 2: persist 重啟 — s6 一個 service 包起 Hermes gateway（已有）+ 超級簡單：spec 寫嘅 `tick` 觸發方式已經走 Hermes cron**:
+- 嘅 Hermes cron dispatcher 由 per-profile gateway service 啟動時跑（已經發生緊 — gushen 嗰 7 個 cron 就係咁被 dispatch)
+- 只要我哋 `{hermes -p default cron create --script px_job.sh tick --schedule "* * * * *" --no-agent}` 入 default profile, 然後個 cron job 繼承「per-profile gateway 加 `default` profile 醒時 active」嘅生命週期
+- **重啟 s6-overlay container 後**：per-profile gateway service 自動 supervise 重啟 → Hermes cron dispatcher 重啟 → 自動 dispatch 新加嘅 tick job。零額外配置
+
+**不過呢個方案有 tradeoff**：
+- Hermes cron dispatcher 每分鐘醒一次會 wake 嗰 profile 全部 LLM-aware jobs
+- 即是話我哋加咗 tick job 之後, 任何 default profile 嘅 cron (即使 disabled) 都會被 dispatcher 「睇」一次/分鐘 — 唔會 fire (paused)，但會佔極少量 CPU
+- 純 LLM 醒醒醒嘅 alert (L-01 reversion) 風險: 萬一有人忘記 `--no-agent`，個 tick cron 會打 model。但 spec §11 已禁 explicit，禁止人家亂嚟
+
+**Alternative — supercronic + s6 service**:
+- `/opt/data/bin/supercronic` (download 一次)
+- `/config/etc/s6-overlay/s6-rc.d/svc-px-tick/up` + `/run` 兩個 file
+- Container 重啟 = s6 auto-launch = supercronic 開始行 `crontab.txt Option A` = 每分鐘 fire `px_job.sh tick`
+- **Pros**: 純 binary, 零 Hermes cron complexity, 完全 controlled by s6
+- **Cons**: 額外 step (下載 binary + 寫 s6 service + test container restart)
+
+**我 recommend (b) Alternative** — supercronic + s6 service，理由：
+1. spec §3.2 Option A 明確建議 supercronic/s6-style supervisor
+2. 完全 avoid Hermes cron dispatcher complexity 唔影響 `jobs.json` 入面其他 profile 嘅 LLM jobs
+3. Container 重啟可靠性由 s6 保證（已驗證 4 個 gateway 服務 restart 健壯）
+4.與 Option A 原 spec 「一行 cron」完全對齊，crontab.txt 入面已有 template
+
+建議嘅設定（即將做嘅，安裝 step 等你 reply 「§4 OK」先實施）：
+```bash
+# 下載 supercronic binary
+curl -L -o /opt/data/bin/supercronic <URL>
+chmod +x /opt/data/bin/supercronic
+
+# S6 service 結構（用 /config 持久 volume mount）
+mkdir -p /config/etc/s6-overlay/s6-rc.d/svc-px-tick
+echo '#!/usr/bin/with-contenv bash' > /config/etc/s6-overlay/s6-rc.d/svc-px-tick/run
+echo 'exec /opt/data/bin/supercronic /opt/data/project-x/ops/hermes/crontab.txt' >> ...
+echo 'longrun' > /config/etc/s6-overlay/s6-rc.d/svc-px-tick/type
+touch /config/etc/s6-overlay/s6-rc.d/user/contents.d/svc-px-tick
+s6-rc-bundle update add svc-px-tick default
+```
+
+### 3) GitHub push — 仍未成功
+
+- 第二次 `git push origin main` (commit `115da4c` §3 prep) = 仍 `401 Bad credentials`
+- Roy 講「我會開一個新 token, 只限 fung2222/project-x」— 推測新 token 嘅 value 仲未寫入 `/opt/data/.env`
+- `/opt/data/profiles/gushen/.env` 嘅 token 今朝未更新
+- local HEAD 仍 `115da4c`, 等新 token 到位即可 push
+- 等你 reply 講邊個 env file + token value, 我即刻 `git push` + `git log origin/main -3` verify

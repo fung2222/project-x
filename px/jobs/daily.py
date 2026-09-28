@@ -8,7 +8,7 @@ import json
 
 from .. import archive, clock, decide, guard, ledger, marketdata, telegram, engine, scan
 from ..config import load_settings, path
-from ..messages import esc, f2, pct, footer, money, daily_teaching, scenarios, scan_message
+from ..messages import catalyst_text, esc, f2, pct, footer, money, daily_teaching, scenarios, scan_message
 from .common import Ctx, gate_run, refresh_positions, write_text, report_path, strip_html
 
 JOB = "daily"
@@ -43,6 +43,14 @@ def signals_message(report, evals=None, news=None):
         rows.append(f"{x['ticker']:<5} {x['price']:>8.2f} RSI{x['rsi']:>5.1f} 趨勢{x.get('trend_score', 0):+d} {tag} {x['confidence']:.0f}%")
     if rows:
         L.append("<pre>" + esc("\n".join(rows)) + "</pre>")
+    # catalyst / earnings column (Roy requirement): next earnings date per name, soonest first
+    cal = [x for x in report.get("signals", []) + report.get("opportunity_signals", []) if x.get("earnings_date")]
+    cal.sort(key=lambda x: (x.get("earnings_days") if x.get("earnings_days") is not None else 999, x["ticker"]))
+    if cal:
+        L.append("📅 <b>業績日（催化劑）</b>：" + " · ".join(
+            f"{x['ticker']} {catalyst_text(x['earnings_date'], x.get('earnings_days'))}" for x in cal[:8]))
+    else:
+        L.append("📅 業績日：暫時攞唔到（Finnhub／yfinance 冇數據）")
     opp = sorted(report.get("opportunity_signals", []), key=lambda y: y["confidence"], reverse=True)
     ev = {e["ticker"]: e for e in (evals or report.get("gates", []) or [])}
     cands = [x for x in opp if x.get("raw_signal") == "BUY"]

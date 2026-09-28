@@ -125,4 +125,4 @@ def scan_message(scan, title="🚀 高潛力機會掃描 Top 5", show_misses=Tru
 def catalyst_text(earnings_date, days):
     if not earnings_date:
         return "—"
-    return f"{earnings_date}" + (f"（{days}日）" if days is not None else "")
+    return f"{earnings_date}" + (f"（{days}個交易日）" if days is not None else "")

@@ -143,6 +143,21 @@ def analyze(now=None, write_files=True, fetch_profiles=None):
                 if k in prof:
                     x[k] = prof.get(k)
             x["analyst_news"] = prof.get("news", [])
+    # catalyst column: fill missing earnings dates from the earnings calendar (Finnhub, yfinance fallback)
+    try:
+        from . import scan as _scan
+        need = [x["ticker"] for x in core_sigs if not x.get("earnings_date")]
+        cal = _scan.earnings_calendar(need) if need else {}
+        today = clock.session_date(now)
+        for x in core_sigs:
+            if not x.get("earnings_date") and cal.get(x["ticker"]):
+                x["earnings_date"] = cal[x["ticker"]]
+                try:
+                    x["earnings_days"] = clock.trading_days_between(today, dt.date.fromisoformat(cal[x["ticker"]]))
+                except Exception:
+                    x["earnings_days"] = None
+    except Exception as e:
+        print("earnings calendar skipped:", type(e).__name__)
     quotes = {}
     for t in ["SPY", "QQQ", "^VIX"] + core:
         q = marketdata.quote(t)

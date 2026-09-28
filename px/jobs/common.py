@@ -172,8 +172,12 @@ def pick_news(scan_res, n=3):
 
 def annotate_scan(scan_res, news=None):
     """Attach plain reasons to scan top picks (website cards read them from data/scan.json)."""
-    from .. import plain
+    from .. import plain, reasons as rs
     for x in (scan_res or {}).get("top") or []:
+        try:
+            x["trend_word"] = rs.trend_word(x["ticker"])
+        except Exception:
+            x["trend_word"] = None
         x["reason_plain"] = plain.pick_reason(x, (news or {}).get(x["ticker"]))
     return scan_res
 

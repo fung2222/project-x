@@ -378,6 +378,7 @@ def evaluate(book, quotes=None, fx=None, today=None):
             status = "OK"
         rows.append({"id": p.get("id"), "ticker": t, "shares": p["shares"], "entry": entry, "px": round(px, 4),
                      "live": live, "source": q.get("source"), "chg_vs_prev": q.get("change_pct") if live else None,
+                     "session_date": q.get("session_date") if live else None,
                      "sl": sl, "tp": tp, "entry_fee": efee, "pnl_usd": _r2(pnl), "pnl_hkd": _r2(pnl * fx),
                      "pnl_pct": _r2(pnl / basis * 100) if basis else None, "value_usd": _r2(px * sh),
                      "dist_sl_pct": _r2(d_sl) if d_sl is not None else None,

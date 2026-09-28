@@ -110,9 +110,10 @@ def real_rows(ev, reasons=None, trends=None, day_label="今日"):
         t = r["ticker"]
         tag = {"SL_HIT": "⛔", "TP_HIT": "🎯", "NEAR_SL": "🔴"}.get(r["status"], "🟢" if (r.get("pnl_pct") or 0) >= 0 else "🟠")
         day = pct1(r.get("chg_vs_prev")) if r.get("live") and r.get("chg_vs_prev") is not None else MISSING
+        lbl = day_word(r["session_date"]) if r.get("session_date") else day_label
         stale = "" if r.get("live") else "（報價暫缺，用上次記錄價）"
         tw = trends.get(t)
-        L.append(f"{tag} <b>{esc(t)}</b> {_qty(r['shares'])}股｜{day_label} {day}｜買入至今 {pct1(r.get('pnl_pct'))}"
+        L.append(f"{tag} <b>{esc(t)}</b> {_qty(r['shares'])}股｜{lbl} {day}｜買入至今 {pct1(r.get('pnl_pct'))}"
                  f"（{usd(r.get('pnl_usd'), True, 2)}／{hkd(r.get('pnl_usd'), fx, True)}）" + (f"｜趨勢{tw}" if tw else "") + stale)
         L.append(f"　現價 {price(r['px'])}（成本 {price(r['entry'])}）· 止蝕 {price(r.get('sl'))} · 止賺 {price(r.get('tp'))}"
                  + (f" · 持 {r['days_held']} 日" if r.get("days_held") is not None else ""))
@@ -215,7 +216,7 @@ def buy_suggestion(ev, scan, regime=None, market_open=True):
 
 # ---------------------------------------------------------------- picks (潛力股)
 SETUP_WORDS = {"放量突破20日高": "啱啱帶量升穿 20 日高位", "上升趨勢回踩MA20": "升勢中回落到 20 日平均價附近（較穩陣嘅買位）",
-               "趨勢延續": "升勢持續"}
+               "趨勢延續": "企喺 50 日平均價之上"}
 
 
 def pick_reason(x, news_text=None):
@@ -224,6 +225,8 @@ def pick_reason(x, news_text=None):
     rel = [f"近{lbl}{'比納指強' if v >= 0 else '比納指弱'} {abs(v):.0f}%" for lbl, v in (("1個月", e20), ("3個月", e60)) if v is not None]
     if rel:
         parts.append("、".join(rel))
+    if x.get("trend_word"):
+        parts.append(f"趨勢{x['trend_word']}")
     sw = SETUP_WORDS.get(x.get("setup"))
     if sw:
         parts.append(sw)

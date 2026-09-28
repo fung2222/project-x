@@ -1,8 +1,9 @@
 """close job (ET 17:00 = HKT 05:00 EDT / 06:00 EST; trading days only).
 
 Ported from Hermes's 05:00 close report, rebuilt on the px engine:
-  msg 1  🌙 收市報告 — equity USD/HKD, day change, total P&L vs start (fees+FX included), SPY/QQQ/VIX, cash
-  msg 2  📈 持倉結算 — close price, P&L, distance to SL/TP, risk flag (SL/TP auto-executed on paper)
+  msg 1  🌙 收市報告 — Roy's REAL Futu positions first (price/cost/qty, P&L USD+HKD, dist SL/TP, days held,
+         real SL/TP/big-drop alerts; he executes manually) + SPY/QQQ/VIX
+  msg 2  🧪 紙上倉（對照組）— condensed: total P&L % vs SPY/QQQ, open count, today's paper actions (SL/TP auto on paper)
   msg 3  🧭 趨勢 + 今日掃描池最強/最弱 (Mag7 observer retired by Roy 2026-09-28)
   msg 4  🚀 明日觀察 Top 5 (opportunity scan on today's completed bar) + 🩺 health line
 Writes data/pnl_history.json, data/scan.json, data/reports/close_report_<date>.*, portfolio.json."""
@@ -10,8 +11,8 @@ import json
 
 from .. import archive, clock, engine, guard, ledger, marketdata, scan, schedule, telegram
 from ..config import load_settings
-from ..messages import esc, f2, pct, footer, money, scan_message
-from .common import Ctx, refresh_positions
+from ..messages import esc, f2, pct, footer, money, scan_message, real_section, real_alerts, paper_brief, REAL_NOTE
+from .common import Ctx, refresh_positions, real_snapshot, paper_bench, paper_max_positions
 
 JOB = "close"
 PARTS = ("summary", "positions", "trend", "scan")
@@ -50,27 +51,29 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     prev = next((h for h in reversed(hist) if h.get("date") < ctx.session), None)
     day_chg = acct["equity_usd"] - prev["equity_usd"] if prev else None
     fx = acct.get("fx_usdhkd") or mk["fx_usdhkd"]
-    L = [f"<b>🌙 Project X 收市報告 — {ctx.session}</b>（美東收市後）",
-         f"💼 權益 {money(acct['equity_usd'], fx)}" + (f"｜今日 {day_chg:+.2f}" if day_chg is not None else ""),
-         f"📊 總 P&L {acct['total_pnl_usd']:+.2f}（{pct(acct['total_return_pct'])} vs 起始 US${f2(s['account']['start_equity_usd'])}；已計手續費＋匯率 {f2(fx, 3)}）",
-         f"已實現 {acct['realized_pnl_usd']:+.2f} · 未實現 {acct['unrealized_pnl_usd']:+.2f} · 現金 {f2(acct['cash_pct'], 1)}%",
-         f"🌍 SPY ${f2(mk['spy'])}（{pct(mk['spy_chg_pct'])}）· QQQ ${f2(mk['qqq'])}（{pct(mk['qqq_chg_pct'])}）· VIX {f2(mk['vix'])} {mk['emoji']}{esc(mk['regime_zh'])}"]
+    real_book, real_ev = real_snapshot(ctx, fx)
+    real_al, _ = real_alerts(real_ev)
+    L = [f"<b>🌙 Project X 收市報告 — {ctx.session}</b>（美東收市後）"]
+    L += real_section(real_ev)
+    if real_al:
+        L += [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
+    L.append(f"🌍 SPY ${f2(mk['spy'])}（{pct(mk['spy_chg_pct'])}）· QQQ ${f2(mk['qqq'])}（{pct(mk['qqq_chg_pct'])}）· VIX {f2(mk['vix'])} {mk['emoji']}{esc(mk['regime_zh'])} · 匯率 {f2(fx, 3)}")
     m1 = "\n".join(L)
-    P = ["<b>📈 持倉結算</b>"]
+    # paper book (control group) — condensed
+    notes = []
     for tr in executed:
-        P.append(f"✅ 紙上{'止損' if tr['reason'] == 'STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
-    for r in rows:
-        if r["action"].endswith("_EXECUTED"):
-            continue
-        p = ledger.position(pf, r["ticker"]) or {}
-        P.append(f"{_flag(r)} {r['ticker']} x{r['shares']}：${f2(r['entry'])}→${f2(r['px'])}（{pct(r['pnl_pct'])}，今日 {pct(r.get('chg_vs_prev'))}）"
-                 f"· SL ${f2(r['sl'])}（距 {f2(r.get('dist_sl_pct'), 1)}%）· TP ${f2(r['tp'])}")
-    if len(P) == 1:
-        P.append("空倉（現金 100%）")
-    m2 = "\n".join(P)
+        notes.append(f"✅ 紙上{'止損' if tr['reason'] == 'STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
+    open_rows = [r for r in rows if not r["action"].endswith("_EXECUTED")]
+    for r in open_rows:
+        notes.append(f"{_flag(r)}{r['ticker']} {pct(r['pnl_pct'], 1)}（今日 {pct(r.get('chg_vs_prev'), 1)}，距SL {f2(r.get('dist_sl_pct'), 1)}%）")
+    if day_chg is not None:
+        notes.append(f"紙上權益今日 {day_chg:+.2f} USD")
+    spy_ret, qqq_ret = paper_bench()
+    m2 = "\n".join(paper_brief(acct, len(open_rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret, notes))
     # trend + movers (market context = SPY/QQQ/VIX only)
     T = ["<b>🧭 趨勢狀態（已收市日 bar）</b>"]
-    core = s["universe"]["core"] + [p["ticker"] for p in pf.get("positions", []) if p["ticker"] not in s["universe"]["core"]]
+    core = [r["ticker"] for r in real_ev["rows"]]  # real positions first, then core, then paper holdings
+    core += [t for t in s["universe"]["core"] + [p["ticker"] for p in pf.get("positions", [])] if t not in core]
     movers = []
     for t in core:
         sg = engine.build_signal(t, mk["regime"], ledger.position(pf, t) is not None, ctx.now)
@@ -97,10 +100,12 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     msgs = dict(zip(PARTS, (m1, m2, m3, m4)))
     if not dry_run:
         ledger.save(pf)
-        archive.append_pnl(ctx.session, acct, pf.get("positions", []), mk["spy"], mk["qqq"])
+        archive.append_pnl(ctx.session, acct, pf.get("positions", []), mk["spy"], mk["qqq"],
+                           real={k: real_ev.get(k) for k in ("equity_usd", "cash_usd", "unrealized_usd", "realized_usd",
+                                                             "return_pct", "n_open", "n_closed", "real_start_date")})
         archive.save_scan(res)
         archive.save_report(JOB, ctx.session, [msgs[p] for p in PARTS],
-                            summary=f"收市 · 權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）· VIX {f2(mk['vix'])}",
+                            summary=f"收市 · 真倉 {real_ev['n_open']} 隻（{pct(real_ev['return_pct'])}）· 紙上 {pct(acct['total_return_pct'])} · VIX {f2(mk['vix'])}",
                             pnl=acct["total_return_pct"])
     results = {}
     for part in PARTS:
@@ -118,7 +123,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             hist_now = archive.load_pnl() if not dry_run else hist
             if len(hist_now) >= 2:
                 img = charts.equity_chart(hist_now, archive.path_chart(f"equity_{ctx.session}.png") if not dry_run else "/tmp/px_equity_preview.png")
-                okc, rc = telegram.send_photo(img, caption=f"📈 紙上權益 vs SPY（{hist_now[0]['date']} → {ctx.session}）· "
+                okc, rc = telegram.send_photo(img, caption=f"📈 紙上倉（對照組）權益 vs SPY（{hist_now[0]['date']} → {ctx.session}）· "
                                               f"權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）",
                                               dry_run=dry_run, label="close/chart")
                 results["chart"] = "ok" if okc else f"failed: {rc}"

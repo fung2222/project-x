@@ -9,6 +9,18 @@
     "rebase_date": "2026-09-13",
     "fx_fallback_usdhkd": 7.8
   },
+  "real_account": {
+    "_comment": "Roy's REAL Futu account (manual orders; the system only records + alerts). Positions file: data/futu_positions.json via `python run.py pos ...`. Rules approved by Roy 2026-09-28.",
+    "start_capital_hkd": 10000,
+    "start_capital_usd": 1280.0,
+    "max_positions": 3,
+    "max_position_pct": 0.25,
+    "min_cash_pct": 0.2,
+    "risk_per_trade_pct": 0.02,
+    "default_fee_usd": 2.0,
+    "near_sl_alert_pct": 2.0,
+    "big_drop_alert_pct": 5.0
+  },
   "rules": {
     "min_confidence": 0.75,
     "max_positions": 3,
@@ -343,7 +355,7 @@
     "enabled": true,
     "site_url": "https://fung2222.github.io/project-x/",
     "hourly_first_of_session_status": true,
-    "footer": "紙上模擬；真錢落單由你喺富途執行。",
+    "footer": "真倉由你喺富途手動落單（系統只記錄同提醒，唔會落單）；紙上倉係自動運行嘅對照組。",
     "send_charts": true,
     "_destination": "After cutover: Roy's Telegram group 'Project X Nas' via Hermes's bot (see docs/HERMES_HANDOVER.md). Chat id + token ONLY via env (TELEGRAM_CHAT_ID / TELEGRAM_BOT_TOKEN); never commit them."
   },

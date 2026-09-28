@@ -61,7 +61,7 @@
 | R21 | **機會掃描係核心產品**：排好 Top 5，每隻有入場區、止損、目標、R:R、股數同 HKD 金額、「點解」；網站同 Telegram 都要顯眼 | `px/scan.py`；`opportunities.html`（首頁亦有）；daily 第 3 條、close 第 4 條訊息 | `tests/test_scan.py`；回測 `scripts/backtest_scan.py`（結果見 AUDIT §6） | ✅（**回測顯示未有 edge**，見 AUDIT） |
 | R22 | 用情境講法，唔講保證；唔可以作數 | 所有訊息尾有「情境參考，唔係保證」；回測數字由 script 生成並存檔 `data/backtest/` | 人手睇 | ✅ |
 | R23 | 每日報告有催化劑／業績日欄 | daily 信號訊息「📅 業績日（催化劑）」；網站 signals／opportunities 表有業績日欄；業績前 5 個交易日唔開新倉 | `test_earnings_blackout` | ✅ |
-| R24 | 助手管紙上組合；真錢由 Roy 自己喺富途落單。富途倉人手鏡像、分開顯示 | `portfolio.json`（紙上）；`data/futu_positions.json`（人手鏡像，網站「Roy 富途倉（手動鏡像）」獨立一格，過期會出警告） | 網站檢查 | ✅（現有鏡像係 2026-07-08 嘅富途**模擬**戶口記錄，要 Roy 提供最新真倉先更新） |
+| R24 | 真錢由 Roy 自己喺富途落單；**2026-09-28 起報告同網站以真倉為先**，紙上組合自動運行做對照組 | `data/futu_positions.json`（`run.py pos add/close/set/list` 記錄，schema real_positions_v2，保留已平倉紀錄）；`portfolio.json`（紙上）；舊 07-08 模擬記錄封存於 `data/legacy/` | `tests/test_realpos.py`＋dry-run | ✅ |
 | R25 | Mag7 觀察池 | **Roy 2026-09-28 取消（retired by Roy 2026-09-28）**：唔移植、網站同 Telegram 都冇 Mag7 部分 | HERMES_HANDOVER §5 步驟 8（Hermes 刪走 Mag7 jobs） | ✅ 已退役 |
 
 ## 6. 系統要求（Roy 2026-09-28 指示）

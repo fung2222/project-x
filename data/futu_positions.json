@@ -1,34 +1,18 @@
 {
+  "schema": "real_positions_v2",
   "platform": "Futu / Moomoo",
-  "account_type": "美股融資融券模擬賬戶",
-  "owner": "Roy Chan (手動操作)",
-  "last_synced": "2026-07-08T18:38 HKT",
-  "note": "Roy 喺富途 App 親手買入嘅記錄，獨立於 Hermes 自動追蹤嘅 portfolio.json",
-  "positions": [
-    {
-      "ticker": "NVDA",
-      "shares": 1,
-      "entry_price": 194.00,
-      "current_price": 193.98,
-      "pnl_usd": -0.02,
-      "pnl_pct": -0.01,
-      "entry_time": "2026-07-08 18:37 HKT",
-      "order_type": "market",
-      "rationale": "練習富途落單流程"
-    }
-  ],
-  "open_orders": [
-    {
-      "ticker": "NVDA",
-      "order_type": "limit",
-      "limit_price": 100.00,
-      "shares": 1,
-      "note": "測試限價單（手誤，遠低市價）— 建議取消"
-    }
-  ],
-  "pending_actions": [
-    "❌ 取消 $100 限價掛單",
-    "🛑 設止損 $177.24",
-    "🎯 設止盈 $236.32"
-  ]
+  "account_type": "美股真錢戶口（Roy 手動落單）",
+  "owner": "Roy Chan",
+  "note": "Roy 喺富途親手落單後，由 Hermes 用 `python run.py pos ...` 記錄；系統只記錄同提醒，永遠唔會自動落單。",
+  "start_capital_hkd": 10000,
+  "start_capital_usd": 1280.0,
+  "real_start_date": null,
+  "last_synced": "2026-09-28T14:23+08:00",
+  "positions": [],
+  "closed_trades": [],
+  "archived": {
+    "file": "data/legacy/futu_positions_2026-07-08_paper_sim.json",
+    "note": "2026-07-08 富途模擬戶口舊記錄（NVDA ×1 @194，練習落單），已封存，唔計入真倉。",
+    "archived_at": "2026-09-28"
+  }
 }

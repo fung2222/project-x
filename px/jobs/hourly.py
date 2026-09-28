@@ -1,13 +1,15 @@
 """hourly job (ET :06 past 10..16, trimmed on half days; see settings.schedule): MTM, SL/TP auto execution,
 alert-only Telegram (+ one status message on the first run of each session).
+Prominent alerts = Roy's REAL positions (SL / TP / near-SL / big drop; he executes on Futu, the system only
+alerts) + VIX regime change. Paper-book events are one short line in the 紙上倉（對照組） section.
 Alerts are de-duplicated per session in state/job_runs.json."""
 import json
 import os
 
 from .. import clock, guard, ledger, marketdata, telegram
 from ..config import load_settings, path
-from ..messages import esc, f2, pct, footer, money
-from .common import Ctx, gate_run, refresh_positions, write_json
+from ..messages import esc, f2, pct, footer, money, real_section, real_alerts, paper_brief, REAL_NOTE
+from .common import Ctx, gate_run, refresh_positions, write_json, real_snapshot, paper_bench, paper_max_positions
 
 JOB = "hourly"
 
@@ -39,11 +41,14 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     vix = marketdata.vix()
     regime = marketdata.regime_for(vix)
     rows, executed, acct = refresh_positions(ctx, pf)
-    alerts = []
+    # ---------- REAL positions first (Roy executes on Futu; the system only alerts)
+    real_book, real_ev = real_snapshot(ctx, acct.get("fx_usdhkd"))
+    real_al, alerted = real_alerts(real_ev, alerted, st.get("last_real_prices", {}))
+    # ---------- paper book (control group): alerts demoted to one short line
+    paper_notes = []
     for tr in executed:
         kind = "止盈" if tr["reason"] == "TAKE_PROFIT" else "止損"
-        alerts.append(f"✅ 紙上{kind} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}"
-                      f"（入 {f2(tr['entry_price'])}，淨 {tr['net_pnl_usd']:+.2f} / {tr['net_pnl_pct']:+.1f}%）")
+        paper_notes.append(f"✅ 紙上{kind} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
     near_pct = s["rules"]["near_sl_alert_pct"]
     for r in rows:
         if r["action"].endswith("_EXECUTED"):
@@ -51,38 +56,35 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         t = r["ticker"]
         d = r.get("dist_sl_pct")
         if d is not None and d < near_pct:
-            last = alerted.get(f"{t}:NEAR_SL")
-            if last is None or d <= float(last) - 1.0:  # re-alert only if 1pp closer
-                alerts.append(f"⚠️ {t} 距止損 {d:.1f}%（${f2(r['px'])} vs SL ${f2(r['sl'])}）")
-                alerted[f"{t}:NEAR_SL"] = d
+            paper_notes.append(f"{t} 距止損 {d:.1f}%")
         if t in prev_px and prev_px[t]:
             chg = (r["px"] - prev_px[t]) / prev_px[t] * 100
             if abs(chg) >= s["rules"]["big_move_alert_pct"]:
-                alerts.append(f"📈 {t} 大波動 {f2(prev_px[t])}→{f2(r['px'])}（{chg:+.1f}%）" if chg > 0 else
-                              f"📉 {t} 大波動 {f2(prev_px[t])}→{f2(r['px'])}（{chg:+.1f}%）")
+                paper_notes.append(f"{t} 大波動 {chg:+.1f}%")
         if not r["quote_ok"]:
-            key = f"{t}:QUOTE"
-            if key not in alerted:
-                alerts.append(f"🛠 {t} 報價異常（{r.get('source')}），今次唔執行 SL/TP")
-                alerted[key] = 1
+            paper_notes.append(f"{t} 報價異常，今次唔執行 SL/TP")
+    market = []
     prev_regime = st.get("last_regime")
     if prev_regime and prev_regime != regime:
-        alerts.append(f"🌡 VIX 市況轉變 {prev_regime} → {regime}（VIX {f2(vix)}）")
+        market.append(f"🌡 VIX 市況轉變 {prev_regime} → {regime}（VIX {f2(vix)}）")
+    alerts = real_al + market  # prominent alerts = REAL positions + market regime only
     first = s["telegram"].get("hourly_first_of_session_status", True) and not guard.was_sent(ctx.session, JOB, "status")
-    need_push = bool(alerts) or first
-    reason = "alerts" if alerts else ("first_of_session" if first else "none")
+    need_push = bool(alerts) or bool(executed) or first
+    reason = "real_alerts" if real_al else ("alerts" if alerts else ("paper_exit" if executed else ("first_of_session" if first else "none")))
     msg = None
     tg_ok, tg_res = False, None
     if need_push:
-        head = "<b>⚠️ 持倉警報</b>" if alerts else "<b>📊 持倉監控</b>"
-        L = [f"{head} {ctx.now.strftime('%Y-%m-%d %H:%M')} HKT（ET {ctx.now_et.strftime('%H:%M')}）",
-             f"VIX {f2(vix)} {regime} · 權益 {money(acct['equity_usd'], acct['fx_usdhkd'])} · 現金 {f2(acct['cash_pct'],1)}%"]
+        head = "<b>🚨 真倉警報</b>" if real_al else ("<b>⚠️ 市況警報</b>" if alerts else "<b>📊 持倉監控</b>")
+        L = [f"{head} {ctx.now.strftime('%Y-%m-%d %H:%M')} HKT（ET {ctx.now_et.strftime('%H:%M')}）"]
         L += [f"• {esc(a)}" for a in alerts]
-        for r in rows:
-            if not r["action"].endswith("_EXECUTED"):
-                L.append(f"{r['ticker']} x{r['shares']} @ {f2(r['px'])}（{pct(r['pnl_pct'])}）SL {f2(r['sl'])} / TP {f2(r['tp'])} 距SL {f2(r['dist_sl_pct'],1)}%")
-        if not alerts:
-            L.append("✅ 持倉監控正常（今個交易時段首次；之後有事先會再通知）")
+        if real_al:
+            L.append(REAL_NOTE)
+        L += real_section(real_ev)
+        spy_ret, qqq_ret = paper_bench()
+        L += [""] + paper_brief(acct, len(pf.get("positions", [])), paper_max_positions(regime), spy_ret, qqq_ret, paper_notes)
+        L.append(f"VIX {f2(vix)} {regime}")
+        if not alerts and not executed:
+            L.append("✅ 持倉監控正常（今個交易時段首次；之後真倉有事先會再通知）")
         L += ["", footer()]
         msg = "\n".join(L)
         tg_ok, tg_res = telegram.send(msg, dry_run=dry_run, label="hourly")
@@ -93,7 +95,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             if first and alerts:
                 guard.mark_sent(ctx.session, JOB, "status", tg_res)
         cur_px = {r["ticker"]: r["px"] for r in rows if not r["action"].endswith("_EXECUTED")}
-        guard.update(ctx.session, JOB, last_prices=cur_px, last_regime=regime,
+        cur_real = {r["ticker"]: r["px"] for r in real_ev["rows"] if r.get("live")}
+        guard.update(ctx.session, JOB, last_prices=cur_px, last_real_prices=cur_real, last_regime=regime,
                      alerts=alerted if (not need_push or tg_ok) else st.get("alerts", {}),
                      last_run=clock.now_hkt().isoformat(timespec="seconds"), status="ok", _inc_runs=True)
     out = {"hkt": ctx.now.isoformat(), "session_date": ctx.session, "vix": vix, "regime": regime,
@@ -101,6 +104,9 @@ def run(dry_run=False, force=False, legacy=False, now=None):
                           "sl": r["sl"], "tp": r["tp"], "dist_sl_pct": r["dist_sl_pct"], "action": r["action"],
                           "near_stop": (r.get("dist_sl_pct") or 99) < near_pct} for r in rows],
            "executed": executed, "equity_usd": acct["equity_usd"], "cash_usd": acct["cash_usd"], "alerts": alerts,
+           "real_alerts": real_al, "paper_notes": paper_notes,
+           "real_positions": [{k: r.get(k) for k in ("ticker", "shares", "entry", "px", "pnl_usd", "pnl_pct", "sl", "tp",
+                                                     "dist_sl_pct", "dist_tp_pct", "days_held", "status")} for r in real_ev["rows"]],
            "need_push": need_push, "first_today": first, "push_reason": reason, "pushed": bool(tg_ok) and not dry_run,
            "push_err": None if tg_ok or not need_push else str(tg_res), "dry_run": dry_run, "engine": "px v3-core"}
     if not dry_run:

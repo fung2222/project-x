@@ -19,6 +19,7 @@
 - §9 Repo 改名
 - §10 日常操作手冊
 - §11 Hermes 唔准自己改嘅嘢
+- **§12 真倉記錄（Roy 富途真錢；2026-09-28 起報告以真倉為先）**
 
 ---
 
@@ -298,13 +299,38 @@ CRON_TZ=Asia/Hong_Kong
 - **人手重跑漏咗嘅 job**：`ops/hermes/px_job.sh daily`（有 guard，唔會重複 send）。只有 Roy 要求先用 `--force`。
 - **暫停開新倉**：`config/overrides.json → "pause_new_entries": true`（要 Roy 指示），commit + push。封鎖某隻股：`"blocklist": ["TICKER"]`。
 - **暫停全部推送**：`PX_TELEGRAM_DISABLED=1`（寫入 env），或者 `crontab -e` 註解 tick 行。
-- **更新富途鏡像**（Roy 話你知佢真倉之後）：改 `data/futu_positions.json`（`platform`、`account_type`、`last_synced`「YYYY-MM-DDTHH:MM HKT」、`positions[]`：ticker／shares／entry_price），commit + push；網站會獨立顯示。**系統永遠唔會自動落真單。** 而家個檔係 2026-07-08 富途**模擬**戶口記錄（NVDA ×1 @194），網站已標示過期。
+- **記錄 Roy 真倉**：唔好再人手改 `data/futu_positions.json`，一律用 `python run.py pos ...`（見 **§12**）。舊 2026-07-08 富途**模擬**記錄（NVDA ×1 @194）已封存去 `data/legacy/futu_positions_2026-07-08_paper_sim.json`，唔計入真倉。**系統永遠唔會自動落真單。**
 - **Telegram fail**：`python run.py tgcheck`；bot 俾人踢出群組／token 失效 → 話俾 Roy 知。
 - **數據源 fail**（yfinance 冇數）：job 會 fail safe（唔開新倉），watchdog 會重試；持續就話俾 Roy 知。
 - **升級 code**：喺 branch 改 → `python -m unittest discover -s tests` 全過 → `run.py <job> --dry-run --force` → 美股休市時段先 merge。
 
 ## §11 Hermes 唔准自己改嘅嘢（要 Roy 批准）
 見 `docs/REQUIREMENTS.md §7`：推送目的地／時間／job 數目、資金同風控規則、手續費模型、加 LLM 入排程、自動落真單、重開 Mag7 或者其他退役 job、改寫 git history／force push／刪 repo。
+
+## §12 真倉記錄（Roy 富途真錢戶口，約 HKD 10,000 ≈ US$1,280）
+**2026-09-28 起所有 Telegram 報告同網站都以 Roy 嘅真倉為先**（價、成本、股數、P&L USD＋HKD、%、距止蝕／止賺、持倉日數；冇倉就一句「真倉：暫時冇持倉（買入後叫 Hermes 記錄）」）。hourly／close／open 嘅止蝕、止賺、急跌警報**先睇真倉**，寫明「真倉」— Roy 自己喺富途手動落單，系統只提醒。紙上倉照舊自動運行（ledger／回測／掃描全部保留），報告入面縮成一段「🧪 紙上倉（對照組）」。週報有「⚖️ 三方比較」：真倉 vs 紙上倉 vs QQQ／SPY（由第一筆真倉日期起計）＋真倉交易筆數同勝率（目標 20–30 筆先檢討）。
+
+**Roy 講咗買賣之後，你要做（永遠唔好幫佢落單）：**
+
+| Roy 講 | 你行 |
+|---|---|
+| 「買咗 IONQ 3 股 @44.5，止蝕 37，止賺 50」 | `python run.py pos add IONQ 3 44.5 --sl 37 --tp 50` |
+| （唔係今日買）「琴日買咗…」 | 加 `--date YYYY-MM-DD`（香港日期） |
+| 富途手續費唔係約 US$2 | 加 `--fee 1.99`（預設用現有富途固定式收費模型，細單約 US$2／單） |
+| 「賣咗 IONQ @48」 | `python run.py pos close IONQ 48`（全部賣） |
+| 「賣咗 IONQ 1 股 @48」 | `python run.py pos close IONQ 48 1`（部分） |
+| 「IONQ 止蝕改 40」 | `python run.py pos set IONQ --sl 40`（`--tp` 同理） |
+| 「我而家有咩倉？」 | `python run.py pos list`（`--live` 攞即時價） |
+
+步驟：
+1. 唔肯定數字（股數／價／止蝕／止賺）就**先問 Roy**，唔好估。買入一定要有止蝕同止賺（CLI 會拒絕：止蝕要低過買入價、止賺要高過買入價、日期唔可以喺將來、股數要 > 0）。可以先加 `--dry-run` 試。
+2. 行指令；CLI 會印 ✅ 同埋規則提示（超過 3 隻、單隻 >25%、現金 <20%、風險 >2%）——提示唔會阻止記錄（佢已經買咗），但要照轉述俾 Roy。
+3. 推上 GitHub：最簡單係指令後面加 `--push`（先 `git pull --rebase`，再**淨係** commit＋push `data/futu_positions.json`，唔會 force push）。同 tick job 用同一把鎖，避免同時搞 git：
+   `cd /opt/data/project-x && flock -w 600 .px.lock .venv/bin/python run.py pos add IONQ 3 44.5 --sl 37 --tp 50 --push`
+   （人手做都得：`git pull --rebase` → `git add data/futu_positions.json` → `git commit -m "real pos: add IONQ 3 @44.5"` → `git push`；如果話 nothing to commit，即係 tick job 已經順手 push 咗，`git log -1 -- data/futu_positions.json` 核對。唔好 force push、唔好改 history。）
+4. 回覆 Roy，例如：「✅ 已記錄真倉：IONQ 3 股 @44.5，止蝕 37／止賺 50（費用約 US$2）。之後每個報告會先講呢隻；到止蝕／止賺我哋會提你，但落單要你自己喺富途做。」賣出就報埋淨 P&L（USD／HKD／%）。
+
+檔案：`data/futu_positions.json`（schema `real_positions_v2`：`positions[]` 持倉、`closed_trades[]` 已實現紀錄——**唔好刪**，20–30 筆檢討要用、`real_start_date` 第一筆真倉日）。寫入係 atomic＋file lock；jobs 會自動更新 `last_price`（畀網站用）。唔好人手改呢個檔。
 
 ---
 ## 切換紀錄

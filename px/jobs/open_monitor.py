@@ -5,35 +5,35 @@ import json
 from .. import clock, guard, ledger, marketdata, telegram
 from ..config import load_settings, path
 from ..engine import market_context
-from ..messages import OPEN_TEACH, esc, f2, pct, footer, money
-from .common import Ctx, gate_run, refresh_positions, write_json, write_text, report_path
+from ..messages import OPEN_TEACH, esc, f2, pct, footer, money, real_section, real_alerts, paper_brief, REAL_NOTE
+from .common import (Ctx, gate_run, refresh_positions, write_json, write_text, report_path, real_snapshot, paper_bench,
+                     paper_max_positions)
 
 JOB = "open"
 
 
-def build_message(ctx, mkt, rows, executed, alerts, teach, acct):
-    s = load_settings()
+def build_message(ctx, mkt, rows, executed, alerts, teach, acct, real_ev=None, real_al=None, paper_bench_=(None, None)):
+    """Roy's REAL positions first (+ real alerts), then the paper book (control group) condensed."""
+    from .. import realpos
+    real_ev = real_ev or realpos.evaluate(realpos.empty_book(), {}, acct.get("fx_usdhkd"))
     L = [f"<b>🔔 開市監控</b> {ctx.now.strftime('%Y-%m-%d %H:%M')} HKT（ET {ctx.now_et.strftime('%H:%M')}）",
-         f"{mkt['emoji']} 市況：<b>{esc(mkt['regime_zh'])}</b>（VIX {f2(mkt['vix'])} / {mkt['regime']}）",
-         f"SPY {f2(mkt['spy'])} ({pct(mkt['spy_chg_pct'])}) · QQQ {f2(mkt['qqq'])} ({pct(mkt['qqq_chg_pct'])})",
-         f"權益 {money(acct['equity_usd'], acct['fx_usdhkd'])} · 現金 {f2(acct['cash_pct'],1)}%"]
-    open_rows = [r for r in rows if not r["action"].endswith("_EXECUTED")]
-    if open_rows:
-        L += ["", "<b>📍 今晚要睇嘅價位</b>"]
-        for r in open_rows:
-            L.append(f"• {r['ticker']} 止損 ${f2(r['sl'])} / 止盈 ${f2(r['tp'])}（而家 ${f2(r['px'])}，距SL {f2(r['dist_sl_pct'],1)}%）")
-    if rows:
-        L += ["", "<b>📦 持倉</b>"]
-        for r in rows:
-            chg = f"vs昨收 {pct(r['chg_vs_prev'],1)}" if r.get("chg_vs_prev") is not None else "vs昨收 n/a"
-            L.append(f"• <b>{r['ticker']}</b> x{r['shares']} @ ${f2(r['px'])}（{pct(r['pnl_pct'])}｜{chg}｜{r['action']}）")
-    else:
-        L += ["", "📦 持倉：空倉"]
+         f"{mkt['emoji']} 市況：<b>{esc(mkt['regime_zh'])}</b>（VIX {f2(mkt['vix'])} / {mkt['regime']}）· "
+         f"SPY {f2(mkt['spy'])} ({pct(mkt['spy_chg_pct'])}) · QQQ {f2(mkt['qqq'])} ({pct(mkt['qqq_chg_pct'])})", ""]
+    L += real_section(real_ev)
+    if real_al:
+        L += ["<b>⚠️ 真倉預警</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
+    elif real_ev.get("rows"):
+        L.append("📍 今晚照預設止蝕／止賺做，唔好頭半個鐘用感覺加倉攤平。")
+    notes = []
     for tr in executed:
         kind = "止損" if tr["reason"] == "STOP_LOSS" else "止盈"
-        L.append(f"✅ 紙上已{kind}：{tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}，淨 {tr['net_pnl_usd']:+.2f}")
-    if alerts:
-        L += ["", "<b>⚠️ 風險預警</b>"] + [f"• {esc(a)}" for a in alerts]
+        notes.append(f"✅ 紙上已{kind} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
+    for r in rows:
+        if not r["action"].endswith("_EXECUTED"):
+            notes.append(f"{r['ticker']} {pct(r['pnl_pct'], 1)}（vs昨收 {pct(r.get('chg_vs_prev'), 1)}，距SL {f2(r['dist_sl_pct'], 1)}%）")
+    notes += [a.split(" ", 1)[1] for a in alerts if a.startswith("QUOTE ")]
+    L += [""] + paper_brief(acct, len([r for r in rows if not r["action"].endswith("_EXECUTED")]),
+                            paper_max_positions(mkt.get("regime")), paper_bench_[0], paper_bench_[1], notes)
     L += ["", f"📚 {esc(teach)}", "", footer()]
     return "\n".join(L)
 
@@ -62,8 +62,17 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             alerts.append(f"OPEN_MOVE {r['ticker']} {'急升' if r['chg_vs_prev'] > 0 else '急跌'} {r['chg_vs_prev']:+.1f}% vs 昨收")
         if not r["quote_ok"]:
             alerts.append(f"QUOTE {r['ticker']} 報價異常（{r.get('source')}），今次唔執行 SL/TP")
+    real_book, real_ev = real_snapshot(ctx, acct.get("fx_usdhkd") or mkt.get("fx_usdhkd"))
+    real_al, _ = real_alerts(real_ev, day_move_pct=s["rules"]["open_move_alert_pct"], downside_only=False)
     teach = OPEN_TEACH.get(mkt["regime"], OPEN_TEACH["NORMAL"])
-    if any(t["reason"] == "STOP_LOSS" for t in executed):
+    real_status = {r["status"] for r in real_ev["rows"]}
+    if "SL_HIT" in real_status or "NEAR_SL" in real_status:
+        teach = OPEN_TEACH["NEAR_SL"]
+    elif "TP_HIT" in real_status:
+        teach = OPEN_TEACH["EXIT_TP"]
+    elif any(r.get("chg_vs_prev") is not None and r["chg_vs_prev"] <= -s["rules"]["open_move_alert_pct"] for r in real_ev["rows"]):
+        teach = OPEN_TEACH["GAP_DOWN"]
+    elif any(t["reason"] == "STOP_LOSS" for t in executed):
         teach = OPEN_TEACH["EXIT_SL"]
     elif executed:
         teach = OPEN_TEACH["EXIT_TP"]
@@ -71,7 +80,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         teach = OPEN_TEACH["NEAR_SL"]
     elif any(a.startswith("OPEN_MOVE") and "急跌" in a for a in alerts):
         teach = OPEN_TEACH["GAP_DOWN"]
-    msg = build_message(ctx, mkt, rows, executed, alerts, teach, acct)
+    msg = build_message(ctx, mkt, rows, executed, alerts, teach, acct, real_ev, real_al, paper_bench())
     if not dry_run:
         ledger.save(pf)
     tg_ok, tg_res = telegram.send(msg, dry_run=dry_run, label="open")
@@ -84,7 +93,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     out = {"hkt": ctx.now.isoformat(), "session_date": ctx.session, "vix": mkt["vix"], "regime": mkt["regime"],
            "title": mkt["regime_zh"], "emoji": mkt["emoji"], "teach": teach,
            "price_watch": [f"{r['ticker']} 睇住 ${f2(r['sl'])} 止損、${f2(r['tp'])} 止盈（而家 ${f2(r['px'])}）" for r in rows],
-           "alerts": alerts, "positions": rows, "executed": executed, "equity_usd": acct["equity_usd"],
+           "alerts": alerts, "real_alerts": real_al, "positions": rows, "executed": executed, "equity_usd": acct["equity_usd"],
            "cash_usd": acct["cash_usd"], "telegram_ok": tg_ok,
            "telegram_result": str(tg_res), "dry_run": dry_run, "engine": "px v3-core"}
     if not dry_run:

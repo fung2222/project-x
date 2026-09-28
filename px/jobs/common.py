@@ -92,3 +92,38 @@ def report_path(name):
 def strip_html(t):
     import re
     return re.sub(r"<[^>]+>", "", t)
+
+
+# ---------------------------------------------------------------- REAL positions (Roy's Futu account)
+def real_snapshot(ctx, fx=None):
+    """Load Roy's real book, quote each position, evaluate. Persists last prices (for the website)
+    only on live runs. Never raises: a broken real book must not break the paper jobs."""
+    from .. import realpos
+    try:
+        book = realpos.load()
+        quotes = realpos.quotes_for(book)
+        ev = realpos.evaluate(book, quotes, fx, ctx.now.date())
+        if not ctx.dry_run and book.get("positions"):
+            try:
+                realpos.mark_prices({t: q["price"] for t, q in quotes.items() if q.get("ok")}, ctx.now)
+            except Exception as e:
+                print("[real] mark_prices skipped:", type(e).__name__)
+        return book, ev
+    except Exception as e:
+        print("[real] real book unavailable:", type(e).__name__, e)
+        book = realpos.empty_book()
+        return book, realpos.evaluate(book, {}, fx, ctx.now.date())
+
+
+def paper_bench():
+    """(SPY %, QQQ %) since the paper book's rebase date (same period as the paper total return)."""
+    rb = load_settings()["account"]["rebase_date"]
+    return marketdata.return_since("SPY", rb), marketdata.return_since("QQQ", rb)
+
+
+def paper_max_positions(regime=None):
+    s = load_settings()
+    mp = s["rules"]["max_positions"]
+    if regime and regime in s["regimes"]:
+        mp = min(mp, s["regimes"][regime]["max_positions"])
+    return mp

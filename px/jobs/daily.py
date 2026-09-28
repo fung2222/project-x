@@ -8,8 +8,9 @@ import json
 
 from .. import archive, clock, decide, guard, ledger, marketdata, telegram, engine, scan
 from ..config import load_settings, path
-from ..messages import catalyst_text, esc, f2, pct, footer, money, daily_teaching, scenarios, scan_message
-from .common import Ctx, gate_run, refresh_positions, write_text, report_path, strip_html
+from ..messages import (catalyst_text, esc, f2, pct, footer, money, daily_teaching, scenarios, scan_message,
+                        real_section, real_alerts, real_suggestion_lines, paper_brief, REAL_NOTE)
+from .common import Ctx, gate_run, refresh_positions, write_text, report_path, strip_html, real_snapshot, paper_bench
 
 JOB = "daily"
 PARTS = ("decision", "signals", "scan", "teaching")
@@ -150,10 +151,15 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             continue
         skipped.append({"ticker": e["ticker"], "confidence": e["confidence"], "failed": e["failed"],
                         "why": decide.why_text(e) or (entry_err or "")})
-    # ---------- message 1: decision
+    # ---------- message 1: decision — Roy's REAL positions first, paper book condensed (control group)
     mk = report["market"]
-    L = [f"<b>📘 Project X 每日決策 — {ctx.session}</b>（{mk['regime_emoji']} VIX {f2(mk['vix'])} {esc(mk['regime'])}）",
-         "<b>✅ 今日動作</b>"]
+    real_book, real_ev = real_snapshot(ctx, mk.get("fx_usdhkd") or acct.get("fx_usdhkd"))
+    real_al, _ = real_alerts(real_ev)
+    L = [f"<b>📘 Project X 每日決策 — {ctx.session}</b>（{mk['regime_emoji']} VIX {f2(mk['vix'])} {esc(mk['regime'])}）"]
+    L += real_section(real_ev)
+    if real_al:
+        L += [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
+    L += [""] + real_suggestion_lines(real_ev, scan_res)
     actions = []
     for tr in executed:
         actions.append(f"紙上{'止損' if tr['reason']=='STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
@@ -172,21 +178,18 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             actions.append(f"冇新倉：最高 {top['ticker']} {top['confidence']:.0f}% → {top['why']}")
         else:
             actions.append("冇新倉：今日冇 BUY 候選")
-    L += [f"• {esc(a)}" for a in actions]
-    spy_ret = spy_return_since_rebase()
-    L.append(f"<b>💼 組合</b> 權益 {money(acct['equity_usd'], acct['fx_usdhkd'])}（{pct(acct['total_return_pct'])} vs 起始"
-             f"{'；SPY ' + pct(spy_ret) if spy_ret is not None else ''}）· 現金 {f2(acct['cash_pct'],1)}% · "
-             f"持倉 {len(pf.get('positions', []))}/{report['guardrail']['max_positions']}")
-    L.append(f"已實現 {acct['realized_pnl_usd']:+.2f} · 未實現 {acct['unrealized_pnl_usd']:+.2f} · 總 P&L {acct['total_pnl_usd']:+.2f}")
+    spy_ret, qqq_ret = paper_bench()
+    L += [""] + paper_brief(acct, len(pf.get("positions", [])), report["guardrail"]["max_positions"], spy_ret, qqq_ret, actions)
     m1 = "\n".join(L)
-    # ---------- message 2: signals
-    news = owned_news(sorted({p["ticker"] for p in pf.get("positions", [])}))
+    # ---------- message 2: signals (news: real positions first, then paper)
+    _real_t = [r["ticker"] for r in real_ev["rows"]]
+    news = owned_news(_real_t + sorted({p["ticker"] for p in pf.get("positions", [])} - set(_real_t)))
     m2 = signals_message(report, evals, news)
     # ---------- message 3: teaching + scenarios
     overbought = len([x for x in report.get("signals", []) if (x.get("rsi") or 0) > 68])
     teach = daily_teaching({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry, executed,
                            skipped[0] if skipped else None, overbought)
-    sc, invalid = scenarios({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry)
+    sc, invalid = scenarios({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry, real_ev["rows"])
     m3 = "\n".join([f"<b>🎓 今日教學</b>\n{esc(teach)}", "",
                     f"<b>🔮 情境</b>\n<b>基準</b>：{esc(sc['base'])}\n<b>樂觀</b>：{esc(sc['bull'])}\n<b>悲觀</b>：{esc(sc['bear'])}", "",
                     "<b>⛔ 失效條件</b>\n" + "\n".join(f"• {esc(i)}" for i in invalid), "", footer()])
@@ -198,7 +201,9 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         "decisions": {"actions": actions, "entries": [entry] if entry else [], "exits": executed, "skipped": skipped},
         "gates": evals, "portfolio_summary": {k: acct.get(k) for k in (
             "equity_usd", "cash_usd", "cash_pct", "realized_pnl_usd", "unrealized_pnl_usd", "total_pnl_usd",
-            "total_return_pct")} | {"positions": len(pf.get("positions", [])), "spy_return_pct": spy_ret},
+            "total_return_pct")} | {"positions": len(pf.get("positions", [])), "spy_return_pct": spy_ret, "qqq_return_pct": qqq_ret},
+        "real_summary": {k: real_ev.get(k) for k in ("n_open", "equity_usd", "cash_usd", "unrealized_usd", "realized_usd",
+                                                    "return_pct", "n_closed", "win_rate_pct", "real_start_date")},
         "teaching": teach, "scenarios": sc, "invalidation": invalid,
     }
     report["opportunity_scan"] = {k: scan_res.get(k) for k in ("generated_at", "bar_date", "top", "near_misses", "passed",
@@ -226,7 +231,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         brief = "\n\n".join(strip_html(msgs[p]) for p in PARTS)
         write_text(report_path(f"DailyBrief_{ctx.session}.txt"), brief)
         archive.save_report(JOB, ctx.session, [msgs[p] for p in PARTS],
-                            summary=f"每日分析 · 權益 US${f2(acct['equity_usd'])}（{pct(acct['total_return_pct'])}）· Top: "
+                            summary=f"每日分析 · 真倉 {real_ev['n_open']} 隻（{pct(real_ev['return_pct'])}）· 紙上 {pct(acct['total_return_pct'])} · Top: "
                                     + ", ".join(x["ticker"] for x in scan_res.get("top", [])),
                             pnl=acct["total_return_pct"])
         guard.update(ctx.session, JOB, status="ok" if all(v in ("ok", "already-sent") for v in results.values()) else "partial",

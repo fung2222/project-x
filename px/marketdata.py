@@ -124,3 +124,22 @@ def fx_usdhkd():
 def clear_cache():
     _hist_cache.clear()
     _live_cache.clear()
+
+
+def return_since(ticker, date_str):
+    """% return of `ticker` from the last completed close BEFORE date_str (YYYY-MM-DD) to the live price.
+    None if data is missing (callers just omit the comparison)."""
+    try:
+        d0 = dt.date.fromisoformat(str(date_str))
+        df = history(ticker)
+        if df is None or not len(df):
+            return None
+        before = df[[i.date() < d0 for i in df.index]]["Close"].dropna()
+        if not len(before):
+            return None
+        base = float(before.iloc[-1])
+        q = quote(ticker)
+        last = q.get("price") if q.get("ok") else float(df["Close"].dropna().iloc[-1])
+        return round((float(last) / base - 1) * 100, 2)
+    except Exception:
+        return None

@@ -17,8 +17,8 @@
 <script>
 PX.nav();
 (async () => {
-  const [pf, rep, scan, hist, idx] = await Promise.all([PX.json('portfolio.json'), PX.json('daily_report.json'),
-    PX.json('data/scan.json'), PX.json('data/pnl_history.json'), PX.json('data/reports_index.json')]);
+  const [pf, rep, scan, hist, idx, futu] = await Promise.all([PX.json('portfolio.json'), PX.json('daily_report.json'),
+    PX.json('data/scan.json'), PX.json('data/pnl_history.json'), PX.json('data/reports_index.json'), PX.json('data/futu_positions.json')]);
   const a = (pf && pf.account) || {}; const fx = a.fx_usdhkd || 7.8; const mk = (rep && rep.market) || {};
   PX.setUpdated(`更新：${(rep && (rep.timestamp || rep.date)) || '—'}`);
   const pos = (pf && pf.positions) || [];
@@ -27,10 +27,11 @@ PX.nav();
   const reports = ((idx && idx.reports) || []).slice(-6).reverse();
   document.getElementById('content').innerHTML = `
     ${PX.freshness(rep && rep.timestamp, 30, '每日分析')}
-    <div class="card hero"><h2>📌 今日重點</h2>
-      <div>權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b>${PX.pct(a.total_return_pct)}</b> · 現金 ${Number(a.cash_pct || 0).toFixed(1)}%</div>
+    ${PX.realCard(futu, fx)}
+    <div class="card"><h2>📌 今日重點</h2>
+      <div>🧪 紙上倉（對照組）權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b>${PX.pct(a.total_return_pct)}</b> · 現金 ${Number(a.cash_pct || 0).toFixed(1)}%</div>
       <div style="margin-top:6px">${top.length ? `🚀 今日高潛力 Top ${top.length}：<b>${top.map(x => PX.esc(x.ticker)).join(' · ')}</b>` : '🚀 今日冇名單過晒濾網（唔入場都係決定）'}</div>
-      <div style="margin-top:6px;font-size:12px;opacity:.85">VIX ${mk.vix ?? '—'} ${PX.esc(mk.regime_emoji || '')}${PX.esc(mk.regime || '')} · SPY ${PX.pct(mk.spy_change)} · QQQ ${PX.pct(mk.qqq_change)}</div></div>
+      <div class="muted" style="margin-top:6px">VIX ${mk.vix ?? '—'} ${PX.esc(mk.regime_emoji || '')}${PX.esc(mk.regime || '')} · SPY ${PX.pct(mk.spy_change)} · QQQ ${PX.pct(mk.qqq_change)}</div></div>
     <div class="stats">
       <div class="stat"><div class="stat-label">💰 紙上權益</div><div class="stat-value">${PX.usd(a.equity_usd)}</div><div class="muted">${PX.hkd(a.equity_usd * fx)}（起始 ${PX.usd(a.start_equity_usd)}）</div></div>
       <div class="stat"><div class="stat-label">📈 總 P&L（已計費用＋FX）</div><div class="stat-value ${PX.cls(a.total_pnl_usd)}">${PX.pct(a.total_return_pct)}</div><div class="muted">${PX.usd(a.total_pnl_usd)} · 已實現 ${PX.usd(a.realized_pnl_usd)}</div></div>
@@ -40,7 +41,7 @@ PX.nav();
     <div class="card"><h2>🚀 高潛力機會 Top 5 <a class="muted" href="opportunities.html">詳情 →</a></h2>
       <div class="muted">${PX.esc(scan && scan.method || '')}｜${PX.esc(scan && scan.bar_date || '')} 收市數據</div>
       ${top.length ? top.map((x, i) => PX.oppCard(x, i, fx)).join('') : '<div class="empty">今日冇一隻同時過晒趨勢／流動性／R:R 條件</div>'}</div>
-    <div class="card"><h2>💼 紙上持倉（${pos.length}/3）</h2>${pos.length ? pos.map(p => `
+    <div class="card"><h2>🧪 紙上持倉（對照組，${pos.length}/3）</h2>${pos.length ? pos.map(p => `
       <div class="position-row"><div><b>${PX.esc(p.ticker)}</b> × ${p.shares} @ ${PX.usd(p.entry_price)}
       <div class="position-detail">現價 ${PX.usd(p.current_price)} · SL ${PX.usd(p.stop_loss_price)}（距 ${p.dist_to_sl_pct ?? '—'}%）· TP ${PX.usd(p.take_profit_price)}</div></div>
       <div class="${PX.cls(p.pnl_pct)}" style="font-weight:700">${PX.pct(p.pnl_pct)}</div></div>`).join('') : '<div class="empty">空倉</div>'}</div>

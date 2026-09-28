@@ -69,7 +69,7 @@ def save_report(kind, date_str, messages, summary="", pnl=None):
     return base
 
 
-def append_pnl(session, acct, positions, spy_close=None, qqq_close=None):
+def append_pnl(session, acct, positions, spy_close=None, qqq_close=None, real=None):
     hist = _load(PNL, [])
     hist = [h for h in hist if h.get("date") != session]
     hist.append({"date": session, "equity_usd": acct["equity_usd"], "cash_usd": acct["cash_usd"],
@@ -78,7 +78,8 @@ def append_pnl(session, acct, positions, spy_close=None, qqq_close=None):
                  "fx_usdhkd": acct.get("fx_usdhkd"), "equity_hkd": round(acct["equity_usd"] * (acct.get("fx_usdhkd") or 7.8), 2),
                  "spy_close": spy_close, "qqq_close": qqq_close,
                  "positions": [{"ticker": p["ticker"], "shares": p["shares"], "price": p.get("current_price"),
-                                "pnl_pct": p.get("pnl_pct")} for p in positions]})
+                                "pnl_pct": p.get("pnl_pct")} for p in positions]}
+                | ({"real": real} if real else {}))
     hist.sort(key=lambda h: h["date"])
     _save(PNL, hist)
     return hist

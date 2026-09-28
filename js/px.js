@@ -28,7 +28,7 @@ const PX = {
       <header><div class="header-inner"><div class="logo"><img src="img/icon-32.svg" width="28" height="28" alt="PX"><span>Project X</span></div>
       <div class="update-time" id="update-time">載入中…</div></div></header>
       <nav><div class="nav-inner">${pages.map(([h,i,t]) => `<a href="${h}" class="nav-link${h === cur ? ' active' : ''}"><span class="nav-icon">${i}</span>${t}</a>`).join('')}</div></nav>`;
-    document.getElementById('px-footer').innerHTML = `<p>⚠️ 教育／模擬用途，唔係投資建議。所有預測都係情境參考，唔係保證。紙上組合由系統自動執行；真錢落單由 Roy 自己喺富途做。</p>
+    document.getElementById('px-footer').innerHTML = `<p>⚠️ 教育／模擬用途，唔係投資建議。所有預測都係情境參考，唔係保證。真倉由 Roy 自己喺富途落單（系統只記錄同提醒）；紙上組合由系統自動執行，做對照組。</p>
       <p>數據：Yahoo Finance（yfinance）、Finnhub（報價後備、業績日）。指標用已收市日 bar。</p>`;
   },
   // ISO timestamp -> 'YYYY-MM-DD HH:MM HKT' (naive timestamps are box-local HKT)
@@ -59,6 +59,40 @@ const PX = {
     return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><line x1="${P}" y1="${H-P}" x2="${W-P}" y2="${H-P}" stroke="#e2e8f0"/>
       <text x="2" y="${P}" font-size="11" fill="#718096">${hi.toFixed(0)}</text><text x="2" y="${H-P}" font-size="11" fill="#718096">${lo.toFixed(0)}</text>
       <text x="${P}" y="${H-8}" font-size="11" fill="#718096">${PX.esc(labels[0])}</text><text x="${W-P-70}" y="${H-8}" font-size="11" fill="#718096">${PX.esc(labels[labels.length-1])}</text>${paths}</svg>`;
+  },
+  // Roy's REAL Futu positions (data/futu_positions.json, schema real_positions_v2; written by `run.py pos ...`).
+  // Prices = last_price persisted by the jobs (open/daily/hourly/close/morning); P&L net of the buy fee.
+  realCard(futu, fx, opts = {}) {
+    const rp = futu && futu.schema === 'real_positions_v2' ? futu : null;
+    const pos = (rp && rp.positions) || [];
+    const closed = (rp && rp.closed_trades) || [];
+    const start = (rp && rp.start_capital_usd) || 1280;
+    let value = 0, costOpen = 0, unreal = 0;
+    const rows = pos.map(p => {
+      const px = Number(p.last_price || p.entry_price), sh = Number(p.shares), e = Number(p.entry_price), f = Number(p.entry_fee_usd || 0);
+      const pnl = (px - e) * sh - f, basis = e * sh + f;
+      value += px * sh; costOpen += basis; unreal += pnl;
+      const dsl = p.stop_loss_price ? (px - p.stop_loss_price) / px * 100 : null;
+      const dtp = p.take_profit_price ? (p.take_profit_price - px) / px * 100 : null;
+      const days = p.entry_date ? Math.max(0, Math.floor((Date.now() - new Date(p.entry_date + 'T00:00:00+08:00').getTime()) / 864e5)) : '—';
+      const tag = p.stop_loss_price && px <= p.stop_loss_price ? '⛔ 已穿止蝕' : p.take_profit_price && px >= p.take_profit_price ? '🎯 已到止賺' : (dsl != null && dsl < 2 ? '🔴 近止蝕' : '');
+      return `<div class="position-row" style="display:block"><div style="display:flex;justify-content:space-between"><div><b>${PX.esc(p.ticker)}</b> × ${sh} @ ${PX.usd(e)} <span class="muted">${PX.esc(p.entry_date || '')} · 持 ${days} 日 ${tag}</span></div>
+        <div class="${PX.cls(pnl)}" style="font-weight:700">${PX.pct(pnl / basis * 100)}（${PX.usd(pnl)} / ${PX.hkd(pnl * fx)}）</div></div>
+        <div class="muted">現價 ${PX.usd(px)}${p.last_price_at ? `（${PX.esc(PX.hkt(p.last_price_at))}）` : ''} · 止蝕 ${PX.usd(p.stop_loss_price)}（距 ${dsl != null ? dsl.toFixed(1) : '—'}%）· 止賺 ${PX.usd(p.take_profit_price)}（差 ${dtp != null ? dtp.toFixed(1) : '—'}%）</div></div>`;
+    }).join('');
+    const realized = closed.reduce((a, t) => a + Number(t.net_pnl_usd || 0), 0);
+    const wins = closed.filter(t => Number(t.net_pnl_usd || 0) > 0).length;
+    const equity = start + realized - costOpen + value;
+    const lastAt = pos.map(p => p.last_price_at).filter(Boolean).sort().slice(-1)[0];
+    const hist = opts.history && closed.length ? `<div class="tbl-wrap" style="margin-top:8px"><table class="tbl"><tr><th>股票</th><th>股數</th><th>買入</th><th>賣出</th><th>日期</th><th>持日</th><th>費用</th><th>淨 P&L</th><th>原因</th></tr>
+      ${closed.slice().reverse().map(t => `<tr><td>${PX.esc(t.ticker)}</td><td>${t.shares}</td><td>${PX.usd(t.entry_price)}</td><td>${PX.usd(t.exit_price)}</td><td>${PX.esc(t.entry_date)}→${PX.esc(t.exit_date)}</td><td>${t.days_held ?? '—'}</td><td>${PX.usd(t.fees_usd)}</td>
+      <td class="${PX.cls(t.net_pnl_usd)}">${PX.usd(t.net_pnl_usd)}（${PX.pct(t.net_pnl_pct)}）</td><td class="muted">${PX.esc(t.exit_reason)}</td></tr>`).join('')}</table></div>` : '';
+    return `<div class="card hero"><h2>🏦 真倉（富途 · Roy 手動落單）${pos.length ? `（${pos.length}/3）` : ''}</h2>
+      ${pos.length && lastAt ? PX.freshness(lastAt, 30, '真倉報價') : ''}
+      ${pos.length ? `<div>估算總值 <b>${PX.usd(equity)}</b>（${PX.hkd(equity * fx)}）· 真倉回報 <b>${PX.pct((equity - start) / start * 100)}</b> · 未實現 ${PX.usd(unreal)} · 估算現金 ${PX.usd(start + realized - costOpen, 0)}</div>` : ''}
+      ${rows || '<div>真倉：暫時冇持倉（買入後叫 Hermes 記錄）</div>'}
+      <div style="font-size:12px;opacity:.85;margin-top:6px">${closed.length ? `已平倉 ${closed.length} 筆 · 已實現 ${PX.usd(realized)} · 勝率 ${(wins / closed.length * 100).toFixed(0)}% · ` : ''}${rp && rp.real_start_date ? `真倉 ${PX.esc(rp.real_start_date)} 起 · ` : ''}起始 ${PX.usd(start, 0)}（HKD 10,000）· 系統只記錄同提醒，永遠唔會自動落單</div></div>
+      ${hist ? `<div class="card"><h2>🧾 真倉已平倉紀錄（${closed.length} 筆）</h2>${hist}</div>` : ''}`;
   },
   oppCard(x, i, fx) {
     const cat = x.earnings_date ? `<span class="badge ${x.earnings_days != null && x.earnings_days <= 10 ? 'badge-warn' : ''}">📅 業績 ${PX.esc(x.earnings_date)}${x.earnings_days != null ? `（${x.earnings_days} 交易日）` : ''}</span>` : '<span class="badge">📅 業績日未知</span>';

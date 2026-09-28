@@ -14,6 +14,10 @@
     python run.py status                                    # config/secrets presence, schedule, run ledger
     python run.py tgcheck                                   # getMe + getChat (bot username, chat type/title; no send)
     python run.py tgtest --yes                              # cutover test: 1 text + 1 chart image to TELEGRAM_CHAT_ID
+    python run.py pos add SYMBOL QTY PRICE --sl X --tp Y [--date YYYY-MM-DD] [--fee 2] [--note ..]  # record Roy's REAL buy
+    python run.py pos close SYMBOL PRICE [QTY] [--date YYYY-MM-DD] [--fee 2]                         # record a REAL sell
+    python run.py pos set SYMBOL [--sl X] [--tp Y]  |  python run.py pos list [--live]                # edit levels / show
+                                                            #   (data/futu_positions.json; the system NEVER places orders)
 
 --dry-run : no Telegram, no file/ledger writes, no git (prints messages instead)
 --force   : ignore holiday/time-window checks and the duplicate-send guard
@@ -142,6 +146,10 @@ def _status():
 
 
 def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] == "pos":  # Roy's REAL Futu trade record (never places orders)
+        from px import realpos
+        return realpos.cli(argv[1:])
     ap = argparse.ArgumentParser(description="Project X jobs")
     ap.add_argument("job", choices=list(JOBS) + ["status", "tick", "check", "scan", "tgcheck", "tgtest"])
     ap.add_argument("--yes", action="store_true", help="confirm tgtest (sends 2 real Telegram messages)")

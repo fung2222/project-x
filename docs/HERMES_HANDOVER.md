@@ -291,7 +291,7 @@ CRON_TZ=Asia/Hong_Kong
 ## §9 Repo 改名（最後一步）
 - 目標：真 repo = **`fung2222/project-x`**，網站 https://fung2222.github.io/project-x/ 。舊名 `fung2222/project-x-minimax` 會係一個**新開嘅細 repo，淨係做 redirect**（`index.html`、`404.html` 跳去新網址，保留路徑同 #hash）。**唔好掂 `fung2222.github.io`。**
 - 改名之後：`git remote set-url origin https://github.com/fung2222/project-x.git`（所有 clone 都要）；`config/settings.json → telegram.site_url`、`js/px.js → PX.site`、README、docs 都要用新網址。
-- 狀態：見文件尾「改名紀錄」。
+- 狀態：**2026-09-28 已完成**（見文件尾「改名紀錄」）。Hermes clone 要用 `https://github.com/fung2222/project-x.git`；**唔好**喺 `project-x-minimax` 放任何 code／數據。
 
 ## §10 日常操作手冊
 - **睇狀態**：`python run.py status`；log：`logs/<日期>_<job>.log`（保留 30 日）。
@@ -311,4 +311,7 @@ CRON_TZ=Asia/Hong_Kong
 - （未切換）
 
 ## 改名紀錄
-- （見下方更新）
+- 2026-09-28 約 11:33 HKT：`gh repo rename project-x`（`fung2222/project-x-minimax` → `fung2222/project-x`）；Grok Bot box `/workspace/project-x-minimax` 嘅 origin 已改做 `https://github.com/fung2222/project-x.git`（今晚 routine 由呢度 push）。
+- `config/settings.json → telegram.site_url`、`js/px.js → PX.site`、README、docs 已改新網址；repo homepage = https://fung2222.github.io/project-x/ ；加咗 `.nojekyll`（純靜態網站）。
+- 新網址已驗證：`/`、`opportunities.html`、`signals.html`、`portfolio.html`、`reports.html`、`learn.html` 全部 200、冇 JS error。
+- 新開 public repo `fung2222/project-x-minimax`（**淨係 redirect**：`index.html`＋`404.html`，JS 保留路徑／query／#hash，meta refresh 後備），Pages 已開；驗證：舊網址 `/`、`/portfolio.html`、`/opportunities.html#top`、`/reports.html?x=1` 全部跳去 `https://fung2222.github.io/project-x/…` 對應頁。

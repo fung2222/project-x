@@ -29,7 +29,7 @@ const PX = {
       <div class="update-time" id="update-time">載入中…</div></div></header>
       <nav><div class="nav-inner">${pages.map(([h,i,t]) => `<a href="${h}" class="nav-link${h === cur ? ' active' : ''}"><span class="nav-icon">${i}</span>${t}</a>`).join('')}</div></nav>`;
     document.getElementById('px-footer').innerHTML = `<p>⚠️ 教育／模擬用途，唔係投資建議。所有預測都係情境參考，唔係保證。真倉由 Roy 自己喺富途落單（系統只記錄同提醒）；紙上組合由系統自動執行，做對照組。</p>
-      <p>數據：Yahoo Finance（yfinance）、Finnhub（報價後備、業績日）。指標用已收市日 bar。</p>`;
+      <p>數據：Yahoo Finance（yfinance）、Finnhub（真倉 5 分鐘報價、報價後備、業績日、新聞）、Marketaux（新聞後備）。指標用已收市日 bar；攞唔到嘅數據會寫「數據暫缺」，唔會估。</p>`;
   },
   // ISO timestamp -> 'YYYY-MM-DD HH:MM HKT' (naive timestamps are box-local HKT)
   hkt(iso) {
@@ -78,7 +78,8 @@ const PX = {
       const tag = p.stop_loss_price && px <= p.stop_loss_price ? '⛔ 已穿止蝕' : p.take_profit_price && px >= p.take_profit_price ? '🎯 已到止賺' : (dsl != null && dsl < 2 ? '🔴 近止蝕' : '');
       return `<div class="position-row" style="display:block"><div style="display:flex;justify-content:space-between"><div><b>${PX.esc(p.ticker)}</b> × ${sh} @ ${PX.usd(e)} <span class="muted">${PX.esc(p.entry_date || '')} · 持 ${days} 日 ${tag}</span></div>
         <div class="${PX.cls(pnl)}" style="font-weight:700">${PX.pct(pnl / basis * 100)}（${PX.usd(pnl)} / ${PX.hkd(pnl * fx)}）</div></div>
-        <div class="muted">現價 ${PX.usd(px)}${p.last_price_at ? `（${PX.esc(PX.hkt(p.last_price_at))}）` : ''} · 止蝕 ${PX.usd(p.stop_loss_price)}（距 ${dsl != null ? dsl.toFixed(1) : '—'}%）· 止賺 ${PX.usd(p.take_profit_price)}（差 ${dtp != null ? dtp.toFixed(1) : '—'}%）</div></div>`;
+        <div class="muted">現價 ${PX.usd(px)}${p.last_price_at ? `（${PX.esc(PX.hkt(p.last_price_at))}）` : ''} · 止蝕 ${PX.usd(p.stop_loss_price)}（距 ${dsl != null ? dsl.toFixed(1) : '—'}%）· 止賺 ${PX.usd(p.take_profit_price)}（差 ${dtp != null ? dtp.toFixed(1) : '—'}%）</div>
+        ${PX.reasonLine(opts.reasons, p.ticker)}</div>`;
     }).join('');
     const realized = closed.reduce((a, t) => a + Number(t.net_pnl_usd || 0), 0);
     const wins = closed.filter(t => Number(t.net_pnl_usd || 0) > 0).length;
@@ -94,6 +95,13 @@ const PX = {
       <div style="font-size:12px;opacity:.85;margin-top:6px">${closed.length ? `已平倉 ${closed.length} 筆 · 已實現 ${PX.usd(realized)} · 勝率 ${(wins / closed.length * 100).toFixed(0)}% · ` : ''}${rp && rp.real_start_date ? `真倉 ${PX.esc(rp.real_start_date)} 起 · ` : ''}起始 ${PX.usd(start, 0)}（HKD 10,000）· 系統只記錄同提醒，永遠唔會自動落單</div></div>
       ${hist ? `<div class="card"><h2>🧾 真倉已平倉紀錄（${closed.length} 筆）</h2>${hist}</div>` : ''}`;
   },
+  // one-line move reason from data/reasons.json (px/reasons.py: headline + move vs QQQ / sector ETF; never invented)
+  reasonLine(reasons, t) {
+    const r = reasons && reasons.reasons && reasons.reasons[t];
+    if (!r || !r.text) return '';
+    const link = r.url ? ` <a class="muted" href="${PX.esc(r.url)}" target="_blank" rel="noopener">新聞</a>` : '';
+    return `<div class="why" style="margin-top:4px">💬 ${PX.esc(r.text)}${link} <span class="muted">${r.at ? PX.esc(PX.hkt(r.at)) : ''}</span></div>`;
+  },
   oppCard(x, i, fx) {
     const cat = x.earnings_date ? `<span class="badge ${x.earnings_days != null && x.earnings_days <= 10 ? 'badge-warn' : ''}">📅 業績 ${PX.esc(x.earnings_date)}${x.earnings_days != null ? `（${x.earnings_days} 交易日）` : ''}</span>` : '<span class="badge">📅 業績日未知</span>';
     const live = x.live_price ? ` <span class="muted">現 ${PX.usd(x.live_price)} <span class="${PX.cls(x.live_change_pct)}">${PX.pct(x.live_change_pct)}</span></span>` : '';
@@ -106,6 +114,6 @@ const PX = {
       <div><span>回報／風險</span>R:R ${Number(x.rr).toFixed(1)}</div>
       <div><span>建議注碼</span>${x.shares} 股 ≈ ${PX.usd(x.cost_usd, 0)} / ${PX.hkd(x.cost_hkd)}</div>
       <div><span>最大風險（2%）</span>${PX.usd(x.risk_usd, 0)} · 來回手續費 ${x.fee_drag_pct != null ? Number(x.fee_drag_pct).toFixed(1) + '%（要升過呢個先打和）' : '—'}</div></div>
-      <div>${cat}</div><div class="why" style="margin-top:6px">💡 ${PX.esc((x.why || []).join('；'))}</div></div>`;
+      <div>${cat}</div>${x.reason_plain ? `<div class="why" style="margin-top:6px">💬 ${PX.esc(x.reason_plain)}</div>` : ''}<div class="why" style="margin-top:6px">💡 ${PX.esc((x.why || []).join('；'))}</div></div>`;
   },
 };

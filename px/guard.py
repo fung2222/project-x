@@ -60,3 +60,26 @@ def update(session, job, **fields):
 
 def get_all():
     return _load()
+
+
+# ---------------------------------------------------------------- shared REAL-position alert de-dup
+# One store per US session shared by hourly + realwatch (+ any job that pushes real alerts), so the same condition
+# (e.g. "IONQ SL@38.0", "IONQ DROP step 5") is pushed at most once per session whichever job sees it first.
+REAL_KEY = "real"
+
+
+def real_alerted(session):
+    return dict(job_state(session, REAL_KEY).get("alerts", {}))
+
+
+def save_real_alerted(session, alerted, by=None):
+    """Merge (never drop) alert keys after a SUCCESSFUL send."""
+    d = _load()
+    j = d.setdefault(str(session), {}).setdefault(REAL_KEY, {})
+    cur = j.setdefault("alerts", {})
+    cur.update(alerted or {})
+    j["updated"] = clock.now_hkt().isoformat(timespec="seconds")
+    if by:
+        j["last_by"] = by
+    _save(d)
+    return cur

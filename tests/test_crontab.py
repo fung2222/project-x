@@ -12,6 +12,8 @@ import sys
 import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import _env  # noqa: E402,F401  (offline + temp state dir)
 from px import clock, schedule  # noqa: E402
 from px.config import load_settings  # noqa: E402
 

@@ -17,8 +17,8 @@
 <script>
 PX.nav();
 (async () => {
-  const [pf, rep, scan, hist, idx, futu] = await Promise.all([PX.json('portfolio.json'), PX.json('daily_report.json'),
-    PX.json('data/scan.json'), PX.json('data/pnl_history.json'), PX.json('data/reports_index.json'), PX.json('data/futu_positions.json')]);
+  const [pf, rep, scan, hist, idx, futu, rsn] = await Promise.all([PX.json('portfolio.json'), PX.json('daily_report.json'),
+    PX.json('data/scan.json'), PX.json('data/pnl_history.json'), PX.json('data/reports_index.json'), PX.json('data/futu_positions.json'), PX.json('data/reasons.json')]);
   const a = (pf && pf.account) || {}; const fx = a.fx_usdhkd || 7.8; const mk = (rep && rep.market) || {};
   PX.setUpdated(`更新：${(rep && (rep.timestamp || rep.date)) || '—'}`);
   const pos = (pf && pf.positions) || [];
@@ -27,7 +27,7 @@ PX.nav();
   const reports = ((idx && idx.reports) || []).slice(-6).reverse();
   document.getElementById('content').innerHTML = `
     ${PX.freshness(rep && rep.timestamp, 30, '每日分析')}
-    ${PX.realCard(futu, fx)}
+    ${PX.realCard(futu, fx, {reasons: rsn})}
     <div class="card"><h2>📌 今日重點</h2>
       <div>🧪 紙上倉（對照組）權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b>${PX.pct(a.total_return_pct)}</b> · 現金 ${Number(a.cash_pct || 0).toFixed(1)}%</div>
       <div style="margin-top:6px">${top.length ? `🚀 今日高潛力 Top ${top.length}：<b>${top.map(x => PX.esc(x.ticker)).join(' · ')}</b>` : '🚀 今日冇名單過晒濾網（唔入場都係決定）'}</div>

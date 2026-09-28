@@ -445,6 +445,45 @@ def mark_prices(prices, now=None, p=None):
         return changed
 
 
+# ---------------------------------------------------------------- plain confirmations (Roy 2026-09-28)
+def _usd(x):
+    return f"US${float(x):,.2f}"
+
+
+def _hk(x, fx):
+    return f"HK${float(x) * float(fx):,.0f}"
+
+
+def _cash_line(book):
+    ev = evaluate(book, {}, None)
+    return f"剩低現金約 {_usd(ev['cash_usd'])}（{ev['cash_pct']:.0f}%）· 而家揸 {ev['n_open']}/{ev['max_positions']} 隻", ev["fx"]
+
+
+def confirm_add(book, pos):
+    cash, fx = _cash_line(book)
+    sh, e = float(pos["shares"]), float(pos["entry_price"])
+    cost = sh * e + float(pos.get("entry_fee_usd") or 0)
+    sl, tp = float(pos["stop_loss_price"]), float(pos["take_profit_price"])
+    risk, gain = (e - sl) * sh, (tp - e) * sh
+    return (f"✅ 記低咗：買入 {pos['ticker']} {_fmt_qty(sh)} 股，每股 ${e:,.2f}（連手續費用咗 {_usd(cost)} ≈ {_hk(cost, fx)}，{pos['entry_date']}）\n"
+            f"　止蝕 ${sl:,.2f}：跌到就賣，大約蝕 {_usd(risk)}（{_hk(risk, fx)}）\n"
+            f"　止賺 ${tp:,.2f}：升到可以賣，大約賺 {_usd(gain)}（{_hk(gain, fx)}）\n"
+            f"　{cash}。開市時系統每 5 分鐘幫你睇住，到價會提你；落單要你自己喺富途做。")
+
+
+def confirm_close(book, tr):
+    cash, fx = _cash_line(book)
+    word = "賺" if tr["net_pnl_usd"] >= 0 else "蝕"
+    return (f"✅ 記低咗：賣出 {tr['ticker']} {_fmt_qty(tr['shares'])} 股，每股 ${float(tr['exit_price']):,.2f}（買入價 ${float(tr['entry_price']):,.2f}）\n"
+            f"　扣埋手續費淨{word} {_usd(abs(tr['net_pnl_usd']))}（HK${abs(tr['net_pnl_hkd']):,.0f}，{tr['net_pnl_pct']:+.1f}%）· 揸咗 {tr['days_held']} 日\n"
+            f"　{cash}。")
+
+
+def confirm_set(book, pos):
+    return (f"✅ 改好咗 {pos['ticker']}：止蝕 ${float(pos['stop_loss_price']):,.2f}（跌到就賣）· "
+            f"止賺 ${float(pos['take_profit_price']):,.2f}（升到可以賣）。之後會用新價錢提你。")
+
+
 # ---------------------------------------------------------------- CLI
 def _print_list(book, quotes=None):
     ev = evaluate(book, quotes or {}, None)
@@ -512,17 +551,14 @@ def cli(argv=None):
                 raise RealPosError(f"{p} 仲係舊格式（7 月模擬記錄）；請先封存再用 pos 指令")
             if a.cmd == "add":
                 pos, warns = add_position(book, a.symbol, a.qty, a.price, a.sl, a.tp, a.date, a.fee, a.note, a.allow_add)
-                msg = (f"✅ 已記錄真倉買入：{pos['ticker']} {_fmt_qty(pos['shares'])} 股 @ ${pos['entry_price']}"
-                       f"（止蝕 ${pos['stop_loss_price']}／止賺 ${pos['take_profit_price']}，費用 US${pos['entry_fee_usd']}，{pos['entry_date']}）")
+                msg = confirm_add(book, pos)
             elif a.cmd == "close":
                 tr, warns = close_position(book, a.symbol, a.price, a.qty, a.date, a.fee, a.note)
-                msg = (f"✅ 已記錄真倉賣出：{tr['ticker']} {_fmt_qty(tr['shares'])} 股 @ ${tr['exit_price']}（買入 ${tr['entry_price']}）"
-                       f"→ 淨 {tr['net_pnl_usd']:+.2f} USD / {tr['net_pnl_hkd']:+.0f} HKD（{tr['net_pnl_pct']:+.2f}%，已扣費用 US${tr['fees_usd']}）"
-                       f"· 持 {tr['days_held']} 日 · {tr['exit_reason']}")
+                msg = confirm_close(book, tr)
             else:
                 pos = set_levels(book, a.symbol, a.sl, a.tp)
                 warns = []
-                msg = f"✅ 已更新 {pos['ticker']}：止蝕 ${pos['stop_loss_price']}／止賺 ${pos['take_profit_price']}"
+                msg = confirm_set(book, pos)
             if not a.dry_run:
                 save(book, p)
     except RealPosError as e:

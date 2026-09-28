@@ -91,11 +91,30 @@ def _tick_run(job, slot):
         return "failed"
 
 
+REPORT_JOBS = ("open", "daily", "close", "morning", "weekly")  # multi-source reports: wait out a Yahoo rate limit
+
+
+def _realwatch(dry_run):
+    """5-minute real-position watch (px/jobs/realwatch.py). Never affects the schedule tick."""
+    try:
+        from px.jobs import realwatch
+        return realwatch.run(dry_run=dry_run)
+    except Exception as e:
+        print(f"[realwatch] failed (tick continues): {type(e).__name__}: {telegram._redact(str(e))[:200]}")
+        return {"status": "failed"}
+
+
 def _tick(dry_run, push=False):
     def runner(job, slot):
+        if job in REPORT_JOBS:
+            from px import marketdata
+            if marketdata.yahoo_blocked():
+                print(f"[tick] {job}: Yahoo rate-limit cooldown active — deferred (no attempt used; retried after cooldown)")
+                return "deferred"
         # first attempt of a slot = normal run; later attempts come from the watchdog (window bypass)
         e = schedule.get(job, slot)
         return _rerun(job, slot) if e else _tick_run(job, slot)
+    _realwatch(dry_run)
     acts = schedule.tick(runner=runner, alert=_alert, dry_run=dry_run)
     if acts:
         print(json.dumps({"now_hkt": clock.now_hkt().isoformat(timespec="minutes"), "actions": acts}, ensure_ascii=False, indent=1))

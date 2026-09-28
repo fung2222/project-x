@@ -160,135 +160,137 @@ REAL_EMPTY = "🏦 真倉：暫時冇持倉（買入後叫 Hermes 記錄）"
 
 
 def real_row_lines(r, stale_note=True):
-    if r["status"] == "SL_HIT":
-        tag = "⛔"
-    elif r["status"] == "TP_HIT":
-        tag = "🎯"
-    elif r["status"] == "NEAR_SL":
-        tag = "🔴"
-    elif (r.get("pnl_pct") or 0) <= -5:
-        tag = "🟠"
-    else:
-        tag = "🟢"
+    """Two plain lines per real position (kept for the website archive / tests; pushes use px.plain)."""
+    tag = {"SL_HIT": "⛔", "TP_HIT": "🎯", "NEAR_SL": "🔴"}.get(r["status"], "🟠" if (r.get("pnl_pct") or 0) <= -5 else "🟢")
     stale = "" if r.get("live", True) else ("（報價暫缺，用上次價）" if stale_note else "（上次記錄價）")
-    day = f"｜今日 {pct(r['chg_vs_prev'], 1)}" if r.get("chg_vs_prev") is not None else ""
-    sl_txt = (f"止蝕 ${f2(r['sl'])}（" + ("已穿！" if r["status"] == "SL_HIT" else f"距 {f2(r['dist_sl_pct'], 1)}%") + "）") if r.get("sl") else "止蝕 未設"
-    tp_txt = (f"止賺 ${f2(r['tp'])}（" + ("已到！" if r["status"] == "TP_HIT" else f"差 {f2(r['dist_tp_pct'], 1)}%") + "）") if r.get("tp") else "止賺 未設"
-    days = f"持 {r['days_held']} 日" if r.get("days_held") is not None else ""
-    return [f"{tag} <b>{esc(r['ticker'])}</b> {_qty(r['shares'])}股 · 現價 ${f2(r['px'])}（成本 ${f2(r['entry'])}）{day}{stale}",
-            f"　P&L {usd_s(r['pnl_usd'])} / {hkd_s(r['pnl_hkd'])}（{pct(r['pnl_pct'])}）· {sl_txt} · {tp_txt} · {days}"]
+    day = f"｜今日 {pct(r['chg_vs_prev'], 1)}" if r.get("chg_vs_prev") is not None and r.get("live", True) else ""
+    sl_txt = (f"止蝕 ${f2(r['sl'])}" + ("（已穿！）" if r["status"] == "SL_HIT" else "")) if r.get("sl") else "止蝕 未設"
+    tp_txt = (f"止賺 ${f2(r['tp'])}" + ("（已到！）" if r["status"] == "TP_HIT" else "")) if r.get("tp") else "止賺 未設"
+    days = f" · 持 {r['days_held']} 日" if r.get("days_held") is not None else ""
+    return [f"{tag} <b>{esc(r['ticker'])}</b> {_qty(r['shares'])}股{day}｜買入至今 {pct(r['pnl_pct'], 1)}（{usd_s(r['pnl_usd'])}／{hkd_s(r['pnl_hkd'])}）{stale}",
+            f"　現價 ${f2(r['px'])}（成本 ${f2(r['entry'])}）· {sl_txt} · {tp_txt}{days}"]
 
 
-def real_section(ev, title="🏦 真倉（富途）", stale_note=True):
-    """Roy's REAL positions block (always first in every report). ev = realpos.evaluate(...)."""
+def real_section(ev, title="🏦 真倉", stale_note=True):
+    """Roy's REAL positions block (always first). ev = realpos.evaluate(...)."""
     closed = ""
     if ev.get("n_closed"):
         closed = (f"已平倉 {ev['n_closed']} 筆 · 已實現 {usd_s(ev['realized_usd'])}"
                   + (f" · 勝率 {f2(ev['win_rate_pct'], 0)}%" if ev.get("win_rate_pct") is not None else ""))
     if not ev.get("rows"):
         return [REAL_EMPTY + (f"｜{closed}" if closed else "")]
-    L = [f"<b>{title}</b> {ev['n_open']}/{ev['max_positions']} 隻 · 未實現 {usd_s(ev['unrealized_usd'])} / {hkd_s(ev['unrealized_usd'] * ev['fx'])}"
-         f" · 真倉回報 {pct(ev['return_pct'])}（起始 US${ev['start_capital_usd']:,.0f}）"]
+    L = [f"<b>{title} {ev['n_open']}/{ev['max_positions']} 隻</b> · 總賺蝕 {usd_s(ev['return_usd'])}（{pct(ev['return_pct'], 1)}）"]
     for r in ev["rows"]:
         L += real_row_lines(r, stale_note)
-    L.append(f"估算現金 US${ev['cash_usd']:,.0f}（{f2(ev['cash_pct'], 0)}%）" + (f" · {closed}" if closed else "")
-             + " · P&L 已扣買入費")
+    if closed:
+        L.append(closed)
     return L
 
 
-REAL_NOTE = "👉 真倉提醒：落單由你喺富途手動做，系統只提醒、唔會落單；做咗之後話 Hermes 記錄。"
+REAL_NOTE = "👉 落單由你喺富途自己做，系統只提醒、唔會落單；做咗之後話 Hermes 記錄。"
 
 
-def real_alerts(ev, alerted=None, prev_px=None, day_move_pct=None, downside_only=True):
-    """Alerts for REAL positions. alerted = per-session de-dup dict (keys REAL:<T>:<kind>).
-    Returns (alert_texts, updated_alerted)."""
+def _watch_cfg():
     from . import realpos
     c = realpos.cfg()
-    rules = load_settings()["rules"]
+    w = {"near_sl_pct": c.get("near_sl_alert_pct", 2.0), "drop_steps_pct": [c.get("big_drop_alert_pct", 5.0), 10.0, 15.0, 20.0],
+         "surge_steps_pct": [8.0, 15.0, 25.0], "near_sl_restep_pct": 1.0}
+    w.update({k: v for k, v in (c.get("intraday_watch") or {}).items() if not k.startswith("_")})
+    return w
+
+
+def _step(value, steps):
+    """Highest step reached (abs value), or None."""
+    hit = [st for st in steps if value >= st]
+    return max(hit) if hit else None
+
+
+def real_alerts(ev, alerted=None, prev_px=None, day_move_pct=None, downside_only=False, reasons=None):
+    """Alerts for REAL positions (agreed with Roy 2026-09-28). alerted = per-session de-dup dict.
+
+    price <= SL · price >= TP · within near_sl_pct above SL · day drop >= 5% (re-alert at 10/15/20%) ·
+    day surge >= 8% (re-alert at 15/25%). Each condition once per ticker per US session; SL/TP/near-SL keys include
+    the level so changing SL/TP re-arms them. Quote missing -> one 🛠 notice per session (no fake price).
+    reasons: {ticker: {"text": ...}} -> one-line 原因 under each alert. Returns (alert_texts, updated_alerted)."""
+    w = _watch_cfg()
     alerted = dict(alerted or {})
-    day_move = float(day_move_pct if day_move_pct is not None else c["big_drop_alert_pct"])
+    drops = sorted(float(x) for x in w["drop_steps_pct"])
+    if day_move_pct is not None:
+        drops = sorted({float(day_move_pct), *[d for d in drops if d > float(day_move_pct)]})
+    surges = sorted(float(x) for x in w["surge_steps_pct"])
+    reasons = reasons or {}
     out = []
     for r in ev.get("rows", []):
         t, px_ = r["ticker"], r["px"]
+        why = reasons.get(t)
+        why = f"\n　原因：{why.get('text') if isinstance(why, dict) else why}" if why else ""
         if not r.get("live"):
             k = f"REAL:{t}:QUOTE"
             if k not in alerted:
-                out.append(f"🛠 真倉 {t} 報價攞唔到（用上次價 ${f2(px_)}），請自己喺富途睇住")
+                out.append(f"🛠 真倉 {t} 報價攞唔到（唔會用估計價），請自己喺富途睇住止蝕 ${f2(r.get('sl'))}")
                 alerted[k] = 1
             continue
+        sl, tp = r.get("sl"), r.get("tp")
         if r["status"] == "SL_HIT":
-            k = f"REAL:{t}:SL"
+            k = f"REAL:{t}:SL@{sl}"
             if k not in alerted:
-                out.append(f"🚨 真倉 {t} 跌穿止蝕：${f2(px_)} ≤ ${f2(r['sl'])} → 請你喺富途手動賣出 {_qty(r['shares'])} 股（唔好攤平）")
+                out.append(f"🚨 真倉 {t} 跌穿止蝕：而家 ${f2(px_)}，止蝕價 ${f2(sl)} → 建議你喺富途賣出 {_qty(r['shares'])} 股（唔好攤平）{why}")
                 alerted[k] = px_
         elif r["status"] == "TP_HIT":
-            k = f"REAL:{t}:TP"
+            k = f"REAL:{t}:TP@{tp}"
             if k not in alerted:
-                out.append(f"🎯 真倉 {t} 到止賺：${f2(px_)} ≥ ${f2(r['tp'])} → 考慮喺富途手動止賺 {_qty(r['shares'])} 股")
+                out.append(f"🎯 真倉 {t} 到止賺：而家 ${f2(px_)}，目標 ${f2(tp)} → 可以考慮喺富途賣出 {_qty(r['shares'])} 股袋袋平安{why}")
                 alerted[k] = px_
-        elif r["status"] == "NEAR_SL":
-            k = f"REAL:{t}:NEAR_SL"
+        elif sl and r.get("dist_sl_pct") is not None and r["dist_sl_pct"] < float(w["near_sl_pct"]):
+            k = f"REAL:{t}:NEAR@{sl}"
             d = r["dist_sl_pct"]
             last = alerted.get(k)
-            if last is None or d <= float(last) - 1.0:
-                out.append(f"⚠️ 真倉 {t} 距止蝕只剩 {f2(d, 1)}%（${f2(px_)} vs ${f2(r['sl'])}）→ 準備好喺富途執行，唔好攤平")
+            if last is None or d <= float(last) - float(w["near_sl_restep_pct"]):
+                out.append(f"⚠️ 真倉 {t} 就快到止蝕：而家 ${f2(px_)}，距止蝕 ${f2(sl)} 只差 {f2(d, 1)}% → 準備好，跌穿就喺富途賣{why}")
                 alerted[k] = d
         chg = r.get("chg_vs_prev")
-        if chg is not None and (chg <= -day_move or (not downside_only and chg >= day_move)):
-            k = f"REAL:{t}:DAY{'DN' if chg < 0 else 'UP'}"
-            if k not in alerted:
-                out.append(f"{'📉' if chg < 0 else '📈'} 真倉 {t} 今日{'急跌' if chg < 0 else '急升'} {chg:+.1f}%（vs 昨收）"
-                           + (f"，止蝕 ${f2(r['sl'])} 仲有 {f2(r['dist_sl_pct'], 1)}%" if chg < 0 and r.get("sl") else ""))
-                alerted[k] = chg
-        if prev_px and prev_px.get(t):
+        if chg is not None and chg < 0:
+            stp = _step(-chg, drops)
+            k = f"REAL:{t}:DROP"
+            if stp is not None and stp > float(alerted.get(k, 0)):
+                out.append(f"📉 真倉 {t} 今日急跌 {chg:+.1f}%（比昨日收市）：而家 ${f2(px_)}"
+                           + (f"，距止蝕 ${f2(sl)} 仲有 {f2(r.get('dist_sl_pct'), 1)}%" if sl and r['status'] != 'SL_HIT' else "") + why)
+                alerted[k] = stp
+        elif chg is not None and chg > 0 and not downside_only:
+            stp = _step(chg, surges)
+            k = f"REAL:{t}:SURGE"
+            if stp is not None and stp > float(alerted.get(k, 0)):
+                out.append(f"📈 真倉 {t} 今日急升 {chg:+.1f}%（比昨日收市）：而家 ${f2(px_)}"
+                           + (f"，距止賺 ${f2(tp)} 仲差 {f2(r.get('dist_tp_pct'), 1)}%" if tp and r['status'] != 'TP_HIT' else "") + why)
+                alerted[k] = stp
+        if prev_px and prev_px.get(t):  # legacy option (no caller passes it since 2026-09-28: realwatch covers intraday)
             m = (px_ - float(prev_px[t])) / float(prev_px[t]) * 100
-            if abs(m) >= rules["big_move_alert_pct"]:
+            if abs(m) >= load_settings()["rules"]["big_move_alert_pct"]:
                 out.append(f"{'📈' if m > 0 else '📉'} 真倉 {t} 上次檢查後 {f2(prev_px[t])}→{f2(px_)}（{m:+.1f}%）")
     return out, alerted
 
 
-def real_suggestion_lines(ev, scan, n=2):
-    """Entry ideas phrased for Roy's REAL account (≈US$1,280, max 3 positions, ≤25% each, ≥20% cash, SL/TP first)."""
-    from . import realpos
-    c = realpos.cfg()
-    eq = ev["equity_usd"]
-    slots = max(0, int(c["max_positions"]) - ev["n_open"])
-    L = [f"<b>💡 真倉建議</b>（本金 ≈US${eq:,.0f}：最多 {c['max_positions']} 隻 · 每隻 ≤{c['max_position_pct'] * 100:.0f}%"
-         f" ≈US${f2(c['max_position_pct'] * eq, 0)} · 現金 ≥{c['min_cash_pct'] * 100:.0f}% · 入場前定好止蝕／止賺）",
-         f"而家真倉 {ev['n_open']}/{c['max_positions']} 隻 · 估算現金 US${ev['cash_usd']:,.0f}（{f2(ev['cash_pct'], 0)}%）"
-         + (f" → 最多可再開 {slots} 隻" if slots else " → 已滿，唔開新倉")]
-    held = {r["ticker"] for r in ev.get("rows", [])}
-    top = [x for x in ((scan or {}).get("top") or []) if x.get("ticker") not in held]  # no adding to real holdings
-    if not slots:
-        return L
-    if not top:
-        L.append("• 今日冇（未持有嘅）候選過晒濾網 → 唔入場都係一種決定")
-        return L
-    for x in top[:n]:
-        entry = float(x.get("live_price") or x["entry_zone"][1])
-        sh, budget, why = realpos.suggest_shares(ev, entry, x.get("stop"))
-        size = (f"建議 {sh} 股 ≈ US${f2(sh * entry, 0)}（HK${sh * entry * ev['fx']:,.0f}）" if sh else f"唔建議（{why}）")
-        L.append(f"• {esc(x['ticker'])} 入場區 ${f2(x['entry_zone'][0])}–{f2(x['entry_zone'][1])} · 止蝕 ${f2(x['stop'])} · "
-                 f"止賺 ${f2(x['target'])} · R:R {f2(x.get('rr'), 1)} → {size}")
-    t0 = top[0]
-    L.append(f"<i>落咗單就話 Hermes：「買咗 {esc(t0['ticker'])} N 股 @價，止蝕 {f2(t0['stop'])}，止賺 {f2(t0['target'])}」</i>")
-    return L
+def real_suggestion_lines(ev, scan, n=2, regime=None, market_open=True):
+    """Plain buy suggestion for Roy's REAL account (sized for ≈US$1,280: ≤25% each, ≥20% cash, 2% risk)."""
+    from . import plain
+    lines, _t = plain.buy_suggestion(ev, scan, regime=regime, market_open=market_open)
+    return ["<b>💡 真倉建議</b>"] + lines
 
 
-def paper_brief(acct, n_pos, max_pos, spy_ret=None, qqq_ret=None, actions=None, label="紙上今日"):
-    """Condensed paper book (control group): total P&L %, vs SPY/QQQ same period, open count, today's actions."""
+def paper_brief(acct, n_pos, max_pos, spy_ret=None, qqq_ret=None, actions=None, label="今日"):
+    """Paper book (control group) in ONE line: total return vs SPY/QQQ same period, open count, today's actions."""
     bench = []
     if spy_ret is not None:
         bench.append(f"SPY {pct(spy_ret)}")
     if qqq_ret is not None:
         bench.append(f"QQQ {pct(qqq_ret)}")
-    L = [f"<b>🧪 紙上倉（對照組）</b> 總 P&L {pct(acct.get('total_return_pct'))}"
-         + (f"（同期 {' · '.join(bench)}）" if bench else "")
-         + f" · 持倉 {n_pos}/{max_pos} · 現金 {f2(acct.get('cash_pct'), 0)}%"]
+    line = (f"🧪 紙上倉（對照組）：總回報 {pct(acct.get('total_return_pct'))}"
+            + (f"（同期 {'、'.join(bench)}）" if bench else "")
+            + f" · 持倉 {n_pos}/{max_pos}")
     acts = [a for a in (actions or []) if a]
     if acts:
         txt = "；".join(acts)
-        if len(txt) > 230:
-            txt = txt[:228] + "…"
-        L.append(f"{label}：{esc(txt)}")
-    return L
+        if len(txt) > 160:
+            txt = txt[:158] + "…"
+        line += f" · {label}：{esc(txt)}"
+    return [line]

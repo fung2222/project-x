@@ -54,13 +54,16 @@ def market_context():
     regime = marketdata.regime_for(vix)
     reg = s["regimes"][regime]
     spy, qqq = marketdata.quote("SPY"), marketdata.quote("QQQ")
+    fxi = marketdata.fx_info()
+    spy = spy if spy.get("ok") else {}
+    qqq = qqq if qqq.get("ok") else {}
     return {
         "vix": round(vix, 2) if vix else None, "regime": regime, "regime_zh": reg["title"], "emoji": reg["emoji"],
         "max_positions": min(s["rules"]["max_positions"], reg["max_positions"]),
         "min_confidence": max(s["rules"]["min_confidence"], reg["min_confidence"]),
         "spy": spy.get("price"), "spy_chg_pct": spy.get("change_pct"),
         "qqq": qqq.get("price"), "qqq_chg_pct": qqq.get("change_pct"),
-        "fx_usdhkd": marketdata.fx_usdhkd(),
+        "fx_usdhkd": fxi["rate"], "fx_live": fxi["live"],
     }
 
 
@@ -189,6 +192,9 @@ def analyze(now=None, write_files=True, fetch_profiles=None):
         "errors": errors,
         "quotes_ts": clock.now_hkt().isoformat(timespec="seconds"),
     }
+    if write_files and marketdata.yahoo_blocked():
+        print("[analyze] Yahoo rate-limited this run — not overwriting data files with a partial report")
+        write_files = False
     if write_files:
         save_json(REPORT_PATH, report)
         if profiles:

@@ -16,7 +16,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SETTINGS_PATH = os.path.join(BASE_DIR, "config", "settings.json")
-STATE_DIR = os.path.join(BASE_DIR, "state")
+STATE_DIR = os.environ.get("PX_STATE_DIR") or os.path.join(BASE_DIR, "state")  # tests point this at a temp dir
 REPORTS_DIR = os.path.join(BASE_DIR, "Reports")
 
 _SECRET_FALLBACK = {
@@ -99,6 +99,11 @@ def secret_status():
 
 def is_dry_run():
     return os.environ.get("PX_DRY_RUN", "").strip().lower() in ("1", "true", "yes")
+
+
+def network_off():
+    """PX_NETWORK_OFF=1 (set by the test suite): no external data calls at all (Yahoo / Finnhub / Marketaux)."""
+    return os.environ.get("PX_NETWORK_OFF", "").strip().lower() in ("1", "true", "yes")
 
 
 def telegram_disabled():

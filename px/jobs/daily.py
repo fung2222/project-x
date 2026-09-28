@@ -1,6 +1,8 @@
 """daily job (ET 10:00): full-universe indicators/signals on completed bars, SL/TP,
-deterministic gates -> at most 1 paper entry, decisions/teaching/scenarios,
-4 Telegram messages (decision / signals / opportunity Top 5 / teaching+scenarios).
+deterministic gates -> at most 1 paper entry, decisions/teaching/scenarios (kept on the website),
+ONE plain-language Telegram report (Roy 2026-09-28): 真倉 -> 資金 -> 買賣信號 -> 潛力股 -> 大市 -> 今日學一樣 ->
+紙上倉 one line -> site link. No new entries / buy suggestions when VIX is missing (regime UNKNOWN) or the
+earnings date is unknown.
 Paper entry: gated legacy BUY signal first; otherwise the top opportunity-scan candidate with
 score >= scan.paper_entry_min_score (forward test of the scan), both through ledger rules. Idempotent per session:
 each message part is sent at most once; the 1-entry-per-day rule is enforced by the ledger."""
@@ -8,12 +10,14 @@ import json
 
 from .. import archive, clock, decide, guard, ledger, marketdata, telegram, engine, scan
 from ..config import load_settings, path
-from ..messages import (catalyst_text, esc, f2, pct, footer, money, daily_teaching, scenarios, scan_message,
-                        real_section, real_alerts, real_suggestion_lines, paper_brief, REAL_NOTE)
-from .common import Ctx, gate_run, refresh_positions, write_text, report_path, strip_html, real_snapshot, paper_bench
+from ..messages import (catalyst_text, esc, f2, pct, footer, daily_teaching, scenarios, scan_message,
+                        real_alerts, REAL_NOTE)
+from .common import (Ctx, gate_run, refresh_positions, write_text, report_path, strip_html, paper_bench, real_context,
+                     data_wait, pick_news, annotate_scan, save_reasons)
 
 JOB = "daily"
-PARTS = ("decision", "signals", "scan", "teaching")
+PARTS = ("report",)
+LEGACY_PARTS = ("decision", "signals", "scan", "teaching")  # pre-2026-09-28 parts: any sent => session already reported
 
 
 def owned_news(tickers, max_items=3):
@@ -76,7 +80,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if not ok:
         print(f"[daily] {why}")
         return {"status": "skipped", "reason": why}
-    sent_all = all(guard.was_sent(ctx.session, JOB, p) for p in PARTS)
+    sent_all = (all(guard.was_sent(ctx.session, JOB, p) for p in PARTS)
+                or any(guard.was_sent(ctx.session, JOB, p) for p in LEGACY_PARTS))
     if sent_all and not force:
         msg = f"[daily] all {len(PARTS)} messages already sent for session {ctx.session} — nothing to do (use --force)"
         print(msg)
@@ -91,6 +96,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     for x in sigs:
         x["is_owned"] = x["ticker"] in owned
     chosen, evals = decide.run_gates(pf, sigs, regime, ctx.now)
+    no_new = bool(s["regimes"].get(regime, {}).get("no_new_entries"))
+    if no_new and chosen:
+        print(f"[daily] regime {regime}: no new paper entries (VIX data missing)")
+        chosen = None
     entry = None
     entry_err = None
     if chosen:
@@ -118,12 +127,16 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     cutoff = s["schedule_et"]["daily"].get("no_new_entries_after", "15:00")
     ov = decide.load_overrides()
     scan_entry_ok = (clock.market_is_open(ctx.now) and ctx.now_et.strftime("%H:%M") < cutoff
-                     and not ov.get("pause_new_entries"))
+                     and not ov.get("pause_new_entries") and not no_new)
+    unknown_blocks = s.get("earnings", {}).get("unknown_blocks_entry", True)
     if not chosen and not entry and scan_entry_ok:
         for x in scan_res.get("top", []):
             if x["score"] < max(min_sc, min_conf) or x["ticker"] in owned or x["ticker"] in (ov.get("blocklist") or []):
                 continue
             if x.get("earnings_days") is not None and x["earnings_days"] <= s["scan"]["earnings_blackout_days"]:
+                continue
+            if unknown_blocks and not x.get("earnings_date") and x.get("earnings_known") is False:
+                x.setdefault("paper_note", "業績日未知，保守起見唔入")
                 continue
             q = marketdata.quote(x["ticker"])
             px_ = q["price"] if q.get("ok") else x["entry"]
@@ -151,15 +164,11 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             continue
         skipped.append({"ticker": e["ticker"], "confidence": e["confidence"], "failed": e["failed"],
                         "why": decide.why_text(e) or (entry_err or "")})
-    # ---------- message 1: decision — Roy's REAL positions first, paper book condensed (control group)
+    # ---------- plain report (Roy 2026-09-28): real first, money, signals, picks, market, one lesson, paper 1 line
+    from .. import plain, lessons, reasons as rs
     mk = report["market"]
-    real_book, real_ev = real_snapshot(ctx, mk.get("fx_usdhkd") or acct.get("fx_usdhkd"))
-    real_al, _ = real_alerts(real_ev)
-    L = [f"<b>📘 Project X 每日決策 — {ctx.session}</b>（{mk['regime_emoji']} VIX {f2(mk['vix'])} {esc(mk['regime'])}）"]
-    L += real_section(real_ev)
-    if real_al:
-        L += [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
-    L += [""] + real_suggestion_lines(real_ev, scan_res)
+    real_book, real_ev, rsn, trends = real_context(ctx, mk.get("fx_usdhkd") or acct.get("fx_usdhkd"))
+    real_al, _ = real_alerts(real_ev, reasons=rsn)
     actions = []
     for tr in executed:
         actions.append(f"紙上{'止損' if tr['reason']=='STOP_LOSS' else '止盈'} {tr['ticker']} x{tr['shares']} @ ${f2(tr['exit_price'])}（淨 {tr['net_pnl_usd']:+.2f}）")
@@ -173,28 +182,43 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             continue
         actions.append(f"HOLD {p['ticker']} @ {f2(p.get('current_price'))}（{pct(p.get('pnl_pct'))}，距SL {f2(p.get('dist_to_sl_pct'),1)}%，唔攤平）")
     if not entry:
-        if skipped:
+        if no_new:
+            actions.append("冇新倉：VIX 數據暫缺，唔開新倉")
+        elif skipped:
             top = skipped[0]
             actions.append(f"冇新倉：最高 {top['ticker']} {top['confidence']:.0f}% → {top['why']}")
         else:
             actions.append("冇新倉：今日冇 BUY 候選")
+    short_acts = [f"紙上{'止損' if tr['reason']=='STOP_LOSS' else '止盈'} {tr['ticker']}" for tr in executed]
+    if entry:
+        short_acts.append(f"{'（dry-run）' if dry_run else ''}紙上買入 {entry['ticker']} {entry['shares']} 股")
     spy_ret, qqq_ret = paper_bench()
-    L += [""] + paper_brief(acct, len(pf.get("positions", [])), report["guardrail"]["max_positions"], spy_ret, qqq_ret, actions)
-    m1 = "\n".join(L)
-    # ---------- message 2: signals (news: real positions first, then paper)
-    _real_t = [r["ticker"] for r in real_ev["rows"]]
-    news = owned_news(_real_t + sorted({p["ticker"] for p in pf.get("positions", [])} - set(_real_t)))
-    m2 = signals_message(report, evals, news)
-    # ---------- message 3: teaching + scenarios
+    news = pick_news(scan_res)
+    annotate_scan(scan_res, news)
+    mood = plain.market_lines(mk.get("spy_change"), mk.get("qqq_change"), mk.get("vix"), rs.market_headline())
+    lesson = lessons.pick(clock.session_date(ctx.now), save=not dry_run)
+    L = [f"<b>📘 每日報告 {ctx.session}</b>（開市半個鐘）"]
+    L += plain.real_block(real_ev, rsn, trends, "今日")
+    if real_al:
+        L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
+    L.append(plain.capital_line(real_ev, mk.get("fx_live", report["market"].get("fx_live", True))))
+    L += ["", "<b>🧭 買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
+    L += plain.buy_suggestion(real_ev, scan_res, regime, clock.market_is_open(ctx.now))[0]
+    L += [""] + plain.picks_block(scan_res, news)
+    L += ["", "<b>🌍 大市</b>"] + mood
+    L += ["", f"<b>🎓 今日學一樣</b>：{esc(lesson)}"]
+    L += ["", plain.paper_line(acct, len(pf.get("positions", [])), report["guardrail"]["max_positions"], spy_ret, qqq_ret,
+                               short_acts), "", plain.footer_line()]
+    m_report = "\n".join(L)
+    # website keeps the detailed teaching / scenarios
     overbought = len([x for x in report.get("signals", []) if (x.get("rsi") or 0) > 68])
     teach = daily_teaching({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry, executed,
                            skipped[0] if skipped else None, overbought)
     sc, invalid = scenarios({"regime": regime, "vix": mk["vix"], "regime_zh": mk["regime"]}, pf, entry, real_ev["rows"])
-    m3 = "\n".join([f"<b>🎓 今日教學</b>\n{esc(teach)}", "",
-                    f"<b>🔮 情境</b>\n<b>基準</b>：{esc(sc['base'])}\n<b>樂觀</b>：{esc(sc['bull'])}\n<b>悲觀</b>：{esc(sc['bear'])}", "",
-                    "<b>⛔ 失效條件</b>\n" + "\n".join(f"• {esc(i)}" for i in invalid), "", footer()])
-    m_scan = scan_message(scan_res)
-    msgs = dict(zip(PARTS, (m1, m2, m_scan, m3)))
+    msgs = {"report": m_report}
+    wait = data_wait(JOB)
+    if wait:
+        return wait
     # ---------- persist
     report["v3"] = {
         "session_date": ctx.session, "job": JOB, "generated_at": clock.now_hkt().isoformat(timespec="seconds"),
@@ -204,7 +228,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             "total_return_pct")} | {"positions": len(pf.get("positions", [])), "spy_return_pct": spy_ret, "qqq_return_pct": qqq_ret},
         "real_summary": {k: real_ev.get(k) for k in ("n_open", "equity_usd", "cash_usd", "unrealized_usd", "realized_usd",
                                                     "return_pct", "n_closed", "win_rate_pct", "real_start_date")},
-        "teaching": teach, "scenarios": sc, "invalidation": invalid,
+        "teaching": teach, "scenarios": sc, "invalidation": invalid, "lesson": lesson,
     }
     report["opportunity_scan"] = {k: scan_res.get(k) for k in ("generated_at", "bar_date", "top", "near_misses", "passed",
                                                                "scanned", "max_position_usd", "risk_per_trade_usd", "method")}
@@ -218,6 +242,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         engine.save_json(engine.REPORT_PATH, report)
         if scan_res.get("top") is not None and not scan_res.get("error"):
             archive.save_scan(scan_res)
+        save_reasons(rsn, scan_res, news)
     results = {}
     for part in PARTS:
         if guard.was_sent(ctx.session, JOB, part) and not force:

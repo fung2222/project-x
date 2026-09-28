@@ -127,3 +127,60 @@ def paper_max_positions(regime=None):
     if regime and regime in s["regimes"]:
         mp = min(mp, s["regimes"][regime]["max_positions"])
     return mp
+
+
+# ---------------------------------------------------------------- data-quality guard + plain-report context
+def data_wait(job):
+    """Yahoo rate-limited in this run -> don't push a report built on holes; the watchdog retries after the cooldown.
+    Returns a result dict to return from the job, or None when data is fine."""
+    if marketdata.yahoo_blocked():
+        msg = f"[{job}] Yahoo rate-limited — not pushing a report with missing data; watchdog will retry after cooldown"
+        print(msg)
+        return {"status": "data_wait", "reason": msg}
+    return None
+
+
+def real_context(ctx, fx=None, with_reasons=True):
+    """(book, ev, reasons{ticker: dict}, trends{ticker: word}) for Roy's real positions. Never raises."""
+    from .. import reasons as rs
+    book, ev = real_snapshot(ctx, fx)
+    rsn, trends = {}, {}
+    if with_reasons:
+        for r in ev.get("rows", []):
+            t = r["ticker"]
+            try:
+                trends[t] = rs.trend_word(t)
+                rsn[t] = rs.reason(t, r.get("chg_vs_prev") if r.get("live") else None)
+            except Exception as e:
+                print(f"[real] reason {t} skipped:", type(e).__name__)
+    return book, ev, rsn, trends
+
+
+def pick_news(scan_res, n=3):
+    """{ticker: headline_text} for the top picks (only relevant recent headlines; missing = no entry)."""
+    from .. import reasons as rs
+    out = {}
+    for x in ((scan_res or {}).get("top") or [])[:n]:
+        try:
+            h = rs.best_headline(x["ticker"], rs.news(x["ticker"]))
+            if h:
+                out[x["ticker"]] = rs.headline_text(h, 70)
+        except Exception as e:
+            print(f"[news] {x.get('ticker')} skipped:", type(e).__name__)
+    return out
+
+
+def annotate_scan(scan_res, news=None):
+    """Attach plain reasons to scan top picks (website cards read them from data/scan.json)."""
+    from .. import plain
+    for x in (scan_res or {}).get("top") or []:
+        x["reason_plain"] = plain.pick_reason(x, (news or {}).get(x["ticker"]))
+    return scan_res
+
+
+def save_reasons(real_reasons, scan_res=None, news=None):
+    from .. import reasons as rs
+    picks = {x["ticker"]: {"ticker": x["ticker"], "text": x.get("reason_plain"), "kind": "pick",
+                           "at": clock.now_hkt().isoformat(timespec="seconds")}
+             for x in ((scan_res or {}).get("top") or []) if x.get("reason_plain")}
+    rs.save_site({**picks, **(real_reasons or {})})

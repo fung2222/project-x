@@ -61,14 +61,14 @@
           ]
         }
       },
-      "runs": 6,
+      "runs": 7,
       "last_prices": {
-        "SOUN": 5.935
+        "SOUN": 5.83
       },
       "last_real_prices": {},
       "last_regime": "NORMAL",
       "alerts": {},
-      "last_run": "2026-09-29T03:06:02+08:00",
+      "last_run": "2026-09-29T04:06:02+08:00",
       "status": "ok"
     }
   }

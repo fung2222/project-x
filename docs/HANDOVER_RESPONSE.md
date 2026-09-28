@@ -355,3 +355,34 @@ dc5ca63 docs/§4 prep: Mag7 paused + tick trigger investigation + rec (supercron
    - `ln -s /opt/data/bin/px_tick_watch.sh /opt/data/.hermes/scripts/px_tick_watch.sh`
    - `hermes -p gushen cron create --script px_tick_watch.sh --schedule "*/10 * * * *" --no-agent`
    - 等等 Roy 同意先做
+
+
+---
+
+## §6 Step 7 — Finnhub + Marketaux keys set ✅
+
+- **`FINNHUB_API_KEY`** — Roy 開嘅新 key (40 chars) 寫入 `/opt/data/.env` + `/opt/data/profiles/gushen/.env`
+- **`MARKETAUX_API_KEY`** — Roy 開嘅新 key (40 chars) 寫入兩個 env files
+- 兩個 file perm 都係 `0o600`，絕對冇 commit、冇 print
+
+### Smoke test 結果
+
+| Test | 結果 |
+|------|------|
+| `run.py status` (`px_job.sh status`) | ✅ `secrets present: {"FINNHUB_API_KEY": true, "MARKETAUX_API_KEY": true, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}` |
+| Finnhub 直接 call `https://finnhub.io/api/v1/quote?symbol=AAPL` | ✅ HTTP 200, AAPL=$341.07 (+1.53%) |
+| Marketaux 直接 call `https://api.marketaux.com/v1/news/all?symbols=AAPL` | ⚠️ 第一次 403 Cloudflare 1010 (無 User-Agent)，加咗 `User-Agent` header 後 HTTP 200 |
+| Marketaux 透過 `finnhub_api.fetch_marketaux_news`（用 `get_secret` + `requests` library） | ✅ HTTP 200, 16 條 AAPL news 拎到（9月25-28 之間） |
+
+### Notes / Quirk
+
+- `MARKETAUX_API_KEY` 一開始透過 `os.environ.get()` 拎係會 **空字串**。`_load_dotenv()` 只喺 `get_secret()` 入面 call。即係 `finnhub_api.py` 已經寫好用 `get_secret()` 所以 OK，但任何新 script **必須用 `from px.config import get_secret`** 唔好直接讀 env var。
+- Cloudflare 1010 only happens when UA header is missing; `requests` library defaults to `python-requests/2.34.2` which Cloudflare accepts (proof: HTTP 200 via run.py pipeline). 所以**唔需要改 finnhub_api.py**。
+- 4 個 spec-required secrets 全部 true，spec §11 R4 ✅。
+- §6 改動（zombie guard + setsid+nohup + schedule fix + install script heredoc fix）已 commit `f941df4` + push。
+
+### 等 §7 正式切換
+
+- 4 個 PX cron 仍 active，**未做切換**
+- 真 `svc-px-tick`（Hermes cron fallback）**未啟用**
+- 切換前要 Roy 通知先做

@@ -1,0 +1,20 @@
+# --- secrets: NEVER commit (keys come from env vars; local json files are fallback only) ---
+.env
+.env.*
+!.env.example
+finnhub_config.json
+marketaux_config.json
+telegram_config.json
+*_config.json
+*.key
+*.pem
+
+# --- python / local ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.tmp
+.portfolio.*.tmp
+state/.job_runs.*

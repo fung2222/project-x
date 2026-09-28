@@ -591,8 +591,8 @@ triggered = current_price >= target_price
 **格式：**
 ```json
 {
-  "bot_token": "8976209104:AAGilbnO3aueLy_uy-DX6k4n7JTR6YtmoPM",
-  "chat_id": "8931901936"
+  "bot_token": "<set via env TELEGRAM_BOT_TOKEN — never commit>",
+  "chat_id": "<set via env TELEGRAM_CHAT_ID>"
 }
 ```
 
@@ -601,7 +601,7 @@ triggered = current_price >= target_price
 **格式：**
 ```json
 {
-  "api_key": "d8vneepr01qgrv4plca0d8vneepr01qgrv4plcag",
+  "api_key": "<set via env FINNHUB_API_KEY — never commit>",
   "enabled": true
 }
 ```
@@ -611,7 +611,7 @@ triggered = current_price >= target_price
 **格式：**
 ```json
 {
-  "api_key": "M2JonwTc4OpNqiu9FPg3smM6LgL02B1kydEpgzJL",
+  "api_key": "<set via env MARKETAUX_API_KEY — never commit>",
   "enabled": true
 }
 ```

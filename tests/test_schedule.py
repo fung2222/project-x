@@ -1,5 +1,6 @@
 """Schedule / holiday / watchdog / duplicate-guard tests (offline)."""
 import datetime as dt
+import json
 import os
 import sys
 import tempfile
@@ -84,6 +85,8 @@ class TestWatchdog(unittest.TestCase):
         self.p4 = mock.patch.object(guard, "STATE_DIR", self.tmp)
         for p in (self.p1, self.p2, self.p3, self.p4):
             p.start()
+        with open(os.path.join(self.tmp, "run_ledger.json"), "w") as f:
+            json.dump({"_meta": {"watch_since": "2026-01-01T00:00+08:00"}}, f)
 
     def tearDown(self):
         for p in (self.p1, self.p2, self.p3, self.p4):
@@ -133,7 +136,22 @@ class TestWatchdog(unittest.TestCase):
         self.assertEqual(len(sends), 1)
         e = schedule.get("open", schedule.expected_slots("open", dt.date(2026, 10, 2))[0])
         self.assertEqual(e["attempts"], 2)
-        self.assertEqual(e["status"], "duplicate")
+        self.assertEqual(e["status"], "ok")  # sticky success: duplicate re-run does not downgrade
+
+    def test_first_check_arms_only(self):
+        os.remove(os.path.join(self.tmp, "run_ledger.json"))
+        now = hkt(2026, 10, 2, 23, 30)
+        with mock.patch.object(clock, "now_hkt", return_value=now):
+            acts = schedule.check(now=now, runner=lambda j, s: "failed", alert=lambda t: True)
+            self.assertEqual([a["action"] for a in acts], ["armed"])
+            acts2 = schedule.check(now=now, runner=lambda j, s: "failed", alert=lambda t: True)
+        self.assertEqual(acts2, [])  # all earlier slots are before watch_since
+
+    def test_superset_cron_skip_keeps_ok(self):
+        slot = schedule.expected_slots("close", dt.date(2026, 10, 2))[0]
+        schedule.record("close", slot, "ok")
+        schedule.record("close", slot, "skipped")
+        self.assertEqual(schedule.get("close", slot)["status"], "ok")
 
     def test_holiday_no_watchdog_action(self):
         now = hkt(2026, 11, 27, 1, 0)  # Thanksgiving ET evening

@@ -1,4 +1,4 @@
-"""hourly job (ET 10:30..15:30 + 16:10 post-close): MTM, SL/TP auto execution,
+"""hourly job (ET :06 past 10..16, trimmed on half days; see settings.schedule): MTM, SL/TP auto execution,
 alert-only Telegram (+ one status message on the first run of each session).
 Alerts are de-duplicated per session in state/job_runs.json."""
 import json

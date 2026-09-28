@@ -36,6 +36,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             return {"status": "skipped", "reason": f"US market closed on {d} ET ({clock.holiday_name(d) or 'weekend'})"}
         if not clock.session_closed(ctx.now_et) and os.environ.get("PX_RERUN") != "1":
             return {"status": "skipped", "reason": "session not closed yet"}
+        win = load_settings()["schedule_et"]["close"]["window"]
+        if not clock.in_window(win, ctx.now_et) and os.environ.get("PX_RERUN") != "1":
+            # e.g. the 05:00 HKT line during EST = 16:00 ET: too early for final prices; the 06:00 line runs it
+            return {"status": "skipped", "reason": f"outside close window {win[0]}-{win[1]} ET"}
         if all(guard.was_sent(ctx.session, JOB, p) for p in PARTS):
             return {"status": "duplicate", "reason": f"close already sent for {ctx.session}"}
     s = load_settings()

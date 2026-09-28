@@ -274,5 +274,24 @@ class T16_Secrets(unittest.TestCase):
         self.assertEqual(grep.stdout.strip(), "")
 
 
+class TestSecretsPrecedence(unittest.TestCase):
+    def test_px_prefix_and_env_file(self):
+        import os, tempfile
+        from px import config
+        with tempfile.NamedTemporaryFile("w", suffix=".env", delete=False) as f:
+            f.write("export PX_TEST_SECRET_X=fromfile\n# comment\n")
+            fn = f.name
+        old = dict(os.environ)
+        try:
+            os.environ["PX_ENV_FILE"] = fn
+            os.environ["TEST_SECRET_X"] = "plain"
+            config._dotenv_loaded = False
+            self.assertEqual(config.get_secret("TEST_SECRET_X"), "fromfile")
+            os.environ["PX_TEST_SECRET_X"] = "explicit"
+            self.assertEqual(config.get_secret("TEST_SECRET_X"), "explicit")
+        finally:
+            os.environ.clear(); os.environ.update(old); os.unlink(fn); config._dotenv_loaded = False
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

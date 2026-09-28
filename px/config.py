@@ -6,8 +6,9 @@ local, git-ignored json files that the Grok Bot box still uses:
     MARKETAUX_API_KEY  <- marketaux_config.json {"api_key": ...}
     TELEGRAM_BOT_TOKEN <- telegram_config.json  {"bot_token": ...}
     TELEGRAM_CHAT_ID   <- telegram_config.json  {"chat_id": ...}
-An optional `.env` file at the repo root (git-ignored) is also loaded
-(simple KEY=VALUE lines; real environment variables win).
+Each name may also be given with a PX_ prefix (PX_TELEGRAM_CHAT_ID ...), which wins.
+Env files loaded (real environment variables always win): $PX_ENV_FILE (e.g. Hermes
+/opt/data/.env), then the repo-root `.env` (git-ignored). Simple KEY=VALUE lines.
 NEVER print secret values.
 """
 import json
@@ -46,28 +47,33 @@ def _load_dotenv():
     if _dotenv_loaded:
         return
     _dotenv_loaded = True
-    p = path(".env")
-    if not os.path.exists(p):
-        return
-    try:
-        with open(p, encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                k, v = line.split("=", 1)
-                k = k.strip()
-                v = v.strip().strip('"').strip("'")
-                if k and v and k not in os.environ:
-                    os.environ[k] = v
-    except Exception:
-        pass
+    # Precedence: real environment > PX_ENV_FILE (e.g. Hermes /opt/data/.env) > repo-root .env
+    for p in [os.environ.get("PX_ENV_FILE", "").strip(), path(".env")]:
+        if not p or not os.path.exists(p):
+            continue
+        try:
+            with open(p, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line.startswith("export "):
+                        line = line[7:].strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    k, v = line.split("=", 1)
+                    k = k.strip()
+                    v = v.strip().strip('"').strip("'")
+                    if k and v and k not in os.environ:
+                        os.environ[k] = v
+        except Exception:
+            pass
 
 
 def get_secret(name, required=False):
     """Return secret value (env first, then local json fallback) or ''."""
     _load_dotenv()
-    val = os.environ.get(name, "").strip()
+    # PX_<NAME> wins over <NAME>, so a shared env file (e.g. Hermes /opt/data/.env, whose
+    # TELEGRAM_CHAT_ID may be a DM) can never silently redirect Project X pushes.
+    val = os.environ.get("PX_" + name, "").strip() or os.environ.get(name, "").strip()
     if not val and name in _SECRET_FALLBACK:
         fname, keys = _SECRET_FALLBACK[name]
         fp = path(fname)

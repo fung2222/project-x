@@ -54,9 +54,12 @@ def _rerun(job, slot):
         os.environ.pop("PX_RERUN", None)
 
 
-def _check(dry_run):
+def _check(dry_run, push=False):
     acts = schedule.check(runner=_rerun, alert=_alert, dry_run=dry_run)
     print(json.dumps({"now_hkt": clock.now_hkt().isoformat(timespec="minutes"), "actions": acts}, ensure_ascii=False, indent=1))
+    if push and not dry_run and acts:
+        from px import gitops
+        gitops.commit_and_push(f"px check: {clock.now_hkt():%Y-%m-%d %H:%M} HKT")
     return 0
 
 
@@ -105,7 +108,7 @@ def main(argv=None):
     if a.dry_run:
         os.environ["PX_DRY_RUN"] = "1"
     if a.job == "check":
-        return _check(a.dry_run)
+        return _check(a.dry_run, a.push)
     if a.job == "scan":
         return _scan()
     if a.job == "tgcheck":

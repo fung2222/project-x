@@ -7,6 +7,8 @@
   against the matching slot (or "manual").
 - check(now): watchdog. For every expected slot whose grace period has passed:
   ok/duplicate/skipped(holiday)  -> fine
+  (the first live pass only "arms" the watchdog: ledger _meta.watch_since = now;
+   slots before watch_since are ignored, so a runner switch never floods alerts)
   missing/failed/telegram_failed -> re-run once or twice while inside the slot's
                                     rerun window (duplicate-send guard still applies)
                                  -> otherwise ONE short Telegram alert per slot.
@@ -118,7 +120,10 @@ def record(job, slot, status, detail="", now=None, via="cron"):
                   "slot_local": slot.strftime("%Y-%m-%d %H:%M ") + ("ET" if slot and slot.tzinfo == clock.ET else "HKT") if slot else None,
                   "attempts": 0, "history": []})
     e["attempts"] = e.get("attempts", 0) + 1
-    e["status"] = status
+    # Sticky success: once a slot is "ok" (messages sent), a later duplicate/skip/failed
+    # run of the same slot (e.g. the DST-superset HKT cron line) must not downgrade it.
+    if e.get("status") != "ok" or status == "ok":
+        e["status"] = status
     e["last_at"] = now.isoformat(timespec="seconds")
     e["detail"] = str(detail)[:300]
     e["history"] = (e.get("history", []) + [{"at": e["last_at"], "status": status, "via": via}])[-6:]
@@ -177,7 +182,19 @@ def check(now=None, runner=None, alert=None, dry_run=False):
     """Watchdog pass. runner(job, slot) -> status str; alert(text) -> bool. Returns list of actions."""
     now = now or clock.now_hkt()
     actions = []
+    # Arming: the watchdog only looks at slots after `watch_since` (set on the first live pass),
+    # so switching runners (cutover) never produces a burst of "missed" alerts for old slots.
+    led = _load()
+    ws = (led.get("_meta") or {}).get("watch_since")
+    if not ws:
+        if not dry_run:
+            led.setdefault("_meta", {})["watch_since"] = now.isoformat(timespec="minutes")
+            _save(led)
+        return [{"action": "armed", "watch_since": now.isoformat(timespec="minutes")}]
+    ws_dt = dt.datetime.fromisoformat(ws)
     for job, slot in due_slots(now):
+        if slot < ws_dt:
+            continue
         e = get(job, slot) or {}
         st = e.get("status", "missing")
         if st in OK_STATES or st == "skipped":

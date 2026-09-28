@@ -3,7 +3,7 @@ import subprocess
 
 from .config import BASE_DIR
 
-DATA_PATHS = ["portfolio.json", "daily_report.json", "signals.json", "profiles.json", "Reports", "state",
+DATA_PATHS = ["data", "portfolio.json", "daily_report.json", "signals.json", "profiles.json", "Reports", "state",
               "_last_open_monitor.json", "_last_hourly_check.json", ".last_hourly_quiet_hkt"]
 
 

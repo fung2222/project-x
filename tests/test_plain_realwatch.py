@@ -475,6 +475,22 @@ class TestMarketHeadlineRelevance(unittest.TestCase):
                                 reasons.MARKET_HEADLINE_MIN_SCORE)  # oil counts only when tied to stocks
         self.assertLess(reasons.market_relevance("Oil prices rise as Iran tensions mount"), reasons.MARKET_HEADLINE_MIN_SCORE)
 
+    def test_real_pool_2026_09_28(self):
+        # Real Finnhub general-news headlines seen 2026-09-28 (HKT evening): the Wall St item must win; FX-led and
+        # foreign-market items (a bare "US-Iran" is not a US-market mention) must not.
+        items = self._items("South African rand slips as US-Iran stalemate pushes oil prices higher - Reuters",
+                            "Wall St futures drop as oil spikes after Trump rejects Iran peace proposal - Reuters",
+                            "Indian shares slide to near six-month low as US-Iran deadlock lifts oil prices - Reuters",
+                            "Dollar near two-month high as US-Iran stalemate bolsters oil, Fed rate hike bets - Reuters",
+                            "Stocks slip in Asia as oil and yields climb - Reuters")
+        self.assertEqual(reasons.pick_market_headline(items, now=self.NOW)["headline"],
+                         "Wall St futures drop as oil spikes after Trump rejects Iran peace proposal - Reuters")
+        for h in ("Indian shares slide to near six-month low as US-Iran deadlock lifts oil prices - Reuters",
+                  "Stocks slip in Asia as oil and yields climb - Reuters"):
+            self.assertLess(reasons.market_relevance(h), reasons.MARKET_HEADLINE_MIN_SCORE, h)
+        self.assertLess(reasons.market_relevance("Dollar near two-month high as US-Iran stalemate bolsters oil, Fed rate hike bets"),
+                        reasons.market_relevance("Wall St futures drop as oil spikes after Trump rejects Iran peace proposal"))
+
     def test_stale_headline_ignored_and_no_line_when_none(self):
         items = [{"headline": "Treasury yields climb after strong jobs report", "ts": self.NOW - 30 * 3600}]
         self.assertIsNone(reasons.pick_market_headline(items, now=self.NOW))

@@ -262,8 +262,8 @@ def reason(ticker, chg, mkt_chg=None, fetch_news=True):
 
 
 # ---------------------------------------------------------------- market headline relevance (US-equity investor)
-_US_STRONG = re.compile(r"\b(wall street|s&p( 500)?|nasdaq|dow( jones)?|nyse|russell 2000|stocks?|equit(y|ies)|"
-                        r"stock market|shares|futures|fed|federal reserve|fomc|powell|rate (cut|hike)s?|interest rates?|"
+_US_STRONG = re.compile(r"\b(wall street|wall st\.?|s&p( 500)?|nasdaq|dow( jones)?|nyse|russell 2000|stocks?|equit(y|ies)|"
+                        r"stock market|shares|futures|fed|federal reserve|fomc|powell|rate[- ](cut|hike)s?|interest rates?|"
                         r"treasur(y|ies)|bond yields?|yields?|inflation|cpi|pce|jobs report|payrolls|nonfarm|jobless claims|"
                         r"unemployment|earnings|guidance|ipo)\b")
 _US_THEME = re.compile(r"\b(tech|chips?|chipmakers?|semiconductors?|ai|nvidia|apple|microsoft|alphabet|google|amazon|meta|"
@@ -271,20 +271,21 @@ _US_THEME = re.compile(r"\b(tech|chips?|chipmakers?|semiconductors?|ai|nvidia|ap
                        r"white house|treasury secretary|sec)\b")
 _COMMODITY = re.compile(r"\b(oil|crude|brent|opec|gold|natural gas)\b")
 _FX = re.compile(r"\b(rand|yen|euro|sterling|pound|rupee|peso|yuan|renminbi|lira|won|ringgit|baht|rupiah|real|franc|"
-                 r"forex|fx|currenc(y|ies)|dollar index)\b")
+                 r"forex|fx|currenc(y|ies)|dollar|dollar index)\b")
 _FOREIGN = re.compile(r"\b(south africa(n)?|india(n|'s)?|china(ese|'s)?|japan(ese|'s)?|europe(an)?|euro zone|eurozone|ecb|"
                       r"boj|bank of japan|bank of england|boe|uk|britain|british|germany|german|france|french|brazil(ian)?|"
                       r"mexico|mexican|turkey|turkish|russia(n)?|ukraine|korea(n)?|australia(n)?|canada|canadian|"
                       r"hong kong|hang seng|nikkei|ftse|dax|stoxx|asia(n)?|emerging markets?)\b")
-_US_MARK = re.compile(r"\b(us|u\.s\.|american|wall street|s&p|nasdaq|dow|fed|federal reserve)\b")
+# a bare "US" (e.g. "US-Iran deadlock") does not make a foreign-market story a US-stock story; US-market words do
+_US_MARK = re.compile(r"\b(wall street|wall st\.?|s&p|nasdaq|dow|nyse|fed|federal reserve|(us|u\.s\.) (stocks?|shares|equit(y|ies)|futures|economy|inflation|jobs|treasur(y|ies)|yields?))\b")
 MARKET_HEADLINE_MIN_SCORE = 3
 
 
 def market_relevance(headline):
     """Score a general-news headline for a US-stock investor. >= MARKET_HEADLINE_MIN_SCORE -> worth showing.
     + US equity / Fed / rates / inflation / jobs / earnings words (3 each, max 2 counted), US tech/chip themes (1 each);
-    oil & commodities add nothing on their own and are penalised unless the headline also talks about stocks/markets; FX and other-country-only
-    headlines are penalised; generic listicles are rejected."""
+    oil & commodities add nothing on their own and are penalised unless the headline also talks about stocks/markets; FX headlines
+    are penalised (less when Fed/rates/stocks are in them) and other-country-only headlines (a bare "US" does not count) too; generic listicles are rejected."""
     h = (headline or "").lower()
     if not h or GENERIC.search(h):
         return -99
@@ -294,8 +295,8 @@ def market_relevance(headline):
     if _COMMODITY.search(h):
         score -= 0 if strong else 1  # oil only counts via the stock words it comes with; "oil rises on Iran" alone is out
     us = bool(_US_MARK.search(h))
-    if _FX.search(h) and not strong:  # currency moves are not a US-stock story unless stocks/Fed/rates are in it
-        score -= 4
+    if _FX.search(h):  # currency moves are not a US-stock story; with stocks/Fed/rates in it they still rank below a stock headline
+        score -= 2 if strong else 4
     if _FOREIGN.search(h) and not us:  # other-country-only stories
         score -= 4
     return score

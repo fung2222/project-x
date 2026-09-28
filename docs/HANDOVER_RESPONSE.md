@@ -125,3 +125,56 @@ OK
 4. **`futu_positions.json` 過期** — 仲係 2026-07-08 嘅模擬戶口（AUDIT R-04）。Roy 真倉位要填返先有用，唔影響切換。
 5. **§5 正式切換** — 要等 Roy 通知。我做嘅已經去到 spec §1/§2 嘅 dry-run 同 audit。
 6. **`@Minimax0707bot` revoke** — 等 Roy 喺 BotFather 做（spec §5 步驟 9），唔關 Hermes 事。
+
+
+---
+
+## §3 切換前準備答覆（2026-09-28 HKT）
+
+### 1) gushen profile 完整排程清單
+
+揾到 `/opt/data/profiles/gushen/cron/jobs.json` 入面 **7 個 cron 全部 ENABLED**：
+
+| 類別 | Cron 名稱 | Job ID | Schedule (HKT) | Deliver |
+|------|----------|--------|----------------|---------|
+| PX | `project-x-daily-report` | `b0ece97aa091` | `30 21 * * 1-5`（21:30 美股開市） | Soonoo DM (用 Soonoo bot 推去 893190…) |
+| PX | `project-x-close-report` | `dda4d9ed4a71` | `0 5 * * 1-5`（05:00 收市後） | Soonoo DM |
+| PX | `project-x-morning-briefing` | `a1d845966230` | `30 8 * * 1-5`（08:30 隔夜複盤） | Soonoo DM |
+| PX | `project-x-data-integrity-check` | `827895abf50c` | `0 23 * * *`（23:00 完整性核對） | Soonoo DM |
+| Mag7 | `mag7-daily` | `8405f161cfea` | `30 21 * * 1-5` | Soonoo DM |
+| Mag7 | `mag7-premarket` | `b655bf26892b` | `0 16 * * 1-5`（16:00 盤前） | Soonoo DM |
+| Mag7 | `mag7-close` | `46d2ea2e5114` | `5 5 * * 1-5`（05:05 收市） | Soonoo DM |
+
+**Default profile**（`/opt/data/cron/jobs.json`）同樣 7 個 job，全部 **paused**（paused_at 2026-09-21 19:03，原因 `moved to gushen profile; 古神 bot DM`）。
+
+**結論**：你每日 05:00 / 08:30 / 21:30 收到嘅推送全部由 **gushen profile** 經 Soonoo bot 推去 Soonoo DM（**唔係群組「Project X Nas」**）— 與 spec R2「推送去『Project X Nas』群組」嘅最終目標唔同。**正式切換（§5）時要 disable gushen，啟用新 cron**，報告路線由「Soonoo bot → DM」改去「Sono NAS bot → Project X Nas 群組」。
+
+**其他 profile / 系統 crontab / systemd timer 普查**：
+- 其他 profile（apps / media）— 冇 `cron/jobs.json`，skip
+- 系統 crontab（`crontab -l`）— **未安裝**（`crontab` 二進制唔存在 Hermes 環境）— 即部機完全靠 Hermes 內建 cronjob 系統
+- systemd timer（`systemctl list-timers`）— 0 個，非用戶自訂 timer
+
+**未停任何嘢**（依你 step 1 要求）。
+
+### 2) 群組「Project X Nas」chat ID — 已 set + 已確認
+
+**之前 jobs.json 全部帶 Soonoo DM 8931901936（user_id），從未帶群組 id**。但 `profiles/gushen/SOUL.md` L20 寫咗群組的 chat id（指定明唔用 Soonoo 群組嘅）。我用規範路徑：set `PX_TELEGRAM_CHAT_ID` 到 `/opt/data/.env`（spec §6：PX_ 前綴贏過 `TELEGRAM_CHAT_ID`、避撞 Hermes default bot 嘅 `TELEGRAM_HOME_CHANNEL`）。Perm 0o600 維持。
+
+**`tgcheck` 確認**（output 唔含 ID）：
+```
+getChat.type   = "supergroup"
+getChat.title  = "Project X Nas"
+getChat.error  = null
+```
+
+✅ Bot（@hermes_jwzow5tax572z2xt_bot = 「Sono NAS」）已經喺「Project X Nas」群組入面，level = supergroup，name 100% 一致。
+
+### 3) GitHub push（commit `15b9c34`）
+
+**失敗**。原因：Roy 你嗰個 GITHUB_TOKEN 已 revoke。
+
+- 我哋 `/opt/data/.env` 同 `/opt/data/profiles/gushen/.env` 入面嗰個 `ghp_...` token API call `401 Unauthorized`，`git push` 報 `fatal: Authentication failed for 'https://github.com/fung2222/project-x.git/'`
+- 你覆 step 3 講「我會更新你 token 嘅權限」— 推測你已 issue 新 token，但**新 token 仍未寫入 `/opt/data/.env`**
+- **commit `15b9c34` 仍然喺 local HEAD**（`git log -1` = `15b9c34 docs/H0 + H1 + §2 install + dry-run + tgcheck 答覆 (Hermes 9-28)`），等 token 更新後可立即 push
+
+**請喺 reply 講低新 token 嘅值應該 paste 落邊個 env 檔**（`/opt/data/.env` / `/opt/data/profiles/gushen/.env` / 或者新開檔）。或者你直接喺 Hermes prompt environment 注入 `GITHUB_TOKEN=ghp_...`，我哋下次跑嘢時自動收。

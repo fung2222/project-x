@@ -233,5 +233,36 @@
    }
   ],
   "backfilled": true
+ },
+ {
+  "date": "2026-09-28",
+  "equity_usd": 1286.31,
+  "cash_usd": 1140.56,
+  "total_pnl_usd": 6.31,
+  "total_return_pct": 0.49,
+  "realized_pnl_usd": 18.06,
+  "unrealized_pnl_usd": -10.75,
+  "fx_usdhkd": 7.8,
+  "equity_hkd": 10033.22,
+  "spy_close": 765.61,
+  "qqq_close": 736.53,
+  "positions": [
+   {
+    "ticker": "SOUN",
+    "shares": 25,
+    "price": 5.83,
+    "pnl_pct": -6.87
+   }
+  ],
+  "real": {
+   "equity_usd": 1280.0,
+   "cash_usd": 1280.0,
+   "unrealized_usd": 0.0,
+   "realized_usd": 0.0,
+   "return_pct": 0.0,
+   "n_open": 0,
+   "n_closed": 0,
+   "real_start_date": null
+  }
  }
 ]

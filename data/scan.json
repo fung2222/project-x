@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-09-29T05:00:16+08:00",
+ "generated_at": "2026-09-29T21:53:15+08:00",
  "bar_date": "2026-09-28",
- "equity_usd": 1286.31,
- "fx_usdhkd": 7.8,
- "max_position_usd": 321.58,
- "risk_per_trade_usd": 25.73,
+ "equity_usd": 1287.25,
+ "fx_usdhkd": 7.846,
+ "max_position_usd": 321.81,
+ "risk_per_trade_usd": 25.75,
  "universe_size": 54,
  "scanned": 54,
  "passed": 2,
@@ -28,7 +28,7 @@
    "rsi": 60.3,
    "ex_qqq_20d_pp": 10.92,
    "ex_qqq_60d_pp": -12.6,
-   "dollar_vol20_musd": 1006.8,
+   "dollar_vol20_musd": 1007.2,
    "entry_zone": [
     43.17,
     44.58
@@ -43,10 +43,10 @@
    "atr_pct": 6.33,
    "shares": 3,
    "cost_usd": 133.74,
-   "cost_hkd": 1043.0,
+   "cost_hkd": 1049.0,
    "risk_usd": 25.39,
    "fee_drag_pct": 3.0,
-   "earnings_days": 26,
+   "earnings_days": 25,
    "why": [
     "相對 QQQ：20日 +10.9pp / 60日 -12.6pp",
     "結構：價 > MA20，MA20 < MA50，MA50 向下",
@@ -56,10 +56,10 @@
    "earnings_known": true,
    "bar_date": "2026-09-28",
    "theme": "QUANTUM",
-   "live_price": 44.58,
-   "live_change_pct": -1.98,
+   "live_price": 44.98,
+   "live_change_pct": 0.91,
    "trend_word": "橫行",
-   "reason_plain": "近1個月比納指強 11%、近3個月比納指弱 13%，趨勢橫行，企喺 50 日平均價之上，業績 11-03｜新聞：IonQ Takes Quantum Computing to NVIDIA's Research Center: What's Next?"
+   "reason_plain": "近1個月比納指強 11%、近3個月比納指弱 13%，趨勢橫行，企喺 50 日平均價之上，業績 11-03｜新聞：IonQ (IONQ): BofA Sees Upside as Quantum Roadmap Gains Commercial Tra…"
   },
   {
    "ticker": "RKLB",
@@ -80,7 +80,7 @@
    "rsi": 55.7,
    "ex_qqq_20d_pp": 9.31,
    "ex_qqq_60d_pp": -31.5,
-   "dollar_vol20_musd": 1325.8,
+   "dollar_vol20_musd": 1326.1,
    "entry_zone": [
     70.27,
     72.19
@@ -95,10 +95,10 @@
    "atr_pct": 5.32,
    "shares": 2,
    "cost_usd": 144.38,
-   "cost_hkd": 1126.0,
+   "cost_hkd": 1133.0,
    "risk_usd": 23.04,
    "fee_drag_pct": 2.78,
-   "earnings_days": 30,
+   "earnings_days": 29,
    "why": [
     "相對 QQQ：20日 +9.3pp / 60日 -31.5pp",
     "結構：價 > MA20，MA20 < MA50，MA50 向下",
@@ -108,10 +108,10 @@
    "earnings_known": true,
    "bar_date": "2026-09-28",
    "theme": "SPACE",
-   "live_price": 72.19,
-   "live_change_pct": -2.38,
+   "live_price": 71.82,
+   "live_change_pct": -0.51,
    "trend_word": "橫行",
-   "reason_plain": "近1個月比納指強 9%、近3個月比納指弱 32%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：［新產品］Cantor Backs Rocket Lab’s Launch Momentum After 97th Electron Mission…"
+   "reason_plain": "近1個月比納指強 9%、近3個月比納指弱 32%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：Rocket Lab: Iridium Financing Solved, Neutron Next"
   }
  ],
  "near_misses": [
@@ -136,7 +136,7 @@
    "rsi": 61.0,
    "ex_qqq_20d_pp": -2.17,
    "ex_qqq_60d_pp": 41.64,
-   "dollar_vol20_musd": 4634.9,
+   "dollar_vol20_musd": 4635.5,
    "entry_zone": [
     184.12,
     187.48
@@ -151,10 +151,10 @@
    "atr_pct": 3.58,
    "shares": 1,
    "cost_usd": 187.48,
-   "cost_hkd": 1462.0,
+   "cost_hkd": 1471.0,
    "risk_usd": 20.16,
    "fee_drag_pct": 2.13,
-   "earnings_days": 25,
+   "earnings_days": 24,
    "why": [
     "相對 QQQ：20日 -2.2pp / 60日 +41.6pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -201,10 +201,10 @@
    "atr_pct": 6.91,
    "shares": 9,
    "cost_usd": 120.06,
-   "cost_hkd": 936.0,
+   "cost_hkd": 942.0,
    "risk_usd": 24.01,
    "fee_drag_pct": 3.37,
-   "earnings_days": 40,
+   "earnings_days": 39,
    "why": [
     "相對 QQQ：20日 +11.6pp / 60日 +2.3pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -236,7 +236,7 @@
    "rsi": 46.0,
    "ex_qqq_20d_pp": 14.88,
    "ex_qqq_60d_pp": 4.11,
-   "dollar_vol20_musd": 1604.9,
+   "dollar_vol20_musd": 1605.3,
    "entry_zone": [
     41.72,
     41.72
@@ -251,10 +251,10 @@
    "atr_pct": 7.01,
    "shares": 3,
    "cost_usd": 125.16,
-   "cost_hkd": 976.0,
+   "cost_hkd": 982.0,
    "risk_usd": 25.03,
    "fee_drag_pct": 3.2,
-   "earnings_days": 27,
+   "earnings_days": 26,
    "why": [
     "相對 QQQ：20日 +14.9pp / 60日 +4.1pp",
     "結構：價 < MA20，MA20 > MA50，MA50 向上",
@@ -301,10 +301,10 @@
    "atr_pct": 7.05,
    "shares": 5,
    "cost_usd": 108.1,
-   "cost_hkd": 843.0,
+   "cost_hkd": 848.0,
    "risk_usd": 21.62,
    "fee_drag_pct": 3.72,
-   "earnings_days": 22,
+   "earnings_days": 21,
    "why": [
     "相對 QQQ：20日 +11.0pp / 60日 -5.6pp",
     "結構：價 < MA20，MA20 > MA50，MA50 向上",
@@ -351,7 +351,7 @@
    "atr_pct": 4.59,
    "shares": 17,
    "cost_usd": 176.97,
-   "cost_hkd": 1380.0,
+   "cost_hkd": 1389.0,
    "risk_usd": 24.36,
    "fee_drag_pct": 2.31,
    "earnings_days": null,
@@ -383,7 +383,7 @@
    "earnings_date": "2026-10-29",
    "ex_qqq_20d_pp": 4.56,
    "ex_qqq_60d_pp": 12.54,
-   "dollar_vol20_musd": 1836.3
+   "dollar_vol20_musd": 1836.6
   },
   {
    "ticker": "HOOD",
@@ -401,7 +401,7 @@
    "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": 8.9,
    "ex_qqq_60d_pp": -0.05,
-   "dollar_vol20_musd": 2652.6
+   "dollar_vol20_musd": 2653.1
   },
   {
    "ticker": "PLTR",
@@ -418,7 +418,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -2.17,
    "ex_qqq_60d_pp": 41.64,
-   "dollar_vol20_musd": 4634.9
+   "dollar_vol20_musd": 4635.5
   },
   {
    "ticker": "MARA",
@@ -436,7 +436,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": 10.69,
    "ex_qqq_60d_pp": -5.7,
-   "dollar_vol20_musd": 544.9
+   "dollar_vol20_musd": 545.0
   },
   {
    "ticker": "RXRX",
@@ -489,7 +489,7 @@
    "earnings_date": "2026-10-28",
    "ex_qqq_20d_pp": 20.63,
    "ex_qqq_60d_pp": 52.58,
-   "dollar_vol20_musd": 3482.3
+   "dollar_vol20_musd": 3483.3
   },
   {
    "ticker": "SMCI",
@@ -507,7 +507,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": 9.87,
    "ex_qqq_60d_pp": 50.13,
-   "dollar_vol20_musd": 1500.1
+   "dollar_vol20_musd": 1500.5
   },
   {
    "ticker": "TEM",
@@ -525,7 +525,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": 30.05,
    "ex_qqq_60d_pp": 37.81,
-   "dollar_vol20_musd": 500.8
+   "dollar_vol20_musd": 501.1
   },
   {
    "ticker": "SHOP",
@@ -543,7 +543,7 @@
    "earnings_date": "2026-10-22",
    "ex_qqq_20d_pp": -8.62,
    "ex_qqq_60d_pp": 17.19,
-   "dollar_vol20_musd": 1454.2
+   "dollar_vol20_musd": 1455.0
   },
   {
    "ticker": "IREN",
@@ -560,7 +560,7 @@
    "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": 14.88,
    "ex_qqq_60d_pp": 4.11,
-   "dollar_vol20_musd": 1604.9
+   "dollar_vol20_musd": 1605.3
   },
   {
    "ticker": "IONQ",
@@ -575,7 +575,7 @@
    "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": 10.92,
    "ex_qqq_60d_pp": -12.6,
-   "dollar_vol20_musd": 1006.8
+   "dollar_vol20_musd": 1007.2
   },
   {
    "ticker": "RIOT",
@@ -627,7 +627,7 @@
    "earnings_date": "2026-11-11",
    "ex_qqq_20d_pp": -1.81,
    "ex_qqq_60d_pp": 0.71,
-   "dollar_vol20_musd": 2517.5
+   "dollar_vol20_musd": 2520.6
   },
   {
    "ticker": "ONDS",
@@ -644,7 +644,7 @@
    "earnings_date": "2026-11-11",
    "ex_qqq_20d_pp": -5.59,
    "ex_qqq_60d_pp": 0.29,
-   "dollar_vol20_musd": 473.1
+   "dollar_vol20_musd": 473.2
   },
   {
    "ticker": "RKLB",
@@ -659,7 +659,7 @@
    "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": 9.31,
    "ex_qqq_60d_pp": -31.5,
-   "dollar_vol20_musd": 1325.8
+   "dollar_vol20_musd": 1326.1
   },
   {
    "ticker": "U",
@@ -749,7 +749,7 @@
    "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": 2.28,
    "ex_qqq_60d_pp": -31.7,
-   "dollar_vol20_musd": 594.7
+   "dollar_vol20_musd": 594.9
   },
   {
    "ticker": "LUNR",
@@ -785,7 +785,7 @@
    "earnings_date": "2026-10-15",
    "ex_qqq_20d_pp": -6.67,
    "ex_qqq_60d_pp": 4.49,
-   "dollar_vol20_musd": 181.0
+   "dollar_vol20_musd": 181.3
   },
   {
    "ticker": "CIFR",
@@ -821,7 +821,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -35.64,
    "ex_qqq_60d_pp": 0.74,
-   "dollar_vol20_musd": 844.6
+   "dollar_vol20_musd": 844.7
   },
   {
    "ticker": "ACHR",
@@ -909,7 +909,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -4.04,
    "ex_qqq_60d_pp": -28.88,
-   "dollar_vol20_musd": 271.2
+   "dollar_vol20_musd": 271.3
   },
   {
    "ticker": "SOFI",
@@ -926,7 +926,7 @@
    "earnings_date": "2026-10-26",
    "ex_qqq_20d_pp": -14.6,
    "ex_qqq_60d_pp": -16.02,
-   "dollar_vol20_musd": 770.7
+   "dollar_vol20_musd": 771.0
   },
   {
    "ticker": "LYFT",
@@ -938,7 +938,7 @@
    ],
    "close": 14.88,
    "rsi": 38.1,
-   "rr": 1.8,
+   "rr": 1.79,
    "setup": "趨勢延續",
    "theme": "INTERNET",
    "earnings_date": "2026-11-03",
@@ -979,7 +979,7 @@
    "earnings_date": "2026-10-14",
    "ex_qqq_20d_pp": -6.0,
    "ex_qqq_60d_pp": -29.16,
-   "dollar_vol20_musd": 406.5
+   "dollar_vol20_musd": 406.6
   },
   {
    "ticker": "RIVN",
@@ -996,7 +996,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -10.77,
    "ex_qqq_60d_pp": -23.97,
-   "dollar_vol20_musd": 322.0
+   "dollar_vol20_musd": 322.1
   },
   {
    "ticker": "WULF",
@@ -1031,7 +1031,7 @@
    "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": -16.37,
    "ex_qqq_60d_pp": -23.89,
-   "dollar_vol20_musd": 347.6
+   "dollar_vol20_musd": 347.7
   },
   {
    "ticker": "CELH",
@@ -1066,7 +1066,7 @@
    "earnings_date": "2026-10-28",
    "ex_qqq_20d_pp": -9.29,
    "ex_qqq_60d_pp": -29.86,
-   "dollar_vol20_musd": 738.8
+   "dollar_vol20_musd": 738.9
   },
   {
    "ticker": "OKLO",
@@ -1135,7 +1135,7 @@
    "earnings_date": "2026-11-23",
    "ex_qqq_20d_pp": -20.65,
    "ex_qqq_60d_pp": -28.41,
-   "dollar_vol20_musd": 150.0
+   "dollar_vol20_musd": 150.1
   },
   {
    "ticker": "PLUG",
@@ -1172,7 +1172,7 @@
    "earnings_date": "2026-10-30",
    "ex_qqq_20d_pp": -27.62,
    "ex_qqq_60d_pp": -23.49,
-   "dollar_vol20_musd": 85.1
+   "dollar_vol20_musd": 85.2
   },
   {
    "ticker": "QS",
@@ -1189,7 +1189,7 @@
    "earnings_date": "2026-10-28",
    "ex_qqq_20d_pp": -21.52,
    "ex_qqq_60d_pp": -38.86,
-   "dollar_vol20_musd": 57.7
+   "dollar_vol20_musd": 57.8
   },
   {
    "ticker": "BBAI",
@@ -1234,7 +1234,7 @@
    ],
    "close": 51.58,
    "rsi": 33.6,
-   "rr": 6.15,
+   "rr": 6.11,
    "setup": "趨勢延續",
    "theme": "HEALTH_CONSUMER",
    "earnings_date": "2026-11-02",
@@ -1258,7 +1258,7 @@
    "earnings_date": "2026-11-11",
    "ex_qqq_20d_pp": -26.24,
    "ex_qqq_60d_pp": -41.1,
-   "dollar_vol20_musd": 63.7
+   "dollar_vol20_musd": 63.8
   },
   {
    "ticker": "OPEN",

@@ -1,0 +1,23 @@
+📘 每日報告 2026-09-29（開市 23 分鐘）
+🏦 真倉：暫時冇持倉（買入後叫 Hermes 記錄）
+💰 資金：本金 US$1,280（HK$10,043）· 用咗 US$0 · 剩低現金 US$1,280（100%）· 總賺蝕 +US$0.00／+HK$0（+0.0%）
+
+🧭 買賣信號
+🛒 考慮買入 IONQ（IonQ）：建議買 2 股約 US$90（HK$706），止蝕 $36.12（-20%），止賺 $73.65（+64%，係之前高位、好遠，唔一定去到）
+　（落咗單就話 Hermes：「買咗 IONQ N 股 @價，止蝕…，止賺…」）
+
+⭐ 潛力股（系統揀，唔係保證）
+1. IONQ IonQ 現價 $44.98：近1個月比納指強 11%、近3個月比納指弱 13%，趨勢橫行，企喺 50 日平均價之上，業績 11-03｜新聞：IonQ (IONQ): BofA Sees Upside as Quantum Roadmap Gains Commercial Tra…
+2. RKLB Rocket Lab 現價 $71.82：近1個月比納指強 9%、近3個月比納指弱 32%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：Rocket Lab: Iridium Financing Solved, Neutron Next
+
+🌍 大市
+美股今日窄幅上落：標普 -0.0%、納指 +0.2%。
+恐慌指數 16，正常。
+頭條：Stocks fall as higher oil prices, Treasury yields weigh - reuters.com
+
+🎓 今日學一樣：恐慌指數（VIX）超過 30 代表市場好驚，波幅會好大。呢啲日子少做少錯。
+
+🧪 紙上倉（對照組）：總回報 +0.57%（同期 SPY +0.14%、QQQ +3.23%） · 持倉 1/3
+
+真倉由你喺富途自己落單，系統只提醒；情境參考，唔係保證。
+👉 詳情睇網站：https://fung2222.github.io/project-x/

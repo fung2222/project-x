@@ -6,13 +6,13 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 59,
     "analyst_rating_str": "🟢 強烈買入（59位分析師）",
-    "current_price": 230.725,
+    "current_price": 230.5199,
     "target_mean": 327.7,
     "target_high": 515.0,
     "target_low": 180.0,
-    "upside_pct": 42.0,
+    "upside_pct": 42.2,
     "earnings_date": "2026-11-17",
-    "earnings_days": 49,
+    "earnings_days": 48,
     "pe_ratio": 29.1,
     "forward_pe": 14.7,
     "profit_margin_pct": 63.7,
@@ -20,8 +20,36 @@
     "earnings_growth_pct": 127.8,
     "industry": "Semiconductors",
     "sector": "Technology",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:06.315772"
+    "news": [
+      {
+        "title": "How Micron's earnings results could impact chip ETFs",
+        "title_en": "How Micron's earnings results could impact chip ETFs",
+        "desc_zh": "英偉達 業績／財務相關",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/30"
+      },
+      {
+        "title": "Elon Musk: 'Scaling energy' is the long-term challenge with AI",
+        "title_en": "Elon Musk: 'Scaling energy' is the long-term challenge with AI",
+        "desc_zh": "英偉達 AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      },
+      {
+        "title": "What is a stock buyback? Everything shareholders need to know.",
+        "title_en": "What is a stock buyback? Everything shareholders need to know.",
+        "desc_zh": "英偉達 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/29"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:05.055106"
   },
   "TSLA": {
     "symbol": "TSLA",
@@ -30,22 +58,50 @@
     "recommendation_key": "buy",
     "num_analysts": 38,
     "analyst_rating_str": "🟢 買入（38位分析師）",
-    "current_price": 352.67,
+    "current_price": 346.7,
     "target_mean": 395.83212,
     "target_high": 600.0,
     "target_low": 125.0,
-    "upside_pct": 12.2,
+    "upside_pct": 14.2,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 329.6,
-    "forward_pe": 162.3,
+    "pe_ratio": 327.1,
+    "forward_pe": 160.3,
     "profit_margin_pct": 3.7,
     "revenue_growth_pct": 25.5,
     "earnings_growth_pct": -3.0,
     "industry": "Auto Manufacturers",
     "sector": "Consumer Cyclical",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:06.663174"
+    "news": [
+      {
+        "title": "Trump gathers with AI leaders, floats 'self-regulation' as the way to deal with the technology's dangers",
+        "title_en": "Trump gathers with AI leaders, floats 'self-regulation' as the way to deal with the technology's dangers",
+        "desc_zh": "特斯拉 AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      },
+      {
+        "title": "Tesla's Q3 deliveries loom large as the Roadster slips again",
+        "title_en": "Tesla's Q3 deliveries loom large as the Roadster slips again",
+        "desc_zh": "特斯拉 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 2,
+        "date": "09/29"
+      },
+      {
+        "title": "Should You Buy Tesla Stock Before Oct. 2?",
+        "title_en": "Should You Buy Tesla Stock Before Oct. 2?",
+        "desc_zh": "特斯拉 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/30"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:05.374221"
   },
   "RKLB": {
     "symbol": "RKLB",
@@ -54,22 +110,50 @@
     "recommendation_key": "none",
     "num_analysts": 19,
     "analyst_rating_str": "⚪ 未知（19位分析師）",
-    "current_price": 71.85,
+    "current_price": 72.86,
     "target_mean": 109.36842,
     "target_high": 150.0,
     "target_low": 64.0,
-    "upside_pct": 52.2,
+    "upside_pct": 50.1,
     "earnings_date": null,
     "earnings_days": null,
     "pe_ratio": null,
-    "forward_pe": 1576.6,
+    "forward_pe": 1598.8,
     "profit_margin_pct": -21.5,
     "revenue_growth_pct": 62.0,
     "earnings_growth_pct": null,
     "industry": "Aerospace & Defense",
     "sector": "Industrials",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:07.038139"
+    "news": [
+      {
+        "title": "Rocket Lab Sold Kepler a Dedicated Neutron Flight. Here's How Many More It Needs to Justify Its Valuation",
+        "title_en": "Rocket Lab Sold Kepler a Dedicated Neutron Flight. Here's How Many More It Needs to Justify Its Valuation",
+        "desc_zh": "Rocket Lab 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/30"
+      },
+      {
+        "title": "Stock Market News for Sep 30, 2026",
+        "title_en": "Stock Market News for Sep 30, 2026",
+        "desc_zh": "Rocket Lab 相關負面消息",
+        "sentiment": "利淡",
+        "sentiment_emoji": "🔴",
+        "sentiment_score": -2,
+        "date": "09/30"
+      },
+      {
+        "title": "Rocket Lab Steps In Where SpaceX Just Walked Away",
+        "title_en": "Rocket Lab Steps In Where SpaceX Just Walked Away",
+        "desc_zh": "Rocket Lab 相關負面消息",
+        "sentiment": "利淡",
+        "sentiment_emoji": "🔴",
+        "sentiment_score": -1,
+        "date": "09/29"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:05.679291"
   },
   "AMD": {
     "symbol": "AMD",
@@ -78,22 +162,50 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 50,
     "analyst_rating_str": "🟢 強烈買入（50位分析師）",
-    "current_price": 619.02,
+    "current_price": 602.6908,
     "target_mean": 618.508,
     "target_high": 1250.0,
     "target_low": 365.0,
-    "upside_pct": -0.1,
+    "upside_pct": 2.6,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 159.1,
-    "forward_pe": 39.7,
+    "pe_ratio": 152.6,
+    "forward_pe": 38.7,
     "profit_margin_pct": 15.6,
     "revenue_growth_pct": 50.1,
     "earnings_growth_pct": 159.5,
     "industry": "Semiconductors",
     "sector": "Technology",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:07.404122"
+    "news": [
+      {
+        "title": "Are Meta, AMD, and Micron to thank for the September rally?",
+        "title_en": "Are Meta, AMD, and Micron to thank for the September rally?",
+        "desc_zh": "AMD超微 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/29"
+      },
+      {
+        "title": "HPE boosts networking growth outlook, gets $1.2 billion AI order from cloud firm Vultr",
+        "title_en": "HPE boosts networking growth outlook, gets $1.2 billion AI order from cloud firm Vultr",
+        "desc_zh": "AMD超微 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 3,
+        "date": "09/30"
+      },
+      {
+        "title": "Cathie Wood Sold $110 Million of AMD and Bought Nvidia Instead",
+        "title_en": "Cathie Wood Sold $110 Million of AMD and Bought Nvidia Instead",
+        "desc_zh": "AMD超微 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/30"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:05.981515"
   },
   "MSFT": {
     "symbol": "MSFT",
@@ -102,22 +214,50 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 52,
     "analyst_rating_str": "🟢 強烈買入（52位分析師）",
-    "current_price": 503.92,
-    "target_mean": 577.26135,
+    "current_price": 515.195,
+    "target_mean": 578.41516,
     "target_high": 870.0,
     "target_low": 440.0,
-    "upside_pct": 14.6,
+    "upside_pct": 12.3,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 28.4,
-    "forward_pe": 21.3,
+    "pe_ratio": 28.7,
+    "forward_pe": 21.8,
     "profit_margin_pct": 40.3,
     "revenue_growth_pct": 17.7,
     "earnings_growth_pct": 31.7,
     "industry": "Software - Infrastructure",
     "sector": "Technology",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:07.779011"
+    "news": [
+      {
+        "title": "Microsoft Copilot Users Just Got a Surprising Privacy Reality Check",
+        "title_en": "Microsoft Copilot Users Just Got a Surprising Privacy Reality Check",
+        "desc_zh": "微軟 AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/30"
+      },
+      {
+        "title": "OpenAI Eyes $1.4 Trillion Valuation in New Funding",
+        "title_en": "OpenAI Eyes $1.4 Trillion Valuation in New Funding",
+        "desc_zh": "微軟 AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/30"
+      },
+      {
+        "title": "Nokia Oyj (HLSE:NOKIA) Expands AI Partnerships, Is The Stock Still A Bargain?",
+        "title_en": "Nokia Oyj (HLSE:NOKIA) Expands AI Partnerships, Is The Stock Still A Bargain?",
+        "desc_zh": "微軟 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/30"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:06.314474"
   },
   "GOOGL": {
     "symbol": "GOOGL",
@@ -126,22 +266,50 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 54,
     "analyst_rating_str": "🟢 強烈買入（54位分析師）",
-    "current_price": 340.31,
-    "target_mean": 429.54816,
+    "current_price": 348.85,
+    "target_mean": 429.36295,
     "target_high": 515.0,
     "target_low": 340.0,
-    "upside_pct": 26.2,
+    "upside_pct": 23.1,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 17.1,
-    "forward_pe": 22.6,
+    "pe_ratio": 17.5,
+    "forward_pe": 23.1,
     "profit_margin_pct": 54.8,
     "revenue_growth_pct": 24.2,
     "earnings_growth_pct": 294.0,
     "industry": "Internet Content & Information",
     "sector": "Communication Services",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:08.239111"
+    "news": [
+      {
+        "title": "What we know about Trump's meeting with Alex Karp, Jensen Huang, & other AI leaders",
+        "title_en": "What we know about Trump's meeting with Alex Karp, Jensen Huang, & other AI leaders",
+        "desc_zh": "谷歌 AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      },
+      {
+        "title": "Why AMD's World Labs deal just turned up the heat in the AI chip race",
+        "title_en": "Why AMD's World Labs deal just turned up the heat in the AI chip race",
+        "desc_zh": "谷歌 相關負面消息",
+        "sentiment": "利淡",
+        "sentiment_emoji": "🔴",
+        "sentiment_score": -1,
+        "date": "09/29"
+      },
+      {
+        "title": "A closer look at Anthropic's 2025 losses, Dan Ives discusses AI safety risks",
+        "title_en": "A closer look at Anthropic's 2025 losses, Dan Ives discusses AI safety risks",
+        "desc_zh": "谷歌 相關負面消息",
+        "sentiment": "利淡",
+        "sentiment_emoji": "🔴",
+        "sentiment_score": -3,
+        "date": "09/29"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:06.750900"
   },
   "META": {
     "symbol": "META",
@@ -150,22 +318,50 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 57,
     "analyst_rating_str": "🟢 強烈買入（57位分析師）",
-    "current_price": 721.405,
+    "current_price": 729.7798,
     "target_mean": 793.90735,
     "target_high": 1000.0,
     "target_low": 580.0,
-    "upside_pct": 10.1,
+    "upside_pct": 8.8,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 28.6,
-    "forward_pe": 20.7,
+    "pe_ratio": 27.5,
+    "forward_pe": 20.9,
     "profit_margin_pct": 29.8,
     "revenue_growth_pct": 28.0,
     "earnings_growth_pct": -13.4,
     "industry": "Internet Content & Information",
     "sector": "Communication Services",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:08.610447"
+    "news": [
+      {
+        "title": "OpenAI's Dots connect to 4,000 apps and never sleep",
+        "title_en": "OpenAI's Dots connect to 4,000 apps and never sleep",
+        "desc_zh": "Meta 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/30"
+      },
+      {
+        "title": "What we know about Trump's meeting with Alex Karp, Jensen Huang, & other AI leaders",
+        "title_en": "What we know about Trump's meeting with Alex Karp, Jensen Huang, & other AI leaders",
+        "desc_zh": "Meta AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      },
+      {
+        "title": "OpenAI debuts Dots AI agents in challenge to Meta's popular Muse agent",
+        "title_en": "OpenAI debuts Dots AI agents in challenge to Meta's popular Muse agent",
+        "desc_zh": "Meta AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:07.097964"
   },
   "PLTR": {
     "symbol": "PLTR",
@@ -174,22 +370,50 @@
     "recommendation_key": "buy",
     "num_analysts": 26,
     "analyst_rating_str": "🟢 買入（26位分析師）",
-    "current_price": 186.56,
+    "current_price": 189.17,
     "target_mean": 195.56538,
     "target_high": 255.0,
     "target_low": 80.0,
-    "upside_pct": 4.8,
+    "upside_pct": 3.4,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 158.1,
-    "forward_pe": 80.3,
+    "pe_ratio": 160.3,
+    "forward_pe": 81.4,
     "profit_margin_pct": 49.0,
     "revenue_growth_pct": 92.8,
     "earnings_growth_pct": 215.4,
     "industry": "Software - Infrastructure",
     "sector": "Technology",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:08.964665"
+    "news": [
+      {
+        "title": "What we know about Trump's meeting with Alex Karp, Jensen Huang, & other AI leaders",
+        "title_en": "What we know about Trump's meeting with Alex Karp, Jensen Huang, & other AI leaders",
+        "desc_zh": "Palantir AI／晶片板塊",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      },
+      {
+        "title": "Michael Burry Swapped Shorts for Micron Puts Struck Near Half the Share Price",
+        "title_en": "Michael Burry Swapped Shorts for Micron Puts Struck Near Half the Share Price",
+        "desc_zh": "Palantir 業績／財務相關",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/30"
+      },
+      {
+        "title": "Palantir CEO Alex Karp buys 37,000 acres of Swedish forest",
+        "title_en": "Palantir CEO Alex Karp buys 37,000 acres of Swedish forest",
+        "desc_zh": "Palantir 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 1,
+        "date": "09/30"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:07.393458"
   },
   "ARM": {
     "symbol": "ARM",
@@ -198,21 +422,49 @@
     "recommendation_key": "buy",
     "num_analysts": 40,
     "analyst_rating_str": "🟢 買入（40位分析師）",
-    "current_price": 297.49,
+    "current_price": 290.41,
     "target_mean": 288.705,
     "target_high": 500.0,
     "target_low": 125.0,
-    "upside_pct": -3.0,
+    "upside_pct": -0.6,
     "earnings_date": "2026-11-04",
-    "earnings_days": 36,
-    "pe_ratio": 300.5,
-    "forward_pe": 97.4,
+    "earnings_days": 35,
+    "pe_ratio": 299.7,
+    "forward_pe": 95.2,
     "profit_margin_pct": 20.2,
     "revenue_growth_pct": 22.4,
     "earnings_growth_pct": 108.3,
     "industry": "Semiconductors",
     "sector": "Technology",
-    "news": [],
-    "timestamp": "2026-09-29T21:53:09.314779"
+    "news": [
+      {
+        "title": "Arm Stock Surges 5.24% as Agent Safety Needs Two Silicon Layers",
+        "title_en": "Arm Stock Surges 5.24% as Agent Safety Needs Two Silicon Layers",
+        "desc_zh": "ARM 市場動態",
+        "sentiment": "中性",
+        "sentiment_emoji": "⚪",
+        "sentiment_score": 0,
+        "date": "09/29"
+      },
+      {
+        "title": "European Equities Traded in the US as American Depositary Receipts Lower in Tuesday Trading",
+        "title_en": "European Equities Traded in the US as American Depositary Receipts Lower in Tuesday Trading",
+        "desc_zh": "ARM 相關負面消息",
+        "sentiment": "利淡",
+        "sentiment_emoji": "🔴",
+        "sentiment_score": -1,
+        "date": "09/29"
+      },
+      {
+        "title": "Arm Jumps 5% as Chip Selloff Unwinds; Marvell Climbs 4%, Qualcomm Inches Higher",
+        "title_en": "Arm Jumps 5% as Chip Selloff Unwinds; Marvell Climbs 4%, Qualcomm Inches Higher",
+        "desc_zh": "ARM 相關利好消息",
+        "sentiment": "利好",
+        "sentiment_emoji": "🟢",
+        "sentiment_score": 2,
+        "date": "09/29"
+      }
+    ],
+    "timestamp": "2026-09-30T21:53:07.703818"
   }
 }

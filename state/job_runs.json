@@ -234,15 +234,15 @@
           ]
         }
       },
-      "runs": 2,
+      "runs": 3,
       "last_prices": {
-        "SOUN": 6.076,
-        "RXRX": 4.205
+        "SOUN": 6.105,
+        "RXRX": 4.18
       },
       "last_real_prices": {},
       "last_regime": "NORMAL",
       "alerts": {},
-      "last_run": "2026-09-30T23:06:02+08:00",
+      "last_run": "2026-10-01T00:11:02+08:00",
       "status": "ok"
     },
     "real": {

@@ -285,7 +285,18 @@
    "pnl": null,
    "source": "px",
    "generated_at": "2026-09-29T21:35:04+08:00"
+  },
+  {
+   "date": "2026-09-30",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-09-30.html",
+   "md": "reports/open_report_2026-09-30.md",
+   "summary": "開市監控 · 正常市場（VIX 15.88）",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-09-30T21:35:04+08:00"
   }
  ],
- "updated": "2026-09-30T08:30:03+08:00"
+ "updated": "2026-09-30T21:35:04+08:00"
 }

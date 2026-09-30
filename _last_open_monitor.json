@@ -1,41 +1,39 @@
 {
-  "hkt": "2026-09-29T21:35:02.435039+08:00",
-  "session_date": "2026-09-29",
-  "vix": 15.84,
+  "hkt": "2026-09-30T21:35:02.114822+08:00",
+  "session_date": "2026-09-30",
+  "vix": 15.88,
   "regime": "NORMAL",
   "title": "正常市場",
   "emoji": "🟢",
-  "teach": "開市近止損最危險：唔好加倉攤平；價一穿預設止損就執行，情緒留畀下一個訊號。",
+  "teach": "開市唔使急：先睇 VIX 同大盤方向，持倉只跟預設止損／止盈，唔好喺頭半小時用感覺加倉攤平。",
   "price_watch": [
-    "SOUN 睇住 $5.76 止損、$6.89 止盈（而家 $5.86）"
+    "SOUN 睇住 $5.76 止損、$6.89 止盈（而家 $5.92）"
   ],
-  "alerts": [
-    "NEAR_SL SOUN 距止損 1.7%（5.86 vs SL 5.76）"
-  ],
+  "alerts": [],
   "real_alerts": [],
   "positions": [
     {
       "ticker": "SOUN",
       "shares": 25,
       "entry": 6.26,
-      "px": 5.86,
-      "prev_close": 5.83,
-      "chg_vs_prev": 0.51,
+      "px": 5.92,
+      "prev_close": 5.84,
+      "chg_vs_prev": 1.37,
       "sl": 5.76,
       "tp": 6.89,
       "quote_ok": true,
       "source": "yfinance",
       "action": "HOLD",
-      "pnl_pct": -6.39,
-      "dist_sl_pct": 1.71,
-      "risk_flag": "NEAR_SL"
+      "pnl_pct": -5.43,
+      "dist_sl_pct": 2.7,
+      "risk_flag": "OK"
     }
   ],
   "executed": [],
-  "equity_usd": 1287.06,
+  "equity_usd": 1288.56,
   "cash_usd": 1140.56,
   "telegram_ok": true,
-  "telegram_result": "[160]",
+  "telegram_result": "[166]",
   "dry_run": false,
   "engine": "px v3-core"
 }

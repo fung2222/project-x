@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-01T21:35:03+08:00",
+ "generated_at": "2026-10-01T21:53:12+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -9,15 +9,15 @@
   },
   "RKLB": {
    "ticker": "RKLB",
-   "text": "近1個月比納指強 7%、近3個月比納指弱 21%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：［收購合併］AST SpaceMobile Jumps 5% on Takeover Speculation; Rocket Lab Rises 5%…",
+   "text": "近1個月比納指強 7%、近3個月比納指弱 21%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：［合作／合約］RKLB Stock A ‘Core Holding For Space Bulls,’ Analyst Says – Sees 43%…",
    "kind": "pick",
-   "at": "2026-10-01T05:00:17+08:00"
+   "at": "2026-10-01T21:53:12+08:00"
   },
   "RXRX": {
    "ticker": "RXRX",
    "text": "近1個月比納指強 19%、近3個月比納指強 3%，趨勢上升，企喺 50 日平均價之上，業績 11-03",
    "kind": "pick",
-   "at": "2026-10-01T05:00:17+08:00"
+   "at": "2026-10-01T21:53:12+08:00"
   }
  }
 }

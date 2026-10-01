@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-10-01T05:00:16+08:00",
+ "generated_at": "2026-10-01T21:53:11+08:00",
  "bar_date": "2026-09-30",
- "equity_usd": 1290.62,
- "fx_usdhkd": 7.8,
- "max_position_usd": 322.65,
- "risk_per_trade_usd": 25.81,
+ "equity_usd": 1289.72,
+ "fx_usdhkd": 7.8467,
+ "max_position_usd": 322.43,
+ "risk_per_trade_usd": 25.79,
  "universe_size": 54,
  "scanned": 54,
  "passed": 2,
@@ -43,10 +43,10 @@
    "atr_pct": 5.86,
    "shares": 35,
    "cost_usd": 144.55,
-   "cost_hkd": 1127.0,
+   "cost_hkd": 1134.0,
    "risk_usd": 25.4,
    "fee_drag_pct": 2.91,
-   "earnings_days": 24,
+   "earnings_days": 23,
    "why": [
     "相對 QQQ：20日 +19.5pp / 60日 +3.3pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -56,8 +56,8 @@
    "earnings_known": true,
    "bar_date": "2026-09-30",
    "theme": "BIOTECH_AI",
-   "live_price": 4.13,
-   "live_change_pct": 2.48,
+   "live_price": 4.08,
+   "live_change_pct": -1.21,
    "trend_word": "上升",
    "reason_plain": "近1個月比納指強 19%、近3個月比納指強 3%，趨勢上升，企喺 50 日平均價之上，業績 11-03"
   },
@@ -80,14 +80,14 @@
    "rsi": 50.9,
    "ex_qqq_20d_pp": 6.88,
    "ex_qqq_60d_pp": -20.74,
-   "dollar_vol20_musd": 1376.9,
+   "dollar_vol20_musd": 1377.1,
    "entry_zone": [
     67.69,
     69.68
    ],
    "entry": 69.68,
    "stop": 57.72,
-   "stop_pct": 17.16,
+   "stop_pct": 17.17,
    "target": 151.0,
    "target_pct": 116.7,
    "rr": 6.8,
@@ -95,10 +95,10 @@
    "atr_pct": 5.72,
    "shares": 2,
    "cost_usd": 139.36,
-   "cost_hkd": 1087.0,
+   "cost_hkd": 1094.0,
    "risk_usd": 23.92,
    "fee_drag_pct": 2.88,
-   "earnings_days": 28,
+   "earnings_days": 27,
    "why": [
     "相對 QQQ：20日 +6.9pp / 60日 -20.7pp",
     "結構：價 > MA20，MA20 < MA50，MA50 向下",
@@ -108,10 +108,10 @@
    "earnings_known": true,
    "bar_date": "2026-09-30",
    "theme": "SPACE",
-   "live_price": 69.68,
-   "live_change_pct": -0.03,
+   "live_price": 69.99,
+   "live_change_pct": 0.44,
    "trend_word": "橫行",
-   "reason_plain": "近1個月比納指強 7%、近3個月比納指弱 21%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：［收購合併］AST SpaceMobile Jumps 5% on Takeover Speculation; Rocket Lab Rises 5%…"
+   "reason_plain": "近1個月比納指強 7%、近3個月比納指弱 21%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：［合作／合約］RKLB Stock A ‘Core Holding For Space Bulls,’ Analyst Says – Sees 43%…"
   }
  ],
  "near_misses": [
@@ -143,7 +143,7 @@
    ],
    "entry": 10.99,
    "stop": 9.5,
-   "stop_pct": 13.55,
+   "stop_pct": 13.56,
    "target": 11.82,
    "target_pct": 7.55,
    "rr": 0.56,
@@ -151,8 +151,8 @@
    "atr_pct": 4.52,
    "shares": 17,
    "cost_usd": 186.83,
-   "cost_hkd": 1457.0,
-   "risk_usd": 25.32,
+   "cost_hkd": 1466.0,
+   "risk_usd": 25.33,
    "fee_drag_pct": 2.19,
    "earnings_days": null,
    "why": [
@@ -186,14 +186,14 @@
    "rsi": 50.5,
    "ex_qqq_20d_pp": 1.9,
    "ex_qqq_60d_pp": 0.02,
-   "dollar_vol20_musd": 2609.0,
+   "dollar_vol20_musd": 2609.3,
    "entry_zone": [
     86.56,
     87.12
    ],
    "entry": 87.12,
-   "stop": 71.23,
-   "stop_pct": 18.24,
+   "stop": 71.22,
+   "stop_pct": 18.25,
    "target": 138.25,
    "target_pct": 58.69,
    "rr": 3.22,
@@ -201,10 +201,10 @@
    "atr_pct": 6.08,
    "shares": 1,
    "cost_usd": 87.12,
-   "cost_hkd": 680.0,
-   "risk_usd": 15.89,
+   "cost_hkd": 684.0,
+   "risk_usd": 15.9,
    "fee_drag_pct": 4.58,
-   "earnings_days": 30,
+   "earnings_days": 29,
    "why": [
     "相對 QQQ：20日 +1.9pp / 60日 +0.0pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -236,7 +236,7 @@
    "rsi": 60.4,
    "ex_qqq_20d_pp": -0.58,
    "ex_qqq_60d_pp": 34.93,
-   "dollar_vol20_musd": 4477.0,
+   "dollar_vol20_musd": 4478.0,
    "entry_zone": [
     183.88,
     187.05
@@ -251,10 +251,10 @@
    "atr_pct": 3.39,
    "shares": 1,
    "cost_usd": 187.05,
-   "cost_hkd": 1459.0,
+   "cost_hkd": 1468.0,
    "risk_usd": 19.01,
    "fee_drag_pct": 2.13,
-   "earnings_days": 23,
+   "earnings_days": 22,
    "why": [
     "相對 QQQ：20日 -0.6pp / 60日 +34.9pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -286,7 +286,7 @@
    "rsi": 57.9,
    "ex_qqq_20d_pp": 11.55,
    "ex_qqq_60d_pp": -7.58,
-   "dollar_vol20_musd": 1001.7,
+   "dollar_vol20_musd": 1001.9,
    "entry_zone": [
     42.45,
     43.86
@@ -301,10 +301,10 @@
    "atr_pct": 6.45,
    "shares": 3,
    "cost_usd": 131.58,
-   "cost_hkd": 1026.0,
+   "cost_hkd": 1032.0,
    "risk_usd": 25.45,
    "fee_drag_pct": 3.05,
-   "earnings_days": 24,
+   "earnings_days": 23,
    "why": [
     "相對 QQQ：20日 +11.6pp / 60日 -7.6pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向上",
@@ -336,7 +336,7 @@
    "rsi": 46.8,
    "ex_qqq_20d_pp": -4.52,
    "ex_qqq_60d_pp": 33.72,
-   "dollar_vol20_musd": 423.3,
+   "dollar_vol20_musd": 423.4,
    "entry_zone": [
     40.93,
     40.93
@@ -351,10 +351,10 @@
    "atr_pct": 4.96,
    "shares": 4,
    "cost_usd": 163.72,
-   "cost_hkd": 1277.0,
+   "cost_hkd": 1285.0,
    "risk_usd": 24.37,
    "fee_drag_pct": 2.45,
-   "earnings_days": 24,
+   "earnings_days": 23,
    "why": [
     "相對 QQQ：20日 -4.5pp / 60日 +33.7pp",
     "結構：價 < MA20，MA20 > MA50，MA50 向上",
@@ -383,7 +383,7 @@
    "earnings_date": "2026-10-28",
    "ex_qqq_20d_pp": 18.05,
    "ex_qqq_60d_pp": 52.96,
-   "dollar_vol20_musd": 3443.7
+   "dollar_vol20_musd": 3444.6
   },
   {
    "ticker": "SMCI",
@@ -401,7 +401,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": 7.34,
    "ex_qqq_60d_pp": 52.18,
-   "dollar_vol20_musd": 1525.2
+   "dollar_vol20_musd": 1525.8
   },
   {
    "ticker": "AI",
@@ -436,7 +436,7 @@
    "earnings_date": "2026-10-29",
    "ex_qqq_20d_pp": 0.88,
    "ex_qqq_60d_pp": 9.73,
-   "dollar_vol20_musd": 1795.3
+   "dollar_vol20_musd": 1795.5
   },
   {
    "ticker": "CRWV",
@@ -453,7 +453,7 @@
    "earnings_date": "2026-11-11",
    "ex_qqq_20d_pp": 1.9,
    "ex_qqq_60d_pp": 0.02,
-   "dollar_vol20_musd": 2609.0
+   "dollar_vol20_musd": 2609.3
   },
   {
    "ticker": "PLTR",
@@ -470,7 +470,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -0.58,
    "ex_qqq_60d_pp": 34.93,
-   "dollar_vol20_musd": 4477.0
+   "dollar_vol20_musd": 4478.0
   },
   {
    "ticker": "RXRX",
@@ -520,7 +520,7 @@
    "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": 11.55,
    "ex_qqq_60d_pp": -7.58,
-   "dollar_vol20_musd": 1001.7
+   "dollar_vol20_musd": 1001.9
   },
   {
    "ticker": "SHOP",
@@ -538,7 +538,7 @@
    "earnings_date": "2026-10-22",
    "ex_qqq_20d_pp": 1.52,
    "ex_qqq_60d_pp": 17.4,
-   "dollar_vol20_musd": 1454.6
+   "dollar_vol20_musd": 1455.9
   },
   {
    "ticker": "CLSK",
@@ -573,7 +573,7 @@
    "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": -4.52,
    "ex_qqq_60d_pp": 33.72,
-   "dollar_vol20_musd": 423.3
+   "dollar_vol20_musd": 423.4
   },
   {
    "ticker": "MARA",
@@ -605,7 +605,7 @@
    "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": 6.88,
    "ex_qqq_60d_pp": -20.74,
-   "dollar_vol20_musd": 1376.9
+   "dollar_vol20_musd": 1377.1
   },
   {
    "ticker": "HOOD",
@@ -623,7 +623,7 @@
    "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": 4.14,
    "ex_qqq_60d_pp": -4.63,
-   "dollar_vol20_musd": 2735.0
+   "dollar_vol20_musd": 2735.5
   },
   {
    "ticker": "RGTI",
@@ -640,7 +640,7 @@
    "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": 0.46,
    "ex_qqq_60d_pp": -9.17,
-   "dollar_vol20_musd": 266.7
+   "dollar_vol20_musd": 266.8
   },
   {
    "ticker": "SNAP",
@@ -711,7 +711,7 @@
    "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": 6.49,
    "ex_qqq_60d_pp": -1.6,
-   "dollar_vol20_musd": 1592.7
+   "dollar_vol20_musd": 1593.5
   },
   {
    "ticker": "HUT",
@@ -729,7 +729,7 @@
    "earnings_date": "2026-11-04",
    "ex_qqq_20d_pp": 6.46,
    "ex_qqq_60d_pp": -15.28,
-   "dollar_vol20_musd": 428.0
+   "dollar_vol20_musd": 428.1
   },
   {
    "ticker": "ONDS",
@@ -746,7 +746,7 @@
    "earnings_date": "2026-11-11",
    "ex_qqq_20d_pp": -0.42,
    "ex_qqq_60d_pp": -4.55,
-   "dollar_vol20_musd": 475.7
+   "dollar_vol20_musd": 475.8
   },
   {
    "ticker": "SERV",
@@ -851,7 +851,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": 3.78,
    "ex_qqq_60d_pp": -26.97,
-   "dollar_vol20_musd": 594.7
+   "dollar_vol20_musd": 594.8
   },
   {
    "ticker": "ASTS",
@@ -869,7 +869,7 @@
    "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": 0.94,
    "ex_qqq_60d_pp": -24.96,
-   "dollar_vol20_musd": 628.8
+   "dollar_vol20_musd": 629.0
   },
   {
    "ticker": "LUNR",
@@ -930,7 +930,7 @@
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.3%（> 3.0%）",
-    "5 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "4 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
    "close": 24.37,
    "rsi": 41.8,
@@ -940,7 +940,7 @@
    "earnings_date": "2026-10-07",
    "ex_qqq_20d_pp": -4.21,
    "ex_qqq_60d_pp": -24.92,
-   "dollar_vol20_musd": 412.0
+   "dollar_vol20_musd": 412.1
   },
   {
    "ticker": "LYFT",
@@ -958,7 +958,7 @@
    "earnings_date": "2026-11-03",
    "ex_qqq_20d_pp": -15.04,
    "ex_qqq_60d_pp": -7.06,
-   "dollar_vol20_musd": 150.4
+   "dollar_vol20_musd": 150.5
   },
   {
    "ticker": "QBTS",
@@ -976,7 +976,7 @@
    "earnings_date": "2026-11-02",
    "ex_qqq_20d_pp": -4.36,
    "ex_qqq_60d_pp": -25.6,
-   "dollar_vol20_musd": 273.7
+   "dollar_vol20_musd": 273.8
   },
   {
    "ticker": "SOUN",
@@ -1010,7 +1010,7 @@
    "earnings_date": "2026-10-27",
    "ex_qqq_20d_pp": -12.34,
    "ex_qqq_60d_pp": -15.71,
-   "dollar_vol20_musd": 763.4
+   "dollar_vol20_musd": 763.7
   },
   {
    "ticker": "WULF",
@@ -1028,7 +1028,7 @@
    "earnings_date": "2026-11-09",
    "ex_qqq_20d_pp": -3.52,
    "ex_qqq_60d_pp": -31.15,
-   "dollar_vol20_musd": 448.4
+   "dollar_vol20_musd": 448.5
   },
   {
    "ticker": "SMR",
@@ -1128,7 +1128,7 @@
    ],
    "close": 54.1,
    "rsi": 42.1,
-   "rr": 6.01,
+   "rr": 6.0,
    "setup": "趨勢延續",
    "theme": "HEALTH_CONSUMER",
    "earnings_date": "2026-11-02",
@@ -1169,7 +1169,7 @@
    "earnings_date": "2026-10-28",
    "ex_qqq_20d_pp": -6.06,
    "ex_qqq_60d_pp": -32.86,
-   "dollar_vol20_musd": 754.1
+   "dollar_vol20_musd": 754.2
   },
   {
    "ticker": "UUUU",
@@ -1186,7 +1186,7 @@
    "earnings_date": "2026-10-30",
    "ex_qqq_20d_pp": -26.97,
    "ex_qqq_60d_pp": -18.51,
-   "dollar_vol20_musd": 85.5
+   "dollar_vol20_musd": 85.6
   },
   {
    "ticker": "NIO",

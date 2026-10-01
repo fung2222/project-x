@@ -332,5 +332,42 @@
    "n_closed": 0,
    "real_start_date": null
   }
+ },
+ {
+  "date": "2026-10-01",
+  "equity_usd": 1289.39,
+  "cash_usd": 1003.83,
+  "total_pnl_usd": 9.39,
+  "total_return_pct": 0.73,
+  "realized_pnl_usd": 18.06,
+  "unrealized_pnl_usd": -5.58,
+  "fx_usdhkd": 7.8,
+  "equity_hkd": 10057.24,
+  "spy_close": 763.99,
+  "qqq_close": 742.03,
+  "positions": [
+   {
+    "ticker": "SOUN",
+    "shares": 25,
+    "price": 6.05,
+    "pnl_pct": -3.35
+   },
+   {
+    "ticker": "RXRX",
+    "shares": 33,
+    "price": 4.07,
+    "pnl_pct": -0.25
+   }
+  ],
+  "real": {
+   "equity_usd": 1280.0,
+   "cash_usd": 1280.0,
+   "unrealized_usd": 0.0,
+   "realized_usd": 0.0,
+   "return_pct": 0.0,
+   "n_open": 0,
+   "n_closed": 0,
+   "real_start_date": null
+  }
  }
 ]

@@ -308,6 +308,37 @@
         "report": "ok"
       },
       "entry": null
+    },
+    "hourly": {
+      "sent": {
+        "slot@10:06": {
+          "at": "2026-10-01T22:06:03+08:00",
+          "ids": [
+            174
+          ]
+        },
+        "status": {
+          "at": "2026-10-01T22:06:03+08:00",
+          "ids": [
+            174
+          ]
+        }
+      },
+      "runs": 1,
+      "last_prices": {
+        "SOUN": 6.035,
+        "RXRX": 4.0427
+      },
+      "last_real_prices": {},
+      "last_regime": "NORMAL",
+      "alerts": {},
+      "last_run": "2026-10-01T22:06:03+08:00",
+      "status": "ok"
+    },
+    "real": {
+      "alerts": {},
+      "updated": "2026-10-01T22:06:03+08:00",
+      "last_by": "hourly"
     }
   }
 }

@@ -1,17 +1,17 @@
 {
-  "hkt": "2026-10-01T21:35:02.060717+08:00",
-  "session_date": "2026-10-01",
-  "vix": 16.45,
+  "hkt": "2026-10-02T21:35:02.011941+08:00",
+  "session_date": "2026-10-02",
+  "vix": 15.62,
   "regime": "NORMAL",
   "title": "正常市場",
   "emoji": "🟢",
-  "teach": "開市急跌先分清缺口定趨勢：未穿止損就忍住唔抄底，等頭半小時波動收斂再決定。",
+  "teach": "開市唔使急：先睇 VIX 同大盤方向，持倉只跟預設止損／止盈，唔好喺頭半小時用感覺加倉攤平。",
   "price_watch": [
-    "SOUN 睇住 $5.76 止損、$6.89 止盈（而家 $6.04）",
-    "RXRX 睇住 $3.32 止損、$5.80 止盈（而家 $4.04）"
+    "SOUN 睇住 $5.76 止損、$6.89 止盈（而家 $6.08）",
+    "RXRX 睇住 $3.32 止損、$5.80 止盈（而家 $4.19）"
   ],
   "alerts": [
-    "OPEN_MOVE RXRX 急跌 -2.1% vs 昨收"
+    "OPEN_MOVE RXRX 急升 +3.0% vs 昨收"
   ],
   "real_alerts": [],
   "positions": [
@@ -19,40 +19,40 @@
       "ticker": "SOUN",
       "shares": 25,
       "entry": 6.26,
-      "px": 6.035,
-      "prev_close": 6.02,
-      "chg_vs_prev": 0.25,
+      "px": 6.0785,
+      "prev_close": 6.05,
+      "chg_vs_prev": 0.47,
       "sl": 5.76,
       "tp": 6.89,
       "quote_ok": true,
       "source": "yfinance",
       "action": "HOLD",
-      "pnl_pct": -3.59,
-      "dist_sl_pct": 4.56,
-      "risk_flag": "OK"
+      "pnl_pct": -2.9,
+      "dist_sl_pct": 5.24,
+      "risk_flag": "REVIEW"
     },
     {
       "ticker": "RXRX",
       "shares": 33,
       "entry": 4.08,
-      "px": 4.045,
-      "prev_close": 4.13,
-      "chg_vs_prev": -2.06,
+      "px": 4.19,
+      "prev_close": 4.07,
+      "chg_vs_prev": 2.95,
       "sl": 3.32,
       "tp": 5.8,
       "quote_ok": true,
       "source": "yfinance",
       "action": "HOLD",
-      "pnl_pct": -0.86,
-      "dist_sl_pct": 17.92,
+      "pnl_pct": 2.7,
+      "dist_sl_pct": 20.76,
       "risk_flag": "OK"
     }
   ],
   "executed": [],
-  "equity_usd": 1288.19,
+  "equity_usd": 1294.06,
   "cash_usd": 1003.83,
   "telegram_ok": true,
-  "telegram_result": "[172]",
+  "telegram_result": "[178]",
   "dry_run": false,
   "engine": "px v3-core"
 }

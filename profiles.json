@@ -6,50 +6,22 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 59,
     "analyst_rating_str": "🟢 強烈買入（59位分析師）",
-    "current_price": 231.84,
+    "current_price": 237.39,
     "target_mean": 327.7,
     "target_high": 515.0,
     "target_low": 180.0,
-    "upside_pct": 41.3,
+    "upside_pct": 38.0,
     "earnings_date": "2026-11-17",
-    "earnings_days": 47,
-    "pe_ratio": 29.3,
-    "forward_pe": 14.8,
+    "earnings_days": 46,
+    "pe_ratio": 30.0,
+    "forward_pe": 15.1,
     "profit_margin_pct": 63.7,
     "revenue_growth_pct": 105.9,
     "earnings_growth_pct": 127.8,
     "industry": "Semiconductors",
     "sector": "Technology",
-    "news": [
-      {
-        "title": "Breaking down Jensen Huang's biggest moves of Q3 2026",
-        "title_en": "Breaking down Jensen Huang's biggest moves of Q3 2026",
-        "desc_zh": "英偉達 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -1,
-        "date": "09/30"
-      },
-      {
-        "title": "5 Stocks Under $10 to Buy Now for Immediate Monthly Cash Flow",
-        "title_en": "5 Stocks Under $10 to Buy Now for Immediate Monthly Cash Flow",
-        "desc_zh": "英偉達 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -2,
-        "date": "10/01"
-      },
-      {
-        "title": "Nvidia Knows It Could Trigger a Credit Risk Shock and Collapse Markets",
-        "title_en": "Nvidia Knows It Could Trigger a Credit Risk Shock and Collapse Markets",
-        "desc_zh": "英偉達 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -1,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:04.977817"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:05.443889"
   },
   "TSLA": {
     "symbol": "TSLA",
@@ -58,102 +30,46 @@
     "recommendation_key": "buy",
     "num_analysts": 38,
     "analyst_rating_str": "🟢 買入（38位分析師）",
-    "current_price": 357.2332,
-    "target_mean": 395.83212,
+    "current_price": 369.2401,
+    "target_mean": 395.56894,
     "target_high": 600.0,
     "target_low": 125.0,
-    "upside_pct": 10.8,
+    "upside_pct": 7.1,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 337.0,
-    "forward_pe": 165.2,
+    "pe_ratio": 348.4,
+    "forward_pe": 170.8,
     "profit_margin_pct": 3.7,
     "revenue_growth_pct": 25.5,
     "earnings_growth_pct": -3.0,
     "industry": "Auto Manufacturers",
     "sector": "Consumer Cyclical",
-    "news": [
-      {
-        "title": "Tesla Bears Retreat as Sell Ratings Hit 3-Year Low: 'Don't Bet Against Musk'",
-        "title_en": "Tesla Bears Retreat as Sell Ratings Hit 3-Year Low: 'Don't Bet Against Musk'",
-        "desc_zh": "特斯拉 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -2,
-        "date": "10/01"
-      },
-      {
-        "title": "'Show It in Your Actions' — Zohran Mamdani Says Elon Musk's Talk About Universal High Income Doesn't Match His Actions. ",
-        "title_en": "'Show It in Your Actions' — Zohran Mamdani Says Elon Musk's Talk About Universal High Income Doesn't Match His Actions. ",
-        "desc_zh": "特斯拉 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      },
-      {
-        "title": "Latest News In Energy Transition - Wind Power's Surge: Driving Global Renewable Energy Growth",
-        "title_en": "Latest News In Energy Transition - Wind Power's Surge: Driving Global Renewable Energy Growth",
-        "desc_zh": "特斯拉 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 4,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:05.310763"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:05.807793"
   },
   "RKLB": {
     "symbol": "RKLB",
     "analyst_consensus": "未知",
     "analyst_emoji": "⚪",
     "recommendation_key": "none",
-    "num_analysts": 19,
-    "analyst_rating_str": "⚪ 未知（19位分析師）",
-    "current_price": 69.98,
-    "target_mean": 109.36842,
+    "num_analysts": 20,
+    "analyst_rating_str": "⚪ 未知（20位分析師）",
+    "current_price": 75.25,
+    "target_mean": 109.15,
     "target_high": 150.0,
     "target_low": 64.0,
-    "upside_pct": 56.3,
+    "upside_pct": 45.0,
     "earnings_date": null,
     "earnings_days": null,
     "pe_ratio": null,
-    "forward_pe": 1536.0,
+    "forward_pe": 1393.8,
     "profit_margin_pct": -21.5,
     "revenue_growth_pct": 62.0,
     "earnings_growth_pct": null,
     "industry": "Aerospace & Defense",
     "sector": "Industrials",
-    "news": [
-      {
-        "title": "Exxon Mobil downgraded, BP upgraded: Wall Street's top analyst calls",
-        "title_en": "Exxon Mobil downgraded, BP upgraded: Wall Street's top analyst calls",
-        "desc_zh": "Rocket Lab 市場動態",
-        "sentiment": "中性",
-        "sentiment_emoji": "⚪",
-        "sentiment_score": 0,
-        "date": "10/01"
-      },
-      {
-        "title": "Rocket Lab stock jumps on 20-launch deal with Synspective",
-        "title_en": "Rocket Lab stock jumps on 20-launch deal with Synspective",
-        "desc_zh": "Rocket Lab 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      },
-      {
-        "title": "Here Are Thursday’s Top Wall Street Analyst Research Calls: BP, Dollar Tree, Exxon Mobil, Lennar, Occidental Petroleum, ",
-        "title_en": "Here Are Thursday’s Top Wall Street Analyst Research Calls: BP, Dollar Tree, Exxon Mobil, Lennar, Occidental Petroleum, ",
-        "desc_zh": "Rocket Lab 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -1,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:05.707711"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:06.166961"
   },
   "AMD": {
     "symbol": "AMD",
@@ -162,50 +78,22 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 50,
     "analyst_rating_str": "🟢 強烈買入（50位分析師）",
-    "current_price": 605.76,
-    "target_mean": 618.508,
+    "current_price": 640.345,
+    "target_mean": 619.508,
     "target_high": 1250.0,
     "target_low": 365.0,
-    "upside_pct": 2.1,
+    "upside_pct": -3.3,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 154.5,
-    "forward_pe": 38.9,
+    "pe_ratio": 162.5,
+    "forward_pe": 41.1,
     "profit_margin_pct": 15.6,
     "revenue_growth_pct": 50.1,
     "earnings_growth_pct": 159.5,
     "industry": "Semiconductors",
     "sector": "Technology",
-    "news": [
-      {
-        "title": "Nvidia’s Latest Move is a Green Light to Keep Loading Up",
-        "title_en": "Nvidia’s Latest Move is a Green Light to Keep Loading Up",
-        "desc_zh": "AMD超微 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      },
-      {
-        "title": "The Hyperscaler CPU Threat to AMD No One Is Talking About",
-        "title_en": "The Hyperscaler CPU Threat to AMD No One Is Talking About",
-        "desc_zh": "AMD超微 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      },
-      {
-        "title": "I’m Dollar Cost Averaging AMD at Today’s Price Without Fear",
-        "title_en": "I’m Dollar Cost Averaging AMD at Today’s Price Without Fear",
-        "desc_zh": "AMD超微 市場動態",
-        "sentiment": "中性",
-        "sentiment_emoji": "⚪",
-        "sentiment_score": 0,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:06.031365"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:06.628103"
   },
   "MSFT": {
     "symbol": "MSFT",
@@ -214,50 +102,22 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 52,
     "analyst_rating_str": "🟢 強烈買入（52位分析師）",
-    "current_price": 518.43,
-    "target_mean": 578.41516,
+    "current_price": 515.81,
+    "target_mean": 578.89594,
     "target_high": 870.0,
     "target_low": 440.0,
-    "upside_pct": 11.6,
+    "upside_pct": 12.2,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 28.9,
-    "forward_pe": 21.9,
+    "pe_ratio": 28.7,
+    "forward_pe": 21.8,
     "profit_margin_pct": 40.3,
     "revenue_growth_pct": 17.7,
     "earnings_growth_pct": 31.7,
     "industry": "Software - Infrastructure",
     "sector": "Technology",
-    "news": [
-      {
-        "title": "Oracle’s Negative Free Cash Flow Exposes the Uncomfortable Truth About AI’s Financing Game",
-        "title_en": "Oracle’s Negative Free Cash Flow Exposes the Uncomfortable Truth About AI’s Financing Game",
-        "desc_zh": "微軟 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -1,
-        "date": "10/01"
-      },
-      {
-        "title": "Dow Jones Futures Rise, S&P 500 Finds Key Support As Micron Earnings Crush Views; Oil Prices, Treasury Yields In Focus",
-        "title_en": "Dow Jones Futures Rise, S&P 500 Finds Key Support As Micron Earnings Crush Views; Oil Prices, Treasury Yields In Focus",
-        "desc_zh": "微軟 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 3,
-        "date": "10/01"
-      },
-      {
-        "title": "Every S&P Sector Fell in September Except One",
-        "title_en": "Every S&P Sector Fell in September Except One",
-        "desc_zh": "微軟 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 2,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:06.345139"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:07.083195"
   },
   "GOOGL": {
     "symbol": "GOOGL",
@@ -266,7 +126,7 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 54,
     "analyst_rating_str": "🟢 強烈買入（54位分析師）",
-    "current_price": 343.8,
+    "current_price": 343.75,
     "target_mean": 429.36295,
     "target_high": 515.0,
     "target_low": 340.0,
@@ -280,88 +140,32 @@
     "earnings_growth_pct": 294.0,
     "industry": "Internet Content & Information",
     "sector": "Communication Services",
-    "news": [
-      {
-        "title": "AI companies just signed a White House accord, and tech folks can't get enough of the signatures",
-        "title_en": "AI companies just signed a White House accord, and tech folks can't get enough of the signatures",
-        "desc_zh": "谷歌 相關負面消息",
-        "sentiment": "利淡",
-        "sentiment_emoji": "🔴",
-        "sentiment_score": -1,
-        "date": "09/30"
-      },
-      {
-        "title": "Stock Market Today: Dow Flat As Yields Keep Rising; Micron Drops On Earnings (Live Coverage)",
-        "title_en": "Stock Market Today: Dow Flat As Yields Keep Rising; Micron Drops On Earnings (Live Coverage)",
-        "desc_zh": "谷歌 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      },
-      {
-        "title": "Stocks to Watch: Micron, Alphabet, Sanofi, Nu Holdings",
-        "title_en": "Stocks to Watch: Micron, Alphabet, Sanofi, Nu Holdings",
-        "desc_zh": "谷歌 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:06.642786"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:07.451113"
   },
   "META": {
     "symbol": "META",
     "analyst_consensus": "強烈買入",
     "analyst_emoji": "🟢",
     "recommendation_key": "strong_buy",
-    "num_analysts": 57,
-    "analyst_rating_str": "🟢 強烈買入（57位分析師）",
-    "current_price": 729.5799,
-    "target_mean": 793.90735,
+    "num_analysts": 58,
+    "analyst_rating_str": "🟢 強烈買入（58位分析師）",
+    "current_price": 731.6479,
+    "target_mean": 794.9607,
     "target_high": 1000.0,
     "target_low": 580.0,
-    "upside_pct": 8.8,
+    "upside_pct": 8.7,
     "earnings_date": null,
     "earnings_days": null,
     "pe_ratio": 27.5,
-    "forward_pe": 20.9,
+    "forward_pe": 21.0,
     "profit_margin_pct": 29.8,
     "revenue_growth_pct": 28.0,
     "earnings_growth_pct": -13.4,
     "industry": "Internet Content & Information",
     "sector": "Communication Services",
-    "news": [
-      {
-        "title": "Apple Stock’s Upside May Be Limited as AI Agents Could Disrupt Business",
-        "title_en": "Apple Stock’s Upside May Be Limited as AI Agents Could Disrupt Business",
-        "desc_zh": "Meta 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 2,
-        "date": "10/01"
-      },
-      {
-        "title": "‘We’re looking at a bubble here’: Experts including Ray Dalio advise on how to protect your wealth as bond yields spike",
-        "title_en": "‘We’re looking at a bubble here’: Experts including Ray Dalio advise on how to protect your wealth as bond yields spike",
-        "desc_zh": "Meta 市場動態",
-        "sentiment": "中性",
-        "sentiment_emoji": "⚪",
-        "sentiment_score": 0,
-        "date": "10/01"
-      },
-      {
-        "title": "Meta’s Next AI Gold Mine? Muse Targets 200 Million Small Businesses As Zuckerberg Eyes Fees, Subscriptions",
-        "title_en": "Meta’s Next AI Gold Mine? Muse Targets 200 Million Small Businesses As Zuckerberg Eyes Fees, Subscriptions",
-        "desc_zh": "Meta 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 2,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:06.937300"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:07.818121"
   },
   "PLTR": {
     "symbol": "PLTR",
@@ -370,50 +174,22 @@
     "recommendation_key": "buy",
     "num_analysts": 26,
     "analyst_rating_str": "🟢 買入（26位分析師）",
-    "current_price": 189.34,
+    "current_price": 191.165,
     "target_mean": 195.56538,
     "target_high": 255.0,
     "target_low": 80.0,
-    "upside_pct": 3.3,
+    "upside_pct": 2.3,
     "earnings_date": null,
     "earnings_days": null,
-    "pe_ratio": 160.5,
-    "forward_pe": 81.4,
+    "pe_ratio": 162.0,
+    "forward_pe": 82.2,
     "profit_margin_pct": 49.0,
     "revenue_growth_pct": 92.8,
     "earnings_growth_pct": 215.4,
     "industry": "Software - Infrastructure",
     "sector": "Technology",
-    "news": [
-      {
-        "title": "IBM Jumps 5% as Bob Coding Agent Gains Self-Hosted Deployment; Salesforce Rises 3%, Palantir Inches Higher",
-        "title_en": "IBM Jumps 5% as Bob Coding Agent Gains Self-Hosted Deployment; Salesforce Rises 3%, Palantir Inches Higher",
-        "desc_zh": "Palantir 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 5,
-        "date": "10/01"
-      },
-      {
-        "title": "Palantir’s CEO Bought 37,000 Acres of Swedish Forestland and Hunting Leases Vanished. Five Years of Rent Can Count as $0",
-        "title_en": "Palantir’s CEO Bought 37,000 Acres of Swedish Forestland and Hunting Leases Vanished. Five Years of Rent Can Count as $0",
-        "desc_zh": "Palantir 業績／財務相關",
-        "sentiment": "中性",
-        "sentiment_emoji": "⚪",
-        "sentiment_score": 0,
-        "date": "10/01"
-      },
-      {
-        "title": "OpenAI President Backs Out of Pledged $25 Million Donation to AI Super PAC",
-        "title_en": "OpenAI President Backs Out of Pledged $25 Million Donation to AI Super PAC",
-        "desc_zh": "Palantir 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "10/01"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:07.260845"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:08.286004"
   },
   "ARM": {
     "symbol": "ARM",
@@ -422,49 +198,21 @@
     "recommendation_key": "buy",
     "num_analysts": 40,
     "analyst_rating_str": "🟢 買入（40位分析師）",
-    "current_price": 289.0,
+    "current_price": 308.8499,
     "target_mean": 288.705,
     "target_high": 500.0,
     "target_low": 125.0,
-    "upside_pct": -0.1,
+    "upside_pct": -6.5,
     "earnings_date": "2026-11-04",
-    "earnings_days": 34,
-    "pe_ratio": 294.9,
-    "forward_pe": 94.6,
+    "earnings_days": 33,
+    "pe_ratio": 312.0,
+    "forward_pe": 101.1,
     "profit_margin_pct": 20.2,
     "revenue_growth_pct": 22.4,
     "earnings_growth_pct": 108.3,
     "industry": "Semiconductors",
     "sector": "Technology",
-    "news": [
-      {
-        "title": "3 AI Stocks With Earnings Growth Up To 76%",
-        "title_en": "3 AI Stocks With Earnings Growth Up To 76%",
-        "desc_zh": "ARM 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 2,
-        "date": "10/01"
-      },
-      {
-        "title": "In AI Race, Software Is Now Winning Alongside Chips",
-        "title_en": "In AI Race, Software Is Now Winning Alongside Chips",
-        "desc_zh": "ARM 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 1,
-        "date": "09/30"
-      },
-      {
-        "title": "Arm Is Betting on a World Where Everything Needs a Chip",
-        "title_en": "Arm Is Betting on a World Where Everything Needs a Chip",
-        "desc_zh": "ARM 相關利好消息",
-        "sentiment": "利好",
-        "sentiment_emoji": "🟢",
-        "sentiment_score": 2,
-        "date": "09/30"
-      }
-    ],
-    "timestamp": "2026-10-01T21:53:07.540599"
+    "news": [],
+    "timestamp": "2026-10-02T21:53:08.682624"
   }
 }

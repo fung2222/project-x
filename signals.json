@@ -34898,6 +34898,276 @@
       "is_owned": false,
       "timestamp": "2026-10-02T21:53:03+08:00",
       "date": "2026-10-02"
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "偏高，觀望",
+      "confidence": 55.0,
+      "price": 237.52,
+      "change_pct": 1.53,
+      "rsi": 62.9,
+      "macd": 3.4886,
+      "macd_histogram": 0.8272,
+      "macd_bullish": true,
+      "vol_ratio": 1.23,
+      "ma20": 223.79,
+      "ma50": 218.28,
+      "atr": 5.9101,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 6,
+      "reasons": [
+        "RSI 63 偏高"
+      ],
+      "signal_reasons": [
+        "RSI 63 偏高"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "觀望",
+      "confidence": 50.0,
+      "price": 374.35,
+      "change_pct": 1.01,
+      "rsi": 55.0,
+      "macd": 1.8335,
+      "macd_histogram": -1.4985,
+      "macd_bullish": false,
+      "vol_ratio": 1.43,
+      "ma20": 364.87,
+      "ma50": 347.58,
+      "atr": 12.4431,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 5,
+      "reasons": [
+        "RSI 55 中性"
+      ],
+      "signal_reasons": [
+        "RSI 55 中性"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "RKLB",
+      "name": "Rocket Lab",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "觀望",
+      "confidence": 50.0,
+      "price": 72.52,
+      "change_pct": -1.89,
+      "rsi": 58.4,
+      "macd": 0.74,
+      "macd_histogram": 0.8567,
+      "macd_bullish": true,
+      "vol_ratio": 1.28,
+      "ma20": 67.8,
+      "ma50": 69.76,
+      "atr": 4.0532,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 3,
+      "reasons": [
+        "RSI 58 中性"
+      ],
+      "signal_reasons": [
+        "RSI 58 中性"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "AMD",
+      "name": "Adv. Micro Devices",
+      "signal": "SELL",
+      "raw_signal": "SELL",
+      "action": "超買，考慮止盈（冇持倉，唔做空）",
+      "confidence": 57.1,
+      "price": 629.99,
+      "change_pct": -0.62,
+      "rsi": 70.1,
+      "macd": 35.5575,
+      "macd_histogram": 4.3933,
+      "macd_bullish": true,
+      "vol_ratio": 0.88,
+      "ma20": 566.49,
+      "ma50": 513.53,
+      "atr": 24.208,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 4,
+      "reasons": [
+        "RSI 70 超買"
+      ],
+      "signal_reasons": [
+        "RSI 70 超買"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "偏高，觀望",
+      "confidence": 55.0,
+      "price": 528.39,
+      "change_pct": 2.1,
+      "rsi": 62.6,
+      "macd": 7.8044,
+      "macd_histogram": 0.3591,
+      "macd_bullish": true,
+      "vol_ratio": 0.83,
+      "ma20": 501.67,
+      "ma50": 487.72,
+      "atr": 11.5857,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 5,
+      "reasons": [
+        "RSI 63 偏高"
+      ],
+      "signal_reasons": [
+        "RSI 63 偏高"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "觀望",
+      "confidence": 50.0,
+      "price": 345.14,
+      "change_pct": 0.48,
+      "rsi": 50.0,
+      "macd": -0.5463,
+      "macd_histogram": -0.1491,
+      "macd_bullish": false,
+      "vol_ratio": 0.87,
+      "ma20": 342.62,
+      "ma50": 344.37,
+      "atr": 9.0041,
+      "regime": "NORMAL",
+      "above_ma50": false,
+      "trend_score": 0,
+      "reasons": [
+        "RSI 50 中性"
+      ],
+      "signal_reasons": [
+        "RSI 50 中性"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "觀望",
+      "confidence": 50.0,
+      "price": 738.48,
+      "change_pct": 1.43,
+      "rsi": 61.5,
+      "macd": 34.3132,
+      "macd_histogram": -0.7695,
+      "macd_bullish": false,
+      "vol_ratio": 0.54,
+      "ma20": 695.92,
+      "ma50": 625.04,
+      "atr": 25.4147,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 4,
+      "reasons": [
+        "RSI 62 中性"
+      ],
+      "signal_reasons": [
+        "RSI 62 中性"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "PLTR",
+      "name": "Palantir",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "觀望",
+      "confidence": 50.0,
+      "price": 190.69,
+      "change_pct": 1.03,
+      "rsi": 61.2,
+      "macd": 5.5841,
+      "macd_histogram": 0.0614,
+      "macd_bullish": true,
+      "vol_ratio": 0.74,
+      "ma20": 180.19,
+      "ma50": 169.78,
+      "atr": 6.2733,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 5,
+      "reasons": [
+        "RSI 61 中性"
+      ],
+      "signal_reasons": [
+        "RSI 61 中性"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
+    },
+    {
+      "ticker": "ARM",
+      "name": "Arm Holdings",
+      "signal": "HOLD",
+      "raw_signal": "HOLD",
+      "action": "觀望",
+      "confidence": 50.0,
+      "price": 301.35,
+      "change_pct": -2.0,
+      "rsi": 58.5,
+      "macd": 11.1369,
+      "macd_histogram": 1.2586,
+      "macd_bullish": true,
+      "vol_ratio": 1.0,
+      "ma20": 281.7,
+      "ma50": 265.79,
+      "atr": 19.0234,
+      "regime": "NORMAL",
+      "above_ma50": true,
+      "trend_score": 5,
+      "reasons": [
+        "RSI 58 中性"
+      ],
+      "signal_reasons": [
+        "RSI 58 中性"
+      ],
+      "is_owned": false,
+      "timestamp": "2026-10-05T21:53:03+08:00",
+      "date": "2026-10-05"
     }
   ],
   "performance": {
@@ -34912,7 +35182,7 @@
     "miss_rate_pct": 23.7,
     "label": "信號命中率樣本（唔係實際交易筆數）"
   },
-  "last_updated": "2026-10-02T21:53:08+08:00",
+  "last_updated": "2026-10-05T21:53:11+08:00",
   "vix_regime": "正常市場",
-  "vix_value": 15.68
+  "vix_value": 15.92
 }

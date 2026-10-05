@@ -1,0 +1,20 @@
+🌙 收市報告 2026-10-05（美股已收市）
+🌍 美股今日升：標普 +0.7%、納指 +0.9%。 恐慌指數 16，正常。 頭條：Wall Street rewards Microsoft's AI pivot. A longtime skeptic says it's just the beginning
+
+🏦 真倉：暫時冇持倉（買入後叫 Hermes 記錄）
+💰 資金：本金 US$1,280（HK$9,984）· 用咗 US$0 · 剩低現金 US$1,280（100%）· 總賺蝕 +US$0.00／+HK$0（+0.0%）
+
+🧭 買賣信號
+🛒 今晚開市後考慮買入 RXRX（Recursion）：建議買 29 股約 US$139（HK$1,081），止蝕 $3.92（-18%），止賺 $6.93（+45%，係之前高位、好遠，唔一定去到）（價錢喺 $4.64–$4.78 之間先買，唔好追高）
+　（落咗單就話 Hermes：「買咗 RXRX N 股 @價，止蝕…，止賺…」）
+
+⭐ 今晚開市潛力股（系統揀，唔係保證）
+1. RXRX Recursion 現價 $4.78：近1個月比納指強 26%、近3個月比納指強 30%，趨勢上升，啱啱帶量升穿 20 日高位，業績 11-03
+2. RKLB Rocket Lab 現價 $73.02：近1個月比納指強 8%、近3個月比納指弱 14%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：SpaceX Climbs 5% as Musk Renames SpaceXAI to SpaceXSI, Morgan Stanley…
+
+🧪 紙上倉（對照組）：總回報 +2.23%（同期 SPY +1.38%、QQQ +5.78%） · 持倉 2/3 · 今日：權益 +22.78 美元
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 7/7✅
+🗺 今日板塊熱力圖：https://fung2222.github.io/project-x/heatmap.html
+
+真倉由你喺富途自己落單，系統只提醒；情境參考，唔係保證。
+👉 詳情睇網站：https://fung2222.github.io/project-x/

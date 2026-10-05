@@ -1,34 +1,34 @@
 {
-  "hkt": "2026-10-06T02:06:02.105511+08:00",
+  "hkt": "2026-10-06T03:06:02.362901+08:00",
   "session_date": "2026-10-05",
-  "vix": 15.55,
+  "vix": 15.56,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "SOUN",
       "shares": 25,
-      "px": 5.93,
-      "pnl_pct": -5.28,
+      "px": 5.94,
+      "pnl_pct": -5.16,
       "sl": 5.76,
       "tp": 6.89,
-      "dist_sl_pct": 2.85,
+      "dist_sl_pct": 2.98,
       "action": "HOLD",
       "near_stop": false
     },
     {
       "ticker": "RXRX",
       "shares": 33,
-      "px": 4.68,
-      "pnl_pct": 14.71,
+      "px": 4.84,
+      "pnl_pct": 18.63,
       "sl": 3.32,
       "tp": 5.8,
-      "dist_sl_pct": 29.06,
+      "dist_sl_pct": 31.4,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1306.5,
+  "equity_usd": 1311.98,
   "cash_usd": 1003.83,
   "alerts": [],
   "real_alerts": [],

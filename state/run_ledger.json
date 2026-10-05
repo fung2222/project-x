@@ -1136,5 +1136,26 @@
   "status": "ok",
   "last_at": "2026-10-02T21:35:04+08:00",
   "detail": ""
+ },
+ "weekly|2026-10-05T09:44+08:00": {
+  "job": "weekly",
+  "slot_hkt": "2026-10-05T09:44+08:00",
+  "slot_local": "2026-10-05 09:44 HKT",
+  "attempts": 1,
+  "history": [
+   {
+    "at": "2026-10-05T09:44:01+08:00",
+    "status": "running",
+    "via": "tick"
+   },
+   {
+    "at": "2026-10-05T09:44:04+08:00",
+    "status": "ok",
+    "via": "tick"
+   }
+  ],
+  "status": "ok",
+  "last_at": "2026-10-05T09:44:04+08:00",
+  "detail": ""
  }
 }

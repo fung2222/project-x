@@ -417,7 +417,18 @@
    "pnl": null,
    "source": "px",
    "generated_at": "2026-10-02T21:35:04+08:00"
+  },
+  {
+   "date": "2026-10-05",
+   "kind": "weekly",
+   "kind_zh": "週報",
+   "file": "reports/weekly_report_2026-10-05.html",
+   "md": "reports/weekly_report_2026-10-05.md",
+   "summary": "每週回顧 2026-09-28 至 2026-10-05",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-10-05T09:44:04+08:00"
   }
  ],
- "updated": "2026-10-03T08:30:03+08:00"
+ "updated": "2026-10-05T09:44:04+08:00"
 }

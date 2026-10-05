@@ -1,0 +1,81 @@
+{
+  "type": "weekly_report",
+  "week_start": "2026-09-28",
+  "week_end": "2026-10-05",
+  "generated": "2026-10-05T09:44:01.960973+08:00",
+  "market": {
+    "vix": 15.31,
+    "regime": "正常市場",
+    "spy_price": 769.64,
+    "qqq_price": 749.58
+  },
+  "real": {
+    "summary": {
+      "n_open": 0,
+      "equity_usd": 1280.0,
+      "cash_usd": 1280.0,
+      "unrealized_usd": 0.0,
+      "realized_usd": 0.0,
+      "return_pct": 0.0,
+      "n_closed": 0,
+      "n_wins": 0,
+      "win_rate_pct": null,
+      "real_start_date": null
+    },
+    "three_way": {
+      "since": null
+    }
+  },
+  "account": {
+    "equity_usd": 1285.79,
+    "cash_usd": 1003.83,
+    "cash_pct": 78.07,
+    "realized_pnl_usd": 18.06,
+    "unrealized_pnl_usd": -9.18,
+    "total_pnl_usd": 5.79,
+    "total_return_pct": 0.45
+  },
+  "spy_return_since_rebase_pct": 0.7,
+  "trades": [
+    {
+      "id": "T006",
+      "date": "2026-09-30",
+      "timestamp": "2026-09-30T21:53:02+08:00",
+      "ticker": "RXRX",
+      "action": "BUY",
+      "shares": 33,
+      "entry_price": 4.08,
+      "cost_usd": 134.64,
+      "fee_usd": 2.09,
+      "reason": "SCAN_ENTRY: RXRX 分數 87，趨勢延續，R:R 2.5，SL 3.32 / TP 5.80",
+      "setup": "SCAN",
+      "confidence": 86.6,
+      "theme": "BIOTECH_AI",
+      "stop_loss_price": 3.32,
+      "take_profit_price": 5.8,
+      "status": "open",
+      "pnl_usd": null,
+      "pnl_pct": null
+    }
+  ],
+  "week_summary": {
+    "days_analyzed": 5,
+    "buy_signals": 0,
+    "hold_signals": 43,
+    "sell_signals": 2
+  },
+  "signal_hit_rate_sample": {
+    "total_signals": 38,
+    "hits": 16,
+    "partials": 13,
+    "misses": 9,
+    "neutrals": 9,
+    "hit_rate_pct": 42.1,
+    "partial_rate_pct": 34.2,
+    "note": "從 2026-07-07 開始實時收集",
+    "miss_rate_pct": 23.7,
+    "label": "信號命中率樣本（唔係實際交易筆數）"
+  },
+  "telegram_ok": true,
+  "engine": "px v3-core"
+}

@@ -1,45 +1,43 @@
 {
-  "hkt": "2026-10-03T04:06:01.953969+08:00",
-  "session_date": "2026-10-02",
-  "vix": 15.46,
+  "hkt": "2026-10-05T22:06:02.263635+08:00",
+  "session_date": "2026-10-05",
+  "vix": 15.88,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "SOUN",
       "shares": 25,
-      "px": 5.84,
-      "pnl_pct": -6.71,
+      "px": 5.88,
+      "pnl_pct": -5.99,
       "sl": 5.76,
       "tp": 6.89,
-      "dist_sl_pct": 1.37,
+      "dist_sl_pct": 2.12,
       "action": "HOLD",
-      "near_stop": true
+      "near_stop": false
     },
     {
       "ticker": "RXRX",
       "shares": 33,
-      "px": 4.12,
-      "pnl_pct": 0.98,
+      "px": 4.41,
+      "pnl_pct": 8.09,
       "sl": 3.32,
       "tp": 5.8,
-      "dist_sl_pct": 19.42,
+      "dist_sl_pct": 24.72,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1285.79,
+  "equity_usd": 1296.49,
   "cash_usd": 1003.83,
   "alerts": [],
   "real_alerts": [],
-  "paper_notes": [
-    "SOUN 距止損 1.4%"
-  ],
+  "paper_notes": [],
   "real_positions": [],
-  "need_push": false,
-  "first_today": false,
-  "push_reason": "none",
-  "pushed": false,
+  "need_push": true,
+  "first_today": true,
+  "push_reason": "first_of_session",
+  "pushed": true,
   "push_err": null,
   "dry_run": false,
   "engine": "px v3-core"

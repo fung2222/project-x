@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-06T21:35:03+08:00",
+ "generated_at": "2026-10-06T21:53:14+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -9,15 +9,15 @@
   },
   "RKLB": {
    "ticker": "RKLB",
-   "text": "近1個月比納指強 8%、近3個月比納指弱 14%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：SpaceX Climbs 5% as Musk Renames SpaceXAI to SpaceXSI, Morgan Stanley…",
+   "text": "近1個月比納指強 8%、近3個月比納指弱 14%，趨勢橫行，企喺 50 日平均價之上，業績 11-09｜新聞：Can Rocket Lab Capitalize on Falcon 9’s Exit Before Neutron Slips Aga…",
    "kind": "pick",
-   "at": "2026-10-06T05:00:29+08:00"
+   "at": "2026-10-06T21:53:14+08:00"
   },
   "RXRX": {
    "ticker": "RXRX",
    "text": "近1個月比納指強 26%、近3個月比納指強 30%，趨勢上升，啱啱帶量升穿 20 日高位，業績 11-03",
    "kind": "pick",
-   "at": "2026-10-06T05:00:29+08:00"
+   "at": "2026-10-06T21:53:14+08:00"
   }
  }
 }

@@ -702,15 +702,15 @@
           ]
         }
       },
-      "runs": 5,
+      "runs": 6,
       "last_prices": {
-        "RXRX": 4.32,
-        "AI": 11.345
+        "RXRX": 4.395,
+        "AI": 11.36
       },
       "last_real_prices": {},
       "last_regime": "NORMAL",
       "alerts": {},
-      "last_run": "2026-10-08T02:06:02+08:00",
+      "last_run": "2026-10-08T03:06:02+08:00",
       "status": "ok"
     },
     "real": {

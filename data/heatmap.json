@@ -1,11 +1,11 @@
 {
  "schema": "heatmap_v1",
- "generated_at": "2026-10-08T00:06:02+08:00",
- "generated_hkt": "2026-10-08 00:06 HKT",
- "prices_as_of": "2026-10-08T00:06:02+08:00",
+ "generated_at": "2026-10-08T01:06:02+08:00",
+ "generated_hkt": "2026-10-08 01:06 HKT",
+ "prices_as_of": "2026-10-08T01:06:02+08:00",
  "data_date": "2026-10-07",
  "phase": "intraday",
- "date_label": "美股 2026-10-07（星期三）盤中，截至 12:06 美東（00:06 香港時間）",
+ "date_label": "美股 2026-10-07（星期三）盤中，截至 13:06 美東（01:06 香港時間）",
  "colour": {
   "up": "red",
   "down": "green",
@@ -47,47 +47,47 @@
  "index": {
   "SPY": {
    "name": "SPY 標普500",
-   "last": 776.38,
-   "chg_pct": -0.348,
-   "color": "#add7b7",
+   "last": 776.91,
+   "chg_pct": -0.28,
+   "color": "#b0daba",
    "text_color": "#1a1a1a",
-   "label": "-0.35%"
+   "label": "-0.28%"
   },
   "QQQ": {
    "name": "QQQ 納指100",
-   "last": 756.8,
-   "chg_pct": -0.377,
-   "color": "#abd6b5",
+   "last": 757.06,
+   "chg_pct": -0.342,
+   "color": "#add7b7",
    "text_color": "#1a1a1a",
-   "label": "-0.38%"
+   "label": "-0.34%"
   },
   "VIX": {
    "name": "VIX 恐慌指數",
-   "last": 15.33,
-   "chg_pct": 2.13,
+   "last": 15.36,
+   "chg_pct": 2.33,
    "color": "#ffffff",
    "text_color": "#1d2129",
-   "label": "+2.13%"
+   "label": "+2.33%"
   }
  },
  "sectors": [
   {
    "t": "XLK",
    "zh": "科技",
-   "last": 201.04,
-   "chg_pct": -0.475,
-   "color": "#a6d3b1",
+   "last": 201.34,
+   "chg_pct": -0.327,
+   "color": "#aed8b8",
    "text_color": "#1a1a1a",
-   "label": "-0.48%"
+   "label": "-0.33%"
   },
   {
    "t": "SMH",
    "zh": "半導體",
-   "last": 623.89,
-   "chg_pct": -1.361,
-   "color": "#80b991",
+   "last": 624.45,
+   "chg_pct": -1.273,
+   "color": "#83bb94",
    "text_color": "#1a1a1a",
-   "label": "-1.36%"
+   "label": "-1.27%"
   },
   {
    "t": "XLY",
@@ -101,47 +101,47 @@
   {
    "t": "XLC",
    "zh": "通訊／媒體",
-   "last": 111.02,
-   "chg_pct": -0.564,
-   "color": "#a2d0ad",
+   "last": 111.09,
+   "chg_pct": -0.502,
+   "color": "#a5d2b0",
    "text_color": "#1a1a1a",
-   "label": "-0.56%"
+   "label": "-0.50%"
   },
   {
    "t": "XLF",
    "zh": "金融",
-   "last": 53.65,
-   "chg_pct": -0.666,
-   "color": "#9dcca9",
+   "last": 53.7,
+   "chg_pct": -0.574,
+   "color": "#a1cfad",
    "text_color": "#1a1a1a",
-   "label": "-0.67%"
+   "label": "-0.57%"
   },
   {
    "t": "XLV",
    "zh": "醫療",
-   "last": 170.28,
-   "chg_pct": 1.909,
-   "color": "#ce7072",
+   "last": 169.88,
+   "chg_pct": 1.67,
+   "color": "#d2787a",
    "text_color": "#1a1a1a",
-   "label": "+1.91%"
+   "label": "+1.67%"
   },
   {
    "t": "XLI",
    "zh": "工業",
-   "last": 168.08,
-   "chg_pct": -2.04,
-   "color": "#67a87c",
-   "text_color": "#ffffff",
-   "label": "-2.04%"
+   "last": 168.21,
+   "chg_pct": -1.964,
+   "color": "#69aa7e",
+   "text_color": "#1a1a1a",
+   "label": "-1.96%"
   },
   {
    "t": "XLE",
    "zh": "能源",
-   "last": 63.1,
-   "chg_pct": -1.02,
-   "color": "#8dc29c",
+   "last": 63.17,
+   "chg_pct": -0.91,
+   "color": "#92c5a0",
    "text_color": "#1a1a1a",
-   "label": "-1.02%"
+   "label": "-0.91%"
   },
   {
    "t": "XLB",
@@ -155,29 +155,29 @@
   {
    "t": "XLU",
    "zh": "公用事業",
-   "last": 41.16,
-   "chg_pct": 0.0,
-   "color": "#dfe2e6",
-   "text_color": "#222222",
-   "label": "+0.00%"
+   "last": 41.11,
+   "chg_pct": -0.121,
+   "color": "#bae0c2",
+   "text_color": "#1a1a1a",
+   "label": "-0.12%"
   },
   {
    "t": "XLRE",
    "zh": "房地產",
-   "last": 40.79,
-   "chg_pct": -0.754,
-   "color": "#99caa6",
+   "last": 40.75,
+   "chg_pct": -0.852,
+   "color": "#94c7a2",
    "text_color": "#1a1a1a",
-   "label": "-0.75%"
+   "label": "-0.85%"
   },
   {
    "t": "XLP",
    "zh": "必需消費",
-   "last": 82.15,
-   "chg_pct": 0.428,
-   "color": "#e9aca9",
+   "last": 81.98,
+   "chg_pct": 0.22,
+   "color": "#eeb7b4",
    "text_color": "#1a1a1a",
-   "label": "+0.43%"
+   "label": "+0.22%"
   }
  ],
  "groups": [
@@ -185,85 +185,85 @@
    "g": "互聯網平台",
    "n": 6,
    "size": 16.7754,
-   "avg_chg_pct": -0.618
+   "avg_chg_pct": -0.504
   },
   {
    "g": "AI 軟件",
    "n": 6,
    "size": 15.6453,
-   "avg_chg_pct": -0.645
+   "avg_chg_pct": -0.71
   },
   {
    "g": "比特幣礦場／AI 算力",
    "n": 8,
    "size": 15.5112,
-   "avg_chg_pct": -5.475
+   "avg_chg_pct": -5.672
   },
   {
    "g": "金融科技",
    "n": 4,
    "size": 11.5778,
-   "avg_chg_pct": -1.046
+   "avg_chg_pct": -0.932
   },
   {
    "g": "醫療／消費",
    "n": 5,
    "size": 9.0353,
-   "avg_chg_pct": -1.897
+   "avg_chg_pct": -2.205
   },
   {
    "g": "AI 雲端／伺服器",
    "n": 3,
    "size": 8.697,
-   "avg_chg_pct": -2.56
+   "avg_chg_pct": -2.388
   },
   {
    "g": "太空",
    "n": 3,
    "size": 7.869,
-   "avg_chg_pct": -5.81
+   "avg_chg_pct": -6.217
   },
   {
    "g": "加密貨幣",
    "n": 2,
    "size": 7.5881,
-   "avg_chg_pct": -4.197
+   "avg_chg_pct": -4.871
   },
   {
    "g": "量子電腦",
    "n": 4,
    "size": 7.1437,
-   "avg_chg_pct": -4.016
+   "avg_chg_pct": -3.972
   },
   {
    "g": "電動車",
    "n": 3,
    "size": 6.1567,
-   "avg_chg_pct": -1.506
+   "avg_chg_pct": -1.598
   },
   {
    "g": "核能／新能源",
    "n": 3,
    "size": 4.7606,
-   "avg_chg_pct": -5.439
+   "avg_chg_pct": -5.18
   },
   {
    "g": "無人機／機械人",
    "n": 3,
    "size": 3.6155,
-   "avg_chg_pct": -4.532
+   "avg_chg_pct": -3.34
   },
   {
    "g": "稀土／鈾礦",
    "n": 2,
    "size": 3.4462,
-   "avg_chg_pct": -6.385
+   "avg_chg_pct": -7.127
   },
   {
    "g": "飛行的士",
    "n": 2,
    "size": 3.3641,
-   "avg_chg_pct": -2.351
+   "avg_chg_pct": -1.62
   }
  ],
  "stocks": [
@@ -284,22 +284,22 @@
   {
    "t": "BBAI",
    "g": "AI 軟件",
-   "last": 2.5,
-   "chg_pct": -3.101,
+   "last": 2.49,
+   "chg_pct": -3.488,
    "mcap_usd": 1270660447,
    "size": 1.0831,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#43915e",
+   "color": "#378954",
    "text_color": "#ffffff",
-   "label": "-3.10%"
+   "label": "-3.49%"
   },
   {
    "t": "IONQ",
    "g": "量子電腦",
-   "last": 41.03,
-   "chg_pct": -5.221,
+   "last": 40.91,
+   "chg_pct": -5.498,
    "mcap_usd": 17732894965,
    "size": 2.6077,
    "size_is_median": false,
@@ -307,13 +307,13 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.22%"
+   "label": "-5.50%"
   },
   {
    "t": "ASTS",
    "g": "太空",
-   "last": 59.59,
-   "chg_pct": -5.593,
+   "last": 59.18,
+   "chg_pct": -6.242,
    "mcap_usd": 22746840486,
    "size": 2.8334,
    "size_is_median": false,
@@ -321,13 +321,13 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.59%"
+   "label": "-6.24%"
   },
   {
    "t": "LUNR",
    "g": "太空",
-   "last": 14.07,
-   "chg_pct": -6.574,
+   "last": 14.03,
+   "chg_pct": -6.839,
    "mcap_usd": 3367473020,
    "size": 1.4989,
    "size_is_median": false,
@@ -335,83 +335,83 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-6.57%"
+   "label": "-6.84%"
   },
   {
    "t": "SOFI",
    "g": "金融科技",
-   "last": 15.6,
-   "chg_pct": -1.015,
+   "last": 15.61,
+   "chg_pct": -0.952,
    "mcap_usd": 20368065950,
    "size": 2.731,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#8dc29d",
+   "color": "#90c49f",
    "text_color": "#1a1a1a",
-   "label": "-1.02%"
+   "label": "-0.95%"
   },
   {
    "t": "HOOD",
    "g": "金融科技",
-   "last": 108.83,
-   "chg_pct": -2.83,
+   "last": 109.08,
+   "chg_pct": -2.607,
    "mcap_usd": 101362538544,
    "size": 4.6626,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#4c9666",
+   "color": "#539b6c",
    "text_color": "#ffffff",
-   "label": "-2.83%"
+   "label": "-2.61%"
   },
   {
    "t": "RIVN",
    "g": "電動車",
-   "last": 14.26,
-   "chg_pct": -1.723,
+   "last": 14.22,
+   "chg_pct": -1.999,
    "mcap_usd": 20704407188,
    "size": 2.7459,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#72b085",
-   "text_color": "#1a1a1a",
-   "label": "-1.72%"
+   "color": "#68a97d",
+   "text_color": "#ffffff",
+   "label": "-2.00%"
   },
   {
    "t": "JOBY",
    "g": "飛行的士",
-   "last": 5.62,
-   "chg_pct": -2.768,
+   "last": 5.63,
+   "chg_pct": -2.595,
    "mcap_usd": 5913553019,
    "size": 1.8084,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#4e9867",
+   "color": "#549c6c",
    "text_color": "#ffffff",
-   "label": "-2.77%"
+   "label": "-2.60%"
   },
   {
    "t": "SMCI",
    "g": "AI 雲端／伺服器",
-   "last": 44.05,
-   "chg_pct": 1.358,
+   "last": 44.5,
+   "chg_pct": 2.393,
    "mcap_usd": 28702816769,
    "size": 3.0618,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#d78484",
-   "text_color": "#1a1a1a",
-   "label": "+1.36%"
+   "color": "#c65f63",
+   "text_color": "#ffffff",
+   "label": "+2.39%"
   },
   {
    "t": "RKLB",
    "g": "太空",
-   "last": 71.11,
-   "chg_pct": -5.263,
+   "last": 70.88,
+   "chg_pct": -5.569,
    "mcap_usd": 44238146202,
    "size": 3.5367,
    "size_is_median": false,
@@ -419,69 +419,69 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.26%"
+   "label": "-5.57%"
   },
   {
    "t": "PLTR",
    "g": "AI 軟件",
-   "last": 192.81,
-   "chg_pct": 0.385,
+   "last": 193.41,
+   "chg_pct": 0.698,
    "mcap_usd": 453577235414,
    "size": 7.6833,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#eaaeab",
+   "color": "#e39f9d",
    "text_color": "#1a1a1a",
-   "label": "+0.39%"
+   "label": "+0.70%"
   },
   {
    "t": "RGTI",
    "g": "量子電腦",
-   "last": 14.53,
-   "chg_pct": -4.219,
+   "last": 14.57,
+   "chg_pct": -3.955,
    "mcap_usd": 5089973214,
    "size": 1.7202,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#217a42",
+   "color": "#297f48",
    "text_color": "#ffffff",
-   "label": "-4.22%"
+   "label": "-3.96%"
   },
   {
    "t": "QBTS",
    "g": "量子電腦",
-   "last": 15.07,
-   "chg_pct": -4.56,
+   "last": 15.1,
+   "chg_pct": -4.37,
    "mcap_usd": 5986711714,
    "size": 1.8158,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#177339",
+   "color": "#1d773e",
    "text_color": "#ffffff",
-   "label": "-4.56%"
+   "label": "-4.37%"
   },
   {
    "t": "ACHR",
    "g": "飛行的士",
-   "last": 4.56,
-   "chg_pct": -1.935,
+   "last": 4.62,
+   "chg_pct": -0.645,
    "mcap_usd": 3765416557,
    "size": 1.5557,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#6aab7f",
+   "color": "#9ecdaa",
    "text_color": "#1a1a1a",
-   "label": "-1.94%"
+   "label": "-0.65%"
   },
   {
    "t": "OKLO",
    "g": "核能／新能源",
-   "last": 36.45,
-   "chg_pct": -5.447,
+   "last": 36.51,
+   "chg_pct": -5.292,
    "mcap_usd": 6672453151,
    "size": 1.8826,
    "size_is_median": false,
@@ -489,13 +489,13 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.45%"
+   "label": "-5.29%"
   },
   {
    "t": "SMR",
    "g": "核能／新能源",
-   "last": 7.45,
-   "chg_pct": -7.107,
+   "last": 7.5,
+   "chg_pct": -6.484,
    "mcap_usd": 3330355376,
    "size": 1.4934,
    "size_is_median": false,
@@ -503,83 +503,83 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-7.11%"
+   "label": "-6.48%"
   },
   {
    "t": "HIMS",
    "g": "醫療／消費",
-   "last": 29.55,
-   "chg_pct": 0.272,
+   "last": 29.48,
+   "chg_pct": 0.034,
    "mcap_usd": 6766088831,
    "size": 1.8914,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#edb4b1",
-   "text_color": "#1a1a1a",
-   "label": "+0.27%"
+   "color": "#dfe2e6",
+   "text_color": "#222222",
+   "label": "+0.03%"
   },
   {
    "t": "AFRM",
    "g": "金融科技",
-   "last": 74.97,
-   "chg_pct": 0.12,
+   "last": 75.13,
+   "chg_pct": 0.334,
    "mcap_usd": 23879302108,
    "size": 2.8797,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#f1beba",
+   "color": "#ebb1ae",
    "text_color": "#1a1a1a",
-   "label": "+0.12%"
+   "label": "+0.33%"
   },
   {
    "t": "UPST",
    "g": "金融科技",
-   "last": 23.75,
-   "chg_pct": -0.461,
+   "last": 23.74,
+   "chg_pct": -0.503,
    "mcap_usd": 2219710729,
    "size": 1.3045,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#a7d3b2",
+   "color": "#a5d2b0",
    "text_color": "#1a1a1a",
-   "label": "-0.46%"
+   "label": "-0.50%"
   },
   {
    "t": "PATH",
    "g": "AI 軟件",
-   "last": 13.11,
-   "chg_pct": 0.076,
+   "last": 13.13,
+   "chg_pct": 0.229,
    "mcap_usd": 6837562511,
    "size": 1.898,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#dfe2e6",
-   "text_color": "#222222",
-   "label": "+0.08%"
+   "color": "#eeb7b3",
+   "text_color": "#1a1a1a",
+   "label": "+0.23%"
   },
   {
    "t": "AI",
    "g": "AI 軟件",
-   "last": 11.31,
-   "chg_pct": 0.623,
+   "last": 11.32,
+   "chg_pct": 0.712,
    "mcap_usd": 1731651221,
    "size": 1.2008,
    "size_is_median": false,
    "paper": true,
    "real": false,
-   "color": "#e5a2a1",
+   "color": "#e39e9d",
    "text_color": "#1a1a1a",
-   "label": "+0.62%"
+   "label": "+0.71%"
   },
   {
    "t": "APLD",
    "g": "AI 雲端／伺服器",
-   "last": 23.95,
-   "chg_pct": -5.485,
+   "last": 23.99,
+   "chg_pct": -5.327,
    "mcap_usd": 7591014817,
    "size": 1.9653,
    "size_is_median": false,
@@ -587,7 +587,7 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.49%"
+   "label": "-5.33%"
   },
   {
    "t": "IREN",
@@ -620,8 +620,8 @@
   {
    "t": "MARA",
    "g": "比特幣礦場／AI 算力",
-   "last": 10.26,
-   "chg_pct": -6.472,
+   "last": 10.22,
+   "chg_pct": -6.837,
    "mcap_usd": 4338141338,
    "size": 1.6309,
    "size_is_median": false,
@@ -629,27 +629,27 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-6.47%"
+   "label": "-6.84%"
   },
   {
    "t": "RIOT",
    "g": "比特幣礦場／AI 算力",
-   "last": 18.1,
-   "chg_pct": -4.385,
+   "last": 18.15,
+   "chg_pct": -4.12,
    "mcap_usd": 7403859149,
    "size": 1.949,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#1d773e",
+   "color": "#247c44",
    "text_color": "#ffffff",
-   "label": "-4.38%"
+   "label": "-4.12%"
   },
   {
    "t": "CLSK",
    "g": "比特幣礦場／AI 算力",
-   "last": 11.56,
-   "chg_pct": -5.94,
+   "last": 11.47,
+   "chg_pct": -6.672,
    "mcap_usd": 3271849689,
    "size": 1.4846,
    "size_is_median": false,
@@ -657,27 +657,27 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.94%"
+   "label": "-6.67%"
   },
   {
    "t": "WULF",
    "g": "比特幣礦場／AI 算力",
-   "last": 14.26,
-   "chg_pct": -4.743,
+   "last": 14.18,
+   "chg_pct": -5.277,
    "mcap_usd": 8830390000,
    "size": 2.0669,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#127035",
+   "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-4.74%"
+   "label": "-5.28%"
   },
   {
    "t": "CORZ",
    "g": "比特幣礦場／AI 算力",
-   "last": 15.78,
-   "chg_pct": -5.396,
+   "last": 15.76,
+   "chg_pct": -5.516,
    "mcap_usd": 5286050091,
    "size": 1.742,
    "size_is_median": false,
@@ -685,49 +685,49 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.40%"
+   "label": "-5.52%"
   },
   {
    "t": "HUT",
    "g": "比特幣礦場／AI 算力",
-   "last": 87.8,
-   "chg_pct": -4.793,
+   "last": 87.72,
+   "chg_pct": -4.88,
    "mcap_usd": 11047746202,
    "size": 2.2272,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#116f34",
+   "color": "#0e6d32",
    "text_color": "#ffffff",
-   "label": "-4.79%"
+   "label": "-4.88%"
   },
   {
    "t": "CRWV",
    "g": "AI 雲端／伺服器",
-   "last": 88.46,
-   "chg_pct": -3.554,
+   "last": 87.84,
+   "chg_pct": -4.23,
    "mcap_usd": 49428708630,
    "size": 3.6699,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#358752",
+   "color": "#217a41",
    "text_color": "#ffffff",
-   "label": "-3.55%"
+   "label": "-4.23%"
   },
   {
    "t": "TEM",
    "g": "AI 軟件",
-   "last": 71.4,
-   "chg_pct": -0.806,
+   "last": 71.0,
+   "chg_pct": -1.361,
    "mcap_usd": 13826716038,
    "size": 2.4002,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#96c8a4",
+   "color": "#80b991",
    "text_color": "#1a1a1a",
-   "label": "-0.81%"
+   "label": "-1.36%"
   },
   {
    "t": "OPEN",
@@ -746,58 +746,58 @@
   {
    "t": "DKNG",
    "g": "醫療／消費",
-   "last": 19.11,
-   "chg_pct": -3.24,
+   "last": 19.05,
+   "chg_pct": -3.544,
    "mcap_usd": 9229081363,
    "size": 2.0976,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#3f8e5b",
+   "color": "#368753",
    "text_color": "#ffffff",
-   "label": "-3.24%"
+   "label": "-3.54%"
   },
   {
    "t": "U",
    "g": "互聯網平台",
-   "last": 44.68,
-   "chg_pct": -0.601,
+   "last": 44.63,
+   "chg_pct": -0.712,
    "mcap_usd": 19192278428,
    "size": 2.6774,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#a0ceac",
+   "color": "#9bcba8",
    "text_color": "#1a1a1a",
-   "label": "-0.60%"
+   "label": "-0.71%"
   },
   {
    "t": "SNAP",
    "g": "互聯網平台",
-   "last": 5.76,
-   "chg_pct": -0.346,
+   "last": 5.77,
+   "chg_pct": -0.173,
    "mcap_usd": 9436883746,
    "size": 2.1132,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#add7b7",
+   "color": "#b7debf",
    "text_color": "#1a1a1a",
-   "label": "-0.35%"
+   "label": "-0.17%"
   },
   {
    "t": "LYFT",
    "g": "互聯網平台",
-   "last": 15.6,
-   "chg_pct": -1.015,
+   "last": 15.56,
+   "chg_pct": -1.269,
    "mcap_usd": 5852232321,
    "size": 1.8021,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#8dc29d",
+   "color": "#83bb94",
    "text_color": "#1a1a1a",
-   "label": "-1.02%"
+   "label": "-1.27%"
   },
   {
    "t": "NIO",
@@ -844,36 +844,36 @@
   {
    "t": "RCAT",
    "g": "無人機／機械人",
-   "last": 6.03,
-   "chg_pct": -4.89,
+   "last": 6.1,
+   "chg_pct": -3.785,
    "mcap_usd": 977371863,
    "size": 1.0,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#0e6d32",
+   "color": "#2e834d",
    "text_color": "#ffffff",
-   "label": "-4.89%"
+   "label": "-3.79%"
   },
   {
    "t": "ONDS",
    "g": "無人機／機械人",
-   "last": 7.06,
-   "chg_pct": -4.723,
+   "last": 7.15,
+   "chg_pct": -3.509,
    "mcap_usd": 4215871288,
    "size": 1.6155,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#137036",
+   "color": "#378854",
    "text_color": "#ffffff",
-   "label": "-4.72%"
+   "label": "-3.51%"
   },
   {
    "t": "MP",
    "g": "稀土／鈾礦",
-   "last": 45.91,
-   "chg_pct": -5.399,
+   "last": 45.75,
+   "chg_pct": -5.728,
    "mcap_usd": 8365431851,
    "size": 2.03,
    "size_is_median": false,
@@ -881,13 +881,13 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.40%"
+   "label": "-5.73%"
   },
   {
    "t": "UUUU",
    "g": "稀土／鈾礦",
-   "last": 10.43,
-   "chg_pct": -7.371,
+   "last": 10.3,
+   "chg_pct": -8.526,
    "mcap_usd": 2840536328,
    "size": 1.4162,
    "size_is_median": false,
@@ -895,41 +895,41 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-7.37%"
+   "label": "-8.53%"
   },
   {
    "t": "RDDT",
    "g": "互聯網平台",
-   "last": 150.83,
-   "chg_pct": 1.262,
+   "last": 152.05,
+   "chg_pct": 2.081,
    "mcap_usd": 28447749281,
    "size": 3.0527,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#d88788",
-   "text_color": "#1a1a1a",
-   "label": "+1.26%"
+   "color": "#cb6a6c",
+   "text_color": "#ffffff",
+   "label": "+2.08%"
   },
   {
    "t": "COIN",
    "g": "加密貨幣",
-   "last": 179.98,
-   "chg_pct": -3.101,
+   "last": 179.08,
+   "chg_pct": -3.586,
    "mcap_usd": 48282171000,
    "size": 3.6413,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#43915e",
+   "color": "#348752",
    "text_color": "#ffffff",
-   "label": "-3.10%"
+   "label": "-3.59%"
   },
   {
    "t": "MSTR",
    "g": "加密貨幣",
-   "last": 155.84,
-   "chg_pct": -5.293,
+   "last": 154.42,
+   "chg_pct": -6.156,
    "mcap_usd": 61479923896,
    "size": 3.9468,
    "size_is_median": false,
@@ -937,77 +937,77 @@
    "real": false,
    "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-5.29%"
+   "label": "-6.16%"
   },
   {
    "t": "SHOP",
    "g": "互聯網平台",
-   "last": 164.56,
-   "chg_pct": 0.073,
+   "last": 164.66,
+   "chg_pct": 0.134,
    "mcap_usd": 194785045242,
    "size": 5.7968,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#dfe2e6",
-   "text_color": "#222222",
-   "label": "+0.07%"
+   "color": "#f1bdb9",
+   "text_color": "#1a1a1a",
+   "label": "+0.13%"
   },
   {
    "t": "CAVA",
    "g": "醫療／消費",
-   "last": 52.25,
-   "chg_pct": -0.741,
+   "last": 52.22,
+   "chg_pct": -0.798,
    "mcap_usd": 6355425418,
    "size": 1.8523,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#99caa7",
+   "color": "#97c8a4",
    "text_color": "#1a1a1a",
-   "label": "-0.74%"
+   "label": "-0.80%"
   },
   {
    "t": "CELH",
    "g": "醫療／消費",
-   "last": 27.01,
-   "chg_pct": -1.026,
+   "last": 26.99,
+   "chg_pct": -1.099,
    "mcap_usd": 6768687534,
    "size": 1.8916,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#8dc29c",
+   "color": "#8ac09a",
    "text_color": "#1a1a1a",
-   "label": "-1.03%"
+   "label": "-1.10%"
   },
   {
    "t": "RXRX",
    "g": "醫療／消費",
-   "last": 4.41,
-   "chg_pct": -4.752,
+   "last": 4.37,
+   "chg_pct": -5.616,
    "mcap_usd": 2209436943,
    "size": 1.3024,
    "size_is_median": false,
    "paper": true,
    "real": false,
-   "color": "#127035",
+   "color": "#0b6b2f",
    "text_color": "#ffffff",
-   "label": "-4.75%"
+   "label": "-5.62%"
   },
   {
    "t": "SERV",
    "g": "無人機／機械人",
-   "last": 4.58,
-   "chg_pct": -3.983,
+   "last": 4.64,
+   "chg_pct": -2.725,
    "mcap_usd": 400155132,
    "size": 1.0,
    "size_is_median": false,
    "paper": false,
    "real": false,
-   "color": "#287f48",
+   "color": "#4f9968",
    "text_color": "#ffffff",
-   "label": "-3.98%"
+   "label": "-2.73%"
   },
   {
    "t": "LAES",
@@ -1026,9 +1026,9 @@
  ],
  "counts": {
   "total": 54,
-  "up": 7,
+  "up": 8,
   "down": 45,
-  "flat": 2,
+  "flat": 1,
   "missing": 0
  },
  "missing": [],

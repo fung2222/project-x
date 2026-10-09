@@ -882,15 +882,15 @@
           ]
         }
       },
-      "runs": 6,
+      "runs": 7,
       "last_prices": {
-        "RXRX": 4.23,
-        "AI": 11.635
+        "RXRX": 4.36,
+        "AI": 11.521
       },
       "last_real_prices": {},
       "last_regime": "NORMAL",
       "alerts": {},
-      "last_run": "2026-10-10T03:06:03+08:00",
+      "last_run": "2026-10-10T04:06:03+08:00",
       "status": "ok"
     },
     "real": {

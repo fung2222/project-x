@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-09T21:53:13+08:00",
+ "generated_at": "2026-10-10T05:00:21+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -21,9 +21,15 @@
   },
   "AI": {
    "ticker": "AI",
-   "text": "近1個月比納指強 3%、近3個月比納指強 20%，趨勢上升，企喺 50 日平均價之上，業績 12-03｜新聞：Velotic Appoints Enterprise AI Leader Houman Behzadi to Board of Dire…",
+   "text": "近1個月比納指強 4%、近3個月比納指強 23%，趨勢上升，企喺 50 日平均價之上，業績 12-03｜新聞：OpenAI Is Too Big To Save? The AI Selloff Was A Warning",
    "kind": "pick",
-   "at": "2026-10-09T21:53:13+08:00"
+   "at": "2026-10-10T05:00:21+08:00"
+  },
+  "SNAP": {
+   "ticker": "SNAP",
+   "text": "近1個月比納指強 5%、近3個月比納指強 26%，趨勢上升，啱啱帶量升穿 20 日高位，業績 11-03｜新聞：Snap Inc. Announces Date of Third Quarter 2026 Results Conference Call",
+   "kind": "pick",
+   "at": "2026-10-10T05:00:21+08:00"
   }
  }
 }

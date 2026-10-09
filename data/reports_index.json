@@ -607,6 +607,17 @@
   },
   {
    "date": "2026-10-09",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-10-09.html",
+   "md": "reports/daily_report_2026-10-09.md",
+   "summary": "每日分析 · 真倉 0 隻（+0.00%）· 紙上 +0.11% · Top: AI",
+   "pnl": 0.11,
+   "source": "px",
+   "generated_at": "2026-10-09T21:53:14+08:00"
+  },
+  {
+   "date": "2026-10-09",
    "kind": "open",
    "kind_zh": "開市監控",
    "file": "reports/open_report_2026-10-09.html",
@@ -617,5 +628,5 @@
    "generated_at": "2026-10-09T21:35:04+08:00"
   }
  ],
- "updated": "2026-10-09T21:35:04+08:00"
+ "updated": "2026-10-09T21:53:14+08:00"
 }

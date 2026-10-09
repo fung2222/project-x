@@ -195,6 +195,9 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     spy_ret, qqq_ret = paper_bench()
     news = pick_news(scan_res)
     annotate_scan(scan_res, news)
+    from .. import fundamental
+    for x in (scan_res.get("top") or [])[:3]:
+        x["fundamental"] = fundamental.fetch(x["ticker"])
     dw = plain.day_word(mk.get("quote_session"), ctx.now)
     mood = plain.market_lines(mk.get("spy_change"), mk.get("qqq_change"), mk.get("vix"), rs.market_headline(), when=dw)
     lesson = lessons.pick(clock.session_date(ctx.now), save=not dry_run)

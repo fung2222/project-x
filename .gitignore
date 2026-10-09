@@ -28,6 +28,7 @@ state/.*
 state/api_state.json
 state/earnings_cache.json
 state/news_cache.json
+state/fundamental_cache.json
 state/realwatch.json
 state/heatmap_state.json
 state/heatmap_mcap.json

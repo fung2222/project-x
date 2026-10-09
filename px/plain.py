@@ -43,6 +43,41 @@ def price(x):
         return MISSING
 
 
+def _big(x):
+    """大數縮寫：US$1.8B / US$232M / US$12,345."""
+    try:
+        v = float(x)
+    except Exception:
+        return MISSING
+    a = abs(v)
+    if a >= 1e9:
+        return f"US${v/1e9:.1f}B"
+    if a >= 1e6:
+        return f"US${v/1e6:.0f}M"
+    return f"US${v:,.0f}"
+
+
+def _fund_line(fund):
+    """財務一行（營收、增速、賺/蝕、毛利率、市值、P/S）；冇數據嘅欄就省略。"""
+    if not fund:
+        return ""
+    parts = []
+    if fund.get("revenue_usd"):
+        parts.append(f"營收 {_big(fund['revenue_usd'])}")
+    if fund.get("revenue_growth") is not None:
+        parts.append(f"增速 {fund['revenue_growth']*100:+.0f}%")
+    if fund.get("net_income_usd") is not None:
+        ni = fund["net_income_usd"]
+        parts.append(f"賺 {_big(ni)}" if ni >= 0 else f"蝕 {_big(-ni)}")
+    if fund.get("gross_margin") is not None:
+        parts.append(f"毛利率 {fund['gross_margin']*100:.0f}%")
+    if fund.get("market_cap_usd"):
+        parts.append(f"市值 {_big(fund['market_cap_usd'])}")
+    if fund.get("ps_ratio") is not None:
+        parts.append(f"P/S {fund['ps_ratio']:.1f}×")
+    return " · ".join(parts)
+
+
 def name_of(t):
     n = load_settings().get("names", {}).get(t)
     return f"{t}（{n}）" if n and n != t else t
@@ -260,9 +295,16 @@ def buy_suggestion(ev, scan, regime=None, market_open=True, now=None):
         sl_pct = (float(x["stop"]) / entry - 1) * 100
         tp_pct = (float(x["target"]) / entry - 1) * 100
         far = "，係之前高位、好遠，唔一定去到" if tp_pct > 30 else ""
-        return [f"🛒 {when}考慮買入 {esc(name_of(t))}：建議買 {sh} 股約 {usd(sh * entry)}（{hkd(sh * entry, fx)}），"
-                f"止蝕 {price(x['stop'])}（{sl_pct:+.0f}%），止賺 {price(x['target'])}（{tp_pct:+.0f}%{far}）{zone}",
-                "　（落咗單就話 Hermes：「買咗 " + esc(t) + " N 股 @價，止蝕…，止賺…」）"], t
+        lines = [f"🛒 {when}考慮買入 {esc(name_of(t))}：建議買 {sh} 股約 {usd(sh * entry)}（{hkd(sh * entry, fx)}），"
+                 f"止蝕 {price(x['stop'])}（{sl_pct:+.0f}%），止賺 {price(x['target'])}（{tp_pct:+.0f}%{far}）{zone}"]
+        blurb = load_settings().get("scan", {}).get("blurbs", {}).get(t)
+        if blurb:
+            lines.append(f"　🏷️ {esc(blurb)}")
+        fl = _fund_line(x.get("fundamental") or {})
+        if fl:
+            lines.append(f"　💰 {esc(fl)}")
+        lines.append("　（落咗單就話 Hermes：「買咗 " + esc(t) + " N 股 @價，止蝕…，止賺…」）")
+        return lines, t
     return ["今日唔建議買新股：" + "；".join(why_not[:3]) + "。"], None
 
 
@@ -300,10 +342,16 @@ def picks_block(scan, news=None, n=3, title="⭐ 潛力股"):
     if not top:
         return [f"<b>{title}</b>：今日冇一隻值得買（冇一隻過晒趨勢、成交同回報風險條件）。"]
     L = [f"<b>{title}</b>（系統揀，唔係保證）"]
+    blurbs = load_settings().get("scan", {}).get("blurbs", {})
     for i, x in enumerate(top, 1):
         live = f" 現價 {price(x.get('live_price'))}" if x.get("live_price") else ""
         L.append(f"{i}. <b>{esc(x['ticker'])}</b> {esc(load_settings()['names'].get(x['ticker'], ''))}{live}："
                  f"{esc(pick_reason(x, news.get(x['ticker'])))}")
+        if blurbs.get(x["ticker"]):
+            L.append(f"　🏷️ {esc(blurbs[x['ticker']])}")
+        fl = _fund_line(x.get("fundamental") or {})
+        if fl:
+            L.append(f"　💰 {esc(fl)}")
     return L
 
 

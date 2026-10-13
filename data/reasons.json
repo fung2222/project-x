@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-13T21:53:15+08:00",
+ "generated_at": "2026-10-14T05:00:16+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -30,6 +30,12 @@
    "text": "近1個月比納指強 7%、近3個月比納指強 37%，趨勢上升，啱啱帶量升穿 20 日高位，業績 11-04｜新聞：Why Every Snap Investor Is Looking At This One Number",
    "kind": "pick",
    "at": "2026-10-13T21:53:15+08:00"
+  },
+  "U": {
+   "ticker": "U",
+   "text": "近1個月比納指強 3%、近3個月比納指強 50%，趨勢上升，企喺 50 日平均價之上，業績 11-11｜新聞：［目標價］Wells Fargo Maintains Overweight on Unity Software, Raises Price Targ…",
+   "kind": "pick",
+   "at": "2026-10-14T05:00:16+08:00"
   }
  }
 }

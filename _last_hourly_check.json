@@ -1,17 +1,17 @@
 {
-  "hkt": "2026-10-14T00:06:02.345295+08:00",
+  "hkt": "2026-10-14T01:06:02.427353+08:00",
   "session_date": "2026-10-13",
-  "vix": 15.38,
+  "vix": 15.42,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "RXRX",
       "shares": 33,
-      "px": 3.92,
-      "pnl_pct": -4.04,
+      "px": 3.9,
+      "pnl_pct": -4.41,
       "sl": 3.32,
       "tp": 5.8,
-      "dist_sl_pct": 15.2,
+      "dist_sl_pct": 14.87,
       "action": "HOLD",
       "near_stop": false
     },
@@ -29,17 +29,17 @@
     {
       "ticker": "SNAP",
       "shares": 26,
-      "px": 6.68,
-      "pnl_pct": 0.91,
+      "px": 6.62,
+      "pnl_pct": -0.08,
       "sl": 5.67,
       "tp": 8.68,
-      "dist_sl_pct": 15.18,
+      "dist_sl_pct": 14.35,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1279.47,
+  "equity_usd": 1277.29,
   "cash_usd": 776.63,
   "alerts": [],
   "real_alerts": [],

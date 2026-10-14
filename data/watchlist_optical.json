@@ -1,0 +1,30 @@
+{
+  "name": "光通訊觀察名單",
+  "created": "2026-10-09",
+  "status": "觀察（獨立記錄，唔入 PX 模擬倉 scan universe）",
+  "thesis": "AI 數據中心帶動晶片間／機架間互連由銅轉光嘅長線趨勢。但要修正：光銅係分工（短距離封裝內／機架內銅仍有優勢，長距離光贏），唔係光完全取代銅。",
+  "watch_focus": [
+    "等回調到合理位先考慮（2026-10-08 板塊急跌 6-10%，仍屬高位）",
+    "業績日前一星期小心（光模組股業績波動大）",
+    "催化劑：AI 數據中心 capex、光模組需求／800G-1.6T 放量新聞",
+    "Roy 本金 US$1,280，每注上限 US$320；高價股一注只買到 1 股，注意分散唔到"
+  ],
+  "tiers": {
+    "core": [
+      {"ticker": "COHR", "name": "Coherent", "why": "光模組龍頭（800G/1.6T），賺 US$770M，P/S 8× 相對平", "price_ref_usd": 288},
+      {"ticker": "CRDO", "name": "Credo", "why": "高速互連（AEC），證明短距銅仍有價值；毛利率 67%", "price_ref_usd": 201},
+      {"ticker": "MRVL", "name": "Marvell", "why": "數據中心互連＋矽光子，賺 US$2.6B，YTD +213%", "price_ref_usd": 266},
+      {"ticker": "AVGO", "name": "Broadcom", "why": "co-packaged optics＋網絡晶片龍頭，賺 US$38B", "price_ref_usd": 355, "note": "Roy 一注 US$320 買唔起"}
+    ],
+    "watch": [
+      {"ticker": "LITE", "name": "Lumentum", "why": "光器件，YTD +170%", "note": "帳面蝕 US$6.9B（或一次性減值）＋股價 $995 太貴"},
+      {"ticker": "MTSI", "name": "MACOM", "why": "光器件，賺 US$241M"},
+      {"ticker": "FN", "name": "Fabrinet", "why": "光模組精密代工，賺 US$473M，毛利率低"},
+      {"ticker": "GLW", "name": "Corning", "why": "光纖＋玻璃，賺 US$1.9B"}
+    ],
+    "speculative": [
+      {"ticker": "AAOI", "name": "Applied Optoelectronics", "why": "光模組，蝕 US$57M"},
+      {"ticker": "POET", "name": "POET Technologies", "why": "光引擎，營收近零 US$2M、蝕 US$76M、P/S 638×"}
+    ]
+  }
+}

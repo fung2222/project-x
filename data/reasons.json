@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-15T21:53:13+08:00",
+ "generated_at": "2026-10-16T05:00:22+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -36,6 +36,12 @@
    "text": "近1個月比納指強 3%、近3個月比納指強 50%，趨勢上升，企喺 50 日平均價之上，業績 11-11",
    "kind": "pick",
    "at": "2026-10-14T21:53:14+08:00"
+  },
+  "LYFT": {
+   "ticker": "LYFT",
+   "text": "近1個月比納指強 9%、近3個月比納指強 14%，趨勢橫行，企喺 50 日平均價之上，業績 11-11｜新聞：Lyft, Inc. Introduces Alcove, a New Global Brand for Its Chauffeur Ne…",
+   "kind": "pick",
+   "at": "2026-10-16T05:00:22+08:00"
   }
  }
 }

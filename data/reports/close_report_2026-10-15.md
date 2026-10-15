@@ -1,0 +1,21 @@
+🌙 收市報告 2026-10-15（美股已收市）
+🌍 美股今日窄幅上落：標普 +0.3%、納指 -0.1%。 恐慌指數 16，正常。 頭條：Treasury yields slide as investors flee to safety of bonds amid tech rout
+
+🏦 真倉：暫時冇持倉（買入後叫 Hermes 記錄）
+💰 資金：本金 US$1,280（HK$9,984）· 用咗 US$0 · 剩低現金 US$1,280（100%）· 總賺蝕 +US$0.00／+HK$0（+0.0%）
+
+🧭 買賣信號
+🛒 今晚開市後考慮買入 LYFT（Lyft）：建議買 15 股約 US$257（HK$2,008），止蝕 $15.52（-10%），止賺 $21.26（+24%）（價錢喺 $16.89–$17.16 之間先買，唔好追高）
+　🏷️ 網約車平台
+　（落咗單就話 Hermes：「買咗 LYFT N 股 @價，止蝕…，止賺…」）
+
+⭐ 今晚開市潛力股（系統揀，唔係保證）
+1. LYFT Lyft 現價 $17.16：近1個月比納指強 9%、近3個月比納指強 14%，趨勢橫行，企喺 50 日平均價之上，業績 11-11｜新聞：Lyft, Inc. Introduces Alcove, a New Global Brand for Its Chauffeur Ne…
+　🏷️ 網約車平台
+
+🧪 紙上倉（對照組）：總回報 +0.63%（同期 SPY +0.98%、QQQ +1.84%） · 持倉 3/3 · 今日：權益 +31.03 美元
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 7/7✅
+🗺 今日板塊熱力圖：https://fung2222.github.io/project-x/heatmap.html
+
+真倉由你喺富途自己落單，系統只提醒；情境參考，唔係保證。
+👉 詳情睇網站：https://fung2222.github.io/project-x/

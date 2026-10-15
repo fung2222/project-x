@@ -772,6 +772,17 @@
   },
   {
    "date": "2026-10-14",
+   "kind": "morning",
+   "kind_zh": "隔夜複盤",
+   "file": "reports/morning_report_2026-10-14.html",
+   "md": "reports/morning_report_2026-10-14.md",
+   "summary": "隔夜複盤 · 真倉 0 隻（+0.00%）· 紙上 -0.31%",
+   "pnl": -0.31,
+   "source": "px",
+   "generated_at": "2026-10-15T08:30:03+08:00"
+  },
+  {
+   "date": "2026-10-14",
    "kind": "open",
    "kind_zh": "開市監控",
    "file": "reports/open_report_2026-10-14.html",
@@ -782,5 +793,5 @@
    "generated_at": "2026-10-14T21:35:04+08:00"
   }
  ],
- "updated": "2026-10-15T05:00:21+08:00"
+ "updated": "2026-10-15T08:30:03+08:00"
 }

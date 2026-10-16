@@ -1,28 +1,28 @@
 {
-  "hkt": "2026-10-17T01:06:02.356846+08:00",
+  "hkt": "2026-10-17T02:06:02.337108+08:00",
   "session_date": "2026-10-16",
-  "vix": 18.17,
+  "vix": 19.78,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "RXRX",
       "shares": 33,
-      "px": 3.56,
-      "pnl_pct": -12.75,
+      "px": 3.51,
+      "pnl_pct": -13.87,
       "sl": 3.32,
       "tp": 5.8,
-      "dist_sl_pct": 6.74,
+      "dist_sl_pct": 5.52,
       "action": "HOLD",
       "near_stop": false
     },
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 11.02,
-      "pnl_pct": -2.35,
+      "px": 11.01,
+      "pnl_pct": -2.39,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 11.21,
+      "dist_sl_pct": 11.17,
       "action": "HOLD",
       "near_stop": false
     },
@@ -39,7 +39,7 @@
     }
   ],
   "executed": [],
-  "equity_usd": 1239.84,
+  "equity_usd": 1238.23,
   "cash_usd": 776.63,
   "alerts": [],
   "real_alerts": [],

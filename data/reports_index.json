@@ -937,6 +937,17 @@
   },
   {
    "date": "2026-10-20",
+   "kind": "close",
+   "kind_zh": "收市報告",
+   "file": "reports/close_report_2026-10-20.html",
+   "md": "reports/close_report_2026-10-20.md",
+   "summary": "收市 · 真倉 0 隻（+0.00%）· 紙上 -1.40% · VIX 17.31",
+   "pnl": -1.4,
+   "source": "px",
+   "generated_at": "2026-10-21T05:00:18+08:00"
+  },
+  {
+   "date": "2026-10-20",
    "kind": "daily",
    "kind_zh": "每日分析",
    "file": "reports/daily_report_2026-10-20.html",
@@ -958,5 +969,5 @@
    "generated_at": "2026-10-20T21:35:04+08:00"
   }
  ],
- "updated": "2026-10-20T21:53:13+08:00"
+ "updated": "2026-10-21T05:00:18+08:00"
 }

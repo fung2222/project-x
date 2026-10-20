@@ -6,25 +6,9 @@
   "note": "Roy 喺富途親手落單後，由 Hermes 用 `python run.py pos ...` 記錄；系統只記錄同提醒，永遠唔會自動落單。",
   "start_capital_hkd": 10000,
   "start_capital_usd": 1280.0,
-  "real_start_date": "2026-10-20",
-  "last_synced": "2026-10-20T22:51+08:00",
-  "positions": [
-    {
-      "id": "R001",
-      "ticker": "NVDA",
-      "shares": 3,
-      "entry_price": 216.0,
-      "entry_date": "2026-10-20",
-      "stop_loss_price": 200.0,
-      "take_profit_price": 250.0,
-      "entry_fee_usd": 2.0,
-      "cost_usd": 648.0,
-      "note": "",
-      "recorded_at": "2026-10-20T22:51:53+08:00",
-      "last_price": 216.0,
-      "last_price_at": "2026-10-20T22:51:53+08:00"
-    }
-  ],
+  "real_start_date": null,
+  "last_synced": null,
+  "positions": [],
   "closed_trades": [],
   "archived": {
     "file": "data/legacy/futu_positions_2026-07-08_paper_sim.json",

@@ -1,7 +1,7 @@
 {
-  "hkt": "2026-10-22T01:06:02.613268+08:00",
+  "hkt": "2026-10-22T02:06:02.332883+08:00",
   "session_date": "2026-10-21",
-  "vix": 16.72,
+  "vix": 16.62,
   "regime": "NORMAL",
   "positions": [
     {
@@ -18,28 +18,28 @@
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 11.93,
-      "pnl_pct": 5.76,
+      "px": 11.92,
+      "pnl_pct": 5.7,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 18.02,
+      "dist_sl_pct": 17.97,
       "action": "HOLD",
       "near_stop": false
     },
     {
       "ticker": "SNAP",
       "shares": 26,
-      "px": 6.45,
-      "pnl_pct": -2.72,
+      "px": 6.38,
+      "pnl_pct": -3.62,
       "sl": 5.67,
       "tp": 8.68,
-      "dist_sl_pct": 12.02,
+      "dist_sl_pct": 11.2,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1270.26,
+  "equity_usd": 1268.58,
   "cash_usd": 776.63,
   "alerts": [],
   "real_alerts": [],

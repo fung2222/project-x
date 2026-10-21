@@ -1,0 +1,229 @@
+=== 2026-10-09 00:07:46 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-08T12:06 ET', 'data_date': '2026-10-08', 'phase': 'intraday', 'counts': {'total': 54, 'up': 8, 'down': 45, 'flat': 1, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T00:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T00:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 01:07:46 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-08T13:06 ET', 'data_date': '2026-10-08', 'phase': 'intraday', 'counts': {'total': 54, 'up': 10, 'down': 44, 'flat': 0, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T01:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T01:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 02:07:47 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-08T14:06 ET', 'data_date': '2026-10-08', 'phase': 'intraday', 'counts': {'total': 54, 'up': 12, 'down': 41, 'flat': 1, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T02:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T02:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 03:07:47 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-08T15:06 ET', 'data_date': '2026-10-08', 'phase': 'intraday', 'counts': {'total': 54, 'up': 12, 'down': 42, 'flat': 0, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T03:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T03:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 04:06:06 CST tick  (exit 0)
+{
+ "now_hkt": "2026-10-09T04:06+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T04:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 05:00:26 CST tick  (exit 0)
+{"session": "2026-10-08", "telegram": {"report": "ok", "chart": "ok"}, "exits": []}
+[heatmap] ok: {'slot': '2026-10-08T17:00 ET', 'data_date': '2026-10-08', 'phase': 'close', 'counts': {'total': 54, 'up': 16, 'down': 36, 'flat': 2, 'missing': 0}, 'sources': {'prices': 'Yahoo Finance 日線（yfinance；收市後重用收市報告已下載數據）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'close', 'reused': 56, 'yahoo_batch': 12, 'finnhub': 0, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T05:00+08:00",
+ "actions": [
+  {
+   "job": "close",
+   "slot": "close|2026-10-09T05:00+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 08:30:07 CST tick  (exit 0)
+{
+ "now_hkt": "2026-10-09T08:30+08:00",
+ "actions": [
+  {
+   "job": "morning",
+   "slot": "morning|2026-10-09T08:30+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-10-09 21:35:07 CST tick  (exit 0)
+{
+ "now_hkt": "2026-10-09T21:35+08:00",
+ "actions": [
+  {
+   "job": "open",
+   "slot": "open|2026-10-09T21:35+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-09 21:35 HKT
+=== 2026-10-09 21:53:17 CST tick  (exit 0)
+[daily] session 2026-10-09 ET, now 2026-10-09 21:53 HKT, dry_run=False
+{
+  "session": "2026-10-09",
+  "telegram": {
+    "report": "ok"
+  },
+  "entry": null,
+  "exits": [],
+  "skipped": [
+    {
+      "ticker": "JOBY",
+      "confidence": 68.0,
+      "failed": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
+    },
+    {
+      "ticker": "BBAI",
+      "confidence": 52.6,
+      "failed": [
+        "G1",
+        "G2",
+        "G4",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制"
+    },
+    {
+      "ticker": "SOUN",
+      "confidence": 42.7,
+      "failed": [
+        "G1",
+        "G2",
+        "G4",
+        "G5",
+        "G8"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制、G8 冷靜期"
+    },
+    {
+      "ticker": "SOFI",
+      "confidence": 39.5,
+      "failed": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
+    },
+    {
+      "ticker": "RIVN",
+      "confidence": 37.2,
+      "failed": [
+        "G1",
+        "G2"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B"
+    }
+  ],
+  "equity_usd": 1281.38
+}
+{
+ "now_hkt": "2026-10-09T21:53+08:00",
+ "actions": [
+  {
+   "job": "daily",
+   "slot": "daily|2026-10-09T21:53+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-09 21:53 HKT
+=== 2026-10-09 22:07:48 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-09T10:06 ET', 'data_date': '2026-10-09', 'phase': 'intraday', 'counts': {'total': 54, 'up': 27, 'down': 27, 'flat': 0, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T22:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T22:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-09 22:07 HKT
+=== 2026-10-09 23:07:46 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-09T11:06 ET', 'data_date': '2026-10-09', 'phase': 'intraday', 'counts': {'total': 54, 'up': 26, 'down': 25, 'flat': 3, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-09T23:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-09T23:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-09 23:07 HKT

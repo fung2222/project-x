@@ -626,7 +626,7 @@
   },
   "heatmap": {
     "_comment": "Stock heatmap (px/heatmap.py -> data/heatmap.json -> heatmap.html). NEVER sends Telegram; failures never block other jobs. Intraday: HOURLY at the hourly job's minute (10:06..15:06 ET, same tick/commit as hourly), prices from Finnhub /quote only (0 Yahoo) paced at finnhub_calls_per_min (headroom for realwatch); stale (>quote_max_age_min) or >50% jumps -> grey. VIX reused from state/vix_last.json (never fetched here). After close 17:00 ET (same tick as close): reuse the close job's Yahoo data, at most ONE batch of <= close_max_yahoo_batch missing symbols, rest Finnhub. Finnhub cooling down -> slot skipped quietly. Never starts when a push slot is due within core_slot_guard_min.",
-    "enabled": true,
+    "enabled": false,
     "first_et": "10:06",
     "every_min": 60,
     "last_before_close_min": 30,

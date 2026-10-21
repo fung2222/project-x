@@ -1,0 +1,118 @@
+=== 2026-09-29 00:30:07 UTC tick  (exit 0)
+{
+ "now_hkt": "2026-09-29T08:30+08:00",
+ "actions": [
+  {
+   "job": "morning",
+   "slot": "morning|2026-09-29T08:30+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-09-29 08:30 HKT
+=== 2026-09-29 21:35:08 CST tick  (exit 0)
+{
+ "now_hkt": "2026-09-29T21:35+08:00",
+ "actions": [
+  {
+   "job": "open",
+   "slot": "open|2026-09-29T21:35+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-29 21:53:21 CST tick  (exit 0)
+[daily] session 2026-09-29 ET, now 2026-09-29 21:53 HKT, dry_run=False
+{
+  "session": "2026-09-29",
+  "telegram": {
+    "report": "ok"
+  },
+  "entry": null,
+  "exits": [],
+  "skipped": [
+    {
+      "ticker": "JOBY",
+      "confidence": 57.2,
+      "failed": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
+    },
+    {
+      "ticker": "SOFI",
+      "confidence": 43.3,
+      "failed": [
+        "G1",
+        "G2",
+        "G4"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
+    },
+    {
+      "ticker": "BBAI",
+      "confidence": 39.1,
+      "failed": [
+        "G1",
+        "G2",
+        "G4",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制"
+    }
+  ],
+  "equity_usd": 1287.25
+}
+{
+ "now_hkt": "2026-09-29T21:53+08:00",
+ "actions": [
+  {
+   "job": "daily",
+   "slot": "daily|2026-09-29T21:53+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-29 22:07:48 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-09-29T10:06 ET', 'data_date': '2026-09-29', 'phase': 'intraday', 'counts': {'total': 54, 'up': 36, 'down': 15, 'flat': 3, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-09-29T22:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-09-29T22:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address
+=== 2026-09-29 23:07:48 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-09-29T11:06 ET', 'data_date': '2026-09-29', 'phase': 'intraday', 'counts': {'total': 54, 'up': 30, 'down': 20, 'flat': 4, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-09-29T23:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-09-29T23:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] push attempt 1 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 2 failed: fatal: could not read Username for 'https://github.com': No such device or address
+[git] push attempt 3 failed: fatal: could not read Username for 'https://github.com': No such device or address

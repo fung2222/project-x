@@ -1,0 +1,168 @@
+=== 2026-09-28 05:15:00 UTC status  (exit 0)
+now: 2026-09-28 13:15 HKT = 2026-09-28 01:15 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 05:16:00 UTC status  (exit 0)
+now: 2026-09-28 13:16 HKT = 2026-09-28 01:16 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 05:17:00 UTC status  (exit 0)
+now: 2026-09-28 13:17 HKT = 2026-09-28 01:17 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:31:00 CST status  (exit 0)
+now: 2026-09-28 13:31 HKT = 2026-09-28 01:31 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:32:00 CST status  (exit 0)
+now: 2026-09-28 13:32 HKT = 2026-09-28 01:32 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:33:00 CST status  (exit 0)
+now: 2026-09-28 13:33 HKT = 2026-09-28 01:33 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:34:00 CST status  (exit 0)
+now: 2026-09-28 13:34 HKT = 2026-09-28 01:34 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:39:00 CST status  (exit 0)
+now: 2026-09-28 13:39 HKT = 2026-09-28 01:39 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:40:00 CST status  (exit 0)
+now: 2026-09-28 13:40 HKT = 2026-09-28 01:40 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:41:00 CST status  (exit 0)
+now: 2026-09-28 13:41 HKT = 2026-09-28 01:41 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 13:42:00 CST status  (exit 0)
+now: 2026-09-28 13:42 HKT = 2026-09-28 01:42 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": false, "MARKETAUX_API_KEY": false, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}
+=== 2026-09-28 05:59:40 UTC status  (exit 0)
+now: 2026-09-28 13:59 HKT = 2026-09-28 01:59 EDT
+US trading day: True
+secrets present (values never shown): {"FINNHUB_API_KEY": true, "MARKETAUX_API_KEY": true, "TELEGRAM_BOT_TOKEN": true, "TELEGRAM_CHAT_ID": true}
+dry-run env: False | telegram disabled: False
+schedule today/next (local -> HKT) and run-ledger status:
+  open     ET 09:35->21:35:-
+  daily    ET 09:53->21:53:-
+  hourly   ET 10:06->22:06:-, 11:06->23:06:-, 12:06->00:06:-, 13:06->01:06:-, 14:06->02:06:-, 15:06->03:06:-, 16:06->04:06:-
+  close    ET 17:00->05:00:-
+  morning  (no slot on 2026-09-28 HKT: after_trading)
+  weekly   HKT 09:44->09:44:-
+🩺 系統健康：全部準時｜open✅ · daily✅ · hourly 0/0✅ · close✅
+guard today: {}

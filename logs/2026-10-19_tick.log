@@ -1,0 +1,134 @@
+=== 2026-10-19 09:44:07 CST tick  (exit 0)
+{
+ "now_hkt": "2026-10-19T09:44+08:00",
+ "actions": [
+  {
+   "job": "weekly",
+   "slot": "weekly|2026-10-19T09:44+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-19 09:44 HKT
+=== 2026-10-19 21:35:07 CST tick  (exit 0)
+{
+ "now_hkt": "2026-10-19T21:35+08:00",
+ "actions": [
+  {
+   "job": "open",
+   "slot": "open|2026-10-19T21:35+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-19 21:35 HKT
+=== 2026-10-19 21:53:20 CST tick  (exit 0)
+[daily] session 2026-10-19 ET, now 2026-10-19 21:53 HKT, dry_run=False
+{
+  "session": "2026-10-19",
+  "telegram": {
+    "report": "ok"
+  },
+  "entry": null,
+  "exits": [],
+  "skipped": [
+    {
+      "ticker": "JOBY",
+      "confidence": 61.6,
+      "failed": [
+        "G1",
+        "G2",
+        "G3",
+        "G4",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G3 成交量不足、G4 趨勢太弱、G5 組合限制"
+    },
+    {
+      "ticker": "RIVN",
+      "confidence": 58.8,
+      "failed": [
+        "G1",
+        "G2",
+        "G4",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制"
+    },
+    {
+      "ticker": "RKLB",
+      "confidence": 54.2,
+      "failed": [
+        "G1",
+        "G2",
+        "G4",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制"
+    },
+    {
+      "ticker": "SMCI",
+      "confidence": 49.8,
+      "failed": [
+        "G1",
+        "G2",
+        "G4",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制"
+    },
+    {
+      "ticker": "HOOD",
+      "confidence": 48.2,
+      "failed": [
+        "G1",
+        "G2",
+        "G5"
+      ],
+      "why": "G1 信心不足、G2 唔符合 setup A/B、G5 組合限制"
+    }
+  ],
+  "equity_usd": 1245.07
+}
+{
+ "now_hkt": "2026-10-19T21:53+08:00",
+ "actions": [
+  {
+   "job": "daily",
+   "slot": "daily|2026-10-19T21:53+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-19 21:53 HKT
+=== 2026-10-19 22:07:50 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-19T10:06 ET', 'data_date': '2026-10-19', 'phase': 'intraday', 'counts': {'total': 54, 'up': 27, 'down': 27, 'flat': 0, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-19T22:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-19T22:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-19 22:07 HKT
+=== 2026-10-19 23:07:52 CST tick  (exit 0)
+[heatmap] ok: {'slot': '2026-10-19T11:06 ET', 'data_date': '2026-10-19', 'phase': 'intraday', 'counts': {'total': 54, 'up': 34, 'down': 18, 'flat': 2, 'missing': 0}, 'sources': {'prices': 'Finnhub 即時報價（15 分鐘內）', 'vix': '其他報告最近攞過嘅 VIX（唔另外 call）', 'mcap': 'Finnhub /stock/profile2（7 日 cache，只用嚟定格大細）', 'finnhub_mcap_calls': 0, 'source': 'finnhub', 'rejected_jump': [], 'calls': 68, 'aborted': None}}
+{
+ "now_hkt": "2026-10-19T23:07+08:00",
+ "actions": [
+  {
+   "job": "hourly",
+   "slot": "hourly|2026-10-19T23:06+08:00",
+   "action": "run",
+   "result": "ok"
+  }
+ ]
+}
+[git] pushed: px tick: 2026-10-19 23:07 HKT

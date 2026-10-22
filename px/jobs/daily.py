@@ -206,13 +206,11 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", report["market"].get("fx_live", True))))
-    L += ["", "<b>🧭 買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
     L += plain.buy_suggestion(real_ev, scan_res, regime, clock.market_is_open(ctx.now), now=ctx.now)[0]
     L += [""] + plain.picks_block(scan_res, news)
     L += ["", "<b>🌍 大市</b>"] + mood
     L += ["", f"<b>🎓 今日學一樣</b>：{esc(lesson)}"]
-    L += ["", plain.paper_line(acct, len(pf.get("positions", [])), report["guardrail"]["max_positions"], spy_ret, qqq_ret,
-                               short_acts), "", plain.footer_line()]
+    L += ["", plain.footer_line()]
     m_report = "\n".join(L)
     # website keeps the detailed teaching / scenarios
     overbought = len([x for x in report.get("signals", []) if (x.get("rsi") or 0) > 68])

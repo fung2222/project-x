@@ -155,6 +155,7 @@ class TestRunNoPush(unittest.TestCase):
             mock.patch.object(heatmap, "STATE_DIR", self.tmp),
             mock.patch.object(heatmap, "OUT_PATH", self.out),
             mock.patch.object(heatmap, "network_off", return_value=True),
+            mock.patch.object(heatmap, "cfg", return_value=dict(heatmap.DEFAULTS)),
             mock.patch.object(heatmap, "build", return_value={
                 "schema": "heatmap_v1", "data_date": "2026-09-26", "phase": "close",
                 "counts": {"total": 2, "up": 1, "down": 1, "flat": 0, "missing": 0},

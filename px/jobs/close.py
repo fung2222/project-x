@@ -78,10 +78,6 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     L += ["", plain.paper_line(acct, len(open_rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret, notes)]
     health = schedule.health_line(clock.to_et(ctx.now).date(), ctx.now, exclude=("close",))
     L += [health]
-    from .. import heatmap as hmap
-    link = hmap.close_link(mk.get("session_date") or ctx.session, s.get("telegram", {}).get("site_url"))
-    if link:  # one short line, only when the heatmap is for this session
-        L.append(link)
     L += ["", plain.footer_line()]
     msgs = {"report": "\n".join(L)}
     wait = data_wait(JOB)

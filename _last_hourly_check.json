@@ -1,28 +1,28 @@
 {
-  "hkt": "2026-10-24T03:06:02.363168+08:00",
+  "hkt": "2026-10-24T04:06:02.430121+08:00",
   "session_date": "2026-10-23",
-  "vix": 19.96,
+  "vix": 19.71,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "RXRX",
       "shares": 33,
-      "px": 3.67,
-      "pnl_pct": -10.15,
+      "px": 3.7,
+      "pnl_pct": -9.31,
       "sl": 3.32,
       "tp": 5.8,
-      "dist_sl_pct": 9.44,
+      "dist_sl_pct": 10.27,
       "action": "HOLD",
       "near_stop": false
     },
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 12.22,
-      "pnl_pct": 8.38,
+      "px": 12.43,
+      "pnl_pct": 10.2,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 20.0,
+      "dist_sl_pct": 21.32,
       "action": "HOLD",
       "near_stop": false
     },
@@ -39,18 +39,16 @@
     }
   ],
   "executed": [],
-  "equity_usd": 1270.14,
+  "equity_usd": 1274.75,
   "cash_usd": 776.63,
-  "alerts": [
-    "🌡 大市情緒轉變：謹慎市場 → 正常市場（恐慌指數 20，正常）"
-  ],
+  "alerts": [],
   "real_alerts": [],
   "paper_notes": [],
   "real_positions": [],
-  "need_push": true,
+  "need_push": false,
   "first_today": false,
-  "push_reason": "alerts",
-  "pushed": true,
+  "push_reason": "none",
+  "pushed": false,
   "push_err": null,
   "dry_run": false,
   "engine": "px v3-core"

@@ -1,8 +1,8 @@
 {
-  "hkt": "2026-10-23T04:06:02.354199+08:00",
-  "session_date": "2026-10-22",
-  "vix": 19.42,
-  "regime": "NORMAL",
+  "hkt": "2026-10-23T22:06:02.333909+08:00",
+  "session_date": "2026-10-23",
+  "vix": 20.13,
+  "regime": "CAUTION",
   "positions": [
     {
       "ticker": "RXRX",
@@ -18,37 +18,39 @@
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 12.04,
-      "pnl_pct": 6.69,
+      "px": 11.97,
+      "pnl_pct": 6.12,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 18.74,
+      "dist_sl_pct": 18.3,
       "action": "HOLD",
       "near_stop": false
     },
     {
       "ticker": "SNAP",
       "shares": 26,
-      "px": 6.34,
-      "pnl_pct": -4.3,
+      "px": 6.32,
+      "pnl_pct": -4.68,
       "sl": 5.67,
       "tp": 8.68,
-      "dist_sl_pct": 10.57,
+      "dist_sl_pct": 10.21,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1264.2,
+  "equity_usd": 1262.45,
   "cash_usd": 776.63,
-  "alerts": [],
+  "alerts": [
+    "🌡 大市情緒轉變：正常市場 → 謹慎市場（恐慌指數 20，偏緊張）"
+  ],
   "real_alerts": [],
   "paper_notes": [],
   "real_positions": [],
-  "need_push": false,
-  "first_today": false,
-  "push_reason": "none",
-  "pushed": false,
+  "need_push": true,
+  "first_today": true,
+  "push_reason": "alerts",
+  "pushed": true,
   "push_err": null,
   "dry_run": false,
   "engine": "px v3-core"

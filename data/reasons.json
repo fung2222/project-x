@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-26T21:53:20+08:00",
+ "generated_at": "2026-10-27T05:00:34+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -21,9 +21,9 @@
   },
   "AI": {
    "ticker": "AI",
-   "text": "近1個月比納指強 22%、近3個月比納指強 34%，趨勢上升，企喺 50 日平均價之上，業績 12-03",
+   "text": "近1個月比納指強 26%、近3個月比納指強 36%，趨勢上升，企喺 50 日平均價之上，業績 12-03",
    "kind": "pick",
-   "at": "2026-10-26T21:53:20+08:00"
+   "at": "2026-10-27T05:00:34+08:00"
   },
   "SNAP": {
    "ticker": "SNAP",
@@ -42,6 +42,19 @@
    "text": "近1個月比納指強 23%、近3個月比納指強 6%，趨勢橫行，企喺 50 日平均價之上，業績 11-05",
    "kind": "pick",
    "at": "2026-10-23T21:53:14+08:00"
+  },
+  "VOO": {
+   "ticker": "VOO",
+   "text": "跟大市升（納指 +1.1%）｜新聞：VOO vs. QQQ: Here's the ETF I'd Personally Buy and Hold for Decades",
+   "kind": "market",
+   "chg_pct": 0.69,
+   "mkt_chg_pct": 1.11,
+   "sector_etf": null,
+   "sector_chg_pct": null,
+   "headline": "VOO vs. QQQ: Here's the ETF I'd Personally Buy and Hold for Decades",
+   "url": "https://finnhub.io/api/news?id=b199742f706fa3d6521dab0e082e722b63145b6a4cb31998859ccd32c65afee9",
+   "news_source": "finnhub:Yahoo",
+   "at": "2026-10-27T05:00:04+08:00"
   }
  }
 }

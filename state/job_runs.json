@@ -1944,16 +1944,18 @@
           ]
         }
       },
-      "runs": 1,
+      "runs": 2,
       "last_prices": {
-        "RXRX": 3.72,
-        "AI": 12.54,
-        "SNAP": 6.1898
+        "RXRX": 3.755,
+        "AI": 12.945,
+        "SNAP": 6.215
       },
-      "last_real_prices": {},
+      "last_real_prices": {
+        "VOO": 705.34
+      },
       "last_regime": "NORMAL",
       "alerts": {},
-      "last_run": "2026-10-26T22:06:04+08:00",
+      "last_run": "2026-10-26T23:06:03+08:00",
       "status": "ok"
     },
     "real": {

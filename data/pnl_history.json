@@ -1052,5 +1052,48 @@
    "n_closed": 0,
    "real_start_date": "2026-10-26"
   }
+ },
+ {
+  "date": "2026-10-27",
+  "equity_usd": 1277.29,
+  "cash_usd": 776.63,
+  "total_pnl_usd": -2.71,
+  "total_return_pct": -0.21,
+  "realized_pnl_usd": 1.48,
+  "unrealized_pnl_usd": 2.01,
+  "fx_usdhkd": 7.8,
+  "equity_hkd": 9962.86,
+  "spy_close": 769.66,
+  "qqq_close": 721.25,
+  "positions": [
+   {
+    "ticker": "RXRX",
+    "shares": 33,
+    "price": 4.05,
+    "pnl_pct": -0.74
+   },
+   {
+    "ticker": "AI",
+    "shares": 17,
+    "price": 12.29,
+    "pnl_pct": 8.95
+   },
+   {
+    "ticker": "SNAP",
+    "shares": 26,
+    "price": 6.08,
+    "pnl_pct": -8.23
+   }
+  ],
+  "real": {
+   "equity_usd": 1284.33,
+   "cash_usd": 576.81,
+   "unrealized_usd": 4.33,
+   "realized_usd": 0.0,
+   "return_pct": 0.34,
+   "n_open": 1,
+   "n_closed": 0,
+   "real_start_date": "2026-10-26"
+  }
  }
 ]

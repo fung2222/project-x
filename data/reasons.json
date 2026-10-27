@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-27T21:53:20+08:00",
+ "generated_at": "2026-10-28T05:00:25+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "窄幅上落｜新聞：VOO vs. QQQ: Here's the ETF I'd Personally Buy and Hold for Decades",
-   "kind": "flat",
-   "chg_pct": 0.08,
-   "mkt_chg_pct": 0.33,
+   "text": "冇特別新聞，似係跟大市升（納指 +1.3%）",
+   "kind": "market",
+   "chg_pct": 0.58,
+   "mkt_chg_pct": 1.27,
    "sector_etf": null,
    "sector_chg_pct": null,
-   "headline": "VOO vs. QQQ: Here's the ETF I'd Personally Buy and Hold for Decades",
-   "url": "https://finnhub.io/api/news?id=b199742f706fa3d6521dab0e082e722b63145b6a4cb31998859ccd32c65afee9",
-   "news_source": "finnhub:Yahoo",
-   "at": "2026-10-27T21:53:12+08:00"
+   "headline": null,
+   "url": null,
+   "news_source": null,
+   "at": "2026-10-28T05:00:05+08:00"
   }
  }
 }

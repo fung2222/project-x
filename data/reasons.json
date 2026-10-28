@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-28T21:35:04+08:00",
+ "generated_at": "2026-10-28T21:53:13+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -47,14 +47,14 @@
    "ticker": "VOO",
    "text": "窄幅上落，冇特別新聞",
    "kind": "flat",
-   "chg_pct": 0.2,
-   "mkt_chg_pct": 0.41,
+   "chg_pct": 0.03,
+   "mkt_chg_pct": 0.0,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": null,
    "url": null,
    "news_source": null,
-   "at": "2026-10-28T21:35:04+08:00"
+   "at": "2026-10-28T21:53:13+08:00"
   }
  }
 }

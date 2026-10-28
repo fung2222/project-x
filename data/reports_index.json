@@ -1212,6 +1212,17 @@
   },
   {
    "date": "2026-10-28",
+   "kind": "daily",
+   "kind_zh": "每日分析",
+   "file": "reports/daily_report_2026-10-28.html",
+   "md": "reports/daily_report_2026-10-28.md",
+   "summary": "每日分析 · 真倉 1 隻（+0.35%）· 紙上 +0.73% · Top: ",
+   "pnl": 0.73,
+   "source": "px",
+   "generated_at": "2026-10-28T21:53:14+08:00"
+  },
+  {
+   "date": "2026-10-28",
    "kind": "open",
    "kind_zh": "開市監控",
    "file": "reports/open_report_2026-10-28.html",
@@ -1222,5 +1233,5 @@
    "generated_at": "2026-10-28T21:35:06+08:00"
   }
  ],
- "updated": "2026-10-28T21:35:06+08:00"
+ "updated": "2026-10-28T21:53:14+08:00"
 }

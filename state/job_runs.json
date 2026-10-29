@@ -2207,6 +2207,23 @@
       "executed": [
         "T010"
       ]
+    },
+    "daily": {
+      "sent": {
+        "report": {
+          "at": "2026-10-29T21:53:14+08:00",
+          "ids": [
+            567
+          ]
+        }
+      },
+      "runs": 1,
+      "status": "ok",
+      "finished": "2026-10-29T21:53:14+08:00",
+      "telegram": {
+        "report": "ok"
+      },
+      "entry": null
     }
   }
 }

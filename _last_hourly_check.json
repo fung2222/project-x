@@ -1,17 +1,17 @@
 {
-  "hkt": "2026-10-30T02:06:02.360380+08:00",
+  "hkt": "2026-10-30T03:06:02.366096+08:00",
   "session_date": "2026-10-29",
-  "vix": 16.8,
+  "vix": 16.99,
   "regime": "NORMAL",
   "positions": [
     {
       "ticker": "RXRX",
       "shares": 33,
-      "px": 4.22,
-      "pnl_pct": 3.55,
+      "px": 4.19,
+      "pnl_pct": 2.7,
       "sl": 3.32,
       "tp": 5.8,
-      "dist_sl_pct": 21.42,
+      "dist_sl_pct": 20.77,
       "action": "HOLD",
       "near_stop": false
     },
@@ -28,7 +28,7 @@
     }
   ],
   "executed": [],
-  "equity_usd": 1266.54,
+  "equity_usd": 1265.39,
   "cash_usd": 921.84,
   "alerts": [],
   "real_alerts": [],
@@ -38,13 +38,13 @@
       "ticker": "VOO",
       "shares": 1,
       "entry": 701.2,
-      "px": 705.0701,
-      "pnl_usd": 1.88,
-      "pnl_pct": 0.27,
+      "px": 705.665,
+      "pnl_usd": 2.47,
+      "pnl_pct": 0.35,
       "sl": 526.0,
       "tp": 1402.0,
-      "dist_sl_pct": 25.4,
-      "dist_tp_pct": 98.85,
+      "dist_sl_pct": 25.46,
+      "dist_tp_pct": 98.68,
       "days_held": 4,
       "status": "OK"
     }

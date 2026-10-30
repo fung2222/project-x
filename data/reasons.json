@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-30T21:35:05+08:00",
+ "generated_at": "2026-10-30T21:53:13+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "冇搵到相關新聞，個股自己波動（比大市強 1.6%）",
-   "kind": "stock",
-   "chg_pct": -1.25,
-   "mkt_chg_pct": -2.89,
+   "text": "冇特別新聞，似係跟大市跌（納指 -2.6%）",
+   "kind": "market",
+   "chg_pct": -1.2,
+   "mkt_chg_pct": -2.63,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": null,
    "url": null,
    "news_source": null,
-   "at": "2026-10-30T21:35:05+08:00"
+   "at": "2026-10-30T21:53:12+08:00"
   }
  }
 }

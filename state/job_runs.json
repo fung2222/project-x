@@ -2399,6 +2399,27 @@
       "runs": 1,
       "status": "ok",
       "finished": "2026-11-02T09:44:04+08:00"
+    },
+    "real": {
+      "alerts": {
+        "REAL:VOO:QUOTE": 1
+      },
+      "updated": "2026-11-02T22:30:08+08:00",
+      "last_by": "realwatch"
+    },
+    "open": {
+      "sent": {
+        "main": {
+          "at": "2026-11-02T22:35:04+08:00",
+          "ids": [
+            582
+          ]
+        }
+      },
+      "runs": 1,
+      "status": "ok",
+      "finished": "2026-11-02T22:35:04+08:00",
+      "executed": []
     }
   }
 }

@@ -2430,11 +2430,11 @@
           ]
         }
       },
-      "runs": 1,
-      "status": "ok",
-      "finished": "2026-11-02T22:53:22+08:00",
+      "runs": 2,
+      "status": "partial",
+      "finished": "2026-11-03T00:41:23+08:00",
       "telegram": {
-        "report": "ok"
+        "report": "failed: Telegram not configured (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID)"
       },
       "entry": null
     },

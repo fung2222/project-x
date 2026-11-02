@@ -40911,8 +40911,8 @@
       "raw_signal": "BUY",
       "action": "信心度不足，觀望",
       "confidence": 54.9,
-      "price": 206.63,
-      "change_pct": 0.97,
+      "price": 206.64,
+      "change_pct": 0.98,
       "rsi": 35.1,
       "macd": -3.6576,
       "macd_histogram": -1.4769,
@@ -40938,7 +40938,7 @@
         "⚠️ 價格低於 MA50"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:14+08:00",
+      "timestamp": "2026-11-03T00:42:10+08:00",
       "date": "2026-11-03"
     },
     {
@@ -40948,8 +40948,8 @@
       "raw_signal": "HOLD",
       "action": "觀望",
       "confidence": 50.0,
-      "price": 410.62,
-      "change_pct": 2.71,
+      "price": 410.67,
+      "change_pct": 2.72,
       "rsi": 60.9,
       "macd": 9.0673,
       "macd_histogram": 3.0058,
@@ -40968,7 +40968,7 @@
         "RSI 61 中性"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:10+08:00",
       "date": "2026-11-03"
     },
     {
@@ -40978,8 +40978,8 @@
       "raw_signal": "HOLD",
       "action": "中性偏低，觀望",
       "confidence": 55.0,
-      "price": 53.76,
-      "change_pct": -1.77,
+      "price": 53.77,
+      "change_pct": -1.74,
       "rsi": 40.0,
       "macd": -3.2881,
       "macd_histogram": 0.3098,
@@ -40998,7 +40998,7 @@
         "RSI 40 中性偏低"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:10+08:00",
       "date": "2026-11-03"
     },
     {
@@ -41008,8 +41008,8 @@
       "raw_signal": "BUY",
       "action": "信心度不足，觀望",
       "confidence": 50.3,
-      "price": 488.4,
-      "change_pct": -3.25,
+      "price": 488.25,
+      "change_pct": -3.28,
       "rsi": 39.7,
       "macd": -9.0587,
       "macd_histogram": -5.0229,
@@ -41035,7 +41035,7 @@
         "⚠️ 價格低於 MA50"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:11+08:00",
       "date": "2026-11-03"
     },
     {
@@ -41045,8 +41045,8 @@
       "raw_signal": "HOLD",
       "action": "觀望",
       "confidence": 50.0,
-      "price": 523.95,
-      "change_pct": 0.39,
+      "price": 524.21,
+      "change_pct": 0.44,
       "rsi": 49.0,
       "macd": 4.7846,
       "macd_histogram": -2.2542,
@@ -41065,7 +41065,7 @@
         "RSI 49 中性"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:11+08:00",
       "date": "2026-11-03"
     },
     {
@@ -41075,8 +41075,8 @@
       "raw_signal": "BUY",
       "action": "信心度不足，觀望",
       "confidence": 67.2,
-      "price": 283.31,
-      "change_pct": 1.24,
+      "price": 283.26,
+      "change_pct": 1.22,
       "rsi": 21.4,
       "macd": -12.2422,
       "macd_histogram": -6.2224,
@@ -41104,7 +41104,7 @@
         "⚠️ 趨勢分 -6（下降趨勢）"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:11+08:00",
       "date": "2026-11-03"
     },
     {
@@ -41114,8 +41114,8 @@
       "raw_signal": "BUY",
       "action": "信心度不足，觀望",
       "confidence": 41.8,
-      "price": 613.03,
-      "change_pct": -0.32,
+      "price": 612.96,
+      "change_pct": -0.33,
       "rsi": 33.2,
       "macd": -20.5278,
       "macd_histogram": -13.6619,
@@ -41141,7 +41141,7 @@
         "⚠️ 趨勢分 -3（下降趨勢）"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:11+08:00",
       "date": "2026-11-03"
     },
     {
@@ -41151,8 +41151,8 @@
       "raw_signal": "HOLD",
       "action": "中性偏低，觀望",
       "confidence": 55.0,
-      "price": 184.66,
-      "change_pct": 0.3,
+      "price": 184.72,
+      "change_pct": 0.33,
       "rsi": 41.9,
       "macd": 2.0335,
       "macd_histogram": -1.8812,
@@ -41171,7 +41171,7 @@
         "RSI 42 中性偏低"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:11+08:00",
       "date": "2026-11-03"
     },
     {
@@ -41181,8 +41181,8 @@
       "raw_signal": "BUY",
       "action": "信心度不足，觀望",
       "confidence": 45.1,
-      "price": 204.5,
-      "change_pct": -0.71,
+      "price": 204.25,
+      "change_pct": -0.84,
       "rsi": 34.9,
       "macd": -15.345,
       "macd_histogram": -1.7888,
@@ -41210,7 +41210,7 @@
         "⚠️ 趨勢分 -5（下降趨勢）"
       ],
       "is_owned": false,
-      "timestamp": "2026-11-03T00:41:15+08:00",
+      "timestamp": "2026-11-03T00:42:11+08:00",
       "date": "2026-11-03"
     }
   ],
@@ -41226,7 +41226,7 @@
     "miss_rate_pct": 23.7,
     "label": "信號命中率樣本（唔係實際交易筆數）"
   },
-  "last_updated": "2026-11-03T00:41:20+08:00",
+  "last_updated": "2026-11-03T00:42:15+08:00",
   "vix_regime": "正常市場",
-  "vix_value": 18.85
+  "vix_value": 18.91
 }

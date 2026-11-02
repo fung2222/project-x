@@ -6,11 +6,11 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 58,
     "analyst_rating_str": "🟢 強烈買入（58位分析師）",
-    "current_price": 206.66,
+    "current_price": 206.7093,
     "target_mean": 328.95346,
     "target_high": 515.0,
     "target_low": 180.0,
-    "upside_pct": 59.2,
+    "upside_pct": 59.1,
     "earnings_date": "2026-11-17",
     "earnings_days": 15,
     "pe_ratio": 26.1,
@@ -21,7 +21,7 @@
     "industry": "Semiconductors",
     "sector": "Technology",
     "news": [],
-    "timestamp": "2026-11-03T00:41:16.897211"
+    "timestamp": "2026-11-03T00:42:12.833205"
   },
   "TSLA": {
     "symbol": "TSLA",
@@ -30,7 +30,7 @@
     "recommendation_key": "buy",
     "num_analysts": 40,
     "analyst_rating_str": "🟢 買入（40位分析師）",
-    "current_price": 410.68,
+    "current_price": 410.72,
     "target_mean": 413.10126,
     "target_high": 600.0,
     "target_low": 128.11,
@@ -45,7 +45,7 @@
     "industry": "Auto Manufacturers",
     "sector": "Consumer Cyclical",
     "news": [],
-    "timestamp": "2026-11-03T00:41:17.266881"
+    "timestamp": "2026-11-03T00:42:13.186248"
   },
   "RKLB": {
     "symbol": "RKLB",
@@ -54,7 +54,7 @@
     "recommendation_key": "none",
     "num_analysts": 20,
     "analyst_rating_str": "⚪ 未知（20位分析師）",
-    "current_price": 53.76,
+    "current_price": 53.7661,
     "target_mean": 102.15,
     "target_high": 150.0,
     "target_low": 64.0,
@@ -62,14 +62,14 @@
     "earnings_date": "2026-11-09",
     "earnings_days": 7,
     "pe_ratio": null,
-    "forward_pe": 935.1,
+    "forward_pe": 935.2,
     "profit_margin_pct": -21.5,
     "revenue_growth_pct": 62.0,
     "earnings_growth_pct": null,
     "industry": "Aerospace & Defense",
     "sector": "Industrials",
     "news": [],
-    "timestamp": "2026-11-03T00:41:17.771994"
+    "timestamp": "2026-11-03T00:42:13.554893"
   },
   "AMD": {
     "symbol": "AMD",
@@ -78,14 +78,14 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 49,
     "analyst_rating_str": "🟢 強烈買入（49位分析師）",
-    "current_price": 488.73,
+    "current_price": 488.4095,
     "target_mean": 645.82446,
     "target_high": 1250.0,
     "target_low": 430.0,
-    "upside_pct": 32.1,
+    "upside_pct": 32.2,
     "earnings_date": "2026-11-03",
     "earnings_days": 1,
-    "pe_ratio": 124.7,
+    "pe_ratio": 124.6,
     "forward_pe": 30.5,
     "profit_margin_pct": 15.6,
     "revenue_growth_pct": 50.1,
@@ -93,7 +93,7 @@
     "industry": "Semiconductors",
     "sector": "Technology",
     "news": [],
-    "timestamp": "2026-11-03T00:41:18.168039"
+    "timestamp": "2026-11-03T00:42:13.898958"
   },
   "MSFT": {
     "symbol": "MSFT",
@@ -102,7 +102,7 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 52,
     "analyst_rating_str": "🟢 強烈買入（52位分析師）",
-    "current_price": 524.07,
+    "current_price": 524.26,
     "target_mean": 633.2829,
     "target_high": 870.0,
     "target_low": 440.0,
@@ -117,7 +117,7 @@
     "industry": "Software - Infrastructure",
     "sector": "Technology",
     "news": [],
-    "timestamp": "2026-11-03T00:41:18.536405"
+    "timestamp": "2026-11-03T00:42:14.255950"
   },
   "GOOGL": {
     "symbol": "GOOGL",
@@ -126,7 +126,7 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 52,
     "analyst_rating_str": "🟢 強烈買入（52位分析師）",
-    "current_price": 283.25,
+    "current_price": 283.26,
     "target_mean": 406.54807,
     "target_high": 500.0,
     "target_low": 325.0,
@@ -141,7 +141,7 @@
     "industry": "Internet Content & Information",
     "sector": "Communication Services",
     "news": [],
-    "timestamp": "2026-11-03T00:41:18.899960"
+    "timestamp": "2026-11-03T00:42:14.614555"
   },
   "META": {
     "symbol": "META",
@@ -150,11 +150,11 @@
     "recommendation_key": "strong_buy",
     "num_analysts": 58,
     "analyst_rating_str": "🟢 強烈買入（58位分析師）",
-    "current_price": 613.025,
+    "current_price": 612.75,
     "target_mean": 848.3765,
     "target_high": 1050.0,
     "target_low": 629.06,
-    "upside_pct": 38.4,
+    "upside_pct": 38.5,
     "earnings_date": null,
     "earnings_days": null,
     "pe_ratio": 20.9,
@@ -165,7 +165,7 @@
     "industry": "Internet Content & Information",
     "sector": "Communication Services",
     "news": [],
-    "timestamp": "2026-11-03T00:41:19.246139"
+    "timestamp": "2026-11-03T00:42:15.035746"
   },
   "PLTR": {
     "symbol": "PLTR",
@@ -174,11 +174,11 @@
     "recommendation_key": "buy",
     "num_analysts": 28,
     "analyst_rating_str": "🟢 買入（28位分析師）",
-    "current_price": 184.69,
+    "current_price": 184.715,
     "target_mean": 212.50357,
     "target_high": 265.0,
     "target_low": 80.0,
-    "upside_pct": 15.1,
+    "upside_pct": 15.0,
     "earnings_date": "2026-11-02",
     "earnings_days": 0,
     "pe_ratio": 159.2,
@@ -189,7 +189,7 @@
     "industry": "Software - Infrastructure",
     "sector": "Technology",
     "news": [],
-    "timestamp": "2026-11-03T00:41:19.634737"
+    "timestamp": "2026-11-03T00:42:15.375334"
   },
   "ARM": {
     "symbol": "ARM",
@@ -198,21 +198,21 @@
     "recommendation_key": "buy",
     "num_analysts": 40,
     "analyst_rating_str": "🟢 買入（40位分析師）",
-    "current_price": 204.5,
+    "current_price": 204.29,
     "target_mean": 290.705,
     "target_high": 500.0,
     "target_low": 125.0,
-    "upside_pct": 42.2,
+    "upside_pct": 42.3,
     "earnings_date": "2026-11-04",
     "earnings_days": 2,
-    "pe_ratio": 210.8,
-    "forward_pe": 66.9,
+    "pe_ratio": 210.6,
+    "forward_pe": 66.8,
     "profit_margin_pct": 20.2,
     "revenue_growth_pct": 22.4,
     "earnings_growth_pct": 108.3,
     "industry": "Semiconductors",
     "sector": "Technology",
     "news": [],
-    "timestamp": "2026-11-03T00:41:19.997673"
+    "timestamp": "2026-11-03T00:42:15.766986"
   }
 }

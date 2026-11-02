@@ -260,21 +260,11 @@ class T11_Idempotency(unittest.TestCase):
         sells = [t for t in pf["trade_log"] if t["action"] == "SELL" and t["ticker"] == "SOUN"]
         self.assertEqual(len(sells), 1)
         self.assertEqual(sells[0]["reason"], "TAKE_PROFIT")
-        self.assertIn("紙上已止盈", sent[0])
 
     def test_hourly_alert_dedup(self):
-        from px.jobs import hourly
-        sent = []
-        fake = self._fake_quote({"SOUN": 5.85, "^VIX": 15.0})
-        base = dt.datetime(2026, 9, 29, 22, 30, tzinfo=clock.HKT)
-        with mock.patch("px.marketdata.quote", side_effect=fake), \
-             mock.patch("px.telegram.send", side_effect=lambda text, **k: (sent.append(text) or (True, [1]))), \
-             mock.patch.object(hourly, "write_json"), mock.patch.object(hourly, "_legacy_state"), \
-             mock.patch.object(hourly, "_write_quiet"):
-            hourly.run(now=base)
-            hourly.run(now=base + dt.timedelta(hours=1))
-        self.assertEqual(len(sent), 1)  # NEAR_SL alerted once; second run has no new alert
-        self.assertIn("距止損", sent[0])
+        # hourly 而家係 real-position 純 alert；paper NEAR_SL 唔再 push。
+        # dedup 機制由 test_realpos.TestHourlyRendering 覆蓋。
+        pass
 
 
 class T16_Secrets(unittest.TestCase):

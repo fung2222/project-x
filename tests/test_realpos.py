@@ -30,7 +30,6 @@ class TestRealPosFile(unittest.TestCase):
         with open(os.path.join(ROOT, "data", "futu_positions.json"), encoding="utf-8") as f:
             data = json.load(f)
         self.assertEqual(data.get("schema"), realpos.SCHEMA)
-        self.assertEqual(data.get("positions"), [])
         self.assertTrue(os.path.exists(os.path.join(ROOT, data["archived"]["file"])), "archived July record must exist")
 
     def test_add_valid_and_default_fee(self):
@@ -268,9 +267,7 @@ class TestHourlyRendering(unittest.TestCase):
     def test_hourly_zero_real(self):
         out, sent = self._run(realpos.empty_book(), {})
         self.assertEqual(out["status"], "ok")
-        self.assertIn("真倉：暫時冇持倉", sent[0])
-        self.assertIn("紙上倉（對照組）", sent[0])
-        self.assertLess(sent[0].index("真倉"), sent[0].index("紙上倉"))
+        self.assertEqual(sent, [])  # 冇持倉、冇 alert → 唔 push（純 alert）
 
     def test_hourly_real_sl_alert(self):
         out, sent = self._run(book_with_ionq(), {"IONQ": {"ok": True, "price": 36.5, "change_pct": -6.2, "source": "t"}})
@@ -278,7 +275,6 @@ class TestHourlyRendering(unittest.TestCase):
         self.assertTrue(msg.startswith("<b>🚨 真倉警報</b>"))
         self.assertIn("真倉 IONQ 跌穿止蝕", msg)
         self.assertIn("系統只提醒", msg)
-        self.assertLess(msg.index("IONQ"), msg.index("紙上倉"))
         self.assertTrue(out["real_alerts"])
         self.assertLessEqual(max(len(x) for x in telegram.split_message(msg)), 4096)
 

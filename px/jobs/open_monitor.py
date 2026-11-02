@@ -36,8 +36,6 @@ def build_message(ctx, mkt, rows, executed, alerts, teach, acct, real_ev=None, r
         if not r["action"].endswith("_EXECUTED") and r.get("dist_sl_pct") is not None and r["dist_sl_pct"] < 2:
             notes.append(f"{r['ticker']} 距止損 {f2(r['dist_sl_pct'], 1)}%")
     notes += [a.split(" ", 1)[1] for a in alerts if a.startswith("QUOTE ")]
-    L += ["", plain.paper_line(acct, len([r for r in rows if not r["action"].endswith("_EXECUTED")]),
-                               paper_max_positions(mkt.get("regime")), paper_bench_[0], paper_bench_[1], notes)]
     L += ["", plain.footer_line()]
     return "\n".join(L)
 

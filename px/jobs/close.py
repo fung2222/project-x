@@ -72,10 +72,8 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
     L.append(plain.capital_line(real_ev, mk.get("fx_live", True)))
-    L += ["", "<b>🧭 買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
     L += plain.buy_suggestion(real_ev, res, mk.get("regime"), market_open=False, now=ctx.now)[0]
     L += [""] + plain.picks_block(res, news, title=f"⭐ {plain.next_open_words(ctx.now)[0]}開市潛力股")
-    L += ["", plain.paper_line(acct, len(open_rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret, notes)]
     health = schedule.health_line(clock.to_et(ctx.now).date(), ctx.now, exclude=("close",))
     L += [health]
     L += ["", plain.footer_line()]

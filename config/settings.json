@@ -385,7 +385,7 @@
   "telegram": {
     "enabled": true,
     "site_url": "https://fung2222.github.io/project-x/",
-    "hourly_first_of_session_status": true,
+    "hourly_first_of_session_status": false,
     "footer": "真倉由你喺富途手動落單（系統只提醒，唔會落單）；紙上倉係自動運行嘅對照組。情境參考，唔係保證。",
     "send_charts": true,
     "_destination": "After cutover: Roy's Telegram group 'Project X Nas' via Hermes's bot (see docs/HERMES_HANDOVER.md). Chat id + token ONLY via env (TELEGRAM_CHAT_ID / TELEGRAM_BOT_TOKEN); never commit them."

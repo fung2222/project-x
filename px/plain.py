@@ -221,6 +221,21 @@ def real_block(ev, reasons=None, trends=None, day_label="今日"):
     return [f"<b>🏦 真倉 {ev['n_open']}/{ev['max_positions']} 隻</b>"] + real_rows(ev, reasons, trends, day_label)
 
 
+def real_brief(ev):
+    """一行真倉摘要（用喺唔重複持倉詳細嘅推送）。"""
+    rows = ev.get("rows") or []
+    if not rows:
+        return "🏦 真倉：暫時冇持倉"
+    parts = []
+    for r in rows:
+        pnl = r.get("pnl_usd")
+        txt = f"{esc(r['ticker'])} {r['shares']}股"
+        if pnl is not None:
+            txt += f"（{'+' if pnl >= 0 else '-'}US${abs(pnl):,.2f}）"
+        parts.append(txt)
+    return "🏦 真倉：" + "、".join(parts)
+
+
 def capital_line(ev, fx_live=True):
     """資金: 本金、用咗、剩低現金、總賺蝕 (US$ + HK$ + %). Real account (estimate from the recorded trades)."""
     fx = ev.get("fx")

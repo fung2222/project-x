@@ -90,10 +90,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         L += [f"• {esc(a)}" for a in alerts]
         if real_al:
             L.append(REAL_NOTE)
-        L += [""] + plain.real_block(real_ev, rsn, trends, "今日")
-        spy_ret, qqq_ret = paper_bench()
-        L += ["", plain.paper_line(acct, len(pf.get("positions", [])), paper_max_positions(regime), spy_ret, qqq_ret, paper_notes),
-              "🌍 " + vix_words(vix)]
+        L += ["", "🌍 " + vix_words(vix)]
         if not alerts and not executed:
             L.append("✅ 一切正常（今個交易時段第一次報告；之後真倉有事先會再通知）")
         L += ["", plain.footer_line()]

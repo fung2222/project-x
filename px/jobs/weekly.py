@@ -105,8 +105,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
             trends[r["ticker"]] = rs.trend_word(r["ticker"])
         except Exception:
             pass
-    L += plain.real_block(real_ev, None, trends, "上個交易日")
-    L.append(plain.capital_line(real_ev, marketdata.fx_info()["live"]))
+    L.append(plain.real_brief(real_ev))
     L += [""] + three_way_lines(tw, real_book, real_ev, start, today)
     sc = archive.load_scan() or {}
     L += [""] + plain.picks_block(sc, None, title="⭐ 下週潛力股（上個收市掃描）")
@@ -114,8 +113,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     qqq_ret = marketdata.return_since("QQQ", load_settings()["account"]["rebase_date"])
     n_b = sum(1 for t in trades if t.get("action") == "BUY")
     n_s = sum(1 for t in trades if t.get("action") == "SELL")
-    L += ["", plain.paper_line(acct, len(pf.get("positions", [])), paper_max_positions(regime), spy_ret, qqq_ret,
-                               [f"買 {n_b}／賣 {n_s}"] if trades else None, label="本週"), "", plain.footer_line()]
+    L += ["", plain.footer_line()]
     msg = "\n".join(L)
     wait = data_wait(JOB)
     if wait:

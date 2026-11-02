@@ -52,12 +52,10 @@ def run(dry_run=False, force=False, legacy=False, now=None):
     annotate_scan(sc, news)
     L = [f"<b>🌅 早晨｜美股 {session} 收市回顧</b>",
          "🌍 " + " ".join(plain.market_lines(mk.get("spy_chg_pct"), mk.get("qqq_chg_pct"), mk.get("vix"), when="隔晚")), ""]
-    L += plain.real_block(real_ev, rsn, trends, "隔晚")
+    L.append(plain.real_brief(real_ev))
     if real_al:
         L += ["<b>⚠️ 要留意</b>"] + [f"• {esc(a)}" for a in real_al] + [REAL_NOTE]
-    L.append(plain.capital_line(real_ev, mk.get("fx_live", True)))
     nxt_w, nxt_hkt = plain.next_open_words(ctx.now)
-    L += ["", f"<b>🧭 {nxt_w}開市買賣信號</b>"] + plain.hold_signal_lines(real_ev, trends)
     L += plain.buy_suggestion(real_ev, sc, mk.get("regime"), market_open=False, now=ctx.now)[0]
     L += [""] + plain.picks_block(sc, news, title=f"⭐ {nxt_w}開市潛力股")
     cats = []
@@ -74,8 +72,7 @@ def run(dry_run=False, force=False, legacy=False, now=None):
         L += ["", "📅 快出業績（股價可能大上大落）：" + "、".join(cats)]
     L += ["", f"🕘 下次美股開市：{nxt_w} {nxt_hkt}（香港時間）。先諗定買咩、買幾多、止蝕位，唔好臨場 FOMO。"]
     spy_ret, qqq_ret = paper_bench()
-    L += ["", plain.paper_line(acct, len(rows), paper_max_positions(mk.get("regime")), spy_ret, qqq_ret), "",
-          plain.footer_line()]
+    L += ["", plain.footer_line()]
     wait = data_wait(JOB)
     if wait:
         return wait

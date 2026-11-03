@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-03T06:00:23+08:00",
+ "generated_at": "2026-11-03T22:35:04+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市跌（納指 -1.4%）｜新聞：VOO vs. VTI: Which Vanguard Fund Is the Better Buy Right Now?",
-   "kind": "market",
-   "chg_pct": -0.5,
-   "mkt_chg_pct": -1.36,
+   "text": "窄幅上落｜新聞：VOO vs. VTI: Which Vanguard Fund Is the Better Buy Right Now?",
+   "kind": "flat",
+   "chg_pct": 0.19,
+   "mkt_chg_pct": 0.67,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "VOO vs. VTI: Which Vanguard Fund Is the Better Buy Right Now?",
    "url": "https://finnhub.io/api/news?id=f39dc67e157e510d0707403aee7e1379ae735fcc5097eebe6c5b7a5a359e19ce",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-03T06:00:05+08:00"
+   "at": "2026-11-03T22:35:04+08:00"
   }
  }
 }

@@ -1396,7 +1396,18 @@
    "pnl": null,
    "source": "px",
    "generated_at": "2026-11-02T09:44:04+08:00"
+  },
+  {
+   "date": "2026-11-03",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-11-03.html",
+   "md": "reports/open_report_2026-11-03.md",
+   "summary": "開市監控 · 謹慎市場（VIX 20.97）",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-11-03T22:35:04+08:00"
   }
  ],
- "updated": "2026-11-03T08:30:03+08:00"
+ "updated": "2026-11-03T22:35:04+08:00"
 }

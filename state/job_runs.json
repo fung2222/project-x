@@ -2541,19 +2541,19 @@
       "entry": null
     },
     "hourly": {
-      "runs": 4,
+      "runs": 5,
       "last_prices": {
-        "RXRX": 3.8399,
-        "AI": 11.56
+        "RXRX": 3.82,
+        "AI": 11.565
       },
       "last_real_prices": {
-        "VOO": 695.06
+        "VOO": 694.95
       },
       "last_regime": "CAUTION",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-04T02:06:03+08:00",
+      "last_run": "2026-11-04T03:06:03+08:00",
       "status": "ok"
     }
   }

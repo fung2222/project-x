@@ -2694,6 +2694,23 @@
       "status": "ok",
       "finished": "2026-11-05T22:35:04+08:00",
       "executed": []
+    },
+    "daily": {
+      "sent": {
+        "report": {
+          "at": "2026-11-05T22:53:14+08:00",
+          "ids": [
+            636
+          ]
+        }
+      },
+      "runs": 1,
+      "status": "ok",
+      "finished": "2026-11-05T22:53:14+08:00",
+      "telegram": {
+        "report": "ok"
+      },
+      "entry": null
     }
   }
 }

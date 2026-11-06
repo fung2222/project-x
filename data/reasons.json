@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-06T06:00:21+08:00",
+ "generated_at": "2026-11-06T22:35:03+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市跌（納指 -6.5%）｜新聞：If You'd Invested $5,000 in VOO 15 Years Ago, Here's What You'd Have Today",
+   "text": "跟大市升（納指 +1.4%）｜新聞：Warren Buffett's Retirement Strategy Has a Catch: VOO Alone May Not Be Enough i…",
    "kind": "market",
-   "chg_pct": -4.37,
-   "mkt_chg_pct": -6.49,
+   "chg_pct": 0.25,
+   "mkt_chg_pct": 1.38,
    "sector_etf": null,
    "sector_chg_pct": null,
-   "headline": "If You'd Invested $5,000 in VOO 15 Years Ago, Here's What You'd Have Today",
-   "url": "https://finnhub.io/api/news?id=a8717cc5117332907ac443bedafd12967ae0ef2a60b791f12c16fd6af5ca8ba7",
-   "news_source": "finnhub:Yahoo",
-   "at": "2026-11-06T06:00:05+08:00"
+   "headline": "Warren Buffett's Retirement Strategy Has a Catch: VOO Alone May Not Be Enough in 2026",
+   "url": "https://finnhub.io/api/news?id=569c5335f785a8e89e87c89ccd145806c967adee542354b69d7b3e1f70bcee2f",
+   "news_source": "finnhub:Benzinga",
+   "at": "2026-11-06T22:35:03+08:00"
   }
  }
 }

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-06T22:35:03+08:00",
+ "generated_at": "2026-11-06T22:53:14+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -33,9 +33,9 @@
   },
   "U": {
    "ticker": "U",
-   "text": "近1個月比納指強 3%、近3個月比納指強 50%，趨勢上升，企喺 50 日平均價之上，業績 11-11",
+   "text": "近1個月比納指強 20%、近3個月比納指強 20%，趨勢橫行，啱啱帶量升穿 20 日高位，業績 11-05｜新聞：［業績］Unity Software Analysts Boost Their Forecasts After Strong Q3 Results",
    "kind": "pick",
-   "at": "2026-10-14T21:53:14+08:00"
+   "at": "2026-11-06T22:53:14+08:00"
   },
   "LYFT": {
    "ticker": "LYFT",
@@ -45,16 +45,22 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +1.4%）｜新聞：Warren Buffett's Retirement Strategy Has a Catch: VOO Alone May Not Be Enough i…",
+   "text": "跟大市升（納指 +2.6%）｜新聞：Warren Buffett's Retirement Strategy Has a Catch: VOO Alone May Not Be Enough i…",
    "kind": "market",
-   "chg_pct": 0.25,
-   "mkt_chg_pct": 1.38,
+   "chg_pct": 1.17,
+   "mkt_chg_pct": 2.56,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "Warren Buffett's Retirement Strategy Has a Catch: VOO Alone May Not Be Enough in 2026",
    "url": "https://finnhub.io/api/news?id=569c5335f785a8e89e87c89ccd145806c967adee542354b69d7b3e1f70bcee2f",
    "news_source": "finnhub:Benzinga",
-   "at": "2026-11-06T22:35:03+08:00"
+   "at": "2026-11-06T22:53:12+08:00"
+  },
+  "DKNG": {
+   "ticker": "DKNG",
+   "text": "近1個月比納指強 32%、近3個月比納指強 3%，趨勢下跌，企喺 50 日平均價之上，業績 11-05｜新聞：［業績］DraftKings Q3 2026 Earnings Call Transcript",
+   "kind": "pick",
+   "at": "2026-11-06T22:53:14+08:00"
   }
  }
 }

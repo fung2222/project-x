@@ -2896,6 +2896,22 @@
         "report": "ok"
       },
       "entry": null
+    },
+    "hourly": {
+      "runs": 1,
+      "last_prices": {
+        "RXRX": 3.58,
+        "AI": 11.735
+      },
+      "last_real_prices": {
+        "VOO": 687.7988
+      },
+      "last_regime": "CAUTION",
+      "alerts": {
+        "REAL:VOO:QUOTE": 1
+      },
+      "last_run": "2026-11-09T23:06:03+08:00",
+      "status": "ok"
     }
   }
 }

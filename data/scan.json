@@ -1,291 +1,120 @@
 {
- "generated_at": "2026-11-09T22:53:20+08:00",
- "bar_date": "2026-11-06",
- "equity_usd": 1241.36,
- "fx_usdhkd": 7.8415,
- "max_position_usd": 310.34,
- "risk_per_trade_usd": 24.83,
+ "generated_at": "2026-11-10T06:00:19+08:00",
+ "bar_date": "2026-11-09",
+ "equity_usd": 1251.4,
+ "fx_usdhkd": 7.8,
+ "max_position_usd": 312.85,
+ "risk_per_trade_usd": 25.03,
  "universe_size": 54,
  "scanned": 54,
- "passed": 2,
- "top": [
-  {
-   "ticker": "U",
-   "pass": true,
-   "fail": [],
-   "score": 76.9,
-   "confidence": 76.9,
-   "components": {
-    "rs": 28.9,
-    "trend": 12,
-    "momentum": 8,
-    "setup": 15,
-    "liquidity": 10,
-    "rr": 3
-   },
-   "setup": "放量突破20日高",
-   "close": 51.49,
-   "rsi": 72.1,
-   "ex_qqq_20d_pp": 22.5,
-   "ex_qqq_60d_pp": 22.83,
-   "dollar_vol20_musd": 543.9,
-   "entry_zone": [
-    50.14,
-    51.49
-   ],
-   "entry": 51.49,
-   "stop": 43.41,
-   "stop_pct": 15.69,
-   "target": 71.69,
-   "target_pct": 39.23,
-   "rr": 2.5,
-   "target_mode": "突破投射",
-   "atr_pct": 5.23,
-   "shares": 3,
-   "cost_usd": 154.47,
-   "cost_hkd": 1211.0,
-   "risk_usd": 24.24,
-   "fee_drag_pct": 2.6,
-   "earnings_days": null,
-   "why": [
-    "相對 QQQ：20日 +22.5pp / 60日 +22.8pp",
-    "結構：價 > MA20，MA20 < MA50，MA50 向下",
-    "RSI 72，setup：放量突破20日高，ATR 5.2%"
-   ],
-   "earnings_date": null,
-   "earnings_known": true,
-   "bar_date": "2026-11-06",
-   "theme": "INTERNET",
-   "live_price": 53.71,
-   "live_change_pct": 4.31,
-   "trend_word": "橫行",
-   "reason_plain": "近1個月比納指強 22%、近3個月比納指強 23%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：U Q3 2026 deep dive: AI-driven product momentum and new creator platf…",
-   "fundamental": {
-    "revenue_usd": 2179887104.0,
-    "revenue_growth": 0.322,
-    "net_income_usd": -347705984.0,
-    "gross_margin": 0.78488,
-    "market_cap_usd": 23838040064.0,
-    "ps_ratio": 10.935447079006162
-   }
-  },
-  {
-   "ticker": "JOBY",
-   "pass": true,
-   "fail": [],
-   "score": 76.2,
-   "confidence": 76.2,
-   "components": {
-    "rs": 23.2,
-    "trend": 8,
-    "momentum": 15,
-    "setup": 15,
-    "liquidity": 10,
-    "rr": 5
-   },
-   "setup": "放量突破20日高",
-   "close": 5.93,
-   "rsi": 65.2,
-   "ex_qqq_20d_pp": 21.68,
-   "ex_qqq_60d_pp": -17.83,
-   "dollar_vol20_musd": 105.4,
-   "entry_zone": [
-    5.76,
-    5.93
-   ],
-   "entry": 5.93,
-   "stop": 4.9,
-   "stop_pct": 17.43,
-   "target": 12.48,
-   "target_pct": 110.37,
-   "rr": 6.33,
-   "target_mode": "前高阻力",
-   "atr_pct": 5.81,
-   "shares": 24,
-   "cost_usd": 142.32,
-   "cost_hkd": 1116.0,
-   "risk_usd": 24.8,
-   "fee_drag_pct": 2.9,
-   "earnings_days": null,
-   "why": [
-    "相對 QQQ：20日 +21.7pp / 60日 -17.8pp",
-    "結構：價 > MA20，MA20 < MA50，MA50 向下",
-    "RSI 65，setup：放量突破20日高，ATR 5.8%"
-   ],
-   "earnings_date": null,
-   "earnings_known": true,
-   "bar_date": "2026-11-06",
-   "theme": "EVTOL",
-   "live_price": 5.86,
-   "live_change_pct": -1.26,
-   "trend_word": "橫行",
-   "reason_plain": "近1個月比納指強 22%、近3個月比納指弱 18%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：Where Will Joby Aviation Stock Be in 5 Years?",
-   "fundamental": {
-    "revenue_usd": 148810000.0,
-    "revenue_growth": 1.44,
-    "net_income_usd": -688758976.0,
-    "gross_margin": 0.29186,
-    "market_cap_usd": 5942273536.0,
-    "ps_ratio": 39.93195037967879
-   }
-  }
- ],
+ "passed": 0,
+ "top": [],
  "near_misses": [
-  {
-   "ticker": "CAVA",
-   "pass": false,
-   "fail": [
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
-   ],
-   "score": 87.6,
-   "confidence": 87.6,
-   "components": {
-    "rs": 26.6,
-    "trend": 16,
-    "momentum": 15,
-    "setup": 15,
-    "liquidity": 10,
-    "rr": 5
-   },
-   "setup": "上升趨勢回踩MA20",
-   "close": 59.15,
-   "rsi": 55.3,
-   "ex_qqq_20d_pp": 22.94,
-   "ex_qqq_60d_pp": -7.67,
-   "dollar_vol20_musd": 202.5,
-   "entry_zone": [
-    57.44,
-    59.15
-   ],
-   "entry": 59.15,
-   "stop": 48.88,
-   "stop_pct": 17.37,
-   "target": 92.32,
-   "target_pct": 56.07,
-   "rr": 3.23,
-   "target_mode": "前高阻力",
-   "atr_pct": 5.79,
-   "shares": 2,
-   "cost_usd": 118.3,
-   "cost_hkd": 928.0,
-   "risk_usd": 20.55,
-   "fee_drag_pct": 3.39,
-   "earnings_days": null,
-   "why": [
-    "相對 QQQ：20日 +22.9pp / 60日 -7.7pp",
-    "結構：價 > MA20，MA20 > MA50，MA50 向下",
-    "RSI 55，setup：上升趨勢回踩MA20，ATR 5.8%"
-   ],
-   "earnings_date": null,
-   "earnings_known": true,
-   "bar_date": "2026-11-06",
-   "theme": "HEALTH_CONSUMER"
-  },
-  {
-   "ticker": "LYFT",
-   "pass": false,
-   "fail": [
-    "R:R 0.7 < 2.0"
-   ],
-   "score": 87.2,
-   "confidence": 87.2,
-   "components": {
-    "rs": 27.2,
-    "trend": 20,
-    "momentum": 15,
-    "setup": 15,
-    "liquidity": 10,
-    "rr": 0
-   },
-   "setup": "上升趨勢回踩MA20",
-   "close": 17.09,
-   "rsi": 53.2,
-   "ex_qqq_20d_pp": 18.03,
-   "ex_qqq_60d_pp": 10.14,
-   "dollar_vol20_musd": 199.4,
-   "entry_zone": [
-    16.9,
-    17.09
-   ],
-   "entry": 17.09,
-   "stop": 14.72,
-   "stop_pct": 13.87,
-   "target": 18.84,
-   "target_pct": 10.24,
-   "rr": 0.74,
-   "target_mode": "前高阻力",
-   "atr_pct": 4.62,
-   "shares": 10,
-   "cost_usd": 170.9,
-   "cost_hkd": 1340.0,
-   "risk_usd": 23.71,
-   "fee_drag_pct": 2.37,
-   "earnings_days": null,
-   "why": [
-    "相對 QQQ：20日 +18.0pp / 60日 +10.1pp",
-    "結構：價 > MA20，MA20 > MA50，MA50 向下",
-    "RSI 53，setup：上升趨勢回踩MA20，ATR 4.6%"
-   ],
-   "earnings_date": null,
-   "earnings_known": true,
-   "bar_date": "2026-11-06",
-   "theme": "INTERNET"
-  },
   {
    "ticker": "AI",
    "pass": false,
    "fail": [
-    "R:R 0.7 < 2.0"
+    "R:R 0.6 < 2.0"
    ],
-   "score": 76.7,
-   "confidence": 76.7,
+   "score": 93.9,
+   "confidence": 93.9,
    "components": {
-    "rs": 27.7,
-    "trend": 17,
+    "rs": 28.9,
+    "trend": 25,
     "momentum": 15,
-    "setup": 7,
+    "setup": 15,
     "liquidity": 10,
     "rr": 0
    },
-   "setup": "趨勢延續",
-   "close": 11.69,
-   "rsi": 50.9,
-   "ex_qqq_20d_pp": 14.06,
-   "ex_qqq_60d_pp": 25.21,
-   "dollar_vol20_musd": 61.2,
+   "setup": "上升趨勢回踩MA20",
+   "close": 12.0,
+   "rsi": 54.6,
+   "ex_qqq_20d_pp": 12.3,
+   "ex_qqq_60d_pp": 27.92,
+   "dollar_vol20_musd": 56.3,
    "entry_zone": [
-    11.69,
-    11.69
+    11.9,
+    12.0
    ],
-   "entry": 11.69,
-   "stop": 9.79,
-   "stop_pct": 16.27,
+   "entry": 12.0,
+   "stop": 10.14,
+   "stop_pct": 15.49,
    "target": 13.04,
-   "target_pct": 11.55,
-   "rr": 0.71,
+   "target_pct": 8.67,
+   "rr": 0.56,
    "target_mode": "前高阻力",
-   "atr_pct": 5.42,
+   "atr_pct": 5.16,
    "shares": 13,
-   "cost_usd": 151.97,
-   "cost_hkd": 1192.0,
-   "risk_usd": 24.72,
-   "fee_drag_pct": 2.68,
-   "earnings_days": 17,
+   "cost_usd": 156.0,
+   "cost_hkd": 1217.0,
+   "risk_usd": 24.16,
+   "fee_drag_pct": 2.61,
+   "earnings_days": 21,
    "why": [
-    "相對 QQQ：20日 +14.1pp / 60日 +25.2pp",
-    "結構：價 < MA20，MA20 > MA50，MA50 向上",
-    "RSI 51，setup：趨勢延續，ATR 5.4%"
+    "相對 QQQ：20日 +12.3pp / 60日 +27.9pp",
+    "結構：價 > MA20，MA20 > MA50，MA50 向上",
+    "RSI 55，setup：上升趨勢回踩MA20，ATR 5.2%"
    ],
-   "earnings_date": "2026-12-03",
+   "earnings_date": "2026-12-09",
    "earnings_known": true,
-   "bar_date": "2026-11-06",
+   "bar_date": "2026-11-09",
    "theme": "AI_SOFTWARE"
+  },
+  {
+   "ticker": "CAVA",
+   "pass": false,
+   "fail": [
+    "注碼太細：來回手續費佔 3.2%（> 3.0%）"
+   ],
+   "score": 77.6,
+   "confidence": 77.6,
+   "components": {
+    "rs": 26.6,
+    "trend": 16,
+    "momentum": 15,
+    "setup": 7,
+    "liquidity": 10,
+    "rr": 3
+   },
+   "setup": "趨勢延續",
+   "close": 62.35,
+   "rsi": 61.3,
+   "ex_qqq_20d_pp": 27.57,
+   "ex_qqq_60d_pp": -9.14,
+   "dollar_vol20_musd": 204.9,
+   "entry_zone": [
+    60.63,
+    62.35
+   ],
+   "entry": 62.35,
+   "stop": 52.03,
+   "stop_pct": 16.55,
+   "target": 92.32,
+   "target_pct": 48.06,
+   "rr": 2.9,
+   "target_mode": "前高阻力",
+   "atr_pct": 5.52,
+   "shares": 2,
+   "cost_usd": 124.7,
+   "cost_hkd": 973.0,
+   "risk_usd": 20.64,
+   "fee_drag_pct": 3.22,
+   "earnings_days": null,
+   "why": [
+    "相對 QQQ：20日 +27.6pp / 60日 -9.1pp",
+    "結構：價 > MA20，MA20 > MA50，MA50 向下",
+    "RSI 61，setup：趨勢延續，ATR 5.5%"
+   ],
+   "earnings_date": null,
+   "earnings_known": true,
+   "bar_date": "2026-11-09",
+   "theme": "HEALTH_CONSUMER"
   },
   {
    "ticker": "CELH",
    "pass": false,
    "fail": [
-    "R:R 0.9 < 2.0"
+    "R:R 0.6 < 2.0"
    ],
    "score": 70.4,
    "confidence": 70.4,
@@ -298,38 +127,88 @@
     "rr": 0
    },
    "setup": "趨勢延續",
-   "close": 32.16,
-   "rsi": 68.0,
-   "ex_qqq_20d_pp": 25.19,
-   "ex_qqq_60d_pp": 22.12,
-   "dollar_vol20_musd": 171.2,
+   "close": 33.19,
+   "rsi": 71.5,
+   "ex_qqq_20d_pp": 25.85,
+   "ex_qqq_60d_pp": 21.17,
+   "dollar_vol20_musd": 176.4,
    "entry_zone": [
-    31.39,
-    32.16
+    32.43,
+    33.19
    ],
-   "entry": 32.16,
-   "stop": 27.54,
-   "stop_pct": 14.37,
+   "entry": 33.19,
+   "stop": 28.64,
+   "stop_pct": 13.72,
    "target": 36.15,
-   "target_pct": 12.41,
-   "rr": 0.86,
+   "target_pct": 8.92,
+   "rr": 0.65,
    "target_mode": "前高阻力",
-   "atr_pct": 4.79,
+   "atr_pct": 4.57,
    "shares": 5,
-   "cost_usd": 160.8,
-   "cost_hkd": 1261.0,
-   "risk_usd": 23.11,
-   "fee_drag_pct": 2.5,
+   "cost_usd": 165.95,
+   "cost_hkd": 1294.0,
+   "risk_usd": 22.77,
+   "fee_drag_pct": 2.42,
    "earnings_days": null,
    "why": [
-    "相對 QQQ：20日 +25.2pp / 60日 +22.1pp",
+    "相對 QQQ：20日 +25.8pp / 60日 +21.2pp",
     "結構：價 > MA20，MA20 > MA50，MA50 向下",
-    "RSI 68，setup：趨勢延續，ATR 4.8%"
+    "RSI 71，setup：趨勢延續，ATR 4.6%"
    ],
    "earnings_date": null,
    "earnings_known": true,
-   "bar_date": "2026-11-06",
+   "bar_date": "2026-11-09",
    "theme": "HEALTH_CONSUMER"
+  },
+  {
+   "ticker": "LYFT",
+   "pass": false,
+   "fail": [
+    "R:R 0.9 < 2.0"
+   ],
+   "score": 68.9,
+   "confidence": 68.9,
+   "components": {
+    "rs": 24.9,
+    "trend": 12,
+    "momentum": 15,
+    "setup": 7,
+    "liquidity": 10,
+    "rr": 0
+   },
+   "setup": "趨勢延續",
+   "close": 16.76,
+   "rsi": 50.4,
+   "ex_qqq_20d_pp": 12.97,
+   "ex_qqq_60d_pp": 2.96,
+   "dollar_vol20_musd": 204.7,
+   "entry_zone": [
+    16.76,
+    16.76
+   ],
+   "entry": 16.76,
+   "stop": 14.39,
+   "stop_pct": 14.13,
+   "target": 18.84,
+   "target_pct": 12.41,
+   "rr": 0.88,
+   "target_mode": "前高阻力",
+   "atr_pct": 4.71,
+   "shares": 10,
+   "cost_usd": 167.6,
+   "cost_hkd": 1307.0,
+   "risk_usd": 23.68,
+   "fee_drag_pct": 2.42,
+   "earnings_days": null,
+   "why": [
+    "相對 QQQ：20日 +13.0pp / 60日 +3.0pp",
+    "結構：價 < MA20，MA20 > MA50，MA50 向下",
+    "RSI 50，setup：趨勢延續，ATR 4.7%"
+   ],
+   "earnings_date": null,
+   "earnings_known": true,
+   "bar_date": "2026-11-09",
+   "theme": "INTERNET"
   },
   {
    "ticker": "RIVN",
@@ -337,10 +216,10 @@
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）"
    ],
-   "score": 69.3,
-   "confidence": 69.3,
+   "score": 68.8,
+   "confidence": 68.8,
    "components": {
-    "rs": 24.3,
+    "rs": 23.8,
     "trend": 8,
     "momentum": 15,
     "setup": 7,
@@ -348,74 +227,75 @@
     "rr": 5
    },
    "setup": "趨勢延續",
-   "close": 13.61,
-   "rsi": 53.8,
-   "ex_qqq_20d_pp": 10.16,
-   "ex_qqq_60d_pp": -3.59,
-   "dollar_vol20_musd": 387.9,
+   "close": 14.01,
+   "rsi": 57.2,
+   "ex_qqq_20d_pp": 12.41,
+   "ex_qqq_60d_pp": -1.71,
+   "dollar_vol20_musd": 389.9,
    "entry_zone": [
-    13.27,
-    13.61
+    13.67,
+    14.01
    ],
-   "entry": 13.61,
-   "stop": 11.57,
-   "stop_pct": 14.98,
+   "entry": 14.01,
+   "stop": 11.99,
+   "stop_pct": 14.4,
    "target": 20.2,
-   "target_pct": 48.42,
-   "rr": 3.23,
+   "target_pct": 44.18,
+   "rr": 3.07,
    "target_mode": "前高阻力",
-   "atr_pct": 4.99,
+   "atr_pct": 4.8,
    "shares": 12,
-   "cost_usd": 163.32,
-   "cost_hkd": 1281.0,
-   "risk_usd": 24.46,
-   "fee_drag_pct": 2.49,
+   "cost_usd": 168.12,
+   "cost_hkd": 1311.0,
+   "risk_usd": 24.21,
+   "fee_drag_pct": 2.42,
    "earnings_days": null,
    "why": [
-    "相對 QQQ：20日 +10.2pp / 60日 -3.6pp",
+    "相對 QQQ：20日 +12.4pp / 60日 -1.7pp",
     "結構：價 > MA20，MA20 < MA50，MA50 向下",
-    "RSI 54，setup：趨勢延續，ATR 5.0%"
+    "RSI 57，setup：趨勢延續，ATR 4.8%"
    ],
    "earnings_date": null,
    "earnings_known": true,
-   "bar_date": "2026-11-06",
+   "bar_date": "2026-11-09",
    "theme": "EV"
   }
  ],
  "all": [
   {
-   "ticker": "CAVA",
-   "score": 87.6,
+   "ticker": "AI",
+   "score": 93.9,
    "pass": false,
    "fail": [
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
+    "R:R 0.6 < 2.0"
    ],
-   "close": 59.15,
-   "rsi": 55.3,
-   "rr": 3.23,
+   "close": 12.0,
+   "rsi": 54.6,
+   "rr": 0.56,
    "setup": "上升趨勢回踩MA20",
-   "theme": "HEALTH_CONSUMER",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": 22.94,
-   "ex_qqq_60d_pp": -7.67,
-   "dollar_vol20_musd": 202.5
+   "theme": "AI_SOFTWARE",
+   "earnings_date": "2026-12-09",
+   "ex_qqq_20d_pp": 12.3,
+   "ex_qqq_60d_pp": 27.92,
+   "dollar_vol20_musd": 56.3
   },
   {
-   "ticker": "LYFT",
-   "score": 87.2,
+   "ticker": "RXRX",
+   "score": 85.2,
    "pass": false,
    "fail": [
-    "R:R 0.7 < 2.0"
+    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
+    "R:R 1.8 < 2.0"
    ],
-   "close": 17.09,
-   "rsi": 53.2,
-   "rr": 0.74,
+   "close": 3.805,
+   "rsi": 49.7,
+   "rr": 1.82,
    "setup": "上升趨勢回踩MA20",
-   "theme": "INTERNET",
+   "theme": "BIOTECH_AI",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 18.03,
-   "ex_qqq_60d_pp": 10.14,
-   "dollar_vol20_musd": 199.4
+   "ex_qqq_20d_pp": 3.83,
+   "ex_qqq_60d_pp": 27.49,
+   "dollar_vol20_musd": 93.2
   },
   {
    "ticker": "TEM",
@@ -423,779 +303,782 @@
    "pass": false,
    "fail": [
     "每股太貴：25% 上限只買到 1 股",
-    "R:R 0.9 < 2.0"
+    "R:R 0.3 < 2.0"
    ],
-   "close": 76.05,
-   "rsi": 54.5,
-   "rr": 0.86,
+   "close": 84.44,
+   "rsi": 61.9,
+   "rr": 0.28,
    "setup": "趨勢延續",
    "theme": "AI_SOFTWARE",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 19.89,
-   "ex_qqq_60d_pp": 50.46,
-   "dollar_vol20_musd": 458.2
+   "ex_qqq_20d_pp": 33.13,
+   "ex_qqq_60d_pp": 69.15,
+   "dollar_vol20_musd": 479.5
   },
   {
-   "ticker": "U",
-   "score": 76.9,
-   "pass": true,
-   "fail": [],
-   "close": 51.49,
-   "rsi": 72.1,
-   "rr": 2.5,
-   "setup": "放量突破20日高",
-   "theme": "INTERNET",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": 22.5,
-   "ex_qqq_60d_pp": 22.83,
-   "dollar_vol20_musd": 543.9
-  },
-  {
-   "ticker": "AI",
-   "score": 76.7,
+   "ticker": "CAVA",
+   "score": 77.6,
    "pass": false,
    "fail": [
-    "R:R 0.7 < 2.0"
+    "注碼太細：來回手續費佔 3.2%（> 3.0%）"
    ],
-   "close": 11.69,
-   "rsi": 50.9,
-   "rr": 0.71,
+   "close": 62.35,
+   "rsi": 61.3,
+   "rr": 2.9,
    "setup": "趨勢延續",
-   "theme": "AI_SOFTWARE",
-   "earnings_date": "2026-12-03",
-   "ex_qqq_20d_pp": 14.06,
-   "ex_qqq_60d_pp": 25.21,
-   "dollar_vol20_musd": 61.2
+   "theme": "HEALTH_CONSUMER",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": 27.57,
+   "ex_qqq_60d_pp": -9.14,
+   "dollar_vol20_musd": 204.9
   },
   {
-   "ticker": "JOBY",
-   "score": 76.2,
-   "pass": true,
-   "fail": [],
-   "close": 5.93,
-   "rsi": 65.2,
-   "rr": 6.33,
-   "setup": "放量突破20日高",
-   "theme": "EVTOL",
+   "ticker": "RIOT",
+   "score": 70.5,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
+   ],
+   "close": 17.66,
+   "rsi": 58.0,
+   "rr": 3.58,
+   "setup": "趨勢延續",
+   "theme": "BTC_MINING_HPC",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 21.68,
-   "ex_qqq_60d_pp": -17.83,
-   "dollar_vol20_musd": 105.4
+   "ex_qqq_20d_pp": 16.16,
+   "ex_qqq_60d_pp": -0.05,
+   "dollar_vol20_musd": 389.6
   },
   {
    "ticker": "CELH",
    "score": 70.4,
    "pass": false,
    "fail": [
-    "R:R 0.9 < 2.0"
+    "R:R 0.6 < 2.0"
    ],
-   "close": 32.16,
-   "rsi": 68.0,
-   "rr": 0.86,
+   "close": 33.19,
+   "rsi": 71.5,
+   "rr": 0.65,
    "setup": "趨勢延續",
    "theme": "HEALTH_CONSUMER",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 25.19,
-   "ex_qqq_60d_pp": 22.12,
-   "dollar_vol20_musd": 171.2
+   "ex_qqq_20d_pp": 25.85,
+   "ex_qqq_60d_pp": 21.17,
+   "dollar_vol20_musd": 176.4
   },
   {
-   "ticker": "RIOT",
-   "score": 69.9,
+   "ticker": "LYFT",
+   "score": 68.9,
+   "pass": false,
+   "fail": [
+    "R:R 0.9 < 2.0"
+   ],
+   "close": 16.76,
+   "rsi": 50.4,
+   "rr": 0.88,
+   "setup": "趨勢延續",
+   "theme": "INTERNET",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": 12.97,
+   "ex_qqq_60d_pp": 2.96,
+   "dollar_vol20_musd": 204.7
+  },
+  {
+   "ticker": "RIVN",
+   "score": 68.8,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）"
+   ],
+   "close": 14.01,
+   "rsi": 57.2,
+   "rr": 3.07,
+   "setup": "趨勢延續",
+   "theme": "EV",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": 12.41,
+   "ex_qqq_60d_pp": -1.71,
+   "dollar_vol20_musd": 389.9
+  },
+  {
+   "ticker": "BBAI",
+   "score": 67.6,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.4%（> 3.0%）"
    ],
-   "close": 16.71,
-   "rsi": 54.7,
-   "rr": 4.07,
+   "close": 2.45,
+   "rsi": 50.3,
+   "rr": 6.14,
    "setup": "趨勢延續",
-   "theme": "BTC_MINING_HPC",
+   "theme": "AI_SOFTWARE",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 11.63,
-   "ex_qqq_60d_pp": -2.64,
-   "dollar_vol20_musd": 371.6
+   "ex_qqq_20d_pp": 15.46,
+   "ex_qqq_60d_pp": -18.0,
+   "dollar_vol20_musd": 51.1
   },
   {
-   "ticker": "RIVN",
-   "score": 69.3,
+   "ticker": "QS",
+   "score": 67.1,
    "pass": false,
    "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）"
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.1%（> 3.0%）"
    ],
-   "close": 13.61,
-   "rsi": 53.8,
-   "rr": 3.23,
+   "close": 4.57,
+   "rsi": 55.8,
+   "rr": 6.03,
    "setup": "趨勢延續",
    "theme": "EV",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 10.16,
-   "ex_qqq_60d_pp": -3.59,
-   "dollar_vol20_musd": 387.9
+   "ex_qqq_20d_pp": 15.96,
+   "ex_qqq_60d_pp": -19.1,
+   "dollar_vol20_musd": 61.9
   },
   {
    "ticker": "SOFI",
    "score": 66.0,
    "pass": false,
    "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "R:R 1.4 < 2.0"
+    "R:R 1.2 < 2.0"
    ],
-   "close": 16.21,
-   "rsi": 50.8,
-   "rr": 1.38,
+   "close": 16.75,
+   "rsi": 54.7,
+   "rr": 1.17,
    "setup": "趨勢延續",
    "theme": "FINTECH",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 15.26,
-   "ex_qqq_60d_pp": -1.67,
-   "dollar_vol20_musd": 934.8
+   "ex_qqq_20d_pp": 18.92,
+   "ex_qqq_60d_pp": -1.35,
+   "dollar_vol20_musd": 937.7
   },
   {
-   "ticker": "RXRX",
-   "score": 62.5,
+   "ticker": "SHOP",
+   "score": 65.2,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
+    "每股太貴：25% 上限只買到 0 股",
+    "R:R 1.1 < 2.0"
    ],
-   "close": 3.52,
-   "rsi": 44.1,
-   "rr": 2.37,
+   "close": 152.06,
+   "rsi": 45.4,
+   "rr": 1.1,
    "setup": "趨勢延續",
-   "theme": "BIOTECH_AI",
+   "theme": "INTERNET",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -6.6,
-   "ex_qqq_60d_pp": 16.72,
-   "dollar_vol20_musd": 94.1
+   "ex_qqq_20d_pp": -6.22,
+   "ex_qqq_60d_pp": 5.61,
+   "dollar_vol20_musd": 1496.5
   },
   {
-   "ticker": "ACHR",
-   "score": 60.3,
+   "ticker": "IONQ",
+   "score": 64.8,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.5%（> 3.0%）",
-    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "注碼太細：來回手續費佔 3.8%（> 3.0%）"
    ],
-   "close": 4.44,
-   "rsi": 51.2,
-   "rr": 3.21,
+   "close": 35.34,
+   "rsi": 53.9,
+   "rr": 5.42,
    "setup": "趨勢延續",
-   "theme": "EVTOL",
-   "earnings_date": "2026-11-09",
-   "ex_qqq_20d_pp": 2.18,
-   "ex_qqq_60d_pp": -25.92,
-   "dollar_vol20_musd": 89.0
+   "theme": "QUANTUM",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": 6.38,
+   "ex_qqq_60d_pp": -16.53,
+   "dollar_vol20_musd": 782.3
   },
   {
    "ticker": "NIO",
-   "score": 58.4,
+   "score": 64.2,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "2 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 3.39,
-   "rsi": 49.8,
-   "rr": 6.65,
+   "close": 3.41,
+   "rsi": 50.8,
+   "rr": 6.62,
    "setup": "趨勢延續",
    "theme": "EV",
    "earnings_date": "2026-11-11",
-   "ex_qqq_20d_pp": 7.36,
-   "ex_qqq_60d_pp": -14.29,
+   "ex_qqq_20d_pp": 7.21,
+   "ex_qqq_60d_pp": -17.48,
    "dollar_vol20_musd": 103.6
   },
   {
-   "ticker": "SHOP",
-   "score": 57.8,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "每股太貴：25% 上限只買到 0 股",
-    "R:R 1.2 < 2.0"
-   ],
-   "close": 148.91,
-   "rsi": 42.8,
-   "rr": 1.18,
-   "setup": "趨勢延續",
-   "theme": "INTERNET",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -0.17,
-   "ex_qqq_60d_pp": 4.31,
-   "dollar_vol20_musd": 1562.3
-  },
-  {
-   "ticker": "QS",
-   "score": 56.7,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.2%（> 3.0%）"
-   ],
-   "close": 4.28,
-   "rsi": 49.1,
-   "rr": 6.55,
-   "setup": "趨勢延續",
-   "theme": "EV",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": 6.12,
-   "ex_qqq_60d_pp": -20.14,
-   "dollar_vol20_musd": 61.9
-  },
-  {
-   "ticker": "IONQ",
-   "score": 53.8,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 4.1%（> 3.0%）"
-   ],
-   "close": 32.62,
-   "rsi": 48.4,
-   "rr": 6.29,
-   "setup": "趨勢延續",
-   "theme": "QUANTUM",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -5.56,
-   "ex_qqq_60d_pp": -17.1,
-   "dollar_vol20_musd": 782.5
-  },
-  {
-   "ticker": "PLTR",
-   "score": 53.2,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "每股太貴：25% 上限只買到 0 股",
-    "R:R 1.8 < 2.0"
-   ],
-   "close": 160.38,
-   "rsi": 31.2,
-   "rr": 1.81,
-   "setup": "趨勢延續",
-   "theme": "DATA_AI",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -10.61,
-   "ex_qqq_60d_pp": -0.03,
-   "dollar_vol20_musd": 4934.6
-  },
-  {
-   "ticker": "RGTI",
-   "score": 51.6,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
-    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
-   ],
-   "close": 11.75,
-   "rsi": 45.5,
-   "rr": 6.94,
-   "setup": "趨勢延續",
-   "theme": "QUANTUM",
-   "earnings_date": "2026-11-10",
-   "ex_qqq_20d_pp": -3.58,
-   "ex_qqq_60d_pp": -26.52,
-   "dollar_vol20_musd": 176.6
-  },
-  {
-   "ticker": "SNAP",
-   "score": 51.5,
+   "ticker": "ACHR",
+   "score": 63.4,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.3%（> 3.0%）",
-    "R:R 1.9 < 2.0"
+    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 4.96,
-   "rsi": 35.4,
-   "rr": 1.91,
+   "close": 4.81,
+   "rsi": 58.6,
+   "rr": 2.58,
    "setup": "趨勢延續",
-   "theme": "INTERNET",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -7.72,
-   "ex_qqq_60d_pp": 3.96,
-   "dollar_vol20_musd": 270.0
+   "theme": "EVTOL",
+   "earnings_date": "2026-11-09",
+   "ex_qqq_20d_pp": 11.5,
+   "ex_qqq_60d_pp": -20.27,
+   "dollar_vol20_musd": 92.2
   },
   {
-   "ticker": "MSTR",
-   "score": 50.3,
+   "ticker": "RGTI",
+   "score": 62.0,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）",
+    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
+   ],
+   "close": 12.98,
+   "rsi": 53.1,
+   "rr": 5.81,
+   "setup": "趨勢延續",
+   "theme": "QUANTUM",
+   "earnings_date": "2026-11-10",
+   "ex_qqq_20d_pp": 6.9,
+   "ex_qqq_60d_pp": -23.96,
+   "dollar_vol20_musd": 183.8
+  },
+  {
+   "ticker": "RKLB",
+   "score": 59.2,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
+    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
+   ],
+   "close": 58.86,
+   "rsi": 51.4,
+   "rr": 7.83,
+   "setup": "趨勢延續",
+   "theme": "SPACE",
+   "earnings_date": "2026-11-09",
+   "ex_qqq_20d_pp": -1.49,
+   "ex_qqq_60d_pp": -19.58,
+   "dollar_vol20_musd": 1114.2
+  },
+  {
+   "ticker": "U",
+   "score": 58.3,
+   "pass": false,
+   "fail": [
+    "R:R 0.3 < 2.0",
+    "離 MA20 3.4 個 ATR（唔追高／唔 FOMO）"
+   ],
+   "close": 51.43,
+   "rsi": 71.9,
+   "rr": 0.35,
+   "setup": "離MA20太遠（追高風險）",
+   "theme": "INTERNET",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": 19.11,
+   "ex_qqq_60d_pp": 18.27,
+   "dollar_vol20_musd": 567.7
+  },
+  {
+   "ticker": "LUNR",
+   "score": 58.0,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
+    "3 日內有業績（跳空風險，唔喺業績前開新倉）"
+   ],
+   "close": 12.04,
+   "rsi": 52.3,
+   "rr": 14.41,
+   "setup": "趨勢延續",
+   "theme": "SPACE",
+   "earnings_date": "2026-11-12",
+   "ex_qqq_20d_pp": 2.56,
+   "ex_qqq_60d_pp": -29.59,
+   "dollar_vol20_musd": 84.1
+  },
+  {
+   "ticker": "JOBY",
+   "score": 55.3,
+   "pass": false,
+   "fail": [
+    "注碼太細：來回手續費佔 3.0%（> 3.0%）",
+    "離 MA20 3.3 個 ATR（唔追高／唔 FOMO）"
+   ],
+   "close": 6.18,
+   "rsi": 68.8,
+   "rr": 5.75,
+   "setup": "離MA20太遠（追高風險）",
+   "theme": "EVTOL",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": 29.17,
+   "ex_qqq_60d_pp": -14.9,
+   "dollar_vol20_musd": 107.2
+  },
+  {
+   "ticker": "PLTR",
+   "score": 54.9,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "每股太貴：25% 上限只買到 0 股",
-    "R:R 1.6 < 2.0"
+    "R:R 1.5 < 2.0"
    ],
-   "close": 128.93,
-   "rsi": 41.4,
-   "rr": 1.64,
+   "close": 169.2,
+   "rsi": 39.4,
+   "rr": 1.5,
    "setup": "趨勢延續",
-   "theme": "CRYPTO",
+   "theme": "DATA_AI",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -3.8,
-   "ex_qqq_60d_pp": 43.16,
-   "dollar_vol20_musd": 2553.0
+   "ex_qqq_20d_pp": -10.1,
+   "ex_qqq_60d_pp": 4.29,
+   "dollar_vol20_musd": 4880.2
   },
   {
-   "ticker": "AFRM",
-   "score": 49.9,
+   "ticker": "WULF",
+   "score": 53.3,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "每股太貴：25% 上限只買到 1 股",
-    "R:R 1.8 < 2.0"
+    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
    ],
-   "close": 68.11,
-   "rsi": 41.5,
-   "rr": 1.77,
+   "close": 12.38,
+   "rsi": 48.6,
+   "rr": 7.05,
    "setup": "趨勢延續",
-   "theme": "FINTECH",
+   "theme": "BTC_MINING_HPC",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -2.93,
-   "ex_qqq_60d_pp": -2.66,
-   "dollar_vol20_musd": 300.6
-  },
-  {
-   "ticker": "PATH",
-   "score": 48.1,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）"
-   ],
-   "close": 13.0,
-   "rsi": 42.7,
-   "rr": 3.4,
-   "setup": "趨勢延續",
-   "theme": "AI_SOFTWARE",
-   "earnings_date": "2026-12-03",
-   "ex_qqq_20d_pp": 9.11,
-   "ex_qqq_60d_pp": -11.68,
-   "dollar_vol20_musd": 331.8
+   "ex_qqq_20d_pp": 1.53,
+   "ex_qqq_60d_pp": -21.69,
+   "dollar_vol20_musd": 668.1
   },
   {
    "ticker": "PLUG",
-   "score": 44.2,
+   "score": 51.6,
    "pass": false,
    "fail": [
     "股價 < $2.0",
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.7%（> 3.0%）",
+    "注碼太細：來回手續費佔 3.6%（> 3.0%）",
     "0 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 1.45,
-   "rsi": 43.8,
-   "rr": 9.93,
+   "close": 1.5,
+   "rsi": 47.6,
+   "rr": 9.43,
    "setup": "趨勢延續",
    "theme": "CLEAN_ENERGY",
    "earnings_date": "2026-11-09",
-   "ex_qqq_20d_pp": -1.02,
-   "ex_qqq_60d_pp": -26.58,
-   "dollar_vol20_musd": 80.0
+   "ex_qqq_20d_pp": 1.53,
+   "ex_qqq_60d_pp": -28.27,
+   "dollar_vol20_musd": 81.9
   },
   {
-   "ticker": "HIMS",
-   "score": 42.6,
+   "ticker": "MSTR",
+   "score": 49.7,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.9%（> 3.0%）",
-    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "每股太貴：25% 上限只買到 0 股",
+    "R:R 1.8 < 2.0"
    ],
-   "close": 26.0,
-   "rsi": 43.8,
-   "rr": 2.51,
+   "close": 125.59,
+   "rsi": 39.5,
+   "rr": 1.82,
    "setup": "趨勢延續",
-   "theme": "HEALTH_CONSUMER",
-   "earnings_date": "2026-11-09",
-   "ex_qqq_20d_pp": -3.24,
-   "ex_qqq_60d_pp": 0.75,
-   "dollar_vol20_musd": 283.1
-  },
-  {
-   "ticker": "DKNG",
-   "score": 41.8,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.6%（> 3.0%）"
-   ],
-   "close": 18.51,
-   "rsi": 38.2,
-   "rr": 3.14,
-   "setup": "趨勢延續",
-   "theme": "HEALTH_CONSUMER",
+   "theme": "CRYPTO",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 7.2,
-   "ex_qqq_60d_pp": -16.81,
-   "dollar_vol20_musd": 311.4
+   "ex_qqq_20d_pp": -8.8,
+   "ex_qqq_60d_pp": 42.06,
+   "dollar_vol20_musd": 2548.4
   },
   {
-   "ticker": "UPST",
-   "score": 39.5,
+   "ticker": "SNAP",
+   "score": 48.1,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
+    "R:R 1.8 < 2.0"
+   ],
+   "close": 5.05,
+   "rsi": 37.4,
+   "rr": 1.78,
+   "setup": "趨勢延續",
+   "theme": "INTERNET",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -13.73,
+   "ex_qqq_60d_pp": 0.42,
+   "dollar_vol20_musd": 264.8
+  },
+  {
+   "ticker": "AFRM",
+   "score": 47.7,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "R:R 1.8 < 2.0"
+   ],
+   "close": 68.03,
+   "rsi": 41.4,
+   "rr": 1.83,
+   "setup": "趨勢延續",
+   "theme": "FINTECH",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -4.54,
+   "ex_qqq_60d_pp": -6.1,
+   "dollar_vol20_musd": 303.9
+  },
+  {
+   "ticker": "OKLO",
+   "score": 47.6,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.7%（> 3.0%）"
    ],
-   "close": 21.89,
-   "rsi": 41.8,
+   "close": 26.84,
+   "rsi": 46.6,
+   "rr": 8.76,
+   "setup": "趨勢延續",
+   "theme": "NUCLEAR",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -7.73,
+   "ex_qqq_60d_pp": -32.45,
+   "dollar_vol20_musd": 276.3
+  },
+  {
+   "ticker": "PATH",
+   "score": 47.5,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）"
+   ],
+   "close": 12.98,
+   "rsi": 42.4,
+   "rr": 3.55,
+   "setup": "趨勢延續",
+   "theme": "AI_SOFTWARE",
+   "earnings_date": "2026-12-03",
+   "ex_qqq_20d_pp": 6.39,
+   "ex_qqq_60d_pp": -11.85,
+   "dollar_vol20_musd": 329.0
+  },
+  {
+   "ticker": "SERV",
+   "score": 46.9,
+   "pass": false,
+   "fail": [
+    "成交額 $12M < $20M",
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
+   ],
+   "close": 3.39,
+   "rsi": 51.9,
+   "rr": 9.73,
+   "setup": "趨勢延續",
+   "theme": "ROBOTICS",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -4.47,
+   "ex_qqq_60d_pp": -24.99,
+   "dollar_vol20_musd": 12.0
+  },
+  {
+   "ticker": "ONDS",
+   "score": 41.3,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
+    "3 日內有業績（跳空風險，唔喺業績前開新倉）"
+   ],
+   "close": 5.97,
+   "rsi": 46.6,
+   "rr": 6.86,
+   "setup": "趨勢延續",
+   "theme": "DRONES_DEFENSE",
+   "earnings_date": "2026-11-12",
+   "ex_qqq_20d_pp": -1.56,
+   "ex_qqq_60d_pp": -28.32,
+   "dollar_vol20_musd": 283.0
+  },
+  {
+   "ticker": "UPST",
+   "score": 38.4,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.0%（> 3.0%）"
+   ],
+   "close": 22.25,
+   "rsi": 43.9,
    "rr": 3.59,
    "setup": "趨勢延續",
    "theme": "FINTECH",
    "earnings_date": null,
-   "ex_qqq_20d_pp": 3.5,
-   "ex_qqq_60d_pp": -18.94,
-   "dollar_vol20_musd": 109.6
+   "ex_qqq_20d_pp": 2.62,
+   "ex_qqq_60d_pp": -19.81,
+   "dollar_vol20_musd": 111.2
   },
   {
-   "ticker": "SERV",
-   "score": 39.3,
-   "pass": false,
-   "fail": [
-    "成交額 $11M < $20M",
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
-   ],
-   "close": 3.22,
-   "rsi": 48.9,
-   "rr": 10.5,
-   "setup": "趨勢延續",
-   "theme": "ROBOTICS",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -13.31,
-   "ex_qqq_60d_pp": -24.44,
-   "dollar_vol20_musd": 11.2
-  },
-  {
-   "ticker": "COIN",
-   "score": 38.1,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "每股太貴：25% 上限只買到 0 股"
-   ],
-   "close": 134.76,
-   "rsi": 33.4,
-   "rr": 2.73,
-   "setup": "趨勢延續",
-   "theme": "CRYPTO",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -12.21,
-   "ex_qqq_60d_pp": -2.06,
-   "dollar_vol20_musd": 1353.9
-  },
-  {
-   "ticker": "WULF",
-   "score": 36.7,
+   "ticker": "DKNG",
+   "score": 37.8,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.6%（> 3.0%）"
    ],
-   "close": 11.37,
-   "rsi": 43.9,
-   "rr": 8.12,
+   "close": 18.7,
+   "rsi": 39.3,
+   "rr": 3.06,
    "setup": "趨勢延續",
-   "theme": "BTC_MINING_HPC",
+   "theme": "HEALTH_CONSUMER",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -4.76,
-   "ex_qqq_60d_pp": -19.91,
-   "dollar_vol20_musd": 644.0
+   "ex_qqq_20d_pp": 4.06,
+   "ex_qqq_60d_pp": -21.39,
+   "dollar_vol20_musd": 324.2
+  },
+  {
+   "ticker": "COIN",
+   "score": 37.5,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "每股太貴：25% 上限只買到 0 股"
+   ],
+   "close": 136.1,
+   "rsi": 34.5,
+   "rr": 2.65,
+   "setup": "趨勢延續",
+   "theme": "CRYPTO",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -15.61,
+   "ex_qqq_60d_pp": -1.26,
+   "dollar_vol20_musd": 1314.6
+  },
+  {
+   "ticker": "QBTS",
+   "score": 37.4,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）",
+    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
+   ],
+   "close": 11.47,
+   "rsi": 44.4,
+   "rr": 8.75,
+   "setup": "趨勢延續",
+   "theme": "QUANTUM",
+   "earnings_date": "2026-11-10",
+   "ex_qqq_20d_pp": -7.58,
+   "ex_qqq_60d_pp": -38.74,
+   "dollar_vol20_musd": 175.2
   },
   {
    "ticker": "HOOD",
-   "score": 36.4,
+   "score": 34.7,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "每股太貴：25% 上限只買到 1 股"
    ],
-   "close": 80.91,
-   "rsi": 32.0,
-   "rr": 2.83,
+   "close": 83.32,
+   "rsi": 35.8,
+   "rr": 2.65,
    "setup": "趨勢延續",
    "theme": "FINTECH",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -13.12,
-   "ex_qqq_60d_pp": -8.2,
-   "dollar_vol20_musd": 1860.1
+   "ex_qqq_20d_pp": -14.77,
+   "ex_qqq_60d_pp": -5.73,
+   "dollar_vol20_musd": 1855.2
   },
   {
-   "ticker": "BBAI",
-   "score": 35.0,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
-   ],
-   "close": 2.22,
-   "rsi": 40.5,
-   "rr": 7.3,
-   "setup": "趨勢延續",
-   "theme": "AI_SOFTWARE",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": 5.55,
-   "ex_qqq_60d_pp": -23.16,
-   "dollar_vol20_musd": 49.4
-  },
-  {
-   "ticker": "RKLB",
-   "score": 35.0,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.8%（> 3.0%）",
-    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
-   ],
-   "close": 53.07,
-   "rsi": 43.8,
-   "rr": 9.23,
-   "setup": "趨勢延續",
-   "theme": "SPACE",
-   "earnings_date": "2026-11-09",
-   "ex_qqq_20d_pp": -9.53,
-   "ex_qqq_60d_pp": -23.37,
-   "dollar_vol20_musd": 1072.1
-  },
-  {
-   "ticker": "SMCI",
+   "ticker": "HIMS",
    "score": 34.5,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）",
+    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 28.76,
+   "close": 22.94,
    "rsi": 36.3,
-   "rr": 3.94,
+   "rr": 3.51,
    "setup": "趨勢延續",
-   "theme": "AI_CLOUD_INFRA",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -18.63,
-   "ex_qqq_60d_pp": -16.18,
-   "dollar_vol20_musd": 1369.6
+   "theme": "HEALTH_CONSUMER",
+   "earnings_date": "2026-11-09",
+   "ex_qqq_20d_pp": -16.19,
+   "ex_qqq_60d_pp": -11.43,
+   "dollar_vol20_musd": 316.0
   },
   {
    "ticker": "MP",
-   "score": 33.9,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.8%（> 3.0%）"
-   ],
-   "close": 35.41,
-   "rsi": 34.2,
-   "rr": 5.38,
-   "setup": "趨勢延續",
-   "theme": "MATERIALS_URANIUM",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -10.59,
-   "ex_qqq_60d_pp": -26.0,
-   "dollar_vol20_musd": 237.5
-  },
-  {
-   "ticker": "ONDS",
    "score": 32.8,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
-    "3 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
    ],
-   "close": 5.335,
-   "rsi": 38.4,
-   "rr": 8.27,
+   "close": 37.75,
+   "rsi": 42.1,
+   "rr": 4.74,
    "setup": "趨勢延續",
-   "theme": "DRONES_DEFENSE",
-   "earnings_date": "2026-11-12",
-   "ex_qqq_20d_pp": -8.06,
-   "ex_qqq_60d_pp": -29.75,
-   "dollar_vol20_musd": 293.6
+   "theme": "MATERIALS_URANIUM",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -4.0,
+   "ex_qqq_60d_pp": -28.66,
+   "dollar_vol20_musd": 234.7
   },
   {
-   "ticker": "LUNR",
+   "ticker": "CORZ",
    "score": 32.2,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.5%（> 3.0%）",
-    "3 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
    ],
-   "close": 10.47,
-   "rsi": 43.7,
-   "rr": 17.33,
-   "setup": "趨勢延續",
-   "theme": "SPACE",
-   "earnings_date": "2026-11-12",
-   "ex_qqq_20d_pp": -7.95,
-   "ex_qqq_60d_pp": -30.0,
-   "dollar_vol20_musd": 76.7
-  },
-  {
-   "ticker": "CORZ",
-   "score": 31.6,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
-   ],
-   "close": 11.76,
-   "rsi": 37.8,
-   "rr": 7.95,
+   "close": 12.72,
+   "rsi": 43.2,
+   "rr": 6.97,
    "setup": "趨勢延續",
    "theme": "BTC_MINING_HPC",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -11.02,
-   "ex_qqq_60d_pp": -30.17,
-   "dollar_vol20_musd": 246.6
+   "ex_qqq_20d_pp": -6.37,
+   "ex_qqq_60d_pp": -29.89,
+   "dollar_vol20_musd": 250.1
+  },
+  {
+   "ticker": "SMCI",
+   "score": 31.1,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
+   ],
+   "close": 28.6,
+   "rsi": 36.0,
+   "rr": 3.99,
+   "setup": "趨勢延續",
+   "theme": "AI_CLOUD_INFRA",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -19.53,
+   "ex_qqq_60d_pp": -21.14,
+   "dollar_vol20_musd": 1377.8
   },
   {
    "ticker": "MARA",
-   "score": 31.1,
+   "score": 30.5,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.4%（> 3.0%）",
     "0 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 6.35,
-   "rsi": 34.0,
-   "rr": 7.94,
+   "close": 6.64,
+   "rsi": 37.4,
+   "rr": 7.37,
    "setup": "趨勢延續",
    "theme": "BTC_MINING_HPC",
    "earnings_date": "2026-11-09",
-   "ex_qqq_20d_pp": -21.53,
-   "ex_qqq_60d_pp": -20.68,
-   "dollar_vol20_musd": 266.2
+   "ex_qqq_20d_pp": -20.72,
+   "ex_qqq_60d_pp": -20.75,
+   "dollar_vol20_musd": 270.4
   },
   {
-   "ticker": "SOUN",
-   "score": 30.5,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
-   ],
-   "close": 4.11,
-   "rsi": 30.8,
-   "rr": 6.58,
-   "setup": "趨勢延續",
-   "theme": "AI_SOFTWARE",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -11.08,
-   "ex_qqq_60d_pp": -34.68,
-   "dollar_vol20_musd": 73.5
-  },
-  {
-   "ticker": "HUT",
+   "ticker": "SMR",
    "score": 29.9,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.8%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
    ],
-   "close": 52.65,
-   "rsi": 37.6,
-   "rr": 8.37,
+   "close": 5.44,
+   "rsi": 42.3,
+   "rr": 8.14,
    "setup": "趨勢延續",
-   "theme": "BTC_MINING_HPC",
+   "theme": "NUCLEAR",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -24.85,
-   "ex_qqq_60d_pp": -26.15,
-   "dollar_vol20_musd": 466.2
+   "ex_qqq_20d_pp": -9.87,
+   "ex_qqq_60d_pp": -34.99,
+   "dollar_vol20_musd": 165.5
   },
   {
-   "ticker": "QBTS",
-   "score": 29.4,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）",
-    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
-   ],
-   "close": 10.68,
-   "rsi": 38.5,
-   "rr": 9.77,
-   "setup": "趨勢延續",
-   "theme": "QUANTUM",
-   "earnings_date": "2026-11-10",
-   "ex_qqq_20d_pp": -14.03,
-   "ex_qqq_60d_pp": -38.52,
-   "dollar_vol20_musd": 173.5
-  },
-  {
-   "ticker": "SMR",
+   "ticker": "SOUN",
    "score": 28.8,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.4%（> 3.0%）"
    ],
-   "close": 5.08,
-   "rsi": 37.0,
-   "rr": 9.07,
+   "close": 4.05,
+   "rsi": 29.8,
+   "rr": 6.75,
    "setup": "趨勢延續",
-   "theme": "NUCLEAR",
+   "theme": "AI_SOFTWARE",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -16.78,
-   "ex_qqq_60d_pp": -38.05,
-   "dollar_vol20_musd": 169.9
+   "ex_qqq_20d_pp": -9.57,
+   "ex_qqq_60d_pp": -38.42,
+   "dollar_vol20_musd": 74.0
   },
   {
-   "ticker": "RDDT",
+   "ticker": "HUT",
    "score": 28.2,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "每股太貴：25% 上限只買到 1 股"
+    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
    ],
-   "close": 95.1,
-   "rsi": 26.6,
-   "rr": 5.94,
+   "close": 57.02,
+   "rsi": 41.6,
+   "rr": 7.35,
    "setup": "趨勢延續",
-   "theme": "INTERNET",
+   "theme": "BTC_MINING_HPC",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -27.86,
-   "ex_qqq_60d_pp": -29.48,
-   "dollar_vol20_musd": 890.2
+   "ex_qqq_20d_pp": -24.17,
+   "ex_qqq_60d_pp": -26.19,
+   "dollar_vol20_musd": 466.8
   },
   {
-   "ticker": "OKLO",
+   "ticker": "APLD",
    "score": 27.7,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.4%（> 3.0%）"
    ],
-   "close": 23.55,
-   "rsi": 36.9,
-   "rr": 10.68,
+   "close": 16.72,
+   "rsi": 41.1,
+   "rr": 10.17,
    "setup": "趨勢延續",
-   "theme": "NUCLEAR",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -19.46,
-   "ex_qqq_60d_pp": -38.92,
-   "dollar_vol20_musd": 266.1
+   "theme": "AI_CLOUD_INFRA",
+   "earnings_date": "2027-01-05",
+   "ex_qqq_20d_pp": -19.15,
+   "ex_qqq_60d_pp": -39.34,
+   "dollar_vol20_musd": 524.5
   },
   {
-   "ticker": "APLD",
+   "ticker": "CLSK",
    "score": 27.1,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.7%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
    ],
-   "close": 15.55,
-   "rsi": 36.8,
-   "rr": 11.31,
+   "close": 6.91,
+   "rsi": 37.6,
+   "rr": 8.87,
    "setup": "趨勢延續",
-   "theme": "AI_CLOUD_INFRA",
-   "earnings_date": "2027-01-05",
-   "ex_qqq_20d_pp": -21.66,
-   "ex_qqq_60d_pp": -38.84,
-   "dollar_vol20_musd": 524.2
+   "theme": "BTC_MINING_HPC",
+   "earnings_date": "2026-11-23",
+   "ex_qqq_20d_pp": -23.97,
+   "ex_qqq_60d_pp": -35.77,
+   "dollar_vol20_musd": 162.2
   },
   {
    "ticker": "UUUU",
@@ -1203,110 +1086,110 @@
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.4%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
    ],
-   "close": 6.66,
-   "rsi": 23.8,
-   "rr": 9.83,
+   "close": 7.31,
+   "rsi": 35.1,
+   "rr": 8.51,
    "setup": "趨勢延續",
    "theme": "MATERIALS_URANIUM",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -20.46,
-   "ex_qqq_60d_pp": -43.94,
-   "dollar_vol20_musd": 76.5
+   "ex_qqq_20d_pp": -15.39,
+   "ex_qqq_60d_pp": -44.51,
+   "dollar_vol20_musd": 77.4
   },
   {
-   "ticker": "CLSK",
-   "score": 26.0,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
-   ],
-   "close": 6.16,
-   "rsi": 31.1,
-   "rr": 10.56,
-   "setup": "趨勢延續",
-   "theme": "BTC_MINING_HPC",
-   "earnings_date": "2026-11-23",
-   "ex_qqq_20d_pp": -28.64,
-   "ex_qqq_60d_pp": -36.15,
-   "dollar_vol20_musd": 158.5
-  },
-  {
-   "ticker": "IREN",
+   "ticker": "ASTS",
    "score": 25.4,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.7%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.6%（> 3.0%）",
+    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 21.64,
-   "rsi": 36.3,
-   "rr": 11.34,
+   "close": 36.89,
+   "rsi": 39.9,
+   "rr": 13.14,
    "setup": "趨勢延續",
-   "theme": "BTC_MINING_HPC",
-   "earnings_date": null,
-   "ex_qqq_20d_pp": -25.84,
-   "ex_qqq_60d_pp": -41.28,
-   "dollar_vol20_musd": 1719.8
+   "theme": "SPACE",
+   "earnings_date": "2026-11-09",
+   "ex_qqq_20d_pp": -19.37,
+   "ex_qqq_60d_pp": -40.95,
+   "dollar_vol20_musd": 702.1
   },
   {
-   "ticker": "ASTS",
+   "ticker": "RDDT",
+   "score": 24.3,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "每股太貴：25% 上限只買到 1 股"
+   ],
+   "close": 100.79,
+   "rsi": 31.9,
+   "rr": 5.32,
+   "setup": "趨勢延續",
+   "theme": "INTERNET",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -28.04,
+   "ex_qqq_60d_pp": -36.33,
+   "dollar_vol20_musd": 878.3
+  },
+  {
+   "ticker": "IREN",
    "score": 23.7,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 4.1%（> 3.0%）",
-    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "注碼太細：來回手續費佔 3.8%（> 3.0%）"
    ],
-   "close": 32.33,
-   "rsi": 30.4,
-   "rr": 15.7,
+   "close": 21.41,
+   "rsi": 36.0,
+   "rr": 11.51,
    "setup": "趨勢延續",
-   "theme": "SPACE",
-   "earnings_date": "2026-11-09",
-   "ex_qqq_20d_pp": -23.9,
-   "ex_qqq_60d_pp": -44.42,
-   "dollar_vol20_musd": 708.9
+   "theme": "BTC_MINING_HPC",
+   "earnings_date": null,
+   "ex_qqq_20d_pp": -29.54,
+   "ex_qqq_60d_pp": -44.33,
+   "dollar_vol20_musd": 1725.4
+  },
+  {
+   "ticker": "CRWV",
+   "score": 23.1,
+   "pass": false,
+   "fail": [
+    "價低於 MA50（唔接跌緊嘅刀）",
+    "注碼太細：來回手續費佔 4.1%（> 3.0%）",
+    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
+   ],
+   "close": 48.98,
+   "rsi": 36.0,
+   "rr": 8.49,
+   "setup": "趨勢延續",
+   "theme": "AI_CLOUD_INFRA",
+   "earnings_date": "2026-11-10",
+   "ex_qqq_20d_pp": -30.03,
+   "ex_qqq_60d_pp": -46.39,
+   "dollar_vol20_musd": 4089.1
   },
   {
    "ticker": "OPEN",
-   "score": 23.1,
+   "score": 22.6,
    "pass": false,
    "fail": [
     "股價 < $2.0",
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.7%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.6%（> 3.0%）"
    ],
-   "close": 1.4,
-   "rsi": 26.8,
-   "rr": 15.14,
+   "close": 1.41,
+   "rsi": 27.4,
+   "rr": 15.0,
    "setup": "趨勢延續",
    "theme": "INTERNET",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -24.27,
-   "ex_qqq_60d_pp": -51.27,
-   "dollar_vol20_musd": 74.0
-  },
-  {
-   "ticker": "CRWV",
-   "score": 22.6,
-   "pass": false,
-   "fail": [
-    "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 4.3%（> 3.0%）",
-    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
-   ],
-   "close": 46.4,
-   "rsi": 32.5,
-   "rr": 9.24,
-   "setup": "趨勢延續",
-   "theme": "AI_CLOUD_INFRA",
-   "earnings_date": "2026-11-10",
-   "ex_qqq_20d_pp": -30.8,
-   "ex_qqq_60d_pp": -45.97,
-   "dollar_vol20_musd": 4047.1
+   "ex_qqq_20d_pp": -23.6,
+   "ex_qqq_60d_pp": -54.19,
+   "dollar_vol20_musd": 73.4
   },
   {
    "ticker": "CIFR",
@@ -1314,56 +1197,56 @@
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.5%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.3%（> 3.0%）"
    ],
-   "close": 6.545,
-   "rsi": 33.3,
-   "rr": 18.03,
+   "close": 6.81,
+   "rsi": 35.1,
+   "rr": 17.13,
    "setup": "趨勢延續",
    "theme": "BTC_MINING_HPC",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -38.92,
-   "ex_qqq_60d_pp": -50.24,
-   "dollar_vol20_musd": 517.9
+   "ex_qqq_20d_pp": -38.68,
+   "ex_qqq_60d_pp": -54.78,
+   "dollar_vol20_musd": 523.6
   },
   {
    "ticker": "RCAT",
-   "score": 20.8,
+   "score": 22.0,
    "pass": false,
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.4%（> 3.0%）",
     "5 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
-   "close": 4.04,
-   "rsi": 35.2,
-   "rr": 14.54,
+   "close": 4.5,
+   "rsi": 43.0,
+   "rr": 12.54,
    "setup": "趨勢延續",
    "theme": "DRONES_DEFENSE",
    "earnings_date": "2026-11-16",
-   "ex_qqq_20d_pp": -17.31,
-   "ex_qqq_60d_pp": -50.13,
-   "dollar_vol20_musd": 31.1
+   "ex_qqq_20d_pp": -7.57,
+   "ex_qqq_60d_pp": -52.49,
+   "dollar_vol20_musd": 31.2
   },
   {
    "ticker": "LAES",
-   "score": 14.3,
+   "score": 14.8,
    "pass": false,
    "fail": [
     "股價 < $2.0",
     "成交額 $7M < $20M",
     "價低於 MA50（唔接跌緊嘅刀）",
-    "注碼太細：來回手續費佔 3.7%（> 3.0%）"
+    "注碼太細：來回手續費佔 3.6%（> 3.0%）"
    ],
-   "close": 1.32,
-   "rsi": 29.3,
-   "rr": 9.77,
+   "close": 1.45,
+   "rsi": 37.8,
+   "rr": 8.45,
    "setup": "趨勢延續",
    "theme": "QUANTUM",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -24.77,
-   "ex_qqq_60d_pp": -43.14,
-   "dollar_vol20_musd": 7.3
+   "ex_qqq_20d_pp": -19.28,
+   "ex_qqq_60d_pp": -44.75,
+   "dollar_vol20_musd": 7.2
   }
  ],
  "errors": [],

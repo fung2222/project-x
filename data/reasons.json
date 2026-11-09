@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-09T22:53:21+08:00",
+ "generated_at": "2026-11-10T06:00:20+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +2.5%）｜新聞：Should You Buy VOO Before the Market Rebounds?",
+   "text": "冇特別新聞，似係跟大市升（納指 +3.5%）",
    "kind": "market",
-   "chg_pct": 1.65,
-   "mkt_chg_pct": 2.54,
+   "chg_pct": 2.35,
+   "mkt_chg_pct": 3.54,
    "sector_etf": null,
    "sector_chg_pct": null,
-   "headline": "Should You Buy VOO Before the Market Rebounds?",
-   "url": "https://finnhub.io/api/news?id=dfd9270bb98a85c4891cabef20a4552baa537e8e9e6cb89f7557457a6590faf5",
-   "news_source": "finnhub:Yahoo",
-   "at": "2026-11-09T22:53:20+08:00"
+   "headline": null,
+   "url": null,
+   "news_source": null,
+   "at": "2026-11-10T06:00:03+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

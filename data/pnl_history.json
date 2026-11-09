@@ -1397,5 +1397,42 @@
    "n_closed": 0,
    "real_start_date": "2026-10-26"
   }
+ },
+ {
+  "date": "2026-11-09",
+  "equity_usd": 1251.4,
+  "cash_usd": 921.84,
+  "total_pnl_usd": -28.59,
+  "total_return_pct": -2.23,
+  "realized_pnl_usd": -27.63,
+  "unrealized_pnl_usd": 3.17,
+  "fx_usdhkd": 7.8,
+  "equity_hkd": 9760.92,
+  "spy_close": 752.69,
+  "qqq_close": 679.35,
+  "positions": [
+   {
+    "ticker": "RXRX",
+    "shares": 33,
+    "price": 3.805,
+    "pnl_pct": -6.74
+   },
+   {
+    "ticker": "AI",
+    "shares": 17,
+    "price": 12.0,
+    "pnl_pct": 6.38
+   }
+  ],
+  "real": {
+   "equity_usd": 1268.68,
+   "cash_usd": 576.81,
+   "unrealized_usd": -11.32,
+   "realized_usd": 0.0,
+   "return_pct": -0.88,
+   "n_open": 1,
+   "n_closed": 0,
+   "real_start_date": "2026-10-26"
+  }
  }
 ]

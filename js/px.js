@@ -1,4 +1,4 @@
-// Project X — shared site helpers (merged v3). All numbers come from JSON written by the Python jobs.
+// Project X — shared site helpers. All figures come from JSON written by the Python jobs.
 const PX = {
   site: 'https://fung2222.github.io/project-x/',
   async json(path) {
@@ -13,24 +13,28 @@ const PX = {
   pct(v, d = 2) { if (v == null || isNaN(v)) return '—'; const n = Number(v); return `${n > 0 ? '+' : ''}${n.toFixed(d)}%`; },
   cls(v) { return v > 0 ? 'up' : v < 0 ? 'down' : ''; },
   esc(s) { return s == null ? '' : String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); },
-  // freshness: warn if a timestamp is older than `hours` (weekends tolerated)
   freshness(iso, hours = 30, label = '數據') {
-    if (!iso) return `<div class="fresh-warn">⚠️ ${label}未有時間戳</div>`;
+    if (!iso) return `<div class="fresh-warn" role="status"><strong>數據提醒</strong>　${label}未有時間戳</div>`;
     const t = new Date(iso); const age = (Date.now() - t.getTime()) / 3.6e6;
     const dow = new Date().getDay(); const tol = (dow === 0 || dow === 1) ? hours + 48 : hours;
-    return age > tol ? `<div class="fresh-warn">⚠️ ${label}已經 ${Math.round(age)} 小時冇更新（${PX.esc(iso)}）— 可能漏跑，請睇 🩺 系統健康</div>` : '';
+    return age > tol ? `<div class="fresh-warn" role="status"><strong>數據提醒</strong>　${label}已經 ${Math.round(age)} 小時冇更新（${PX.esc(iso)}），可能漏跑，請查閱系統健康報告。</div>` : '';
   },
   nav() {
-    const pages = [['index.html','🏠','首頁'],['opportunities.html','🚀','機會掃描'],['signals.html','📊','信號'],
-                   ['portfolio.html','💼','組合'],['reports.html','📰','報告'],['learn.html','📚','學習'],['pullback.html','🎯','回調位']];
+    const pages = [
+      ['index.html', '總覽'], ['portfolio.html', '組合'], ['signals.html', '信號'],
+      ['opportunities.html', '突破研究'], ['pullback.html', '回調研究'],
+      ['reports.html', '報告'], ['learn.html', '學習']
+    ];
     const cur = location.pathname.split('/').pop() || 'index.html';
+    document.body.dataset.page = cur.replace('.html', '');
     document.getElementById('px-header').innerHTML = `
       <a class="skip-link" href="#content">跳到主要內容</a>
-      <header><div class="header-inner"><a class="logo" href="index.html" aria-label="Project X 首頁"><img src="img/icon-32.svg" width="28" height="28" alt=""><span>Project X</span></a>
-      <div class="update-time" id="update-time">載入中…</div></div></header>
-      <nav aria-label="主要導覽"><div class="nav-inner">${pages.map(([h,i,t]) => `<a href="${h}" class="nav-link${h === cur ? ' active' : ''}"${h === cur ? ' aria-current="page"' : ''}><span class="nav-icon" aria-hidden="true">${i}</span>${t}</a>`).join('')}</div></nav>`;
-    document.getElementById('px-footer').innerHTML = `<p>⚠️ 教育／模擬用途，唔係投資建議。所有預測都係情境參考，唔係保證。真倉由 Roy 自己喺富途落單（系統只記錄同提醒）；紙上組合由系統自動執行，做對照組。</p>
-      <p>數據：Yahoo Finance（yfinance）、Finnhub（真倉 5 分鐘報價、報價後備、業績日、新聞、熱力圖市值）、Marketaux（新聞後備）。指標用已收市日 bar；攞唔到嘅數據會寫「數據暫缺」，唔會估。</p>`;
+      <header><div class="header-inner">
+        <a class="logo" href="index.html" aria-label="Project X 首頁"><span class="logo-mark" aria-hidden="true">PX</span><span class="logo-copy"><strong>Project X</strong><small>投資研究與風控</small></span></a>
+        <div class="update-wrap"><span class="status-dot" aria-hidden="true"></span><span class="update-time" id="update-time">載入中…</span></div>
+      </div></header>
+      <nav aria-label="主要導覽"><div class="nav-inner">${pages.map(([h, t]) => `<a href="${h}" class="nav-link${h === cur ? ' active' : ''}"${h === cur ? ' aria-current="page"' : ''}>${t}</a>`).join('')}</div></nav>`;
+    document.getElementById('px-footer').innerHTML = `<footer><div class="footer-main"><div><b>Project X</b><p>研究、模擬、紀錄，先守風控再談回報。</p></div><p>教育／模擬用途，唔係投資建議。真倉由 Roy 自己喺富途落單，系統只記錄同提醒；紙上組合由系統自動執行，用作對照。</p></div><p class="footer-sources">數據：Yahoo Finance、Finnhub、Marketaux。指標只用已收市日線；缺失數據會如實標示，唔會估算補齊。</p></footer>`;
     requestAnimationFrame(() => document.querySelector('.nav-link.active')?.scrollIntoView({block: 'nearest', inline: 'center'}));
   },
   enhanceTables(root = document) {
@@ -42,7 +46,6 @@ const PX = {
       }));
     });
   },
-  // ISO timestamp -> 'YYYY-MM-DD HH:MM HKT' (naive timestamps are box-local HKT)
   hkt(iso) {
     if (!iso || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(iso)) return iso || '';
     const hasTz = /(Z|[+-]\d{2}:?\d{2})$/.test(iso);
@@ -55,11 +58,10 @@ const PX = {
     const el = document.getElementById('update-time');
     if (el) el.textContent = String(txt).replace(/\d{4}-\d{2}-\d{2}T[\d:.]+(Z|[+-]\d{2}:?\d{2})?/g, m => PX.hkt(m));
   },
-  // Tiny accessible SVG line chart (no external library).
-  lineChart(series, labels, colors = ['#0f766e', '#64748b']) {
+  lineChart(series, labels, colors = ['#005d71', '#89939c']) {
     const W = 900, H = 220, P = 38;
     const all = series.flat().filter(v => v != null && Number.isFinite(Number(v))).map(Number);
-    if (all.length < 2) return '<div class="empty">📊 未夠數據畫圖</div>';
+    if (all.length < 2) return '<div class="empty">未夠數據畫圖</div>';
     let lo = Math.min(...all), hi = Math.max(...all); const pad = (hi - lo) * 0.1 || 1; lo -= pad; hi += pad;
     const x = i => P + i * (W - 2 * P) / Math.max(1, labels.length - 1);
     const y = v => H - P - (v - lo) / (hi - lo) * (H - 2 * P);
@@ -69,13 +71,11 @@ const PX = {
     }).join('');
     const id = `chart-${++PX._chartId}`;
     const desc = `${labels[0] || ''} 至 ${labels[labels.length - 1] || ''}；數值範圍 ${Math.min(...all).toFixed(2)} 至 ${Math.max(...all).toFixed(2)}。`;
-    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${id}-title ${id}-desc"><title id="${id}-title">權益走勢圖</title><desc id="${id}-desc">${PX.esc(desc)}</desc><line x1="${P}" y1="${H-P}" x2="${W-P}" y2="${H-P}" stroke="#cbd5e1"/>
-      <text x="2" y="${P}" font-size="12" fill="#5b6778">${hi.toFixed(0)}</text><text x="2" y="${H-P}" font-size="12" fill="#5b6778">${lo.toFixed(0)}</text>
-      <text x="${P}" y="${H-8}" font-size="12" fill="#5b6778">${PX.esc(labels[0])}</text><text x="${W-P}" text-anchor="end" y="${H-8}" font-size="12" fill="#5b6778">${PX.esc(labels[labels.length-1])}</text>${paths}</svg>`;
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${id}-title ${id}-desc"><title id="${id}-title">權益走勢圖</title><desc id="${id}-desc">${PX.esc(desc)}</desc><line x1="${P}" y1="${H-P}" x2="${W-P}" y2="${H-P}" stroke="#d6dde1"/>
+      <text x="2" y="${P}" font-size="12" fill="#5f6b76">${hi.toFixed(0)}</text><text x="2" y="${H-P}" font-size="12" fill="#5f6b76">${lo.toFixed(0)}</text>
+      <text x="${P}" y="${H-8}" font-size="12" fill="#5f6b76">${PX.esc(labels[0])}</text><text x="${W-P}" text-anchor="end" y="${H-8}" font-size="12" fill="#5f6b76">${PX.esc(labels[labels.length-1])}</text>${paths}</svg>`;
   },
   _chartId: 0,
-  // Roy's REAL Futu positions (data/futu_positions.json, schema real_positions_v2; written by `run.py pos ...`).
-  // Prices = last_price persisted by the jobs (open/daily/hourly/close/morning); P&L net of the buy fee.
   realCard(futu, fx, opts = {}) {
     const rp = futu && futu.schema === 'real_positions_v2' ? futu : null;
     const pos = (rp && rp.positions) || [];
@@ -89,52 +89,48 @@ const PX = {
       const dsl = p.stop_loss_price ? (px - p.stop_loss_price) / px * 100 : null;
       const dtp = p.take_profit_price ? (p.take_profit_price - px) / px * 100 : null;
       const days = p.entry_date ? Math.max(0, Math.floor((Date.now() - new Date(p.entry_date + 'T00:00:00+08:00').getTime()) / 864e5)) : '—';
-      const tag = p.stop_loss_price && px <= p.stop_loss_price ? '⛔ 已穿止蝕' : p.take_profit_price && px >= p.take_profit_price ? '🎯 已到止賺' : (dsl != null && dsl < 2 ? '🔴 近止蝕' : '');
+      const tag = p.stop_loss_price && px <= p.stop_loss_price ? '<span class="badge badge-bad">已穿止蝕</span>' : p.take_profit_price && px >= p.take_profit_price ? '<span class="badge badge-ok">已到止賺</span>' : (dsl != null && dsl < 2 ? '<span class="badge badge-warn">近止蝕</span>' : '');
       const isCore = String(p.ticker).toUpperCase() === 'VOO';
       const entryRisk = p.stop_loss_price ? Math.max(0, (e - Number(p.stop_loss_price)) * sh + f) : null;
-      return `<div class="position-row position-block"><div class="position-top"><div><b>${PX.esc(p.ticker)}</b> <span class="badge ${isCore ? 'badge-ok' : ''}">${isCore ? '核心定投' : '衛星學習倉'}</span> × ${sh} @ ${PX.usd(e)} <span class="muted">${PX.esc(p.entry_date || '')} · 持 ${days} 日 ${tag}</span></div>
-        <div class="${PX.cls(pnl)} position-pnl">${PX.pct(pnl / basis * 100)}（${PX.usd(pnl)} / ${PX.hkd(pnl * fx)}）</div></div>
-        <div class="muted">現價 ${PX.usd(px)}${p.last_price_at ? `（${PX.esc(PX.hkt(p.last_price_at))}）` : ''} · 止蝕 ${PX.usd(p.stop_loss_price)}（距 ${dsl != null ? dsl.toFixed(1) : '—'}%）· 止賺 ${PX.usd(p.take_profit_price)}（差 ${dtp != null ? dtp.toFixed(1) : '—'}%）</div>
-        <div class="muted">市值佔起始資金 ${(px * sh / start * 100).toFixed(1)}%${entryRisk != null ? ` · 入場至止蝕風險 ${PX.usd(entryRisk)}（起始資金 ${(entryRisk / start * 100).toFixed(1)}%）` : ''}</div>
-        ${PX.reasonLine(opts.reasons, p.ticker)}</div>`;
+      return `<article class="position-row position-block"><div class="position-top"><div><div class="position-name"><b>${PX.esc(p.ticker)}</b><span class="badge ${isCore ? 'badge-core' : ''}">${isCore ? '核心定投' : '衛星學習倉'}</span>${tag}</div><div class="position-detail">${sh} 股 @ ${PX.usd(e)} · ${PX.esc(p.entry_date || '')} · 持 ${days} 日</div></div><div class="${PX.cls(pnl)} position-pnl">${PX.pct(pnl / basis * 100)}<small>${PX.usd(pnl)} / ${PX.hkd(pnl * fx)}</small></div></div>
+        <div class="position-detail">現價 ${PX.usd(px)}${p.last_price_at ? ` · ${PX.esc(PX.hkt(p.last_price_at))}` : ''} · 止蝕 ${PX.usd(p.stop_loss_price)}（距 ${dsl != null ? dsl.toFixed(1) : '—'}%）· 止賺 ${PX.usd(p.take_profit_price)}（差 ${dtp != null ? dtp.toFixed(1) : '—'}%）</div>
+        ${opts.compact ? '' : `<div class="position-detail">市值佔起始資金 ${(px * sh / start * 100).toFixed(1)}%${entryRisk != null ? ` · 入場至止蝕風險 ${PX.usd(entryRisk)}（起始資金 ${(entryRisk / start * 100).toFixed(1)}%）` : ''}</div>${PX.reasonLine(opts.reasons, p.ticker)}`}</article>`;
     }).join('');
     const realized = closed.reduce((a, t) => a + Number(t.net_pnl_usd || 0), 0);
     const wins = closed.filter(t => Number(t.net_pnl_usd || 0) > 0).length;
     const equity = start + realized - costOpen + value;
     const coreValue = pos.filter(p => String(p.ticker).toUpperCase() === 'VOO').reduce((sum, p) => sum + Number(p.last_price || p.entry_price) * Number(p.shares), 0);
     const satelliteValue = value - coreValue;
+    const corePct = equity ? coreValue / equity * 100 : 0, satellitePct = equity ? satelliteValue / equity * 100 : 0;
+    const coreBar = value ? coreValue / value * 100 : 0;
     const lastAt = pos.map(p => p.last_price_at).filter(Boolean).sort().slice(-1)[0];
-    const hist = opts.history && closed.length ? `<div class="tbl-wrap" style="margin-top:8px"><table class="tbl"><tr><th>股票</th><th>股數</th><th>買入</th><th>賣出</th><th>日期</th><th>持日</th><th>費用</th><th>淨 P&L</th><th>原因</th></tr>
-      ${closed.slice().reverse().map(t => `<tr><td>${PX.esc(t.ticker)}</td><td>${t.shares}</td><td>${PX.usd(t.entry_price)}</td><td>${PX.usd(t.exit_price)}</td><td>${PX.esc(t.entry_date)}→${PX.esc(t.exit_date)}</td><td>${t.days_held ?? '—'}</td><td>${PX.usd(t.fees_usd)}</td>
-      <td class="${PX.cls(t.net_pnl_usd)}">${PX.usd(t.net_pnl_usd)}（${PX.pct(t.net_pnl_pct)}）</td><td class="muted">${PX.esc(t.exit_reason)}</td></tr>`).join('')}</table></div>` : '';
-    return `<div class="card hero"><h2>🏦 真倉：核心＋衛星（Roy 手動落單）</h2>
-      ${pos.length && lastAt ? PX.freshness(lastAt, 30, '真倉報價') : ''}
-      ${pos.length ? `<div>估算總值 <b>${PX.usd(equity)}</b>（${PX.hkd(equity * fx)}）· 真倉回報 <b>${PX.pct((equity - start) / start * 100)}</b> · 未實現 ${PX.usd(unreal)} · 估算現金 ${PX.usd(start + realized - costOpen, 0)}</div>
-      <div class="allocation-line">核心 VOO ${PX.usd(coreValue)}（${(coreValue / equity * 100).toFixed(1)}%）· 衛星個股 ${PX.usd(satelliteValue)}（${(satelliteValue / equity * 100).toFixed(1)}%）</div>
-      <div class="hero-note">25% 單注上限同 2% 每注風險用於衛星新倉；VOO 核心長線定投唔當短線交易訊號。核心同衛星分開顯示，避免將兩層風險混為一談。</div>` : ''}
-      ${rows || '<div>真倉：暫時冇持倉（買入後叫 Hermes 記錄）</div>'}
-      <div class="hero-meta">${closed.length ? `已平倉 ${closed.length} 筆 · 已實現 ${PX.usd(realized)} · 勝率 ${(wins / closed.length * 100).toFixed(0)}% · ` : ''}${rp && rp.real_start_date ? `真倉 ${PX.esc(rp.real_start_date)} 起 · ` : ''}起始 ${PX.usd(start, 0)}（HKD 10,000）· 系統只記錄同提醒，永遠唔會自動落單</div></div>
-      ${hist ? `<div class="card"><h2>🧾 真倉已平倉紀錄（${closed.length} 筆）</h2>${hist}</div>` : ''}`;
+    const hist = opts.history && closed.length ? `<details class="card detail-card"><summary>真倉已平倉紀錄（${closed.length} 筆）</summary><div class="detail-body"><div class="tbl-wrap"><table class="tbl"><tr><th>股票</th><th>股數</th><th>買入</th><th>賣出</th><th>日期</th><th>持日</th><th>費用</th><th>淨 P&amp;L</th><th>原因</th></tr>
+      ${closed.slice().reverse().map(t => `<tr><td>${PX.esc(t.ticker)}</td><td>${t.shares}</td><td>${PX.usd(t.entry_price)}</td><td>${PX.usd(t.exit_price)}</td><td>${PX.esc(t.entry_date)}→${PX.esc(t.exit_date)}</td><td>${t.days_held ?? '—'}</td><td>${PX.usd(t.fees_usd)}</td><td class="${PX.cls(t.net_pnl_usd)}">${PX.usd(t.net_pnl_usd)}（${PX.pct(t.net_pnl_pct)}）</td><td class="muted">${PX.esc(t.exit_reason)}</td></tr>`).join('')}</table></div></div></details>` : '';
+    return `<section class="portfolio-shell" aria-label="真倉概覽"><div class="portfolio-lead"><div class="eyebrow light">REAL PORTFOLIO · 手動落單</div><div class="portfolio-title"><h2>真倉概覽</h2><span>核心＋衛星</span></div>
+      <div class="equity-label">估算總值</div><div class="equity-value">${PX.usd(equity)}</div><div class="equity-hkd">${PX.hkd(equity * fx)}</div>
+      <div class="real-return ${PX.cls(equity - start)}">真倉回報 ${PX.pct((equity - start) / start * 100)}</div>
+      <div class="real-stats"><div><span>未實現</span><b>${PX.usd(unreal)}</b></div><div><span>估算現金</span><b>${PX.usd(start + realized - costOpen, 0)}</b></div></div>
+      <div class="allocation"><div class="allocation-head"><span>持倉分布</span><span>${pos.length} 隻</span></div><div class="allocation-bar" aria-hidden="true"><i style="width:${coreBar.toFixed(1)}%"></i></div><div class="allocation-legend"><span>VOO 核心 ${corePct.toFixed(1)}%</span><span>衛星 ${satellitePct.toFixed(1)}%</span></div></div>
+      <div class="hero-meta">${closed.length ? `已平倉 ${closed.length} 筆 · 已實現 ${PX.usd(realized)} · 勝率 ${(wins / closed.length * 100).toFixed(0)}% · ` : ''}${rp && rp.real_start_date ? `${PX.esc(rp.real_start_date)} 起 · ` : ''}起始 ${PX.usd(start, 0)}</div></div>
+      <div class="portfolio-positions"><div class="section-heading compact"><h2>持倉明細</h2><span class="section-meta">系統只記錄，唔會自動落單</span></div>${pos.length && lastAt ? PX.freshness(lastAt, 30, '真倉報價') : ''}
+      ${rows || '<div class="empty">暫時冇持倉，買入後叫 Hermes 記錄。</div>'}<p class="position-note">VOO 係核心長線定投；其他個股係衛星學習倉。25% 單注上限同 2% 風險規則只適用於衛星新倉。</p></div></section>${hist}`;
   },
-  // one-line move reason from data/reasons.json (px/reasons.py: headline + move vs QQQ / sector ETF; never invented)
   reasonLine(reasons, t) {
     const r = reasons && reasons.reasons && reasons.reasons[t];
     if (!r || !r.text) return '';
-    const link = r.url ? ` <a class="muted" href="${PX.esc(r.url)}" target="_blank" rel="noopener">新聞</a>` : '';
-    return `<div class="why" style="margin-top:4px">💬 ${PX.esc(r.text)}${link} <span class="muted">${r.at ? PX.esc(PX.hkt(r.at)) : ''}</span></div>`;
+    const link = r.url ? ` <a class="muted" href="${PX.esc(r.url)}" target="_blank" rel="noopener">新聞來源</a>` : '';
+    return `<div class="why"><b>市場原因</b>　${PX.esc(r.text)}${link} <span class="muted">${r.at ? PX.esc(PX.hkt(r.at)) : ''}</span></div>`;
   },
-  oppCard(x, i, fx) {
-    const cat = x.earnings_date ? `<span class="badge ${x.earnings_days != null && x.earnings_days <= 10 ? 'badge-warn' : ''}">📅 業績 ${PX.esc(x.earnings_date)}${x.earnings_days != null ? `（${x.earnings_days} 交易日）` : ''}</span>` : '<span class="badge">📅 業績日未知</span>';
-    const live = x.live_price ? ` <span class="muted">現 ${PX.usd(x.live_price)} <span class="${PX.cls(x.live_change_pct)}">${PX.pct(x.live_change_pct)}</span></span>` : '';
-    return `<div class="opp"><div class="opp-head"><div><span class="opp-rank">#${i + 1}</span><span class="opp-ticker">${PX.esc(x.ticker)}</span>
-      <span class="badge">${PX.esc(x.theme || '')}</span><span class="badge badge-ok">${PX.esc(x.setup)}</span>${live}</div>
-      <div class="opp-score">機會評分 ${Number(x.score).toFixed(0)}</div></div>
-      <div class="kv"><div><span>入場區</span>${PX.usd(x.entry_zone[0])}–${PX.usd(x.entry_zone[1])}</div>
+  oppCard(x, i, fx, opts = {}) {
+    const cat = x.earnings_date ? `<span class="badge ${x.earnings_days != null && x.earnings_days <= 10 ? 'badge-warn' : ''}">業績 ${PX.esc(x.earnings_date)}${x.earnings_days != null ? `（${x.earnings_days} 交易日）` : ''}</span>` : '<span class="badge">業績日未知</span>';
+    const live = x.live_price ? `<span class="live-price">現 ${PX.usd(x.live_price)} <span class="${PX.cls(x.live_change_pct)}">${PX.pct(x.live_change_pct)}</span></span>` : '';
+    const reason = x.reason_plain || (x.why || []).join('；');
+    return `<article class="opp${opts.compact ? ' opp-compact' : ''}" aria-label="${PX.esc(x.ticker)} 研究詳情"><div class="opp-head"><div class="opp-identity"><span class="opp-rank">${String(i + 1).padStart(2, '0')}</span><span class="opp-ticker">${PX.esc(x.ticker)}</span><span class="badge">${PX.esc(x.theme || '')}</span><span class="badge badge-ok">${PX.esc(x.setup)}</span></div><div class="opp-score"><span>研究分數</span>${Number(x.score || 0).toFixed(0)}</div></div>
+      ${live ? `<div class="opp-live">${live}</div>` : ''}<div class="kv"><div><span>入場區</span>${PX.usd(x.entry_zone[0])}–${PX.usd(x.entry_zone[1])}</div>
       <div><span>止損</span><b class="down">${PX.usd(x.stop)}</b>（−${Number(x.stop_pct).toFixed(1)}%）</div>
       <div><span>目標（${PX.esc(x.target_mode)}）</span><b class="up">${PX.usd(x.target)}</b>（+${Number(x.target_pct).toFixed(1)}%）</div>
       <div><span>回報／風險</span>R:R ${Number(x.rr).toFixed(1)}</div>
-      <div><span>模擬注碼（預算參考）</span>${x.shares} 股 ≈ ${PX.usd(x.cost_usd, 0)} / ${PX.hkd(x.cost_hkd)}</div>
-      <div><span>最大風險（2%）</span>${PX.usd(x.risk_usd, 0)} · 來回手續費 ${x.fee_drag_pct != null ? Number(x.fee_drag_pct).toFixed(1) + '%（要升過呢個先打和）' : '—'}</div></div>
-      <div>${cat}</div>${x.reason_plain ? `<div class="why" style="margin-top:6px">💬 ${PX.esc(x.reason_plain)}</div>` : ''}<div class="why" style="margin-top:6px">💡 ${PX.esc((x.why || []).join('；'))}</div></div>`;
+      ${opts.compact ? '' : `<div><span>模擬注碼（預算參考）</span>${x.shares} 股 ≈ ${PX.usd(x.cost_usd, 0)} / ${PX.hkd(x.cost_hkd)}</div><div><span>最大風險（2%）</span>${PX.usd(x.risk_usd, 0)} · 來回手續費 ${x.fee_drag_pct != null ? Number(x.fee_drag_pct).toFixed(1) + '%（打和門檻）' : '—'}</div>`}</div>
+      <div class="opp-footer">${cat}</div>${reason ? `<div class="why">${PX.esc(reason)}</div>` : ''}</article>`;
   },
 };

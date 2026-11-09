@@ -3,45 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#005d71">
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <title>學習 · Project X</title>
-<link rel="stylesheet" href="css/style.css?v=20261109">
+<link rel="stylesheet" href="css/style.css?v=20261109-2">
 </head>
 <body>
 <div id="px-header"></div>
-<main><h1 class="page-title">學習中心</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">學習中心</h1><p class="page-subtitle">先學風控，再學訊號。呢度嘅規則同系統程式使用嘅口徑一致，目標係建立紀律，唔係預測每一次升跌。</p><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
-<script src="js/px.js"></script>
+<script src="js/px.js?v=20261109-2"></script>
 <script>
 PX.nav();
 PX.setUpdated('學習中心');
 document.getElementById('content').innerHTML = `
-<div class="card hero"><h2>📚 學習中心</h2><p>由零開始，每日學少少。呢度嘅規則同系統程式入面用緊嘅一樣。</p></div>
-<div class="card"><h2>📖 必學術語</h2>
-<p><b>RSI(14)</b>：0–100 動能指標（Wilder 算法）。&lt;30 超賣、&gt;70 超買。超賣唔等於要買，要睇趨勢。</p>
-<p><b>MA20 / MA50 / MA200</b>：20／50／200 日平均收市價。價 &gt; MA20 &gt; MA50 而且 MA50 向上 = 上升結構。</p>
-<p><b>ATR(14)</b>：平均真實波幅。高波幅股嘅止損要按 ATR 放闊，唔係一刀切 −10%。</p>
-<p><b>相對強度（vs QQQ）</b>：隻股 20／60 日升幅減 QQQ 升幅。跑贏大市嘅股先值得研究。</p>
-<p><b>R:R（回報／風險）</b>：(目標 − 入場) ÷ (入場 − 止損)。少過 2 唔值得做。</p>
-<p><b>VIX</b>：&lt;20 正常（最多 3 隻、信心 ≥75%）；20–30 謹慎（最多 2 隻、≥80%）；&gt;30 防禦（最多 1 隻、≥85%）。</p>
-<p><b>成交量比</b>：最後一日（已收市）成交量 ÷ 之前 20 日平均。</p>
-<p><b>業績日（催化劑）</b>：業績前後股價可以跳空，系統喺業績前 5 個交易日唔開新倉。</p></div>
-<div class="card"><h2>🎯 Roy 嘅規則（程式強制）</h2><ol style="padding-left:18px">
-<li>資金約 HKD 10,000（≈ US$1,280），富途；紙上組合同實盤對齊。富途美股每張單最低收費約 US$2（來回約 US$4 ≈ HK$31）：US$150 一注要升 2.7% 先打和，所以少啲交易、每注大啲先抵。</li>
-<li>VOO 係核心長線定投；其他個股係衛星學習倉。紙上對照組最多 3 隻；衛星新倉每隻 ≤ 25%、每注最大風險 2%；紙上倉現金 ≥ 20%。</li>
-<li>信心 ≥ 75% 先考慮；每單一定預設止損＋止盈。</li>
-<li>唔攤平、唔加倉；止盈後唔 FOMO 追返（冷靜期）；大跌穿止損即走。</li>
-<li>唔好頻繁細額加減倉：每張單最低約 US$2，一買一賣來回約 US$4（另有交收費及賣出 TAF），細資金好易被食晒。</li>
-<li>揀高潛力、股價適中嘅細中型股；巨頭大股一股都太貴。大市背景只睇 SPY／QQQ／VIX。</li>
-<li>所有預測都係情境（基準／樂觀／悲觀），唔係保證。最終落單由 Roy 自己決定。</li></ol></div>
-<div class="card"><h2>📱 富途落單 checklist</h2><ol style="padding-left:18px">
-<li>分清楚策略：突破研究名單唔係回調買位；回調命中亦只係研究線索。現價唔喺入場區就唔追。</li>
-<li>「模擬注碼」只係預算參考；實盤前再按可用現金、來回費用同可承受虧損計股數，用限價單。</li>
-<li>即刻設止損（條件單）同止盈價。</li>
-<li>買完／賣完話 Hermes 知（例如「買咗 IONQ 3 股 @44.5，止蝕 37，止賺 50」），佢會用 <code>run.py pos</code> 記錄；首頁同組合頁「🏦 真倉」會顯示，Telegram 報告會優先講真倉。</li>
-<li>業績前、VIX &gt; 30、或者已經 3 隻持倉 → 唔開新倉。</li></ol></div>
-<div class="card"><h2>❌ 常見錯誤</h2><p>追高殺低 · 唔設止損 · 過度交易（手續費食晒利潤）· 單一股票 all-in · FOMO · 攤平蝕錢股。</p></div>
-<div class="card card-soft"><h2>🎓 階段</h2><p>現階段：紙上組合＋每日報告＋富途模擬／細注實盤（2026 年 10 月初開始真錢 HKD 10k）。先守紀律，再談回報。</p></div>`;
+<div class="learning-note">每日學少少；先明白點樣控制虧損，再研究邊啲股票值得睇。</div>
+<div class="content-grid">
+  <section class="card"><div class="eyebrow">01 · DISCIPLINE</div><h2>Roy 嘅風控規則</h2><ol class="clean-list">
+    <li>資金約 HKD 10,000（≈ US$1,280），富途；紙上組合同實盤對齊。富途美股每張單最低收費約 US$2，一買一賣來回約 US$4（約 HK$31），細注好易被費用食晒。</li>
+    <li>VOO 係核心長線定投；其他個股係衛星學習倉。紙上對照組最多 3 隻；衛星新倉每隻 ≤ 25%、每注最大風險 2%；紙上倉現金 ≥ 20%。</li>
+    <li>信心 ≥ 75% 先考慮；每單一定預設止損＋止盈。</li>
+    <li>唔攤平、唔加倉；止盈後唔 FOMO 追返（冷靜期）；跌穿止損即走。</li>
+    <li>唔好頻繁細額加減倉：每張單最低約 US$2，另有交收費及賣出 TAF；少啲交易，費用比例先會低。</li>
+    <li>所有預測都係情境（基準／樂觀／悲觀），唔係保證。最終落單由 Roy 自己決定。</li></ol></section>
+  <section class="card"><div class="eyebrow">02 · BEFORE ORDERING</div><h2>富途落單 checklist</h2><ol class="clean-list">
+    <li>分清楚策略：突破研究名單唔係回調買位；回調命中亦只係研究線索。現價唔喺入場區就唔追。</li>
+    <li>「模擬注碼」只係預算參考；實盤前再按可用現金、來回費用同可承受虧損計股數，用限價單。</li>
+    <li>即刻設止損（條件單）同止盈價，唔好買完先談退出。</li>
+    <li>買完／賣完話 Hermes 知（例如「買咗 IONQ 3 股 @44.5，止蝕 37，止賺 50」），佢會用 <code>run.py pos</code> 記錄；首頁同組合頁會顯示真倉。</li>
+    <li>業績前、VIX &gt; 30、或者已經有 3 隻紙上持倉 → 唔開新倉。</li></ol></section>
+</div>
+<details class="card detail-card"><summary>必學術語：RSI、均線、ATR、R:R、VIX</summary><div class="detail-body">
+  <p><b>RSI(14)</b>：0–100 動能指標（Wilder 算法）。&lt;30 超賣、&gt;70 超買。超賣唔等於要買，要睇趨勢。</p>
+  <p><b>MA20 / MA50 / MA200</b>：20／50／200 日平均收市價。價 &gt; MA20 &gt; MA50 而且 MA50 向上 = 上升結構。</p>
+  <p><b>ATR(14)</b>：平均真實波幅。高波幅股嘅止損要按 ATR 放闊，唔係一刀切 −10%。</p>
+  <p><b>相對強度（vs QQQ）</b>：隻股 20／60 日升幅減 QQQ 升幅。跑贏大市嘅股先值得研究。</p>
+  <p><b>R:R（回報／風險）</b>：(目標 − 入場) ÷ (入場 − 止損)。少過 2 唔值得做。</p>
+  <p><b>VIX</b>：&lt;20 正常（最多 3 隻、信心 ≥75%）；20–30 謹慎（最多 2 隻、≥80%）；&gt;30 防禦（最多 1 隻、≥85%）。</p>
+  <p><b>成交量比</b>：最後一日（已收市）成交量 ÷ 之前 20 日平均。</p>
+  <p><b>業績日</b>：業績前後股價可以跳空，系統喺業績前 5 個交易日唔開新倉。</p></div></details>
+<section class="card"><div class="eyebrow">03 · AVOID</div><h2>常見錯誤</h2><div class="mistake-list"><span>追高殺低</span><span>唔設止損</span><span>過度交易</span><span>單一股票 all-in</span><span>FOMO</span><span>攤平蝕錢股</span></div></section>
+<section class="card card-soft"><h2>現階段目標</h2><p>紙上組合＋每日報告＋富途模擬／細注實盤（2026 年 10 月初開始真錢 HKD 10k）。先守紀律，再談回報。</p></section>`;
 </script></body></html>

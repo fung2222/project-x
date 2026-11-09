@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#005d71">
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <title>報告 · Project X</title>
-<link rel="stylesheet" href="css/style.css?v=20261109">
+<link rel="stylesheet" href="css/style.css?v=20261109-2">
 </head>
 <body>
 <div id="px-header"></div>
-<main><h1 class="page-title">報告存檔</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">報告存檔</h1><p class="page-subtitle">每份 Telegram 報告都有文字副本，方便追查當時嘅數據、判斷同系統狀態。歷史內容會原樣保留。</p><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
-<script src="js/px.js"></script>
+<script src="js/px.js?v=20261109-2"></script>
 <script>
 PX.nav();
 (async () => {
@@ -23,13 +23,13 @@ PX.nav();
   PX.setUpdated(`報告：${(idx && idx.updated) || '—'}`);
   const kinds = [...new Set(px.map(r => r.kind))];
   document.getElementById('content').innerHTML = `
-    <div class="card"><h2>📰 Project X 報告</h2><p class="muted">每份 Telegram 報告都有文字副本。按類型篩選，每頁 20 份。</p>
+    <section class="card"><div class="section-heading compact"><div><div class="eyebrow">PROJECT X ARCHIVE</div><h2>報告資料庫</h2></div><span class="section-meta">每頁 20 份</span></div>
       <div id="flt" class="filter-bar" role="group" aria-label="報告類型">${['all', ...kinds].map(k => `<button type="button" data-k="${PX.esc(k)}" class="filter-btn" aria-pressed="${k === 'all'}">${k === 'all' ? '全部' : PX.esc((px.find(r => r.kind === k) || {}).kind_zh || k)}</button>`).join('')}</div>
       <div id="report-count" class="muted" role="status" aria-live="polite"></div>
-      <div id="list" class="report-list">${px.length ? '' : '<div class="empty">今晚開始累積</div>'}</div>
-      <div id="pager" class="pager"></div></div>
-    <details class="card"><summary>🗄 Legacy：Hermes 報告（${lg.length} 份，2026-07-09 → 2026-09-28，唯讀）</summary>
-      ${lg.map(r => `<div class="report-item"><a href="data/legacy/hermes_project_x_2026/data/${PX.esc(r.file)}">${PX.esc(r.date)}</a> <span class="muted">${PX.esc(r.summary || '')}</span></div>`).join('')}</details>`;
+      <div id="list" class="report-list">${px.length ? '' : '<div class="empty">報告會喺排程執行後累積</div>'}</div>
+      <div id="pager" class="pager"></div></section>
+    <details class="card detail-card"><summary>Legacy：Hermes 報告（${lg.length} 份，2026-07-09 → 2026-09-28，唯讀）</summary><div class="detail-body">
+      ${lg.map(r => `<div class="report-item"><a href="data/legacy/hermes_project_x_2026/data/${PX.esc(r.file)}">${PX.esc(r.date)}</a><span class="muted">${PX.esc(r.summary || '')}</span></div>`).join('')}</div></details>`;
   let kind = 'all', page = 1;
   const pageSize = 20;
   const render = () => {
@@ -39,8 +39,7 @@ PX.nav();
     const start = (page - 1) * pageSize;
     document.getElementById('report-count').textContent = filtered.length ? `共 ${filtered.length} 份 · 顯示 ${start + 1}–${Math.min(start + pageSize, filtered.length)} 份` : '呢個類型暫時冇報告';
     document.getElementById('list').innerHTML = filtered.slice(start, start + pageSize).map(r =>
-      `<article class="report-item"><div><a href="data/${PX.esc(r.file)}">${PX.esc(r.date)} · ${PX.esc(r.kind_zh || r.kind)}</a><div class="position-detail">${PX.esc(r.summary || '')}</div></div>
-       <a class="report-format" href="data/${PX.esc(r.md || r.file)}" aria-label="開啟 ${PX.esc(r.date)} 純文字版本">TXT</a></article>`).join('') || '<div class="empty">冇報告符合篩選</div>';
+      `<article class="report-item"><div><a href="data/${PX.esc(r.file)}">${PX.esc(r.date)} · ${PX.esc(r.kind_zh || r.kind)}</a><div class="position-detail">${PX.esc(r.summary || '')}</div></div><a class="report-format" href="data/${PX.esc(r.md || r.file)}" aria-label="開啟 ${PX.esc(r.date)} 純文字版本">TXT</a></article>`).join('') || '<div class="empty">冇報告符合篩選</div>';
     document.getElementById('pager').innerHTML = pages > 1 ? `<button type="button" id="prev" ${page === 1 ? 'disabled' : ''}>← 上一頁</button><span>第 ${page} / ${pages} 頁</span><button type="button" id="next" ${page === pages ? 'disabled' : ''}>下一頁 →</button>` : '';
     document.getElementById('prev')?.addEventListener('click', () => { page--; render(); });
     document.getElementById('next')?.addEventListener('click', () => { page++; render(); });

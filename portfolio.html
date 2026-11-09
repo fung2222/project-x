@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#005d71">
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <title>組合 · Project X</title>
-<link rel="stylesheet" href="css/style.css?v=20261109">
+<link rel="stylesheet" href="css/style.css?v=20261109-2">
 </head>
 <body>
 <div id="px-header"></div>
-<main><h1 class="page-title">組合與風險</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">組合與風險</h1><p class="page-subtitle">真倉由你手動落單；紙上組合自動執行，用作紀律對照。兩者分開計算，唔會混為一談。</p><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
-<script src="js/px.js"></script>
+<script src="js/px.js?v=20261109-2"></script>
 <script>
 PX.nav();
 (async () => {
@@ -25,30 +25,32 @@ PX.nav();
   const trades = ((pf && pf.trade_log) || []).slice().reverse();
   const r = (pf && pf.rules) || {};
   const bar = p => { const sl = p.stop_loss_price, tp = p.take_profit_price, px = p.current_price; if (!sl || !tp || !px) return '';
-    const f = Math.max(0, Math.min(1, (px - sl) / (tp - sl))); return `<div class="bar" title="SL→TP"><i style="left:0;width:${(f * 100).toFixed(0)}%"></i></div><div class="muted">SL ${PX.usd(sl)} ←→ TP ${PX.usd(tp)}</div>`; };
+    const f = Math.max(0, Math.min(1, (px - sl) / (tp - sl))); return `<div class="bar" title="止蝕至止賺位置"><i style="left:0;width:${(f * 100).toFixed(0)}%"></i></div><div class="position-detail">止蝕 ${PX.usd(sl)} ←→ 止賺 ${PX.usd(tp)}</div>`; };
   document.getElementById('content').innerHTML = `
     ${PX.realCard(futu, fx, {history: true, reasons: rsn})}
-    <div class="card"><h2>🧪 紙上倉（對照組）· HKD 10,000 ≈ US$1,280，${PX.esc(a.rebase_date || '')} 起</h2>
-      <div>權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b class="${PX.cls(a.total_pnl_usd)}">${PX.usd(a.total_pnl_usd)}（${PX.pct(a.total_return_pct)}）</b></div>
-      <div class="muted" style="margin-top:4px">已實現 ${PX.usd(a.realized_pnl_usd)} · 未實現 ${PX.usd(a.unrealized_pnl_usd)} · 費用 ${PX.usd(a.total_fees_usd)} · FX ${fx} · 現金 ${PX.usd(a.cash_usd)}（${Number(a.cash_pct || 0).toFixed(1)}%）· 系統自動執行，同真倉比較用</div></div>
-    <div class="card"><h2>📊 紙上持倉（${pos.length}/3）</h2>${pos.length ? pos.map(p => `
-      <div class="position-row" style="display:block"><div style="display:flex;justify-content:space-between"><div><b>${PX.esc(p.ticker)}</b> × ${p.shares} @ ${PX.usd(p.entry_price)} <span class="muted">${PX.esc(p.entry_date || '')} · ${PX.esc(p.theme || '')}</span></div>
-      <div class="${PX.cls(p.pnl_pct)}" style="font-weight:700">${PX.pct(p.pnl_pct)} (${PX.usd(p.pnl_usd)})</div></div>
-      <div class="muted">現價 ${PX.usd(p.current_price)} · 市值 ${PX.usd(p.value_usd)}（${a.equity_usd ? (p.value_usd / a.equity_usd * 100).toFixed(1) : '—'}%）· 距 SL ${p.dist_to_sl_pct ?? '—'}% · 距 TP ${p.dist_to_tp_pct ?? '—'}%</div>${bar(p)}</div>`).join('') : '<div class="empty">空倉</div>'}</div>
-    <div class="card"><h2>📈 紙上權益曲線 vs SPY</h2><div class="chart">${h.length > 1 ? PX.lineChart([h.map(x => x.equity_usd), h.map(x => x.spy_close ? x.spy_close / h[0].spy_close * h[0].equity_usd : null)], h.map(x => x.date)) : '<div class="empty">未夠數據</div>'}</div></div>
-    <div class="card"><h2>🧾 紙上交易紀錄</h2><div class="tbl-wrap"><table class="tbl"><tr><th>ID</th><th>日期</th><th>股票</th><th>動作</th><th>股數</th><th>入場</th><th>出場</th><th>費用</th><th>淨 P&L</th><th>原因</th></tr>
-      ${trades.map(t => `<tr><td>${PX.esc(t.id)}</td><td>${PX.esc(t.date)}</td><td>${PX.esc(t.ticker)}</td><td>${PX.esc(t.action)}</td><td>${t.shares ?? ''}</td><td>${PX.usd(t.entry_price)}</td><td>${t.exit_price ? PX.usd(t.exit_price) : '—'}</td><td>${t.fee_usd != null ? PX.usd(t.fee_usd) : '—'}</td>
-      <td class="${PX.cls(t.net_pnl_usd)}">${t.net_pnl_usd != null ? PX.usd(t.net_pnl_usd) : '—'}</td><td class="muted">${PX.esc((t.reason || t.exit_reason || '').toString().slice(0, 60))}</td></tr>`).join('')}</table></div></div>
-    <div class="card card-soft"><h2>⚙️ 紙上倉規則（程式強制）</h2><p class="muted rule-note">以下係紙上對照組規則。真倉由 Roy 手動決定；VOO 核心定投同衛星個股學習倉分層顯示，唔將核心 ETF 當短線訊號。</p><div class="kv">
-      <div><span>最多持倉</span>${r.max_positions ?? 3} 隻</div><div><span>單一股票上限</span>${Math.round((r.max_position_pct ?? .25) * 100)}%</div>
-      <div><span>現金下限</span>${Math.round((r.min_cash_pct ?? .2) * 100)}%</div><div><span>最低信心</span>${Math.round((r.min_confidence ?? .75) * 100)}%</div>
-      <div><span>每注風險</span>≤ ${Math.round((r.risk_per_trade_pct ?? .02) * 100)}%</div><div><span>每日新倉</span>≤ ${r.max_new_entries_per_day ?? 1}</div>
-      <div><span>攤平／加倉</span>禁止</div><div><span>冷靜期</span>止損後 ${r.cooldown_after_sl_days ?? 5} / 止盈後 ${r.cooldown_after_tp_days ?? 3} 交易日</div>
-      <div><span>手續費模型</span>富途美股固定式：每單約 US$2（佣金 0.99＋平台費 1.00 最低＋交收費；賣出加 TAF）。09-28 前嘅紙上交易用舊 US$1 模型入帳</div><div><span>SL/TP</span>每單預設，觸發自動執行</div></div></div>
-    <details class="card"><summary>🗄 Legacy：Hermes 舊模擬倉（HKD 5k，2026-07-08 起，唯讀）</summary>
-      <p class="muted" style="margin:8px 0">止損只標記從未執行（RKLB 07-16 起跌穿 −10% 仍持有；TSLA 曾 −24.7%）。唔同 Project X 合併計算。</p>
-      ${lpf ? `<div>總值 ${PX.usd(lpf.total_value_usd)}（${PX.pct(lpf.total_pnl_pct)}）· 現金 ${PX.usd(lpf.cash_usd)} · ${(lpf.positions || []).map(p => `${PX.esc(p.ticker)} ${p.shares}股 ${PX.pct(p.pnl_pct)}`).join(' · ')}</div>` : ''}
-      <div class="chart">${lhist && lhist.length > 1 ? PX.lineChart([lhist.map(x => x.total_value_usd)], lhist.map(x => x.date), ['#64748b']) : ''}</div></details>`;
+    <div class="section-heading"><div><div class="eyebrow">PAPER CONTROL GROUP</div><h2>紙上對照組</h2></div><span class="section-meta">HKD 10,000 ≈ US$1,280 · ${PX.esc(a.rebase_date || '')} 起 · 系統自動模擬</span></div>
+    ${PX.freshness(pf && pf.updated, 30, '紙上組合')}
+    <section class="stats" aria-label="紙上組合摘要">
+      <div class="stat"><div class="stat-label">權益</div><div class="stat-value">${PX.usd(a.equity_usd)}</div><div class="muted">${PX.hkd(a.equity_usd * fx)}</div></div>
+      <div class="stat"><div class="stat-label">總 P&amp;L</div><div class="stat-value ${PX.cls(a.total_pnl_usd)}">${PX.pct(a.total_return_pct)}</div><div class="muted">${PX.usd(a.total_pnl_usd)}</div></div>
+      <div class="stat"><div class="stat-label">現金比例</div><div class="stat-value">${Number(a.cash_pct || 0).toFixed(1)}%</div><div class="muted">${PX.usd(a.cash_usd)} · 下限 20%</div></div>
+      <div class="stat"><div class="stat-label">已實現／未實現</div><div class="stat-value stat-time">${PX.usd(a.realized_pnl_usd)} / ${PX.usd(a.unrealized_pnl_usd)}</div><div class="muted">累計費用 ${PX.usd(a.total_fees_usd)} · FX ${fx}</div></div>
+    </section>
+    <section class="card"><div class="section-heading compact"><h2>紙上持倉</h2><span class="section-meta">${pos.length}/3 · 每單預設止蝕＋止賺</span></div>${pos.length ? pos.map(p => `
+      <article class="position-row position-block"><div class="position-top"><div><div class="position-name"><b>${PX.esc(p.ticker)}</b><span class="badge">${PX.esc(p.theme || '個股')}</span></div><div class="position-detail">${p.shares} 股 @ ${PX.usd(p.entry_price)} · ${PX.esc(p.entry_date || '')}</div></div><div class="${PX.cls(p.pnl_pct)} position-pnl">${PX.pct(p.pnl_pct)}<small>${PX.usd(p.pnl_usd)}</small></div></div>
+      <div class="position-detail">現價 ${PX.usd(p.current_price)} · 市值 ${PX.usd(p.value_usd)}（${a.equity_usd ? (p.value_usd / a.equity_usd * 100).toFixed(1) : '—'}%）· 距止蝕 ${p.dist_to_sl_pct ?? '—'}% · 距止賺 ${p.dist_to_tp_pct ?? '—'}%</div>${bar(p)}</article>`).join('') : '<div class="empty">目前空倉</div>'}</section>
+    <section class="card"><div class="section-heading compact"><h2>紙上權益曲線 vs SPY</h2><span class="section-meta">深青：組合 · 灰：SPY</span></div><div class="chart">${h.length > 1 ? PX.lineChart([h.map(x => x.equity_usd), h.map(x => x.spy_close ? x.spy_close / h[0].spy_close * h[0].equity_usd : null)], h.map(x => x.date)) : '<div class="empty">未夠數據</div>'}</div></section>
+    <details class="card detail-card"><summary>紙上交易紀錄（${trades.length} 筆）</summary><div class="detail-body"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>ID</th><th>日期</th><th>股票</th><th>動作</th><th>股數</th><th>入場</th><th>出場</th><th>費用</th><th>淨 P&amp;L</th><th>原因</th></tr></thead><tbody>
+      ${trades.map(t => `<tr><td>${PX.esc(t.id)}</td><td>${PX.esc(t.date)}</td><td>${PX.esc(t.ticker)}</td><td>${PX.esc(t.action)}</td><td>${t.shares ?? ''}</td><td>${PX.usd(t.entry_price)}</td><td>${t.exit_price ? PX.usd(t.exit_price) : '—'}</td><td>${t.fee_usd != null ? PX.usd(t.fee_usd) : '—'}</td><td class="${PX.cls(t.net_pnl_usd)}">${t.net_pnl_usd != null ? PX.usd(t.net_pnl_usd) : '—'}</td><td class="muted">${PX.esc((t.reason || t.exit_reason || '').toString().slice(0, 60))}</td></tr>`).join('')}</tbody></table></div></div></details>
+    <details class="card detail-card"><summary>紙上倉規則（程式強制）</summary><div class="detail-body"><p class="muted rule-note">以下係紙上對照組規則。真倉由 Roy 手動決定；VOO 核心定投同衛星個股學習倉分層顯示。</p><div class="kv">
+      <div><span>最多持倉</span>${r.max_positions ?? 3} 隻</div><div><span>單一股票上限</span>${Math.round((r.max_position_pct ?? .25) * 100)}%</div><div><span>現金下限</span>${Math.round((r.min_cash_pct ?? .2) * 100)}%</div>
+      <div><span>最低信心</span>${Math.round((r.min_confidence ?? .75) * 100)}%</div><div><span>每注風險</span>≤ ${Math.round((r.risk_per_trade_pct ?? .02) * 100)}%</div><div><span>每日新倉</span>≤ ${r.max_new_entries_per_day ?? 1}</div>
+      <div><span>攤平／加倉</span>禁止</div><div><span>冷靜期</span>止損後 ${r.cooldown_after_sl_days ?? 5} / 止盈後 ${r.cooldown_after_tp_days ?? 3} 交易日</div><div><span>SL/TP</span>每單預設，觸發自動執行</div>
+      <div><span>手續費模型</span>富途美股固定式：每單約 US$2（佣金 0.99＋平台費 1.00 最低＋交收費；賣出加 TAF）。09-28 前嘅紙上交易用舊 US$1 模型入帳</div></div></div></details>
+    <details class="card detail-card"><summary>Legacy：Hermes 舊模擬倉（HKD 5k，2026-07-08 起，唯讀）</summary><div class="detail-body">
+      <p class="muted">止損只標記從未執行（RKLB 07-16 起跌穿 −10% 仍持有；TSLA 曾 −24.7%）。唔同 Project X 合併計算。</p>
+      ${lpf ? `<p class="section-note">總值 ${PX.usd(lpf.total_value_usd)}（${PX.pct(lpf.total_pnl_pct)}）· 現金 ${PX.usd(lpf.cash_usd)} · ${(lpf.positions || []).map(p => `${PX.esc(p.ticker)} ${p.shares}股 ${PX.pct(p.pnl_pct)}`).join(' · ')}</p>` : ''}
+      <div class="chart">${lhist && lhist.length > 1 ? PX.lineChart([lhist.map(x => x.total_value_usd)], lhist.map(x => x.date), ['#89939c']) : ''}</div></div></details>`;
   PX.enhanceTables(document.getElementById('content'));
 })();
 </script></body></html>

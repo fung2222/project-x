@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0f766e">
+<meta name="theme-color" content="#005d71">
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
-<title>回調位掃描 · Project X</title>
-<link rel="stylesheet" href="css/style.css?v=20261109">
+<title>回調研究 · Project X</title>
+<link rel="stylesheet" href="css/style.css?v=20261109-2">
 </head>
 <body>
 <div id="px-header"></div>
-<main><h1 class="page-title">大型藍籌回調研究</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">大型藍籌回調</h1><p class="page-subtitle">唔追高，等強勢藍籌回到研究區。呢套四條件模型同動能／突破掃描完全分開，命中只係研究起點。</p><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
-<script src="js/px.js"></script>
+<script src="js/px.js?v=20261109-2"></script>
 <script>
 PX.nav();
 (async () => {
@@ -34,33 +34,30 @@ PX.nav();
     : status === 'failed' ? '今次名單不完整，唔好當零命中；主排程 watchdog 會自動重試及告警。' : '初始檔案只表示未跑過，唔代表冇命中。';
   document.getElementById('content').innerHTML = `
     ${d.generated_at ? PX.freshness(d.generated_at, 30, '回調掃描') : ''}
-    <div class="card hero"><h2>🎯 最新掃描狀態 <span class="badge ${statusClass}">${statusText}</span></h2>
-      <p>唔追高，等強勢大型藍籌回調先研究。呢套規則同動能／突破掃描完全分開。</p><p class="hero-note">${stateExplain}</p></div>
-    <div class="stats">
+    <section class="research-banner"><div class="eyebrow">LATEST SCAN</div><div class="section-heading compact"><h2>最新掃描狀態</h2><span class="badge ${statusClass}">${statusText}</span></div><p>${stateExplain}</p></section>
+    <section class="stats" aria-label="回調掃描摘要">
       <div class="stat"><div class="stat-label">數據 bar date</div><div class="stat-value">${PX.esc(d.bar_date || '—')}</div><div class="muted">只用已完成日線</div></div>
       <div class="stat"><div class="stat-label">完整掃描</div><div class="stat-value">${d.scanned ?? 0} / ${d.universe_size ?? 45}</div><div class="muted">失敗 ${d.failure_count ?? failures.length} 隻</div></div>
       <div class="stat"><div class="stat-label">命中</div><div class="stat-value">${status === 'pending' ? '—' : (d.hit_count ?? hits.length)}</div><div class="muted">四條件同時符合</div></div>
       <div class="stat"><div class="stat-label">最近成功</div><div class="stat-value stat-time">${d.last_success_at ? PX.esc(PX.hkt(d.last_success_at)) : '未成功執行'}</div><div class="muted">開始：${d.started_at ? PX.esc(PX.hkt(d.started_at)) : '—'}</div></div>
-    </div>
-    <div class="card"><h2>🔎 今次研究名單</h2>${hits.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>股票</th><th>收市價</th><th>3 個月回報</th><th>離 52 週高位</th><th>價／MA50</th><th>Bar date</th></tr></thead><tbody>${hits.map(x => `<tr><td><b>${PX.esc(x.ticker)}</b></td><td>${PX.usd(x.close)}</td><td class="${PX.cls(x.return_3m_pct)}">${PX.pct(x.return_3m_pct, 1)}</td><td>${PX.pct(x.from_52w_high_pct, 1)}</td><td>${Number(x.price_ma50_ratio).toFixed(2)}</td><td>${PX.esc(x.bar_date)}</td></tr>`).join('')}</tbody></table></div>` : `<div class="empty">${status === 'ok' ? '完整掃描後零命中，唔會為咗有交易而放低標準。' : '未有可顯示嘅完整名單。'}</div>`}
-      <p class="muted section-note">命中只係研究起點，唔係買入建議；呢度唔顯示注碼，實盤前要另計止蝕、可用現金同來回費用。</p></div>
-    ${failures.length ? `<div class="card error-card"><h2>⚠️ 數據失敗（${failures.length}）</h2><p>以下股票未納入完整結果：</p><ul class="failure-list">${failures.map(x => `<li><b>${PX.esc(x.ticker)}</b> — ${PX.esc(x.error)}</li>`).join('')}</ul></div>` : ''}
-    <div class="card"><h2>📏 四條標準（同時符合）</h2><ol class="steps">
+    </section>
+    <section class="card"><div class="section-heading compact"><h2>今次研究名單</h2><span class="section-meta">唔顯示注碼 · 唔係買入建議</span></div>${hits.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>股票</th><th>收市價</th><th>3 個月回報</th><th>離 52 週高位</th><th>價／MA50</th><th>Bar date</th></tr></thead><tbody>${hits.map(x => `<tr><td><b>${PX.esc(x.ticker)}</b></td><td>${PX.usd(x.close)}</td><td class="${PX.cls(x.return_3m_pct)}">${PX.pct(x.return_3m_pct, 1)}</td><td>${PX.pct(x.from_52w_high_pct, 1)}</td><td>${Number(x.price_ma50_ratio).toFixed(2)}</td><td>${PX.esc(x.bar_date)}</td></tr>`).join('')}</tbody></table></div>` : `<div class="empty">${status === 'ok' ? '完整掃描後零命中，唔會為咗有交易而放低標準。' : '未有可顯示嘅完整名單。'}</div>`}<p class="muted section-note">實盤前要另計止蝕、可用現金同來回費用；系統唔會自動落單。</p></section>
+    ${failures.length ? `<section class="card error-card"><h2>數據失敗（${failures.length}）</h2><p>以下股票未納入完整結果：</p><ul class="failure-list">${failures.map(x => `<li><b>${PX.esc(x.ticker)}</b> — ${PX.esc(x.error)}</li>`).join('')}</ul></section>` : ''}
+    <section class="card"><div class="eyebrow">FOUR CONDITIONS</div><h2>四條標準（同時符合）</h2><ol class="steps">
       <li><b>強勢</b>：3 個月（63 個交易日）回報 &gt; ${Number(c.min_3m_return) * 100}%</li>
       <li><b>回調</b>：離 52 週高位 ${Math.abs(Number(c.drop_range[1]) * 100).toFixed(0)}%–${Math.abs(Number(c.drop_range[0]) * 100).toFixed(0)}%</li>
       <li><b>趨勢</b>：MA50 向上（高過 ${c.ma50_slope_lookback} 個交易日前）</li>
-      <li><b>支撐</b>：收市價／MA50 介乎 ${Number(c.ma50_ratio_range[0]).toFixed(2)}–${Number(c.ma50_ratio_range[1]).toFixed(2)}</li></ol></div>
-    <div class="card"><h2>🔄 可靠性流程</h2><ol class="steps">
+      <li><b>支撐</b>：收市價／MA50 介乎 ${Number(c.ma50_ratio_range[0]).toFixed(2)}–${Number(c.ma50_ratio_range[1]).toFixed(2)}</li></ol></section>
+    <details class="card detail-card"><summary>可靠性流程與排程</summary><div class="detail-body"><ol class="steps">
       <li>每個 NYSE 交易日 <b>09:00 ET</b>（開市前 30 分鐘）由主排程觸發，HKT 跟夏冬令時間自動轉換。</li>
       <li>掃描 45 隻藍籌嘅 1 年日線；強制日間執行會剔走未完成嘅當日 bar。</li>
       <li>完整零命中 → 記錄 <code>ok</code> 兼 Telegram 靜默；任何數據失敗 → <code>failed</code>，唔再假裝零命中。</li>
-      <li>有命中先發一次 Telegram；漏跑、失敗會由 watchdog 重試同告警。</li></ol></div>
-    <details class="card"><summary>📋 Universe（45 隻藍籌）</summary><div class="universe-list">
+      <li>有命中先發一次 Telegram；漏跑、失敗會由 watchdog 重試同告警。</li></ol></div></details>
+    <details class="card detail-card"><summary>Universe（45 隻藍籌）</summary><div class="detail-body universe-list">
       <p><b>科技（16）</b>：AAPL MSFT NVDA GOOGL AMZN META AVGO AMD CRM ORCL NOW ADBE INTU QCOM NFLX TSLA</p>
       <p><b>消費（9）</b>：COST WMT MCD PEP KO NKE SBUX HD PG</p><p><b>醫療（7）</b>：LLY UNH JNJ ABBV MRK PFE AMGN</p>
       <p><b>金融（6）</b>：V MA JPM GS BAC MS</p><p><b>工業（7）</b>：GE CAT HON RTX BA DE LMT</p></div></details>
-    <div class="card"><h2>🔍 回測限制</h2><p>5 年回測入面，修正現金及持倉限制後策略約 +51%，同期 SPY 約 +67.6%；參數少少改動就由賺變蝕，未證明有穩定優勢。</p>
-      <p><b>系統價值係風控、紀錄同學習，唔係預測水晶球。</b>主線 VOO 核心定投；衛星個股只用蝕得起嘅資金。</p><a href="https://github.com/fung2222/project-x/blob/main/docs/pullback_backtest.md" target="_blank" rel="noopener">睇回測方法與限制 →</a></div>`;
+    <details class="card detail-card"><summary>回測結果與限制</summary><div class="detail-body"><p>5 年回測入面，修正現金及持倉限制後策略約 +51%，同期 SPY 約 +67.6%；參數少少改動就由賺變蝕，未證明有穩定優勢。</p><p><b>系統價值係風控、紀錄同學習，唔係預測水晶球。</b>主線 VOO 核心定投；衛星個股只用蝕得起嘅資金。</p><p><a href="https://github.com/fung2222/project-x/blob/main/docs/pullback_backtest.md" target="_blank" rel="noopener">睇回測方法與限制 →</a></p></div></details>`;
   PX.enhanceTables(document.getElementById('content'));
 })();
 </script></body></html>

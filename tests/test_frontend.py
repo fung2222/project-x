@@ -50,6 +50,43 @@ class TestFrontendContracts(unittest.TestCase):
         self.assertIn("const pageSize = 20", html)
         self.assertNotIn('href="#"', html)
 
+    def test_consistent_visual_hierarchy_and_cache_versions(self):
+        for page in PAGES:
+            with self.subTest(page=page):
+                html = self.read(page)
+                self.assertIn('class="page-subtitle"', html)
+                self.assertIn('content="#005d71"', html)
+                self.assertIn('css/style.css?v=20261109-2', html)
+                self.assertIn('js/px.js?v=20261109-2', html)
+
+    def test_home_is_a_summary_not_a_duplicate_of_every_page(self):
+        html = self.read("index.html")
+        self.assertIn('class="model-links"', html)
+        self.assertIn('.slice(0, 3)', html)
+        self.assertIn('{compact: true}', html)
+        self.assertNotIn('今日重點', html)
+
+    def test_detailed_evidence_is_preserved_but_collapsed(self):
+        for page in ("opportunities.html", "portfolio.html", "pullback.html"):
+            with self.subTest(page=page):
+                html = self.read(page)
+                self.assertIn('details class="card detail-card"', html)
+                self.assertIn('class="detail-body"', html)
+        self.assertIn('回測結果、手續費影響與限制', self.read("opportunities.html"))
+        self.assertIn('紙上交易紀錄', self.read("portfolio.html"))
+
+    def test_retired_root_files_are_removed(self):
+        retired = (
+            "GROK_BOT_SYSTEM_PROMPT.md", "PROJECT_X_BUILD_SPEC.md",
+            "PROJECT_X_HANDOFF.md", "PROJECT_X_INVESTMENT_PLAN.md",
+            "PROJECT_X_INVESTMENT_PLAN.txt", "PROJECT_X_MANUAL.md",
+            "ProjectX_Portfolio.xlsx", "create_portfolio.py", "run_dashboard.py",
+            "start_server.bat", "market_open_alert.py", "enhanced_indicators.py",
+        )
+        for name in retired:
+            with self.subTest(name=name):
+                self.assertFalse(os.path.exists(os.path.join(ROOT, name)))
+
     def test_pullback_reads_real_state_and_does_not_fake_pending(self):
         html = self.read("pullback.html")
         self.assertIn("PX.json('data/pullback.json')", html)

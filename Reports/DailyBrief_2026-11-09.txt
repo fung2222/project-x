@@ -1,0 +1,24 @@
+📘 每日報告 2026-11-09（開市 23 分鐘）
+🏦 真倉：VOO 1股（-US$16.02）
+🛒 考慮買入 JOBY（Joby Aviation）：建議買 26 股約 US$152（HK$1,195），止蝕 $4.90（-16%），止賺 $12.48（+113%，係之前高位、好遠，唔一定去到）
+　🏷️ 電動空中的士（垂直升降飛行器）
+　💰 營收 US$149M · 增速 +144% · 蝕 US$689M · 毛利率 29% · 市值 US$5.9B · P/S 39.9×
+　（落咗單就話 Hermes：「買咗 JOBY N 股 @價，止蝕…，止賺…」）
+
+⭐ 潛力股（系統揀，唔係保證）
+1. U Unity Software 現價 $53.71：近1個月比納指強 22%、近3個月比納指強 23%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：U Q3 2026 deep dive: AI-driven product momentum and new creator platf…
+　🏷️ 遊戲引擎（開發遊戲用嘅工具）
+　💰 營收 US$2.2B · 增速 +32% · 蝕 US$348M · 毛利率 78% · 市值 US$23.8B · P/S 10.9×
+2. JOBY Joby Aviation 現價 $5.86：近1個月比納指強 22%、近3個月比納指弱 18%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：Where Will Joby Aviation Stock Be in 5 Years?
+　🏷️ 電動空中的士（垂直升降飛行器）
+　💰 營收 US$149M · 增速 +144% · 蝕 US$689M · 毛利率 29% · 市值 US$5.9B · P/S 39.9×
+
+🌍 大市
+美股今日大升：標普 +1.7%、納指 +2.5%。
+恐慌指數 22，偏緊張。
+頭條：［宏觀］Asian stocks steady as AI, Mideast jitters recede; dollar firm on Fed bets - Reuters
+
+🎓 今日學一樣：一隻股票升咗好多唔代表會繼續升，亦唔代表一定跌。我哋只跟預先定好嘅規則做。
+
+真倉由你喺富途自己落單，系統只提醒；情境參考，唔係保證。
+👉 詳情睇網站：https://fung2222.github.io/project-x/

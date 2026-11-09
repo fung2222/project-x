@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-09T22:35:04+08:00",
+ "generated_at": "2026-11-09T22:53:21+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -33,9 +33,9 @@
   },
   "U": {
    "ticker": "U",
-   "text": "近1個月比納指強 22%、近3個月比納指強 23%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：［評級上調］Unity: Q3 Proved Me Wrong (Rating Upgrade)",
+   "text": "近1個月比納指強 22%、近3個月比納指強 23%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：U Q3 2026 deep dive: AI-driven product momentum and new creator platf…",
    "kind": "pick",
-   "at": "2026-11-07T06:00:21+08:00"
+   "at": "2026-11-09T22:53:21+08:00"
   },
   "LYFT": {
    "ticker": "LYFT",
@@ -45,22 +45,28 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +1.4%）｜新聞：Should You Buy VOO Before the Market Rebounds?",
+   "text": "跟大市升（納指 +2.5%）｜新聞：Should You Buy VOO Before the Market Rebounds?",
    "kind": "market",
-   "chg_pct": 1.09,
-   "mkt_chg_pct": 1.45,
+   "chg_pct": 1.65,
+   "mkt_chg_pct": 2.54,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "Should You Buy VOO Before the Market Rebounds?",
    "url": "https://finnhub.io/api/news?id=dfd9270bb98a85c4891cabef20a4552baa537e8e9e6cb89f7557457a6590faf5",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-09T22:35:04+08:00"
+   "at": "2026-11-09T22:53:20+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",
    "text": "近1個月比納指強 32%、近3個月比納指強 3%，趨勢下跌，企喺 50 日平均價之上，業績 11-05｜新聞：［業績］DraftKings Q3 2026 Earnings Call Transcript",
    "kind": "pick",
    "at": "2026-11-06T22:53:14+08:00"
+  },
+  "JOBY": {
+   "ticker": "JOBY",
+   "text": "近1個月比納指強 22%、近3個月比納指弱 18%，趨勢橫行，啱啱帶量升穿 20 日高位｜新聞：Where Will Joby Aviation Stock Be in 5 Years?",
+   "kind": "pick",
+   "at": "2026-11-09T22:53:21+08:00"
   }
  }
 }

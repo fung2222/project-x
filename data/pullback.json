@@ -1,0 +1,17 @@
+{
+  "schema": "pullback_scan_v2",
+  "status": "pending",
+  "started_at": null,
+  "generated_at": null,
+  "last_success_at": null,
+  "strategy": "large_cap_pullback_research",
+  "research_only": true,
+  "bar_date": null,
+  "scanned": 0,
+  "universe_size": 45,
+  "hits": [],
+  "hit_count": 0,
+  "failures": [],
+  "failure_count": 0,
+  "message": "等待主排程第一次完整掃描；呢個狀態唔代表零命中。"
+}

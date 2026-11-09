@@ -199,16 +199,16 @@ class TestTick(unittest.TestCase):
 
     def test_open_runs_once_edt(self):
         self._tick(hkt(2026, 10, 2, 21, 34))
-        self.assertEqual(self.calls, [])
+        self.assertEqual([c for c in self.calls if c[0] == "open"], [])
         self._tick(hkt(2026, 10, 2, 21, 35))
         self._tick(hkt(2026, 10, 2, 21, 36))
-        self.assertEqual(self.calls, [("open", "2026-10-02 09:35")])
+        self.assertEqual([c for c in self.calls if c[0] == "open"], [("open", "2026-10-02 09:35")])
 
     def test_open_after_dst_is_2235_hkt(self):
         self._tick(hkt(2026, 11, 2, 21, 35))
         self.assertEqual(self.calls, [])
         self._tick(hkt(2026, 11, 2, 22, 35))
-        self.assertEqual(self.calls, [("open", "2026-11-02 09:35")])
+        self.assertEqual([c for c in self.calls if c[0] == "open"], [("open", "2026-11-02 09:35")])
 
     def test_friday_second_half_runs_on_saturday_hkt(self):
         self._tick(hkt(2026, 10, 3, 0, 6))  # Sat 00:06 HKT = Fri 12:06 ET

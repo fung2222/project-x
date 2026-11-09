@@ -4,6 +4,7 @@
     python run.py open    [--dry-run] [--force] [--push]   # ET 09:35  (HKT 21:35 EDT / 22:35 EST)
     python run.py daily   [--dry-run] [--force] [--push]   # ET 09:53  (HKT 21:53 EDT / 22:53 EST), push ~10:00 ET
     python run.py hourly  [--dry-run] [--force] [--push]   # ET :06 past 10..16 (alert-only + 1 status/session)
+    python run.py pullback [--dry-run] [--force] [--push]  # ET 09:00; complete zero-hit scans stay Telegram-silent
     python run.py close   [--dry-run] [--force] [--push]   # ET 17:00  (HKT 05:00 EDT / 06:00 EST)
     python run.py morning [--dry-run] [--force] [--push]   # HKT 08:30 Tue-Sat after a US session
     python run.py weekly  [--dry-run] [--force] [--push]   # HKT Monday 09:44
@@ -34,14 +35,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from px import clock, config, guard, schedule, telegram  # noqa: E402
 
-JOBS = ("open", "daily", "hourly", "close", "morning", "weekly", "heatmap")
+JOBS = ("open", "daily", "hourly", "pullback", "close", "morning", "weekly", "heatmap")
 
 
 def _job_fn(job):
-    from px.jobs import open_monitor, daily, hourly, weekly, close, morning
+    from px.jobs import open_monitor, daily, hourly, weekly, close, morning, pullback
     from px import heatmap
     return {"open": open_monitor.run, "daily": daily.run, "hourly": hourly.run, "weekly": weekly.run,
-            "close": close.run, "morning": morning.run, "heatmap": heatmap.run}[job]
+            "pullback": pullback.run, "close": close.run, "morning": morning.run, "heatmap": heatmap.run}[job]
 
 
 def _alert(text):
@@ -92,7 +93,7 @@ def _tick_run(job, slot):
         return "failed"
 
 
-REPORT_JOBS = ("open", "daily", "close", "morning", "weekly")  # multi-source reports: wait out a Yahoo rate limit
+REPORT_JOBS = ("open", "daily", "pullback", "close", "morning", "weekly")  # Yahoo users: wait out a rate-limit cooldown
 
 
 def _realwatch(dry_run):

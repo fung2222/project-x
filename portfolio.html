@@ -7,11 +7,11 @@
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <title>組合 · Project X</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261109">
 </head>
 <body>
 <div id="px-header"></div>
-<main><div id="content"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">組合與風險</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
 <script src="js/px.js"></script>
 <script>
@@ -39,7 +39,7 @@ PX.nav();
     <div class="card"><h2>🧾 紙上交易紀錄</h2><div class="tbl-wrap"><table class="tbl"><tr><th>ID</th><th>日期</th><th>股票</th><th>動作</th><th>股數</th><th>入場</th><th>出場</th><th>費用</th><th>淨 P&L</th><th>原因</th></tr>
       ${trades.map(t => `<tr><td>${PX.esc(t.id)}</td><td>${PX.esc(t.date)}</td><td>${PX.esc(t.ticker)}</td><td>${PX.esc(t.action)}</td><td>${t.shares ?? ''}</td><td>${PX.usd(t.entry_price)}</td><td>${t.exit_price ? PX.usd(t.exit_price) : '—'}</td><td>${t.fee_usd != null ? PX.usd(t.fee_usd) : '—'}</td>
       <td class="${PX.cls(t.net_pnl_usd)}">${t.net_pnl_usd != null ? PX.usd(t.net_pnl_usd) : '—'}</td><td class="muted">${PX.esc((t.reason || t.exit_reason || '').toString().slice(0, 60))}</td></tr>`).join('')}</table></div></div>
-    <div class="card card-soft"><h2>⚙️ 規則（程式強制）</h2><div class="kv">
+    <div class="card card-soft"><h2>⚙️ 紙上倉規則（程式強制）</h2><p class="muted rule-note">以下係紙上對照組規則。真倉由 Roy 手動決定；VOO 核心定投同衛星個股學習倉分層顯示，唔將核心 ETF 當短線訊號。</p><div class="kv">
       <div><span>最多持倉</span>${r.max_positions ?? 3} 隻</div><div><span>單一股票上限</span>${Math.round((r.max_position_pct ?? .25) * 100)}%</div>
       <div><span>現金下限</span>${Math.round((r.min_cash_pct ?? .2) * 100)}%</div><div><span>最低信心</span>${Math.round((r.min_confidence ?? .75) * 100)}%</div>
       <div><span>每注風險</span>≤ ${Math.round((r.risk_per_trade_pct ?? .02) * 100)}%</div><div><span>每日新倉</span>≤ ${r.max_new_entries_per_day ?? 1}</div>
@@ -48,6 +48,7 @@ PX.nav();
     <details class="card"><summary>🗄 Legacy：Hermes 舊模擬倉（HKD 5k，2026-07-08 起，唯讀）</summary>
       <p class="muted" style="margin:8px 0">止損只標記從未執行（RKLB 07-16 起跌穿 −10% 仍持有；TSLA 曾 −24.7%）。唔同 Project X 合併計算。</p>
       ${lpf ? `<div>總值 ${PX.usd(lpf.total_value_usd)}（${PX.pct(lpf.total_pnl_pct)}）· 現金 ${PX.usd(lpf.cash_usd)} · ${(lpf.positions || []).map(p => `${PX.esc(p.ticker)} ${p.shares}股 ${PX.pct(p.pnl_pct)}`).join(' · ')}</div>` : ''}
-      <div class="chart">${lhist && lhist.length > 1 ? PX.lineChart([lhist.map(x => x.total_value_usd)], lhist.map(x => x.date), ['#94a3b8']) : ''}</div></details>`;
+      <div class="chart">${lhist && lhist.length > 1 ? PX.lineChart([lhist.map(x => x.total_value_usd)], lhist.map(x => x.date), ['#64748b']) : ''}</div></details>`;
+  PX.enhanceTables(document.getElementById('content'));
 })();
 </script></body></html>

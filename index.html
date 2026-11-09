@@ -7,11 +7,11 @@
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <title>首頁 · Project X</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261109">
 </head>
 <body>
 <div id="px-header"></div>
-<main><div id="content"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">投資儀表板</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
 <script src="js/px.js"></script>
 <script>
@@ -30,7 +30,7 @@ PX.nav();
     ${PX.realCard(futu, fx, {reasons: rsn})}
     <div class="card"><h2>📌 今日重點</h2>
       <div>🧪 紙上倉（對照組）權益 <b>${PX.usd(a.equity_usd)}</b>（${PX.hkd(a.equity_usd * fx)}）· 總 P&L <b>${PX.pct(a.total_return_pct)}</b> · 現金 ${Number(a.cash_pct || 0).toFixed(1)}%</div>
-      <div style="margin-top:6px">${top.length ? `🚀 今日高潛力 Top ${top.length}：<b>${top.map(x => PX.esc(x.ticker)).join(' · ')}</b>` : '🚀 今日冇名單過晒濾網（唔入場都係決定）'}</div>
+      <div style="margin-top:6px">${top.length ? `🚀 動能／突破研究名單 Top ${top.length}：<b>${top.map(x => PX.esc(x.ticker)).join(' · ')}</b>` : '🚀 今日冇名單過晒濾網（唔入場都係決定）'}</div>
       <div class="muted" style="margin-top:6px">VIX ${mk.vix ?? '—'} ${PX.esc(mk.regime_emoji || '')}${PX.esc(mk.regime || '')} · SPY ${PX.pct(mk.spy_change)} · QQQ ${PX.pct(mk.qqq_change)}</div></div>
     <div class="stats">
       <div class="stat"><div class="stat-label">💰 紙上權益</div><div class="stat-value">${PX.usd(a.equity_usd)}</div><div class="muted">${PX.hkd(a.equity_usd * fx)}（起始 ${PX.usd(a.start_equity_usd)}）</div></div>
@@ -38,8 +38,9 @@ PX.nav();
       <div class="stat"><div class="stat-label">💵 現金</div><div class="stat-value">${PX.usd(a.cash_usd)}</div><div class="muted">${Number(a.cash_pct || 0).toFixed(1)}%（下限 20%）</div></div>
       <div class="stat"><div class="stat-label">🌡️ VIX</div><div class="stat-value">${mk.vix ?? '—'}</div><div class="muted">${PX.esc(mk.regime || '')}</div></div>
     </div>
-    <div class="card"><h2>🚀 高潛力機會 Top 5 <a class="muted" href="opportunities.html">詳情 →</a></h2>
-      <div class="muted">${PX.esc(scan && scan.method || '')}｜${PX.esc(scan && scan.bar_date || '')} 收市數據</div>
+    <div class="card strategy-map"><h2>🧭 兩套研究模型，唔好混用</h2><div class="strategy-grid"><div><b>動能／突破</b><p class="muted">細中型股研究名單；回測未證明優勢，唔係買入訊號。</p><a href="opportunities.html">睇突破模型 →</a></div><div><b>強勢回調</b><p class="muted">45 隻大型藍籌；等 8–18% 回調及 MA50 條件，唔追高。</p><a href="pullback.html">睇回調模型 →</a></div></div></div>
+    <div class="card"><h2>🚀 動能／突破研究 Top 5 <a class="muted" href="opportunities.html">詳情 →</a></h2>
+      <div class="muted">${PX.esc(scan && scan.method || '')}｜${PX.esc(scan && scan.bar_date || '')} 收市數據 · 評分只供排序</div>
       ${top.length ? top.map((x, i) => PX.oppCard(x, i, fx)).join('') : '<div class="empty">今日冇一隻同時過晒趨勢／流動性／R:R 條件</div>'}</div>
     <div class="card"><h2>🧪 紙上持倉（對照組，${pos.length}/3）</h2>${pos.length ? pos.map(p => `
       <div class="position-row"><div><b>${PX.esc(p.ticker)}</b> × ${p.shares} @ ${PX.usd(p.entry_price)}
@@ -49,5 +50,6 @@ PX.nav();
       <div class="muted">綠：紙上權益；灰：SPY 同起點換算。2026-09-13 起（HKD 10k book）。</div></div>
     <div class="card"><h2>📰 最新報告 <a class="muted" href="reports.html">全部 →</a></h2>
       ${reports.length ? reports.map(r => `<div><a href="data/${PX.esc(r.file)}">${PX.esc(r.date)} ${PX.esc(r.kind_zh || r.kind)}</a> <span class="muted">${PX.esc(r.summary || '')}</span></div>`).join('') : '<div class="empty">今晚開始累積</div>'}</div>`;
+  PX.enhanceTables(document.getElementById('content'));
 })();
 </script></body></html>

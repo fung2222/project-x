@@ -1,9 +1,11 @@
-# Project X — AI 美股模擬投資系統（合併版 v3）
+# Project X — 美股學習、模擬與風控系統（v3.1）
 
 網站：https://fung2222.github.io/project-x/ ・ Repo：`fung2222/project-x`（2026-09-28 由 `project-x-minimax` 改名；舊網址自動跳轉，見 `docs/HERMES_HANDOVER.md §9`）
 
 - **紙上組合**：HKD 10,000 ≈ US$1,280（2026-09-13 起），最多 3 隻、每隻 ≤25%、現金 ≥20%、信心 ≥0.75、每筆預設 SL/TP 並自動紙上執行、富途真實手續費、FX 7.8。
-- **核心產品**：高潛力機會掃描 Top 5（入場區、止損、目標、R:R、股數、HKD、點解）。⚠️ 回測未證明有優勢，只係研究名單，唔係買入訊號（`docs/AUDIT.md §6`）。
+- **動能／突破研究**：Top 5 只係研究名單（入場區、止損、目標、R:R、模擬注碼）。⚠️ 回測未證明有優勢，唔係買入訊號（`docs/AUDIT.md §6`）。
+- **大型藍籌回調研究**：45 隻藍籌、四條件、09:00 ET 主排程；完整零命中同數據失敗分開記錄（`docs/pullback_plan.md`）。
+- **核心／衛星分層**：VOO 核心長線定投同其他個股衛星學習倉分開顯示；系統永遠唔會自動落真倉。
 - **推送**：Telegram（開市、每日、盤中 alert、收市＋圖、隔夜複盤、週報），全部 code 生成，**冇 LLM**。真錢由 Roy 自己喺富途落單。
 - Mag7 觀察池：retired by Roy 2026-09-28。
 
@@ -21,9 +23,9 @@
 ```bash
 python run.py status                 # 設定、secret 有冇（唔顯示數值）、今日排程
 python run.py tick                   # cron 每分鐘跑（到期 job＋watchdog）
-python run.py open|daily|hourly|close|morning|weekly [--dry-run] [--force] [--push]
+python run.py open|daily|hourly|pullback|close|morning|weekly [--dry-run] [--force] [--push]
 python run.py scan                   # 印今日 Top 5（唔 send）
-python -m unittest discover -s tests # 50 個離線測試
+python -m unittest discover -s tests # 離線單元測試
 ```
 Secrets 只放環境變數／`.env`（見 `.env.example`），永遠唔好 commit。
 

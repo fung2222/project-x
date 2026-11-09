@@ -7,11 +7,11 @@
 <link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <title>信號 · Project X</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261109">
 </head>
 <body>
 <div id="px-header"></div>
-<main><div id="content"><div class="loading">載入中…</div></div></main>
+<main><h1 class="page-title">核心與次要股信號</h1><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
 <div id="px-footer"></div>
 <script src="js/px.js"></script>
 <script>
@@ -30,12 +30,13 @@ PX.nav();
   const v3 = rep.v3 || {};
   document.getElementById('content').innerHTML = `
     ${PX.freshness(rep.timestamp, 30, '每日分析')}
-    <div class="card card-soft"><h2>📊 核心＋次要股信號</h2><div class="muted">${PX.esc(rep.data_note || '')}｜買入門檻：信心 ≥ ${Math.round(((rep.guardrail || {}).min_confidence || 0.75) * 100)}%，仲要過晒 gates（setup、成交量、趨勢、組合限制、冷靜期）。</div></div>
+    <div class="card card-soft"><h2>📊 核心＋次要股信號</h2><div class="muted">${PX.esc(rep.data_note || '')}｜買入門檻：信心 ≥ ${Math.round(((rep.guardrail || {}).min_confidence || 0.75) * 100)}%，仲要過晒 gates（setup、成交量、趨勢、組合限制、冷靜期）。信號係規則輸出，唔保證升跌。</div></div>
     <div class="card"><div class="tbl-wrap"><table class="tbl">${head}${(rep.signals || []).map(row).join('')}</table></div></div>
     ${(rep.opportunity_signals || []).length ? `<div class="card"><h2>🔎 舊機會名單信號（RSI 模型）</h2><div class="tbl-wrap"><table class="tbl">${head}${rep.opportunity_signals.map(row).join('')}</table></div></div>` : ''}
     ${v3.teaching ? `<div class="card"><h2>🎓 今日教學</h2><p>${PX.esc(v3.teaching)}</p></div>` : ''}
     ${v3.scenarios ? `<div class="card"><h2>🔮 情境（唔係保證）</h2><p><b>基準</b>：${PX.esc(v3.scenarios.base)}</p><p><b>樂觀</b>：${PX.esc(v3.scenarios.bull)}</p><p><b>悲觀</b>：${PX.esc(v3.scenarios.bear)}</p>
       ${(v3.invalidation || []).length ? `<p><b>失效條件</b>：${v3.invalidation.map(PX.esc).join('；')}</p>` : ''}</div>` : ''}
     ${v3.gates ? `<div class="card"><h2>🚦 專業過濾（gates）</h2>${(v3.decisions && v3.decisions.skipped || []).map(x => `<div>${PX.esc(x.ticker)} ${x.confidence}% → ${PX.esc(x.why)}</div>`).join('') || '<div class="empty">今日冇 BUY 候選</div>'}</div>` : ''}`;
+  PX.enhanceTables(document.getElementById('content'));
 })();
 </script></body></html>

@@ -261,7 +261,7 @@ def check(now=None, runner=None, alert=None, dry_run=False):
 def health_line(session_et, now=None, exclude=()):
     """One line: status of every expected ET slot of a US session + the next morning/weekly slot."""
     parts, bad = [], 0
-    for job in ("open", "daily", "hourly", "close"):
+    for job in ("pullback", "open", "daily", "hourly", "close"):
         if job in exclude:
             continue
         slots = expected_slots(job, session_et)

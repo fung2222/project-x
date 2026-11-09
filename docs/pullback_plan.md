@@ -1,54 +1,45 @@
-# 回調位掃描計劃（Roy 學習用）
+# 回調位掃描：執行與可靠性設計
 
-## 背景
+## 定位
 
-Roy 係投資新手，主線係 VOO（標普 500 ETF）每月定投。佢想用細錢（每次 HK$1,000–1,500）學「回調買入」——即係唔追高，等強勢股唞氣（回調）先買。
+呢個係獨立嘅大型藍籌回調研究工具，唔係「核心產品」，亦唔係買入訊號。佢同機會掃描嘅動能／突破模型係兩套唔同策略；突破名單唔會被包裝成回調買位。VOO 核心長線定投同其他衛星個股學習倉分開理解。
 
-Roy 明確拒絕「突破追高」（例如 Unity 三日升 21% 嗰種），因為佢唔想賭，想要低風險嘅入場位。
+## 規則（保持原參數）
 
-## 目標
+一隻股票要同時符合四條：
 
-每日自動掃描大型優質藍籌，搵出「強勢 + 回調 10–15%」嘅靚買位，有先通知 Roy，冇就靜靜地唔出聲。
+1. **強勢**：最近 63 個交易日回報 > 0%。
+2. **回調**：最新收市價離 52 週日線高位 −8% 至 −18%。
+3. **趨勢**：MA50 高過 10 個交易日前。
+4. **支撐**：收市價／MA50 介乎 1.00–1.05。
 
-## 整個流程
+Universe 維持 45 隻大型藍籌；全部名單及門檻以 `config/settings.json` 嘅 `pullback` 為單一來源。回測未證明穩定優勢，唔應為改善歷史數字而調參。
 
-1. 每週一至五 HKT 22:00（美股開市前 30 分鐘），Hermes cron 觸發
-2. cron 跑 `pullback_scan.sh`（wrapper，用 project-x 嘅 venv python）
-3. venv python 跑 `pullback_scan.py`（掃描邏輯）
-4. script 用 yfinance 攞 45 隻藍籌嘅 1 年歷史數據
-5. 篩選符合三條標準嘅股
-6. 有命中 → stdout 輸出 → cron 送到 Roy 嘅 Telegram DM
-7. 冇命中 → 輸出到 stderr → cron 唔 send（watchdog 模式，靜靜地）
+## 主排程
 
-## 標準（靚位定義）
+- 唯一入口：`python run.py pullback`；部署上由每分鐘 `ops/hermes/px_job.sh tick` 自動觸發。
+- 時間：每個 NYSE 交易日 **09:00 ET**，即常規開市前 30 分鐘；HKT 會跟 DST 自動轉換，唔再寫死 22:00。
+- 假期由 `px/clock.py` 處理；重試窗口至 10:30 ET，最多三次嘗試，失敗由現有 watchdog 告警。
+- 舊外部 `pullback_scan.sh` cron 應停用，避免雙重掃描或重複通知。`scripts/pullback_scan.py` 只保留為相容入口。
 
-一隻股要同時符合三條：
+## 狀態語義
 
-1. **強勢**：3 個月回報 > 0%（仲係升緊，唔係一路跌嘅垃圾）
-2. **回調**：離 52 週高位跌咗 8%–18%（唞氣，唔係接刀）
-3. **支撐**：現價 / MA50 喺 0.95–1.05（喺 50 日平均線支撐位附近）
+| 情況 | 網站／ledger | Telegram |
+|---|---|---|
+| 完整掃描、有命中 | `ok`，寫入命中及 bar date | 發送一次，有 duplicate guard |
+| 完整掃描、零命中 | `ok`，`hit_count: 0` | 靜默 |
+| 任何股票數據不足、舊 bar 或請求失敗 | `failed`，列明失敗股票；今次唔當完整名單 | watchdog 重試／告警 |
+| 從未執行 | `pending` | 唔當零命中 |
+| 通知失敗 | `telegram_failed` | watchdog 重試 |
 
-## Universe（45 隻藍籌）
+每次結果寫入 `data/pullback.json`，包括開始／完成時間、最近成功時間、預期及實際 bar date、掃描數、命中數、失敗清單同規則。日間強制執行會剔走未完成嘅當日 bar。
 
-- 科技（16）：AAPL, MSFT, NVDA, GOOGL, AMZN, META, AVGO, AMD, CRM, ORCL, NOW, ADBE, INTU, QCOM, NFLX, TSLA
-- 消費（9）：COST, WMT, MCD, PEP, KO, NKE, SBUX, HD, PG
-- 醫療（7）：LLY, UNH, JNJ, ABBV, MRK, PFE, AMGN
-- 金融（6）：V, MA, JPM, GS, BAC, MS
-- 工業（7）：GE, CAT, HON, RTX, BA, DE, LMT
+## 驗證
 
-## 檔案位置
+```bash
+python run.py pullback --dry-run
+python -m unittest tests.test_pullback tests.test_schedule
+python run.py status
+```
 
-- 掃描邏輯：`/opt/data/project-x/scripts/pullback_scan.py`
-- Cron wrapper：`/opt/data/profiles/gushen/scripts/pullback_scan.sh`
-- Cron job：job_id `26c47646dcaf`（schedule `0 22 * * 1-5`，timezone `Asia/Hong_Kong`，`no_agent` 模式）
-
-## 設計考慮
-
-- **no_agent watchdog**：唔經 LLM，直接跑 script，stdout 有嘢先 deliver，空就唔 send（慳 token + 唔騷擾 Roy）
-- **HKT 22:00**：美股開市前 30 分鐘，Roy 見到靚位可以「今晚開市」準備
-- **8–18% 回調**：太淺（<8%）係「高位」唔係「回調」，太深（>18%）係「接刀」唔係「回調」
-- **只掃大型藍籌**：Roy 要低風險，所以排除小型動量股（嗰啲太波動）
-
-## 現況
-
-2026-11-09 建立，當日測試「今日冇靚回調位」（市場兩極：防禦股喺高位、科技股接刀，中間健康回調位暫缺）。
+正式部署後先由主排程產生真實結果；repository 入面嘅 `pending` 檔只係初始狀態，唔係偽造掃描。

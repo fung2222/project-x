@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Project X job wrapper for Hermes (Linux). No LLM involved.
 #   ops/hermes/px_job.sh tick            # every minute from cron (recommended; runs due jobs + watchdog)
-#   ops/hermes/px_job.sh <job> [args]    # open|daily|hourly|close|morning|weekly|check|status|tgcheck|scan
+#   ops/hermes/px_job.sh <job> [args]    # open|daily|hourly|pullback|close|morning|weekly|check|status|tgcheck|scan
 # Env (all optional):
 #   PX_HOME     repo clone            (default /opt/data/project-x)
 #   PX_VENV     python venv           (default $PX_HOME/.venv)
@@ -20,7 +20,7 @@ LOG="$LOG_DIR/$(date +%Y-%m-%d)_${JOB}.log"
 cd "$PX_HOME" || { echo "[px_job] cannot cd $PX_HOME" >&2; exit 1; }
 
 case "$JOB" in
-  open|daily|hourly|close|morning|weekly|check|tick) PUSH="--push" ;;
+  open|daily|hourly|pullback|close|morning|weekly|check|tick) PUSH="--push" ;;
   *) PUSH="" ;;
 esac
 

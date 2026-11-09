@@ -18,6 +18,8 @@
     "min_cash_pct": 0.2,
     "risk_per_trade_pct": 0.02,
     "default_fee_usd": 2.0,
+    "core_etfs": ["VOO"],
+    "_allocation_note": "VOO 係核心長線定投；其他個股係衛星學習倉。25% 單注上限及 2% 每注風險適用於衛星新倉，核心 ETF 唔當短線交易訊號。",
     "near_sl_alert_pct": 2.0,
     "big_drop_alert_pct": 5.0,
     "intraday_watch": {
@@ -367,6 +369,13 @@
         "16:50",
         "23:59"
       ]
+    },
+    "pullback": {
+      "time": "09:00",
+      "window": [
+        "08:30",
+        "09:30"
+      ]
     }
   },
   "schedule_hkt": {
@@ -529,6 +538,23 @@
       "LAES": "半導體同量子安全晶片"
     }
   },
+  "pullback": {
+    "_comment": "Large-cap pullback research scan (px/jobs/pullback.py -> data/pullback.json). Existing thresholds preserved. Any ticker failure makes the run incomplete/failed; zero hits after a complete scan is ok and Telegram-silent.",
+    "research_only": true,
+    "history_period": "1y",
+    "min_bars": 70,
+    "min_3m_return": 0.0,
+    "drop_range": [-0.18, -0.08],
+    "ma50_ratio_range": [1.0, 1.05],
+    "ma50_slope_lookback": 10,
+    "universe": [
+      "AAPL", "MSFT", "NVDA", "GOOGL", "AMZN", "META", "AVGO", "AMD", "CRM", "ORCL", "NOW", "ADBE", "INTU", "QCOM", "NFLX", "TSLA",
+      "COST", "WMT", "MCD", "PEP", "KO", "NKE", "SBUX", "HD", "PG",
+      "LLY", "UNH", "JNJ", "ABBV", "MRK", "PFE", "AMGN",
+      "V", "MA", "JPM", "GS", "BAC", "MS",
+      "GE", "CAT", "HON", "RTX", "BA", "DE", "LMT"
+    ]
+  },
   "schedule": {
     "_comment": "MASTER push schedule. ET jobs run on NYSE trading days only (px/clock.py holiday + early-close calendar). HKT jobs: morning = after a completed US session; weekly = every Monday HKT. Cron lines for Hermes: docs/HERMES_HANDOVER.md §3. `python run.py check` (watchdog) re-runs missed/failed slots inside rerun windows, else sends ONE alert.",
     "open": {
@@ -563,6 +589,15 @@
       "days": "trading",
       "grace_min": 20,
       "rerun_minutes": 50
+    },
+    "pullback": {
+      "tz": "ET",
+      "times": [
+        "09:00"
+      ],
+      "days": "trading",
+      "grace_min": 20,
+      "rerun_until": "10:30"
     },
     "close": {
       "tz": "ET",

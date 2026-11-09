@@ -38,15 +38,17 @@ MA50_RANGE = (0.95, 1.05)  # 價 / MA50 喺支撐位附近
 
 def scan():
     hits = []
+    failed = []
     for t in UNIVERSE:
         try:
             h = yf.Ticker(t).history(period='1y')
             if len(h) < 70:
+                failed.append(t)
                 continue
             c = h['Close']
             last = float(c.iloc[-1])
             ret_3m = last / float(c.iloc[-63]) - 1
-            high52 = float(c.max())
+            high52 = float(h['High'].max())
             drop = last / high52 - 1
             ma50 = float(c.rolling(50).mean().iloc[-1])
             ratio_ma50 = last / ma50
@@ -54,15 +56,21 @@ def scan():
                     and MA50_RANGE[0] <= ratio_ma50 <= MA50_RANGE[1]):
                 hits.append((t, last, ret_3m * 100, drop * 100, ratio_ma50))
         except Exception:
+            failed.append(t)
             continue
-    return hits
+    return hits, failed
 
 
 if __name__ == '__main__':
-    hits = scan()
-    if not hits:
+    hits, failed = scan()
+    lines = []
+    if failed:
+        lines.append(f'⚠️ 掃描數據不完整：{len(failed)} 隻失敗（{", ".join(failed)}）')
+    if hits:
+        lines.append('今日靚回調位（強勢 + 回調 10-15%）：')
+        for t, last, r3, drop, r50 in hits:
+            lines.append(f'• {t}  ${last:.2f} ｜ 3月 {r3:+.0f}% ｜ 離高 {drop:.0f}% ｜ 價/MA50 {r50:.2f}')
+    if lines:
+        print('\n'.join(lines))
+    else:
         print('今日冇靚回調位', file=sys.stderr)
-        sys.exit(0)
-    print('今日靚回調位（強勢 + 回調 10-15%）：')
-    for t, last, r3, drop, r50 in hits:
-        print(f'• {t}  ${last:.2f} ｜ 3月 {r3:+.0f}% ｜ 離高 {drop:.0f}% ｜ 價/MA50 {r50:.2f}')

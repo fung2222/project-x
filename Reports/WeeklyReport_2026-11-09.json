@@ -1,0 +1,69 @@
+{
+  "type": "weekly_report",
+  "week_start": "2026-11-02",
+  "week_end": "2026-11-09",
+  "generated": "2026-11-09T09:44:02.332465+08:00",
+  "market": {
+    "vix": 25.64,
+    "regime": "謹慎市場",
+    "spy_price": 735.29,
+    "qqq_price": 656.1
+  },
+  "real": {
+    "summary": {
+      "n_open": 1,
+      "equity_usd": 1252.8,
+      "cash_usd": 576.81,
+      "unrealized_usd": -27.2,
+      "realized_usd": 0.0,
+      "return_pct": -2.13,
+      "n_closed": 0,
+      "n_wins": 0,
+      "win_rate_pct": null,
+      "real_start_date": "2026-10-26"
+    },
+    "three_way": {
+      "since": "2026-10-26",
+      "real_pct": -2.13,
+      "real_usd": -27.2,
+      "paper_pct": -3.03,
+      "paper_base_date": "2026-10-23",
+      "qqq_pct": -6.86,
+      "spy_pct": -3.25,
+      "n_closed": 0,
+      "n_wins": 0,
+      "win_rate_pct": null
+    }
+  },
+  "account": {
+    "equity_usd": 1236.73,
+    "cash_usd": 921.84,
+    "cash_pct": 74.54,
+    "realized_pnl_usd": -27.63,
+    "unrealized_pnl_usd": -11.51,
+    "total_pnl_usd": -43.27,
+    "total_return_pct": -3.38
+  },
+  "spy_return_since_rebase_pct": -3.79,
+  "trades": [],
+  "week_summary": {
+    "days_analyzed": 5,
+    "buy_signals": 0,
+    "hold_signals": 45,
+    "sell_signals": 0
+  },
+  "signal_hit_rate_sample": {
+    "total_signals": 38,
+    "hits": 16,
+    "partials": 13,
+    "misses": 9,
+    "neutrals": 9,
+    "hit_rate_pct": 42.1,
+    "partial_rate_pct": 34.2,
+    "note": "從 2026-07-07 開始實時收集",
+    "miss_rate_pct": 23.7,
+    "label": "信號命中率樣本（唔係實際交易筆數）"
+  },
+  "telegram_ok": true,
+  "engine": "px v3-core"
+}

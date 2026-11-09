@@ -32,15 +32,16 @@ document.getElementById('content').innerHTML = `
 <li>週一至五 HKT 22:00（美股開市前 30 分鐘）cron 觸發</li>
 <li>cron 跑 wrapper .sh → 用 project-x venv python 跑 pullback_scan.py</li>
 <li>script 用 yfinance 攞 45 隻藍籌 1 年數據</li>
-<li>篩選符合三條標準嘅股</li>
+<li>篩選符合四條標準嘅股</li>
 <li>有命中 → stdout 送到 Roy Telegram；冇命中 → stderr → 唔 send（watchdog）</li>
 </ol></div>
 
-<div class="card"><h2>📏 標準（三條同時符合）</h2>
+<div class="card"><h2>📏 標準（四條同時符合）</h2>
 <ol style="padding-left:18px">
 <li><b>強勢</b>：3 個月回報 &gt; 0%</li>
-<li><b>回調</b>：離 52 週高位跌 8%–18%</li>
-<li><b>支撐</b>：現價 / MA50 喺 0.95–1.05</li>
+<li><b>回調</b>：離 52 週高位跌 8%–18%（高位用日線 High 計）</li>
+<li><b>趨勢</b>：MA50 向上（現值高過 10 日前）</li>
+<li><b>支撐</b>：收市價企穩 MA50 之上（現價 / MA50 介乎 1.0–1.05）</li>
 </ol></div>
 
 <div class="card"><h2>📋 Universe（45 隻藍籌）</h2>

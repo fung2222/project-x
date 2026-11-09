@@ -33,7 +33,7 @@ UNIVERSE = [
 MIN_3M = 0.0          # 3 個月仲係升（強勢）
 LO_DROP = -0.18       # 離高位最多跌 18%（唔好跌到接刀）
 HI_DROP = -0.08       # 離高位最少跌 8%（唔好太淺）
-MA50_RANGE = (0.95, 1.05)  # 價 / MA50 喺支撐位附近
+MA50_RANGE = (1.0, 1.05)  # 收市價企穩喺 MA50 之上（>1）但唔離太遠
 
 
 def scan():
@@ -51,9 +51,11 @@ def scan():
             high52 = float(h['High'].max())
             drop = last / high52 - 1
             ma50 = float(c.rolling(50).mean().iloc[-1])
+            ma50_prev = float(c.rolling(50).mean().iloc[-11])
+            ma50_up = ma50 > ma50_prev
             ratio_ma50 = last / ma50
             if (ret_3m > MIN_3M and LO_DROP <= drop <= HI_DROP
-                    and MA50_RANGE[0] <= ratio_ma50 <= MA50_RANGE[1]):
+                    and ma50_up and MA50_RANGE[0] <= ratio_ma50 <= MA50_RANGE[1]):
                 hits.append((t, last, ret_3m * 100, drop * 100, ratio_ma50))
         except Exception:
             failed.append(t)

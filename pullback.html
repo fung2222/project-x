@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>回調位掃描 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><div id="content"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+PX.setUpdated('回調位掃描');
+document.getElementById('content').innerHTML = `
+<div class="card hero"><h2>🎯 回調位掃描計劃</h2><p>Roy 學習用：唔追高，等強勢股唞氣（回調）先買。</p></div>
+
+<div class="card"><h2>📖 背景</h2>
+<p>Roy 係投資新手，主線 <b>VOO（標普 500 ETF）</b>每月定投。想用細錢（每次 HK$1,000–1,500）學「回調買入」——唔追高，等強勢股唞氣先買。</p>
+<p>明確拒絕「突破追高」（例：Unity 三日升 21% 嗰種），因為唔想賭，想要低風險嘅入場位。</p></div>
+
+<div class="card"><h2>🎯 目標</h2>
+<p>每日自動掃描大型藍籌，搵「<b>強勢 + 回調 10–15%</b>」嘅靚位，有先通知，冇就靜靜地。</p></div>
+
+<div class="card"><h2>🔄 流程</h2>
+<ol style="padding-left:18px">
+<li>週一至五 HKT 22:00（美股開市前 30 分鐘）cron 觸發</li>
+<li>cron 跑 wrapper .sh → 用 project-x venv python 跑 pullback_scan.py</li>
+<li>script 用 yfinance 攞 45 隻藍籌 1 年數據</li>
+<li>篩選符合三條標準嘅股</li>
+<li>有命中 → stdout 送到 Roy Telegram；冇命中 → stderr → 唔 send（watchdog）</li>
+</ol></div>
+
+<div class="card"><h2>📏 標準（三條同時符合）</h2>
+<ol style="padding-left:18px">
+<li><b>強勢</b>：3 個月回報 &gt; 0%</li>
+<li><b>回調</b>：離 52 週高位跌 8%–18%</li>
+<li><b>支撐</b>：現價 / MA50 喺 0.95–1.05</li>
+</ol></div>
+
+<div class="card"><h2>📋 Universe（45 隻藍籌）</h2>
+<p><b>科技（16）</b>：AAPL MSFT NVDA GOOGL AMZN META AVGO AMD CRM ORCL NOW ADBE INTU QCOM NFLX TSLA</p>
+<p><b>消費（9）</b>：COST WMT MCD PEP KO NKE SBUX HD PG</p>
+<p><b>醫療（7）</b>：LLY UNH JNJ ABBV MRK PFE AMGN</p>
+<p><b>金融（6）</b>：V MA JPM GS BAC MS</p>
+<p><b>工業（7）</b>：GE CAT HON RTX BA DE LMT</p></div>
+
+<div class="card"><h2>💡 設計考慮</h2>
+<ul style="padding-left:18px">
+<li><b>no_agent watchdog</b>：唔經 LLM，有嘢先 send，慳 token 唔騷擾</li>
+<li><b>22:00</b>：開市前，Roy 可即晚準備</li>
+<li><b>8–18%</b>：太淺係高位、太深係接刀</li>
+<li><b>只掃大型藍籌</b>：低風險，排除小型動量股</li>
+</ul></div>
+
+<div class="card card-soft"><h2>📍 現況</h2>
+<p>2026-11-09 建立，當日測試「冇靚位」（市場兩極）。</p></div>`;
+</script></body></html>

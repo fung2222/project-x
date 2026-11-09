@@ -21,8 +21,8 @@ const PX = {
     return age > tol ? `<div class="fresh-warn">⚠️ ${label}已經 ${Math.round(age)} 小時冇更新（${PX.esc(iso)}）— 可能漏跑，請睇 🩺 系統健康</div>` : '';
   },
   nav() {
-    const pages = [['index.html','🏠','首頁'],['heatmap.html','🗺','熱力圖'],['opportunities.html','🚀','機會掃描'],['signals.html','📊','信號'],
-                   ['portfolio.html','💼','組合'],['reports.html','📰','報告'],['learn.html','📚','學習']];
+    const pages = [['index.html','🏠','首頁'],['opportunities.html','🚀','機會掃描'],['signals.html','📊','信號'],
+                   ['portfolio.html','💼','組合'],['reports.html','📰','報告'],['learn.html','📚','學習'],['pullback.html','🎯','回調位']];
     const cur = location.pathname.split('/').pop() || 'index.html';
     document.getElementById('px-header').innerHTML = `
       <header><div class="header-inner"><div class="logo"><img src="img/icon-32.svg" width="28" height="28" alt="PX"><span>Project X</span></div>

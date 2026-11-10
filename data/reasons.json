@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-10T06:00:20+08:00",
+ "generated_at": "2026-11-10T22:35:03+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "冇特別新聞，似係跟大市升（納指 +3.5%）",
-   "kind": "market",
-   "chg_pct": 2.35,
-   "mkt_chg_pct": 3.54,
+   "text": "窄幅上落，冇特別新聞",
+   "kind": "flat",
+   "chg_pct": -0.55,
+   "mkt_chg_pct": -0.93,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": null,
    "url": null,
    "news_source": null,
-   "at": "2026-11-10T06:00:03+08:00"
+   "at": "2026-11-10T22:35:03+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

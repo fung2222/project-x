@@ -7184,6 +7184,27 @@
   "last_at": "2026-11-09T22:48:02+08:00",
   "detail": "outside pullback window ['08:30', '09:30'] ET"
  },
+ "pullback|2026-11-10T22:00+08:00": {
+  "job": "pullback",
+  "slot_hkt": "2026-11-10T22:00+08:00",
+  "slot_local": "2026-11-10 09:00 ET",
+  "attempts": 1,
+  "history": [
+   {
+    "at": "2026-11-10T22:04:01+08:00",
+    "status": "running",
+    "via": "tick"
+   },
+   {
+    "at": "2026-11-10T22:04:18+08:00",
+    "status": "failed",
+    "via": "tick"
+   }
+  ],
+  "status": "failed",
+  "last_at": "2026-11-10T22:04:18+08:00",
+  "detail": "45 ticker data failures"
+ },
  "weekly|2026-10-05T09:44+08:00": {
   "job": "weekly",
   "slot_hkt": "2026-10-05T09:44+08:00",

@@ -3002,19 +3002,19 @@
           ]
         }
       },
-      "runs": 6,
+      "runs": 7,
       "last_prices": {
-        "RXRX": 3.475,
-        "AI": 11.715
+        "RXRX": 3.55,
+        "AI": 11.83
       },
       "last_real_prices": {
-        "VOO": 687.74
+        "VOO": 689.43
       },
       "last_regime": "NORMAL",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-11T04:06:04+08:00",
+      "last_run": "2026-11-11T05:06:03+08:00",
       "status": "ok"
     }
   }

@@ -7188,7 +7188,7 @@
   "job": "pullback",
   "slot_hkt": "2026-11-10T22:00+08:00",
   "slot_local": "2026-11-10 09:00 ET",
-  "attempts": 1,
+  "attempts": 2,
   "history": [
    {
     "at": "2026-11-10T22:04:01+08:00",
@@ -7199,11 +7199,21 @@
     "at": "2026-11-10T22:04:18+08:00",
     "status": "failed",
     "via": "tick"
+   },
+   {
+    "at": "2026-11-10T22:20:02+08:00",
+    "status": "running",
+    "via": "watchdog"
+   },
+   {
+    "at": "2026-11-10T22:20:08+08:00",
+    "status": "ok",
+    "via": "watchdog"
    }
   ],
-  "status": "failed",
-  "last_at": "2026-11-10T22:04:18+08:00",
-  "detail": "45 ticker data failures"
+  "status": "ok",
+  "last_at": "2026-11-10T22:20:08+08:00",
+  "detail": "complete scan; zero hits (Telegram silent)"
  },
  "weekly|2026-10-05T09:44+08:00": {
   "job": "weekly",

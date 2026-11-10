@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
-  "status": "failed",
-  "started_at": "2026-11-10T22:04:01+08:00",
-  "generated_at": "2026-11-10T22:04:01+08:00",
-  "last_success_at": null,
+  "status": "ok",
+  "started_at": "2026-11-10T22:20:02+08:00",
+  "generated_at": "2026-11-10T22:20:02+08:00",
+  "last_success_at": "2026-11-10T22:20:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -19,193 +19,14 @@
     "ma50_slope_lookback": 10
   },
   "hits": [],
-  "failures": [
-    {
-      "ticker": "AAPL",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "MSFT",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "NVDA",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "GOOGL",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "AMZN",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "META",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "AVGO",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "AMD",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "CRM",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "ORCL",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "NOW",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "ADBE",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "INTU",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "QCOM",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "NFLX",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "TSLA",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "COST",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "WMT",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "MCD",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "PEP",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "KO",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "NKE",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "SBUX",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "HD",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "PG",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "LLY",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "UNH",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "JNJ",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "ABBV",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "MRK",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "PFE",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "AMGN",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "V",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "MA",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "JPM",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "GS",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "BAC",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "MS",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "GE",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "CAT",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "HON",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "RTX",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "BA",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "DE",
-      "error": "ValueError: no price history"
-    },
-    {
-      "ticker": "LMT",
-      "error": "ValueError: no price history"
-    }
-  ],
-  "scanned": 0,
+  "failures": [],
+  "scanned": 45,
   "universe_size": 45,
   "bar_date": "2026-11-09",
-  "bar_dates": [],
+  "bar_dates": [
+    "2026-11-09"
+  ],
   "hit_count": 0,
-  "failure_count": 45,
-  "message": "數據不完整；今次結果不視為完整名單，watchdog 會重試"
+  "failure_count": 0,
+  "message": "完整掃描完成"
 }

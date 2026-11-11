@@ -3094,19 +3094,19 @@
       "entry": null
     },
     "hourly": {
-      "runs": 1,
+      "runs": 2,
       "last_prices": {
-        "RXRX": 3.578,
-        "AI": 11.955
+        "RXRX": 3.595,
+        "AI": 12.1811
       },
       "last_real_prices": {
-        "VOO": 695.15
+        "VOO": 697.125
       },
       "last_regime": "NORMAL",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-11T23:06:03+08:00",
+      "last_run": "2026-11-12T00:06:03+08:00",
       "status": "ok"
     }
   }

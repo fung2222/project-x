@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#005d71">
+<link rel="icon" type="image/svg+xml" href="img/icon-32.svg">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<title>師徒模式 · Project X</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="px-header"></div>
+<main><h1 class="page-title">師徒模式</h1><p class="page-subtitle">師傅（古神）教三式，徒弟（Roy）用細錢實戰，記低每一注、學每一課。三式只計你嘅衛星學習倉，唔包括 VOO 核心定投。</p><div id="content" tabindex="-1"><div class="loading">載入中…</div></div></main>
+<div id="px-footer"></div>
+<script src="js/px.js"></script>
+<script>
+PX.nav();
+PX.setUpdated('師徒模式');
+document.getElementById('content').innerHTML = `
+<div class="content-grid">
+  <section class="card"><div class="eyebrow">第一式 · PULLBACK</div><h2>回調買入</h2><p class="muted">強勢股唞氣先買，唔追高。</p>
+    <div class="kv"><div><span>幾時出招</span>3 個月仲係升 ＋ 離 52 週高位跌 8–18% ＋ 企穩 MA50 之上</div>
+    <div><span>止蝕止賺</span>止蝕 −8%／止賺 +16%（2R）</div>
+    <div><span>注碼</span>每注最多蝕本金 2%（HK$10,000 → 約 HK$200）</div></div></section>
+  <section class="card"><div class="eyebrow">第二式 · BREAKOUT</div><h2>突破買入</h2><p class="muted">等收市升破 52 週高位先買，確認突破唔係假破。</p>
+    <div class="kv"><div><span>幾時出招</span>收市企穩突破位之上 ＋ 成交配合</div>
+    <div><span>止蝕止賺</span>止蝕放突破位之下 −5~8%／止賺 2–3R</div>
+    <div><span>注碼</span>每注最多蝕本金 2%</div></div></section>
+  <section class="card"><div class="eyebrow">第三式 · HOLD</div><h2>長揸細注</h2><p class="muted">揀間信得過嘅公司，做股東長揸，唔理短線。</p>
+    <div class="kv"><div><span>幾時出招</span>研究透一間公司，信佢 3–5 年會好</div>
+    <div><span>止蝕止賺</span>止蝕放寬 −15~20%（或唔設，接受波動）</div>
+    <div><span>注碼</span>細注，蝕得起</div></div></section>
+</div>
+<div id="mentor-body"></div>`;
+
+(async () => {
+  const futu = await PX.json('data/futu_positions.json');
+  const rp = (futu && futu.schema === 'real_positions_v2') ? futu : null;
+  const pos = (rp && rp.positions) || [];
+  const closed = (rp && rp.closed_trades) || [];
+  const fx = (rp && rp.fx_usdhkd) || 7.8;
+  const STYLES = [['pullback', '回調買入'], ['breakout', '突破買入'], ['hold', '長揸細注']];
+  const isThree = pb => STYLES.some(([k]) => k === pb);
+  const threePos = pos.filter(p => isThree(p.playbook));
+  const threeClosed = closed.filter(t => isThree(t.playbook));
+
+  // 成績牌
+  const stats = STYLES.map(([k, label]) => {
+    const c = threeClosed.filter(t => t.playbook === k);
+    const wins = c.filter(t => Number(t.net_pnl_usd || 0) > 0).length;
+    const totalPnl = c.reduce((a, t) => a + Number(t.net_pnl_usd || 0), 0);
+    const o = threePos.filter(p => p.playbook === k);
+    let unreal = 0;
+    for (const p of o) {
+      const px = Number(p.last_price || p.entry_price), sh = Number(p.shares), e = Number(p.entry_price), f = Number(p.entry_fee_usd || 0);
+      unreal += (px - e) * sh - f;
+    }
+    const n = c.length + o.length;
+    return { key: k, label, n, closed: c.length, wins, winRate: c.length ? wins / c.length * 100 : null, totalPnl: totalPnl + unreal, realized: totalPnl };
+  });
+
+  const scoreboard = `
+  <section class="card"><div class="eyebrow">成績牌</div><h2>三式實戰成績</h2>
+    <div class="stats">
+      ${stats.map(s => `<div class="stat"><div class="stat-label">${PX.esc(s.label)}</div>
+        <div class="stat-value">${s.n} 筆</div>
+        <div class="muted">${s.closed ? `勝率 ${s.winRate.toFixed(0)}% · 已平倉 ${s.closed} 筆` : '未平倉／未有交易'}</div>
+        <div class="muted ${PX.cls(s.totalPnl)}">總 P&L ${PX.usd(s.totalPnl)}（${PX.hkd(s.totalPnl * fx)}）</div></div>`).join('')}
+    </div>
+    <p class="muted">三式成績分開計，同 VOO 核心定投無關。P&L 係已實現＋未實現。</p></section>`;
+
+  // 實戰記錄（合併 open + closed，按 recorded_at 倒序）
+  const entries = [];
+  for (const p of threePos) {
+    const px = Number(p.last_price || p.entry_price), sh = Number(p.shares), e = Number(p.entry_price), f = Number(p.entry_fee_usd || 0);
+    const pnl = (px - e) * sh - f;
+    entries.push({ at: p.recorded_at, kind: '持倉中', ticker: p.ticker, pb: p.playbook, text: `買入 ${sh} 股 @ ${PX.usd(e)}`, pnl, review: p.mentor_review, entryDate: p.entry_date });
+  }
+  for (const t of threeClosed) {
+    entries.push({ at: t.recorded_at, kind: '已平倉', ticker: t.ticker, pb: t.playbook, text: `買 @ ${PX.usd(t.entry_price)} → 賣 @ ${PX.usd(t.exit_price)}`, pnl: Number(t.net_pnl_usd || 0), review: t.mentor_review, entryDate: t.entry_date });
+  }
+  entries.sort((a, b) => (b.at || '').localeCompare(a.at || ''));
+
+  const log = `
+  <section class="card"><div class="eyebrow">實戰記錄</div><h2>每一注都係一課</h2>
+    ${entries.length ? entries.map(x => {
+      const lbl = (STYLES.find(([k]) => k === x.pb) || [x.pb, x.pb])[1];
+      return `<div class="position-row"><div><b>${PX.esc(x.ticker)}</b> <span class="badge">${PX.esc(lbl)}</span> <span class="badge ${x.kind === '已平倉' ? 'badge-ok' : ''}">${x.kind}</span>
+        <div class="position-detail">${x.text}${x.entryDate ? ` · ${PX.esc(x.entryDate)}` : ''}</div>
+        ${x.review ? `<div class="why"><b>師傅點評</b>　${PX.esc(x.review)}</div>` : ''}</div>
+        <div class="${PX.cls(x.pnl)}" style="font-weight:700">${PX.usd(x.pnl)}</div></div>`;
+    }).join('') : '<div class="empty">未有實戰記錄。你喺富途落第一注後，同古神講一句（例如「回調式買咗 IONQ 2 股 @50，止蝕 45，止賺 60」），佢就會幫你記低、標式、俾點評，自動喺呢度出現。</div>'}
+  </section>`;
+
+  document.getElementById('mentor-body').innerHTML = scoreboard + log;
+})();
+</script></body></html>

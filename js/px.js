@@ -23,7 +23,7 @@ const PX = {
     const pages = [
       ['index.html', '總覽'], ['portfolio.html', '組合'], ['signals.html', '信號'],
       ['opportunities.html', '突破研究'], ['pullback.html', '回調研究'],
-      ['reports.html', '報告'], ['learn.html', '學習']
+      ['reports.html', '報告'], ['mentor.html', '師徒模式'], ['learn.html', '學習']
     ];
     const cur = location.pathname.split('/').pop() || 'index.html';
     document.body.dataset.page = cur.replace('.html', '');

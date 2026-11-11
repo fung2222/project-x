@@ -95,8 +95,8 @@ class TestFrontendContracts(unittest.TestCase):
         self.assertNotIn("週一至五 HKT 22:00", html)
         with open(os.path.join(ROOT, "data", "pullback.json"), encoding="utf-8") as f:
             data = json.load(f)
-        self.assertEqual(data["status"], "pending")
-        self.assertIsNone(data["generated_at"])
+        # 真實 state：未跑過係 pending，跑咗係 ok（頁面唔可以 fake pending）
+        self.assertIn(data["status"], ("pending", "ok"))
 
 
 if __name__ == "__main__":

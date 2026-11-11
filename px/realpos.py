@@ -34,6 +34,8 @@ SCHEMA = "real_positions_v2"
 DEFAULT_PATH = path("data", "futu_positions.json")
 ARCHIVE_NOTE = "data/legacy/futu_positions_2026-07-08_paper_sim.json"
 SYMBOL_RE = re.compile(r"^[A-Z][A-Z0-9]{0,5}([.\-][A-Z]{1,2})?$")
+PLAYBOOKS = ("core", "pullback", "breakout", "hold")
+PLAYBOOK_LABEL = {"core": "核心定投", "pullback": "回調買入", "breakout": "突破買入", "hold": "長揸細注"}
 
 
 class RealPosError(ValueError):
@@ -211,7 +213,7 @@ def _r2(x):
 
 
 # ---------------------------------------------------------------- operations (pure; operate on a book dict)
-def add_position(book, symbol, qty, price, sl, tp, date=None, fee=None, note="", allow_add=False, now=None):
+def add_position(book, symbol, qty, price, sl, tp, date=None, fee=None, note="", allow_add=False, playbook="core", review="", now=None):
     """Record a real BUY. Returns (position, warnings). Raises RealPosError on invalid input."""
     now = now or clock.now_hkt()
     sym = norm_symbol(symbol)
@@ -219,6 +221,8 @@ def add_position(book, symbol, qty, price, sl, tp, date=None, fee=None, note="",
     price = norm_price(price, "買入價")
     sl = norm_price(sl, "止蝕價")
     tp = norm_price(tp, "止賺價")
+    if playbook not in PLAYBOOKS:
+        raise RealPosError(f"玩法唔啱：{playbook!r}（要 core／pullback／breakout／hold）")
     if not sl < price:
         raise RealPosError(f"止蝕 {sl} 要低過買入價 {price}")
     if not tp > price:
@@ -246,7 +250,8 @@ def add_position(book, symbol, qty, price, sl, tp, date=None, fee=None, note="",
     else:
         pos = {"id": _next_id(book, "R"), "ticker": sym, "shares": qty, "entry_price": price, "entry_date": date,
                "stop_loss_price": sl, "take_profit_price": tp, "entry_fee_usd": fee_v, "cost_usd": _r2(price * qty),
-               "note": str(note or "")[:200], "recorded_at": now.isoformat(timespec="seconds"),
+               "note": str(note or "")[:200], "playbook": playbook, "mentor_review": str(review or "")[:200],
+               "recorded_at": now.isoformat(timespec="seconds"),
                "last_price": price, "last_price_at": now.isoformat(timespec="seconds")}
         book.setdefault("positions", []).append(pos)
     if not book.get("real_start_date") or date < book["real_start_date"]:
@@ -268,7 +273,7 @@ def add_position(book, symbol, qty, price, sl, tp, date=None, fee=None, note="",
     return pos, warns
 
 
-def close_position(book, symbol, price, qty=None, date=None, fee=None, note="", now=None):
+def close_position(book, symbol, price, qty=None, date=None, fee=None, note="", review="", now=None):
     """Record a real SELL (full or partial). Returns (closed_trade, warnings)."""
     now = now or clock.now_hkt()
     sym = norm_symbol(symbol)
@@ -302,7 +307,9 @@ def close_position(book, symbol, price, qty=None, date=None, fee=None, note="", 
              "days_held": days, "entry_fee_usd": entry_fee, "exit_fee_usd": exit_fee, "fees_usd": _r2(entry_fee + exit_fee),
              "gross_pnl_usd": _r2(gross), "net_pnl_usd": _r2(net), "net_pnl_pct": _r2(net / basis * 100) if basis else None,
              "net_pnl_hkd": _r2(net * fx), "fx_usdhkd": fx, "stop_loss_price": sl, "take_profit_price": tp,
-             "exit_reason": reason, "note": str(note or "")[:200], "recorded_at": now.isoformat(timespec="seconds")}
+             "exit_reason": reason, "playbook": pos.get("playbook", "core"), "mentor_review": str(review or "")[:200],
+             "note": str(note or "")[:200],
+             "recorded_at": now.isoformat(timespec="seconds")}
     book.setdefault("closed_trades", []).append(trade)
     remain = round(held - q, 4)
     if remain <= 1e-9:
@@ -466,18 +473,21 @@ def confirm_add(book, pos):
     cost = sh * e + float(pos.get("entry_fee_usd") or 0)
     sl, tp = float(pos["stop_loss_price"]), float(pos["take_profit_price"])
     risk, gain = (e - sl) * sh, (tp - e) * sh
-    return (f"✅ 記低咗：買入 {pos['ticker']} {_fmt_qty(sh)} 股，每股 ${e:,.2f}（連手續費用咗 {_usd(cost)} ≈ {_hk(cost, fx)}，{pos['entry_date']}）\n"
+    pb = PLAYBOOK_LABEL.get(pos.get("playbook", "core"), pos.get("playbook", "core"))
+    rv = f"\n　師傅點評：{pos.get('mentor_review')}" if pos.get("mentor_review") else ""
+    return (f"✅ 記低咗：買入 {pos['ticker']} {_fmt_qty(sh)} 股，每股 ${e:,.2f}（{pb}）（連手續費用咗 {_usd(cost)} ≈ {_hk(cost, fx)}，{pos['entry_date']}）\n"
             f"　止蝕 ${sl:,.2f}：跌到就賣，大約蝕 {_usd(risk)}（{_hk(risk, fx)}）\n"
             f"　止賺 ${tp:,.2f}：升到可以賣，大約賺 {_usd(gain)}（{_hk(gain, fx)}）\n"
-            f"　{cash}。開市時系統每 5 分鐘幫你睇住，到價會提你；落單要你自己喺富途做。")
+            f"　{cash}。開市時系統每 5 分鐘幫你睇住，到價會提你；落單要你自己喺富途做。{rv}")
 
 
 def confirm_close(book, tr):
     cash, fx = _cash_line(book)
     word = "賺" if tr["net_pnl_usd"] >= 0 else "蝕"
+    rv = f"\n　師傅點評：{tr.get('mentor_review')}" if tr.get("mentor_review") else ""
     return (f"✅ 記低咗：賣出 {tr['ticker']} {_fmt_qty(tr['shares'])} 股，每股 ${float(tr['exit_price']):,.2f}（買入價 ${float(tr['entry_price']):,.2f}）\n"
             f"　扣埋手續費淨{word} {_usd(abs(tr['net_pnl_usd']))}（HK${abs(tr['net_pnl_hkd']):,.0f}，{tr['net_pnl_pct']:+.1f}%）· 揸咗 {tr['days_held']} 日\n"
-            f"　{cash}。")
+            f"　{cash}。{rv}")
 
 
 def confirm_set(book, pos):
@@ -511,6 +521,9 @@ def cli(argv=None):
     a_add.add_argument("--date", help="trade date YYYY-MM-DD (default today HKT)")
     a_add.add_argument("--fee", help="fee USD (default Futu model ~2.00)")
     a_add.add_argument("--note", default="")
+    a_add.add_argument("--playbook", choices=list(PLAYBOOKS), default="core",
+                       help="玩法標籤：core 核心定投／pullback 回調買入／breakout 突破買入／hold 長揸細注")
+    a_add.add_argument("--review", default="", help="師傅點評（師徒模式）")
     a_add.add_argument("--allow-add", action="store_true", help="merge into an existing position (adding)")
     a_add.add_argument("--dry-run", action="store_true")
     a_add.add_argument("--push", action="store_true", help="git pull first, then commit + push ONLY the positions file")
@@ -521,6 +534,7 @@ def cli(argv=None):
     a_cl.add_argument("--date")
     a_cl.add_argument("--fee")
     a_cl.add_argument("--note", default="")
+    a_cl.add_argument("--review", default="", help="師傅點評（師徒模式）")
     a_cl.add_argument("--dry-run", action="store_true")
     a_cl.add_argument("--push", action="store_true", help="git pull first, then commit + push ONLY the positions file")
     a_set = sub.add_parser("set", help="change stop-loss / take-profit")
@@ -551,10 +565,10 @@ def cli(argv=None):
             if book.get("legacy_unmigrated"):
                 raise RealPosError(f"{p} 仲係舊格式（7 月模擬記錄）；請先封存再用 pos 指令")
             if a.cmd == "add":
-                pos, warns = add_position(book, a.symbol, a.qty, a.price, a.sl, a.tp, a.date, a.fee, a.note, a.allow_add)
+                pos, warns = add_position(book, a.symbol, a.qty, a.price, a.sl, a.tp, a.date, a.fee, a.note, a.allow_add, a.playbook, a.review)
                 msg = confirm_add(book, pos)
             elif a.cmd == "close":
-                tr, warns = close_position(book, a.symbol, a.price, a.qty, a.date, a.fee, a.note)
+                tr, warns = close_position(book, a.symbol, a.price, a.qty, a.date, a.fee, a.note, a.review)
                 msg = confirm_close(book, tr)
             else:
                 pos = set_levels(book, a.symbol, a.sl, a.tp)

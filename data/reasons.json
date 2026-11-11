@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-11T22:53:13+08:00",
+ "generated_at": "2026-11-12T06:00:24+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +1.5%）｜新聞：If You Invest $500 a Month in VOO Starting Today, Here's What History Says You…",
+   "text": "跟大市升（納指 +2.3%）｜新聞：If You Invest $500 a Month in VOO Starting Today, Here's What History Says You…",
    "kind": "market",
-   "chg_pct": 0.8,
-   "mkt_chg_pct": 1.46,
+   "chg_pct": 1.28,
+   "mkt_chg_pct": 2.31,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "If You Invest $500 a Month in VOO Starting Today, Here's What History Says You Could Have in 20 Years",
    "url": "https://finnhub.io/api/news?id=ffc14482987d3f1e1f72cb66db477925c604731d0329644870caa305cfbd7c9d",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-11T22:53:13+08:00"
+   "at": "2026-11-12T06:00:05+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

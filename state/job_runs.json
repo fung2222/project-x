@@ -3054,6 +3054,27 @@
           ]
         }
       }
+    },
+    "real": {
+      "alerts": {
+        "REAL:VOO:QUOTE": 1
+      },
+      "updated": "2026-11-11T22:30:15+08:00",
+      "last_by": "realwatch"
+    },
+    "open": {
+      "sent": {
+        "main": {
+          "at": "2026-11-11T22:35:04+08:00",
+          "ids": [
+            902
+          ]
+        }
+      },
+      "runs": 1,
+      "status": "ok",
+      "finished": "2026-11-11T22:35:04+08:00",
+      "executed": []
     }
   }
 }

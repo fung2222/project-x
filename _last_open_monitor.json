@@ -1,18 +1,17 @@
 {
-  "hkt": "2026-11-10T22:35:03.292703+08:00",
-  "session_date": "2026-11-10",
-  "vix": 21.02,
-  "regime": "CAUTION",
-  "title": "謹慎市場",
-  "emoji": "🟡",
-  "teach": "開市急跌先分清缺口定趨勢：未穿止損就忍住唔抄底，等頭半小時波動收斂再決定。",
+  "hkt": "2026-11-11T22:35:03.268768+08:00",
+  "session_date": "2026-11-11",
+  "vix": 18.33,
+  "regime": "NORMAL",
+  "title": "正常市場",
+  "emoji": "🟢",
+  "teach": "開市唔使急：先睇 VIX 同大盤方向，持倉只跟預設止損／止盈，唔好喺頭半小時用感覺加倉攤平。",
   "price_watch": [
-    "RXRX 睇住 $3.32 止損、$5.80 止盈（而家 $3.63）",
-    "AI 睇住 $9.78 止損、$14.88 止盈（而家 $11.62）"
+    "RXRX 睇住 $3.32 止損、$5.80 止盈（而家 $3.65）",
+    "AI 睇住 $9.78 止損、$14.88 止盈（而家 $12.07）"
   ],
   "alerts": [
-    "OPEN_MOVE RXRX 急跌 -4.6% vs 昨收",
-    "OPEN_MOVE AI 急跌 -3.2% vs 昨收"
+    "OPEN_MOVE RXRX 急升 +2.8% vs 昨收"
   ],
   "real_alerts": [],
   "positions": [
@@ -20,40 +19,40 @@
       "ticker": "RXRX",
       "shares": 33,
       "entry": 4.08,
-      "px": 3.63,
-      "prev_close": 3.805,
-      "chg_vs_prev": -4.6,
+      "px": 3.65,
+      "prev_close": 3.55,
+      "chg_vs_prev": 2.82,
       "sl": 3.32,
       "tp": 5.8,
       "quote_ok": true,
       "source": "yfinance",
       "action": "HOLD",
-      "pnl_pct": -11.03,
-      "dist_sl_pct": 8.54,
+      "pnl_pct": -10.54,
+      "dist_sl_pct": 9.04,
       "risk_flag": "OK"
     },
     {
       "ticker": "AI",
       "shares": 17,
       "entry": 11.28,
-      "px": 11.62,
-      "prev_close": 12.0,
-      "chg_vs_prev": -3.17,
+      "px": 12.075,
+      "prev_close": 11.84,
+      "chg_vs_prev": 1.98,
       "sl": 9.78,
       "tp": 14.88,
       "quote_ok": true,
       "source": "yfinance",
       "action": "HOLD",
-      "pnl_pct": 3.01,
-      "dist_sl_pct": 15.83,
+      "pnl_pct": 7.05,
+      "dist_sl_pct": 19.01,
       "risk_flag": "OK"
     }
   ],
   "executed": [],
-  "equity_usd": 1239.17,
+  "equity_usd": 1247.57,
   "cash_usd": 921.84,
   "telegram_ok": true,
-  "telegram_result": "[893]",
+  "telegram_result": "[902]",
   "dry_run": false,
   "engine": "px v3-core"
 }

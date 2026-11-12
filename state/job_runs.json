@@ -3169,6 +3169,23 @@
       "executed": [
         "T011"
       ]
+    },
+    "daily": {
+      "sent": {
+        "report": {
+          "at": "2026-11-12T22:53:15+08:00",
+          "ids": [
+            979
+          ]
+        }
+      },
+      "runs": 1,
+      "status": "ok",
+      "finished": "2026-11-12T22:53:15+08:00",
+      "telegram": {
+        "report": "ok"
+      },
+      "entry": null
     }
   }
 }

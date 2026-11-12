@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-12T06:00:24+08:00",
+ "generated_at": "2026-11-12T22:35:04+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +2.3%）｜新聞：If You Invest $500 a Month in VOO Starting Today, Here's What History Says You…",
-   "kind": "market",
-   "chg_pct": 1.28,
-   "mkt_chg_pct": 2.31,
+   "text": "窄幅上落｜新聞：SPLV Lost $107,460 on $300,000 in the 2020 Crash, More Than VOO’s $102,030",
+   "kind": "flat",
+   "chg_pct": -0.59,
+   "mkt_chg_pct": -0.99,
    "sector_etf": null,
    "sector_chg_pct": null,
-   "headline": "If You Invest $500 a Month in VOO Starting Today, Here's What History Says You Could Have in 20 Years",
-   "url": "https://finnhub.io/api/news?id=ffc14482987d3f1e1f72cb66db477925c604731d0329644870caa305cfbd7c9d",
+   "headline": "SPLV Lost $107,460 on $300,000 in the 2020 Crash, More Than VOO’s $102,030",
+   "url": "https://finnhub.io/api/news?id=6239b45759c5c21c77f70ec45d523a95f202e8f9fcbdcc806cf22ee79f8b6af8",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-12T06:00:05+08:00"
+   "at": "2026-11-12T22:35:04+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

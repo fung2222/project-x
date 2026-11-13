@@ -3091,18 +3091,18 @@
       "entry": null
     },
     "hourly": {
-      "runs": 5,
+      "runs": 6,
       "last_prices": {
-        "AI": 11.875
+        "AI": 11.925
       },
       "last_real_prices": {
-        "VOO": 692.355
+        "VOO": 692.6551
       },
       "last_regime": "NORMAL",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-14T03:06:03+08:00",
+      "last_run": "2026-11-14T04:06:03+08:00",
       "status": "ok",
       "sent": {
         "slot@11:06": {

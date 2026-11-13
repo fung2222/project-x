@@ -1,0 +1,15 @@
+🌙 收市報告 2026-11-13（美股已收市）
+🌍 美股今日大跌：標普 -0.4%、納指 -1.2%。 恐慌指數 19，正常。 頭條：［宏觀］Bessent, Fed's Goolsbee divided on role of energy shock in inflation - Reuters
+
+🏦 真倉 1/3 隻
+🟠 VOO 1股｜今日 -0.4%｜買入至今 -1.4%（-US$9.81／-HK$77）｜趨勢下跌
+　現價 $693.38（成本 $701.20）· 止蝕 $526.00 · 止賺 $1,402.00 · 持 19 日
+　原因：跟大市跌（納指 -1.2%）｜新聞：Vanguard Has an ETF That Chases Winning Stocks on Purpose. Most VOO Owners Have…
+💰 資金：本金 US$1,280（HK$9,984）· 用咗 US$703 · 剩低現金 US$577（45%）· 總賺蝕 -US$9.81／-HK$77（-0.8%）
+今日唔建議買新股：冇一隻過晒系統條件（趨勢向上、成交夠、回報比風險大兩倍以上）。唔買都係一種決定。
+
+⭐ 11-16（星期一）開市潛力股：今日冇一隻值得買（冇一隻過晒趨勢、成交同回報風險條件）。
+🩺 系統健康：全部準時｜pullback✅ · open✅ · daily✅ · hourly 7/7✅
+
+真倉由你喺富途自己落單，系統只提醒；情境參考，唔係保證。
+👉 詳情睇網站：https://fung2222.github.io/project-x/

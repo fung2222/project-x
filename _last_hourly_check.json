@@ -1,25 +1,27 @@
 {
-  "hkt": "2026-11-14T01:06:02.306948+08:00",
+  "hkt": "2026-11-14T02:06:02.303182+08:00",
   "session_date": "2026-11-13",
-  "vix": 20.32,
-  "regime": "CAUTION",
+  "vix": 19.72,
+  "regime": "NORMAL",
   "positions": [
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 11.84,
-      "pnl_pct": 4.96,
+      "px": 11.85,
+      "pnl_pct": 5.01,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 17.4,
+      "dist_sl_pct": 17.43,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1230.58,
+  "equity_usd": 1230.66,
   "cash_usd": 1029.3,
-  "alerts": [],
+  "alerts": [
+    "🌡 大市情緒轉變：謹慎市場 → 正常市場（恐慌指數 20，正常）"
+  ],
   "real_alerts": [],
   "paper_notes": [],
   "real_positions": [
@@ -27,21 +29,21 @@
       "ticker": "VOO",
       "shares": 1,
       "entry": 701.2,
-      "px": 690.145,
-      "pnl_usd": -13.05,
-      "pnl_pct": -1.86,
+      "px": 690.6,
+      "pnl_usd": -12.59,
+      "pnl_pct": -1.79,
       "sl": 526.0,
       "tp": 1402.0,
-      "dist_sl_pct": 23.78,
-      "dist_tp_pct": 103.15,
+      "dist_sl_pct": 23.83,
+      "dist_tp_pct": 103.01,
       "days_held": 19,
       "status": "OK"
     }
   ],
-  "need_push": false,
+  "need_push": true,
   "first_today": false,
-  "push_reason": "none",
-  "pushed": false,
+  "push_reason": "alerts",
+  "pushed": true,
   "push_err": null,
   "dry_run": false,
   "engine": "px v3-core"

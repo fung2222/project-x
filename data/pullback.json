@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-12T22:00:02+08:00",
-  "generated_at": "2026-11-12T22:00:02+08:00",
-  "last_success_at": "2026-11-12T22:00:02+08:00",
+  "started_at": "2026-11-13T22:00:02+08:00",
+  "generated_at": "2026-11-13T22:00:02+08:00",
+  "last_success_at": "2026-11-13T22:00:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -20,32 +20,23 @@
   },
   "hits": [
     {
-      "ticker": "AMD",
-      "close": 552.9000244140625,
-      "return_3m_pct": 7.4865391374179024,
-      "from_52w_high_pct": -16.038995320502224,
-      "price_ma50_ratio": 1.0044885422466918,
-      "ma50": 550.4293988037109,
-      "bar_date": "2026-11-11"
-    },
-    {
       "ticker": "UNH",
-      "close": 402.94000244140625,
-      "return_3m_pct": 0.91881063585737,
-      "from_52w_high_pct": -12.174270060791969,
-      "price_ma50_ratio": 1.0309302064249968,
-      "ma50": 390.8509033203125,
-      "bar_date": "2026-11-11"
+      "close": 405.1300048828125,
+      "return_3m_pct": 3.0343812721489893,
+      "from_52w_high_pct": -11.696932090325463,
+      "price_ma50_ratio": 1.0361136846041128,
+      "ma50": 391.00922119140625,
+      "bar_date": "2026-11-12"
     }
   ],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-11",
+  "bar_date": "2026-11-12",
   "bar_dates": [
-    "2026-11-11"
+    "2026-11-12"
   ],
-  "hit_count": 2,
+  "hit_count": 1,
   "failure_count": 0,
   "message": "完整掃描完成"
 }

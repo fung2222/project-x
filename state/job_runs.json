@@ -1,94 +1,4 @@
 {
-  "2026-10-02": {
-    "open": {
-      "sent": {
-        "main": {
-          "at": "2026-10-02T21:35:04+08:00",
-          "ids": [
-            178
-          ]
-        }
-      },
-      "runs": 1,
-      "status": "ok",
-      "finished": "2026-10-02T21:35:04+08:00",
-      "executed": []
-    },
-    "daily": {
-      "sent": {
-        "report": {
-          "at": "2026-10-02T21:53:14+08:00",
-          "ids": [
-            179
-          ]
-        }
-      },
-      "runs": 1,
-      "status": "ok",
-      "finished": "2026-10-02T21:53:14+08:00",
-      "telegram": {
-        "report": "ok"
-      },
-      "entry": null
-    },
-    "hourly": {
-      "sent": {
-        "slot@10:06": {
-          "at": "2026-10-02T22:06:03+08:00",
-          "ids": [
-            180
-          ]
-        },
-        "status": {
-          "at": "2026-10-02T22:06:03+08:00",
-          "ids": [
-            180
-          ]
-        }
-      },
-      "runs": 7,
-      "last_prices": {
-        "SOUN": 5.84,
-        "RXRX": 4.12
-      },
-      "last_real_prices": {},
-      "last_regime": "NORMAL",
-      "alerts": {},
-      "last_run": "2026-10-03T04:06:02+08:00",
-      "status": "ok"
-    },
-    "real": {
-      "alerts": {},
-      "updated": "2026-10-02T22:06:03+08:00",
-      "last_by": "hourly"
-    },
-    "close": {
-      "sent": {
-        "report": {
-          "at": "2026-10-03T05:00:25+08:00",
-          "ids": [
-            181
-          ]
-        },
-        "chart": {
-          "at": "2026-10-03T05:00:27+08:00",
-          "ids": [
-            182
-          ]
-        }
-      }
-    },
-    "morning": {
-      "sent": {
-        "main": {
-          "at": "2026-10-03T08:30:03+08:00",
-          "ids": [
-            183
-          ]
-        }
-      }
-    }
-  },
   "2026-10-05": {
     "weekly": {
       "sent": {
@@ -3037,18 +2947,18 @@
           ]
         }
       },
-      "runs": 1,
+      "runs": 2,
       "last_prices": {
-        "AI": 11.5
+        "AI": 11.365
       },
       "last_real_prices": {
-        "VOO": 684.88
+        "VOO": 685.755
       },
       "last_regime": "CAUTION",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-16T23:06:04+08:00",
+      "last_run": "2026-11-17T00:06:03+08:00",
       "status": "ok"
     }
   }

@@ -2947,18 +2947,18 @@
           ]
         }
       },
-      "runs": 2,
+      "runs": 3,
       "last_prices": {
-        "AI": 11.365
+        "AI": 11.34
       },
       "last_real_prices": {
-        "VOO": 685.755
+        "VOO": 684.6001
       },
       "last_regime": "CAUTION",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-17T00:06:03+08:00",
+      "last_run": "2026-11-17T01:06:03+08:00",
       "status": "ok"
     }
   }

@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-13T22:00:02+08:00",
-  "generated_at": "2026-11-13T22:00:02+08:00",
-  "last_success_at": "2026-11-13T22:00:02+08:00",
+  "started_at": "2026-11-16T22:00:04+08:00",
+  "generated_at": "2026-11-16T22:00:04+08:00",
+  "last_success_at": "2026-11-16T22:00:04+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -21,20 +21,20 @@
   "hits": [
     {
       "ticker": "UNH",
-      "close": 405.1300048828125,
-      "return_3m_pct": 3.0343812721489893,
-      "from_52w_high_pct": -11.696932090325463,
-      "price_ma50_ratio": 1.0361136846041128,
-      "ma50": 391.00922119140625,
-      "bar_date": "2026-11-12"
+      "close": 407.4599914550781,
+      "return_3m_pct": 4.071531572260367,
+      "from_52w_high_pct": -11.189082856648202,
+      "price_ma50_ratio": 1.0415944954234309,
+      "ma50": 391.1886950683594,
+      "bar_date": "2026-11-13"
     }
   ],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-12",
+  "bar_date": "2026-11-13",
   "bar_dates": [
-    "2026-11-12"
+    "2026-11-13"
   ],
   "hit_count": 1,
   "failure_count": 0,

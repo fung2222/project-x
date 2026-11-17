@@ -3028,18 +3028,18 @@
       "entry": null
     },
     "hourly": {
-      "runs": 1,
+      "runs": 2,
       "last_prices": {
-        "AI": 10.21
+        "AI": 9.96
       },
       "last_real_prices": {
-        "VOO": 677.7922
+        "VOO": 672.92
       },
       "last_regime": "CAUTION",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-17T23:06:03+08:00",
+      "last_run": "2026-11-18T00:06:03+08:00",
       "status": "ok"
     }
   }

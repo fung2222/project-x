@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "created": "2025-07-05",
-  "updated": "2026-11-16",
+  "updated": "2026-11-17",
   "account": {
     "capital_hkd": 10000,
     "capital_usd_approx": 1280,
@@ -11,41 +11,41 @@
     "started": "2026-07-07",
     "cash_usd": 1029.3,
     "cash_hkd": 8028.54,
-    "equity_usd": 1207.1,
+    "equity_usd": 1201.34,
     "total_invested_usd": 191.76,
-    "total_pnl_usd": -72.9,
-    "total_pnl_pct": -5.7,
+    "total_pnl_usd": -78.66,
+    "total_pnl_pct": -6.15,
     "total_fees_usd": 15.5,
     "last_decision": {
-      "date": "2026-11-16",
+      "date": "2026-11-17",
       "style": "px_gates_v3",
       "actions": [
-        "HOLD AI @ 11.63（+3.07%，距SL 15.9%，唔攤平）",
-        "冇新倉：最高 NVDA 50% → G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
+        "HOLD AI @ 10.12（-10.28%，距SL 3.4%，唔攤平）",
+        "冇新倉：最高 ASTS 55% → G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
       ],
       "skipped": [
-        "NVDA 50%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
-        "SOUN 50%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制",
-        "ASTS 46%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
-        "BBAI 36%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制",
-        "PLTR 36%：G1 信心不足、G2 唔符合 setup A/B、G3 成交量不足"
+        "ASTS 55%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
+        "SOUN 55%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制",
+        "NVDA 55%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
+        "GOOGL 48%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
+        "ARM 47%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
       ],
-      "cash_pct": 83.89,
-      "deployed_pct": 16.11
+      "cash_pct": 85.68,
+      "deployed_pct": 14.32
     },
-    "updated": "2026-11-16",
+    "updated": "2026-11-17",
     "start_equity_usd": 1280.0,
     "rebase_date": "2026-09-13",
-    "equity_hkd": 9415.4,
+    "equity_hkd": 9370.45,
     "fx_usdhkd": 7.8,
     "realized_pnl_usd": -56.9,
-    "unrealized_pnl_usd": -13.96,
+    "unrealized_pnl_usd": -19.72,
     "open_entry_fees_usd": 2.04,
-    "total_return_usd": -72.9,
-    "total_return_pct": -5.7,
+    "total_return_usd": -78.66,
+    "total_return_pct": -6.15,
     "total_fees_scope": "trades since rebase 2026-09-13",
-    "cash_pct": 85.27,
-    "deployed_pct": 14.73,
+    "cash_pct": 85.68,
+    "deployed_pct": 14.32,
     "pnl_formula": "total_pnl = realized + unrealized - open_entry_fees = equity - start_equity"
   },
   "positions": [
@@ -55,7 +55,7 @@
       "entry_price": 11.28,
       "entry_date": "2026-10-07",
       "trade_id": "T008",
-      "current_price": 10.459,
+      "current_price": 10.12,
       "cost_usd": 191.76,
       "stop_loss_price": 9.78,
       "take_profit_price": 14.88,
@@ -63,12 +63,12 @@
       "theme": "AI_SOFTWARE",
       "bucket": "other",
       "thesis": "SCAN_ENTRY: AI 分數 90，上升趨勢回踩MA20，R:R 2.5，SL 9.78 / TP 14.88",
-      "last_updated": "2026-11-17T22:35:03+08:00",
-      "value_usd": 177.8,
-      "pnl_usd": -13.96,
-      "pnl_pct": -7.28,
-      "dist_to_sl_pct": 6.49,
-      "dist_to_tp_pct": 42.27,
+      "last_updated": "2026-11-17T22:53:02+08:00",
+      "value_usd": 172.04,
+      "pnl_usd": -19.72,
+      "pnl_pct": -10.28,
+      "dist_to_sl_pct": 3.36,
+      "dist_to_tp_pct": 47.04,
       "held_trading_days": 29,
       "risk_flag": "OK"
     }

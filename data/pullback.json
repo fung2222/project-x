@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-16T22:00:04+08:00",
-  "generated_at": "2026-11-16T22:00:04+08:00",
-  "last_success_at": "2026-11-16T22:00:04+08:00",
+  "started_at": "2026-11-17T22:00:02+08:00",
+  "generated_at": "2026-11-17T22:00:02+08:00",
+  "last_success_at": "2026-11-17T22:00:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -18,25 +18,15 @@
     ],
     "ma50_slope_lookback": 10
   },
-  "hits": [
-    {
-      "ticker": "UNH",
-      "close": 407.4599914550781,
-      "return_3m_pct": 4.071531572260367,
-      "from_52w_high_pct": -11.189082856648202,
-      "price_ma50_ratio": 1.0415944954234309,
-      "ma50": 391.1886950683594,
-      "bar_date": "2026-11-13"
-    }
-  ],
+  "hits": [],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-13",
+  "bar_date": "2026-11-16",
   "bar_dates": [
-    "2026-11-13"
+    "2026-11-16"
   ],
-  "hit_count": 1,
+  "hit_count": 0,
   "failure_count": 0,
   "message": "完整掃描完成"
 }

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-17T22:53:14+08:00",
+ "generated_at": "2026-11-18T06:00:22+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "窄幅上落｜新聞：Investing $500 Per Month in VOO Starting at Age 25 Could Build a Portfolio Wort…",
-   "kind": "flat",
-   "chg_pct": -0.16,
-   "mkt_chg_pct": -0.26,
+   "text": "冇特別新聞，似係跟大市跌（納指 -0.7%）",
+   "kind": "market",
+   "chg_pct": -1.04,
+   "mkt_chg_pct": -0.73,
    "sector_etf": null,
    "sector_chg_pct": null,
-   "headline": "Investing $500 Per Month in VOO Starting at Age 25 Could Build a Portfolio Worth Over $3 Million by Retirement",
-   "url": "https://finnhub.io/api/news?id=81fea8f8b74f8321e34c719f9c09f45a0e2c925603e3a63fd5becd6f3568ba03",
-   "news_source": "finnhub:Yahoo",
-   "at": "2026-11-17T22:53:13+08:00"
+   "headline": null,
+   "url": null,
+   "news_source": null,
+   "at": "2026-11-18T06:00:04+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

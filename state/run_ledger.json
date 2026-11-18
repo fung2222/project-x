@@ -7571,6 +7571,27 @@
   "last_at": "2026-11-17T22:00:08+08:00",
   "detail": "complete scan; zero hits (Telegram silent)"
  },
+ "pullback|2026-11-18T22:00+08:00": {
+  "job": "pullback",
+  "slot_hkt": "2026-11-18T22:00+08:00",
+  "slot_local": "2026-11-18 09:00 ET",
+  "attempts": 1,
+  "history": [
+   {
+    "at": "2026-11-18T22:00:02+08:00",
+    "status": "running",
+    "via": "tick"
+   },
+   {
+    "at": "2026-11-18T22:00:10+08:00",
+    "status": "ok",
+    "via": "tick"
+   }
+  ],
+  "status": "ok",
+  "last_at": "2026-11-18T22:00:10+08:00",
+  "detail": "hits delivered"
+ },
  "weekly|2026-10-05T09:44+08:00": {
   "job": "weekly",
   "slot_hkt": "2026-10-05T09:44+08:00",

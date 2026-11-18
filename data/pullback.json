@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-17T22:00:02+08:00",
-  "generated_at": "2026-11-17T22:00:02+08:00",
-  "last_success_at": "2026-11-17T22:00:02+08:00",
+  "started_at": "2026-11-18T22:00:02+08:00",
+  "generated_at": "2026-11-18T22:00:02+08:00",
+  "last_success_at": "2026-11-18T22:00:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -18,15 +18,25 @@
     ],
     "ma50_slope_lookback": 10
   },
-  "hits": [],
+  "hits": [
+    {
+      "ticker": "HON",
+      "close": 218.9600067138672,
+      "return_3m_pct": 0.6083223176501784,
+      "from_52w_high_pct": -14.89348258879135,
+      "price_ma50_ratio": 1.0260475679304366,
+      "ma50": 213.40141876220704,
+      "bar_date": "2026-11-17"
+    }
+  ],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-16",
+  "bar_date": "2026-11-17",
   "bar_dates": [
-    "2026-11-16"
+    "2026-11-17"
   ],
-  "hit_count": 0,
+  "hit_count": 1,
   "failure_count": 0,
   "message": "完整掃描完成"
 }

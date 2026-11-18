@@ -3117,6 +3117,21 @@
         "report": "ok"
       },
       "entry": null
+    },
+    "hourly": {
+      "runs": 1,
+      "last_prices": {
+        "AI": 9.88
+      },
+      "last_real_prices": {
+        "VOO": 673.43
+      },
+      "last_regime": "CAUTION",
+      "alerts": {
+        "REAL:VOO:QUOTE": 1
+      },
+      "last_run": "2026-11-18T23:06:03+08:00",
+      "status": "ok"
     }
   }
 }

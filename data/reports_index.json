@@ -1905,6 +1905,17 @@
   },
   {
    "date": "2026-11-18",
+   "kind": "close",
+   "kind_zh": "收市報告",
+   "file": "reports/close_report_2026-11-18.html",
+   "md": "reports/close_report_2026-11-18.md",
+   "summary": "收市 · 真倉 1 隻（-2.62%）· 紙上 -6.58% · VIX 24.69",
+   "pnl": -6.58,
+   "source": "px",
+   "generated_at": "2026-11-19T06:00:21+08:00"
+  },
+  {
+   "date": "2026-11-18",
    "kind": "daily",
    "kind_zh": "每日分析",
    "file": "reports/daily_report_2026-11-18.html",
@@ -1926,5 +1937,5 @@
    "generated_at": "2026-11-18T22:35:04+08:00"
   }
  ],
- "updated": "2026-11-18T22:53:14+08:00"
+ "updated": "2026-11-19T06:00:21+08:00"
 }

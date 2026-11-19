@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-19T22:35:03+08:00",
+ "generated_at": "2026-11-19T22:53:15+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +2.2%）｜新聞：JEPI Vs. VOO: The Bigger Payout Ended Far Behind",
+   "text": "跟大市升（納指 +2.1%）｜新聞：JEPI Vs. VOO: The Bigger Payout Ended Far Behind",
    "kind": "market",
-   "chg_pct": 1.2,
-   "mkt_chg_pct": 2.25,
+   "chg_pct": 1.04,
+   "mkt_chg_pct": 2.11,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "JEPI Vs. VOO: The Bigger Payout Ended Far Behind",
    "url": "https://finnhub.io/api/news?id=50b55e9e552a1bf89022d87d8c46186242fc56ed8c1add00111d8c12d0a01784",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-19T22:35:03+08:00"
+   "at": "2026-11-19T22:53:14+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

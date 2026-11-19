@@ -1663,5 +1663,36 @@
    "n_closed": 0,
    "real_start_date": "2026-10-26"
   }
+ },
+ {
+  "date": "2026-11-19",
+  "equity_usd": 1199.98,
+  "cash_usd": 1029.3,
+  "total_pnl_usd": -80.02,
+  "total_return_pct": -6.25,
+  "realized_pnl_usd": -56.9,
+  "unrealized_pnl_usd": -21.08,
+  "fx_usdhkd": 7.8,
+  "equity_hkd": 9359.84,
+  "spy_close": 715.87,
+  "qqq_close": 645.04,
+  "positions": [
+   {
+    "ticker": "AI",
+    "shares": 17,
+    "price": 10.04,
+    "pnl_pct": -10.99
+   }
+  ],
+  "real": {
+   "equity_usd": 1234.82,
+   "cash_usd": 576.81,
+   "unrealized_usd": -45.18,
+   "realized_usd": 0.0,
+   "return_pct": -3.53,
+   "n_open": 1,
+   "n_closed": 0,
+   "real_start_date": "2026-10-26"
+  }
  }
 ]

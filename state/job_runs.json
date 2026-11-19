@@ -1,107 +1,4 @@
 {
-  "2026-10-05": {
-    "weekly": {
-      "sent": {
-        "main": {
-          "at": "2026-10-05T09:44:04+08:00",
-          "ids": [
-            184
-          ]
-        }
-      },
-      "runs": 1,
-      "status": "ok",
-      "finished": "2026-10-05T09:44:04+08:00"
-    },
-    "open": {
-      "sent": {
-        "main": {
-          "at": "2026-10-05T21:35:04+08:00",
-          "ids": [
-            185
-          ]
-        }
-      },
-      "runs": 1,
-      "status": "ok",
-      "finished": "2026-10-05T21:35:04+08:00",
-      "executed": []
-    },
-    "daily": {
-      "sent": {
-        "report": {
-          "at": "2026-10-05T21:53:21+08:00",
-          "ids": [
-            186
-          ]
-        }
-      },
-      "runs": 1,
-      "status": "ok",
-      "finished": "2026-10-05T21:53:21+08:00",
-      "telegram": {
-        "report": "ok"
-      },
-      "entry": null
-    },
-    "hourly": {
-      "sent": {
-        "slot@10:06": {
-          "at": "2026-10-05T22:06:04+08:00",
-          "ids": [
-            187
-          ]
-        },
-        "status": {
-          "at": "2026-10-05T22:06:04+08:00",
-          "ids": [
-            187
-          ]
-        }
-      },
-      "runs": 7,
-      "last_prices": {
-        "SOUN": 5.88,
-        "RXRX": 4.78
-      },
-      "last_real_prices": {},
-      "last_regime": "NORMAL",
-      "alerts": {},
-      "last_run": "2026-10-06T04:06:02+08:00",
-      "status": "ok"
-    },
-    "real": {
-      "alerts": {},
-      "updated": "2026-10-05T22:06:04+08:00",
-      "last_by": "hourly"
-    },
-    "close": {
-      "sent": {
-        "report": {
-          "at": "2026-10-06T05:00:30+08:00",
-          "ids": [
-            188
-          ]
-        },
-        "chart": {
-          "at": "2026-10-06T05:00:31+08:00",
-          "ids": [
-            189
-          ]
-        }
-      }
-    },
-    "morning": {
-      "sent": {
-        "main": {
-          "at": "2026-10-06T08:30:04+08:00",
-          "ids": [
-            190
-          ]
-        }
-      }
-    }
-  },
   "2026-10-06": {
     "open": {
       "sent": {
@@ -3210,18 +3107,18 @@
       "entry": null
     },
     "hourly": {
-      "runs": 1,
+      "runs": 2,
       "last_prices": {
-        "AI": 10.725
+        "AI": 10.325
       },
       "last_real_prices": {
-        "VOO": 677.43
+        "VOO": 670.25
       },
       "last_regime": "CAUTION",
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "last_run": "2026-11-19T23:06:03+08:00",
+      "last_run": "2026-11-20T00:06:03+08:00",
       "status": "ok"
     }
   }

@@ -1,23 +1,23 @@
 {
-  "hkt": "2026-11-20T04:06:02.299132+08:00",
+  "hkt": "2026-11-20T05:06:02.259384+08:00",
   "session_date": "2026-11-19",
-  "vix": 27.47,
+  "vix": 28.1,
   "regime": "CAUTION",
   "positions": [
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 9.98,
-      "pnl_pct": -11.52,
+      "px": 10.04,
+      "pnl_pct": -10.99,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 2.0,
+      "dist_sl_pct": 2.59,
       "action": "HOLD",
       "near_stop": false
     }
   ],
   "executed": [],
-  "equity_usd": 1198.96,
+  "equity_usd": 1199.98,
   "cash_usd": 1029.3,
   "alerts": [],
   "real_alerts": [],
@@ -27,13 +27,13 @@
       "ticker": "VOO",
       "shares": 1,
       "entry": 701.2,
-      "px": 658.1048,
-      "pnl_usd": -45.09,
-      "pnl_pct": -6.41,
+      "px": 657.95,
+      "pnl_usd": -45.24,
+      "pnl_pct": -6.43,
       "sl": 526.0,
       "tp": 1402.0,
-      "dist_sl_pct": 20.07,
-      "dist_tp_pct": 113.04,
+      "dist_sl_pct": 20.05,
+      "dist_tp_pct": 113.09,
       "days_held": 25,
       "status": "OK"
     }

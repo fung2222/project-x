@@ -678,7 +678,7 @@
   "job": "close",
   "slot_hkt": "2026-11-21T06:00+08:00",
   "slot_local": "2026-11-20 17:00 ET",
-  "attempts": 2,
+  "attempts": 3,
   "history": [
    {
     "at": "2026-11-21T06:00:02+08:00",
@@ -699,10 +699,20 @@
     "at": "2026-11-21T06:28:09+08:00",
     "status": "telegram_failed",
     "via": "watchdog"
+   },
+   {
+    "at": "2026-11-21T06:29:02+08:00",
+    "status": "running",
+    "via": "watchdog"
+   },
+   {
+    "at": "2026-11-21T06:32:02+08:00",
+    "status": "ok",
+    "via": "watchdog"
    }
   ],
-  "status": "telegram_failed",
-  "last_at": "2026-11-21T06:28:09+08:00",
+  "status": "ok",
+  "last_at": "2026-11-21T06:32:02+08:00",
   "detail": ""
  },
  "daily|2026-10-07T21:53+08:00": {

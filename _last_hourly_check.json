@@ -1,72 +1,36 @@
 {
-  "hkt": "2026-11-21T00:06:02.378265+08:00",
+  "hkt": "2026-11-21T01:06:02.370526+08:00",
   "session_date": "2026-11-20",
-  "vix": 29.81,
-  "regime": "CAUTION",
-  "positions": [
-    {
-      "ticker": "AI",
-      "shares": 17,
-      "px": 9.62,
-      "pnl_pct": -14.72,
-      "sl": 9.78,
-      "tp": 14.88,
-      "dist_sl_pct": -1.66,
-      "action": "STOP_LOSS_EXECUTED",
-      "near_stop": true
-    }
-  ],
-  "executed": [
-    {
-      "id": "T012",
-      "date": "2026-11-20",
-      "timestamp": "2026-11-21T00:06:02+08:00",
-      "ticker": "AI",
-      "action": "SELL",
-      "reason": "STOP_LOSS",
-      "shares": 17,
-      "entry_price": 11.28,
-      "exit_price": 9.62,
-      "entry_date": "2026-10-07",
-      "exit_date": "2026-11-20",
-      "open_trade_id": "T008",
-      "gross_proceeds_usd": 163.54,
-      "fee_usd": 2.05,
-      "proceeds_usd": 161.49,
-      "gross_pnl_usd": -28.22,
-      "gross_pnl_pct": -14.72,
-      "net_pnl_usd": -32.31,
-      "net_pnl_pct": -16.67,
-      "status": "closed",
-      "decision_note": "hourly check 2026-11-21 00:06 HKT: 9.62 vs SL 9.78"
-    }
-  ],
+  "vix": 31.34,
+  "regime": "DEFENSIVE",
+  "positions": [],
+  "executed": [],
   "equity_usd": 1190.79,
   "cash_usd": 1190.79,
-  "alerts": [],
-  "real_alerts": [],
-  "paper_notes": [
-    "紙上止損 AI（淨 -32.31 美元）"
+  "alerts": [
+    "🌡 大市情緒轉變：謹慎市場 → 防禦市場（恐慌指數 31，好緊張，波幅大）"
   ],
+  "real_alerts": [],
+  "paper_notes": [],
   "real_positions": [
     {
       "ticker": "VOO",
       "shares": 1,
       "entry": 701.2,
-      "px": 647.86,
-      "pnl_usd": -55.33,
-      "pnl_pct": -7.87,
+      "px": 644.89,
+      "pnl_usd": -58.3,
+      "pnl_pct": -8.29,
       "sl": 526.0,
       "tp": 1402.0,
-      "dist_sl_pct": 18.81,
-      "dist_tp_pct": 116.4,
+      "dist_sl_pct": 18.44,
+      "dist_tp_pct": 117.4,
       "days_held": 26,
       "status": "OK"
     }
   ],
   "need_push": true,
   "first_today": false,
-  "push_reason": "paper_exit",
+  "push_reason": "alerts",
   "pushed": true,
   "push_err": null,
   "dry_run": false,

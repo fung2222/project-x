@@ -1,7 +1,7 @@
 {
-  "hkt": "2026-11-21T04:06:02.366094+08:00",
+  "hkt": "2026-11-21T05:06:02.327149+08:00",
   "session_date": "2026-11-20",
-  "vix": 34.2,
+  "vix": 38.24,
   "regime": "DEFENSIVE",
   "positions": [],
   "executed": [],
@@ -15,13 +15,13 @@
       "ticker": "VOO",
       "shares": 1,
       "entry": 701.2,
-      "px": 637.57,
-      "pnl_usd": -65.62,
-      "pnl_pct": -9.33,
+      "px": 634.77,
+      "pnl_usd": -68.42,
+      "pnl_pct": -9.73,
       "sl": 526.0,
       "tp": 1402.0,
-      "dist_sl_pct": 17.5,
-      "dist_tp_pct": 119.9,
+      "dist_sl_pct": 17.14,
+      "dist_tp_pct": 120.87,
       "days_held": 26,
       "status": "OK"
     }

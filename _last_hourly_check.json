@@ -1,49 +1,73 @@
 {
-  "hkt": "2026-11-20T23:06:02.374777+08:00",
+  "hkt": "2026-11-21T00:06:02.378265+08:00",
   "session_date": "2026-11-20",
-  "vix": 28.74,
+  "vix": 29.81,
   "regime": "CAUTION",
   "positions": [
     {
       "ticker": "AI",
       "shares": 17,
-      "px": 9.93,
-      "pnl_pct": -11.97,
+      "px": 9.62,
+      "pnl_pct": -14.72,
       "sl": 9.78,
       "tp": 14.88,
-      "dist_sl_pct": 1.51,
-      "action": "HOLD",
+      "dist_sl_pct": -1.66,
+      "action": "STOP_LOSS_EXECUTED",
       "near_stop": true
     }
   ],
-  "executed": [],
-  "equity_usd": 1198.11,
-  "cash_usd": 1029.3,
+  "executed": [
+    {
+      "id": "T012",
+      "date": "2026-11-20",
+      "timestamp": "2026-11-21T00:06:02+08:00",
+      "ticker": "AI",
+      "action": "SELL",
+      "reason": "STOP_LOSS",
+      "shares": 17,
+      "entry_price": 11.28,
+      "exit_price": 9.62,
+      "entry_date": "2026-10-07",
+      "exit_date": "2026-11-20",
+      "open_trade_id": "T008",
+      "gross_proceeds_usd": 163.54,
+      "fee_usd": 2.05,
+      "proceeds_usd": 161.49,
+      "gross_pnl_usd": -28.22,
+      "gross_pnl_pct": -14.72,
+      "net_pnl_usd": -32.31,
+      "net_pnl_pct": -16.67,
+      "status": "closed",
+      "decision_note": "hourly check 2026-11-21 00:06 HKT: 9.62 vs SL 9.78"
+    }
+  ],
+  "equity_usd": 1190.79,
+  "cash_usd": 1190.79,
   "alerts": [],
   "real_alerts": [],
   "paper_notes": [
-    "AI 距止損 1.5%"
+    "紙上止損 AI（淨 -32.31 美元）"
   ],
   "real_positions": [
     {
       "ticker": "VOO",
       "shares": 1,
       "entry": 701.2,
-      "px": 657.98,
-      "pnl_usd": -45.21,
-      "pnl_pct": -6.43,
+      "px": 647.86,
+      "pnl_usd": -55.33,
+      "pnl_pct": -7.87,
       "sl": 526.0,
       "tp": 1402.0,
-      "dist_sl_pct": 20.06,
-      "dist_tp_pct": 113.08,
-      "days_held": 25,
+      "dist_sl_pct": 18.81,
+      "dist_tp_pct": 116.4,
+      "days_held": 26,
       "status": "OK"
     }
   ],
-  "need_push": false,
+  "need_push": true,
   "first_today": false,
-  "push_reason": "none",
-  "pushed": false,
+  "push_reason": "paper_exit",
+  "pushed": true,
   "push_err": null,
   "dry_run": false,
   "engine": "px v3-core"

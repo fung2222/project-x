@@ -2998,8 +2998,8 @@
       "alerts": {
         "REAL:VOO:QUOTE": 1
       },
-      "updated": "2026-11-23T22:30:11+08:00",
-      "last_by": "realwatch"
+      "updated": "2026-11-23T23:06:04+08:00",
+      "last_by": "hourly"
     },
     "open": {
       "sent": {
@@ -3031,6 +3031,27 @@
         "report": "ok"
       },
       "entry": null
+    },
+    "hourly": {
+      "sent": {
+        "slot@10:06": {
+          "at": "2026-11-23T23:06:04+08:00",
+          "ids": [
+            1143
+          ]
+        }
+      },
+      "runs": 1,
+      "last_prices": {},
+      "last_real_prices": {
+        "VOO": 663.225
+      },
+      "last_regime": "CAUTION",
+      "alerts": {
+        "REAL:VOO:QUOTE": 1
+      },
+      "last_run": "2026-11-23T23:06:04+08:00",
+      "status": "ok"
     }
   }
 }

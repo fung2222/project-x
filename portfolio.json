@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "created": "2025-07-05",
-  "updated": "2026-11-20",
+  "updated": "2026-11-23",
   "account": {
     "capital_hkd": 10000,
     "capital_usd_approx": 1280,
@@ -17,23 +17,22 @@
     "total_pnl_pct": -6.97,
     "total_fees_usd": 17.55,
     "last_decision": {
-      "date": "2026-11-20",
+      "date": "2026-11-23",
       "style": "px_gates_v3",
       "actions": [
-        "HOLD AI @ 9.83（-12.85%，距SL 0.5%，唔攤平）",
         "冇新倉：最高 NVDA 60% → G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
       ],
       "skipped": [
         "NVDA 60%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
-        "SOUN 55%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱、G5 組合限制",
-        "GOOGL 52%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
-        "HOOD 46%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
-        "META 46%：G1 信心不足、G2 唔符合 setup A/B、G3 成交量不足、G4 趨勢太弱、G6 注碼計唔到 ≥1 股 / ≥USD50"
+        "SOUN 60%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
+        "HOOD 54%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
+        "PLTR 47%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱",
+        "JOBY 47%：G1 信心不足、G2 唔符合 setup A/B、G4 趨勢太弱"
       ],
-      "cash_pct": 86.03,
-      "deployed_pct": 13.97
+      "cash_pct": 100.0,
+      "deployed_pct": 0.0
     },
-    "updated": "2026-11-20",
+    "updated": "2026-11-23",
     "start_equity_usd": 1280.0,
     "rebase_date": "2026-09-13",
     "equity_hkd": 9288.16,

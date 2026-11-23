@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-20T22:00:02+08:00",
-  "generated_at": "2026-11-20T22:00:02+08:00",
-  "last_success_at": "2026-11-20T22:00:02+08:00",
+  "started_at": "2026-11-23T22:00:02+08:00",
+  "generated_at": "2026-11-23T22:00:02+08:00",
+  "last_success_at": "2026-11-23T22:00:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -21,49 +21,40 @@
   "hits": [
     {
       "ticker": "V",
-      "close": 402.25,
-      "return_3m_pct": 5.3828538178087415,
-      "from_52w_high_pct": -8.872175778915315,
-      "price_ma50_ratio": 1.0224795367068327,
-      "ma50": 393.40640625,
-      "bar_date": "2026-11-19"
+      "close": 401.8699951171875,
+      "return_3m_pct": 4.80914767407794,
+      "from_52w_high_pct": -8.958264077645184,
+      "price_ma50_ratio": 1.0198490803693097,
+      "ma50": 394.0484948730469,
+      "bar_date": "2026-11-20"
     },
     {
       "ticker": "MA",
-      "close": 626.5,
-      "return_3m_pct": 4.599362289480635,
-      "from_52w_high_pct": -8.136481624210512,
-      "price_ma50_ratio": 1.034513138631793,
-      "ma50": 605.5988818359375,
-      "bar_date": "2026-11-19"
-    },
-    {
-      "ticker": "HON",
-      "close": 217.83999633789062,
-      "return_3m_pct": 1.7481769392706514,
-      "from_52w_high_pct": -15.328814063220586,
-      "price_ma50_ratio": 1.0174897172428148,
-      "ma50": 214.09552612304688,
-      "bar_date": "2026-11-19"
+      "close": 625.5900268554688,
+      "return_3m_pct": 4.532823047003354,
+      "from_52w_high_pct": -8.26991072985157,
+      "price_ma50_ratio": 1.0310607266856748,
+      "ma50": 606.7441137695313,
+      "bar_date": "2026-11-20"
     },
     {
       "ticker": "LMT",
-      "close": 571.8499755859375,
-      "return_3m_pct": 1.9936529860706154,
-      "from_52w_high_pct": -16.30725466410515,
-      "price_ma50_ratio": 1.0253080353447603,
-      "ma50": 557.7348034667968,
-      "bar_date": "2026-11-19"
+      "close": 565.5,
+      "return_3m_pct": 2.2420942721751436,
+      "from_52w_high_pct": -17.23660892763438,
+      "price_ma50_ratio": 1.0124229878913311,
+      "ma50": 558.5610034179688,
+      "bar_date": "2026-11-20"
     }
   ],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-19",
+  "bar_date": "2026-11-20",
   "bar_dates": [
-    "2026-11-19"
+    "2026-11-20"
   ],
-  "hit_count": 4,
+  "hit_count": 3,
   "failure_count": 0,
   "message": "完整掃描完成"
 }

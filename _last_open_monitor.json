@@ -1,41 +1,20 @@
 {
-  "hkt": "2026-11-20T22:35:03.424998+08:00",
-  "session_date": "2026-11-20",
-  "vix": 29.61,
+  "hkt": "2026-11-23T22:35:03.416196+08:00",
+  "session_date": "2026-11-23",
+  "vix": 26.8,
   "regime": "CAUTION",
   "title": "謹慎市場",
   "emoji": "🟡",
-  "teach": "開市近止損最危險：唔好加倉攤平；價一穿預設止損就執行，情緒留畀下一個訊號。",
-  "price_watch": [
-    "AI 睇住 $9.78 止損、$14.88 止盈（而家 $9.92）"
-  ],
-  "alerts": [
-    "NEAR_SL AI 距止損 1.4%（9.92 vs SL 9.78）"
-  ],
+  "teach": "VIX 已入謹慎區：開市波動會放大，優先守住止損線，新倉等確認訊號先動手。",
+  "price_watch": [],
+  "alerts": [],
   "real_alerts": [],
-  "positions": [
-    {
-      "ticker": "AI",
-      "shares": 17,
-      "entry": 11.28,
-      "px": 9.92,
-      "prev_close": 10.04,
-      "chg_vs_prev": -1.2,
-      "sl": 9.78,
-      "tp": 14.88,
-      "quote_ok": true,
-      "source": "yfinance",
-      "action": "HOLD",
-      "pnl_pct": -12.06,
-      "dist_sl_pct": 1.41,
-      "risk_flag": "NEAR_SL"
-    }
-  ],
+  "positions": [],
   "executed": [],
-  "equity_usd": 1197.94,
-  "cash_usd": 1029.3,
+  "equity_usd": 1190.79,
+  "cash_usd": 1190.79,
   "telegram_ok": true,
-  "telegram_result": "[1086]",
+  "telegram_result": "[1138]",
   "dry_run": false,
   "engine": "px v3-core"
 }

@@ -1,0 +1,93 @@
+{
+  "type": "weekly_report",
+  "week_start": "2026-11-16",
+  "week_end": "2026-11-23",
+  "generated": "2026-11-23T09:44:02.397116+08:00",
+  "market": {
+    "vix": 35.89,
+    "regime": "防禦市場",
+    "spy_price": 689.81,
+    "qqq_price": 608.45
+  },
+  "real": {
+    "summary": {
+      "n_open": 1,
+      "equity_usd": 1212.35,
+      "cash_usd": 576.81,
+      "unrealized_usd": -67.65,
+      "realized_usd": 0.0,
+      "return_pct": -5.29,
+      "n_closed": 0,
+      "n_wins": 0,
+      "win_rate_pct": null,
+      "real_start_date": "2026-10-26"
+    },
+    "three_way": {
+      "since": "2026-10-26",
+      "real_pct": -5.29,
+      "real_usd": -67.65,
+      "paper_pct": -6.63,
+      "paper_base_date": "2026-10-23",
+      "qqq_pct": -13.62,
+      "spy_pct": -9.23,
+      "n_closed": 0,
+      "n_wins": 0,
+      "win_rate_pct": null
+    }
+  },
+  "account": {
+    "equity_usd": 1190.79,
+    "cash_usd": 1190.79,
+    "cash_pct": 100.0,
+    "realized_pnl_usd": -89.21,
+    "unrealized_pnl_usd": 0.0,
+    "total_pnl_usd": -89.21,
+    "total_return_pct": -6.97
+  },
+  "spy_return_since_rebase_pct": -9.74,
+  "trades": [
+    {
+      "id": "T012",
+      "date": "2026-11-20",
+      "timestamp": "2026-11-21T00:06:02+08:00",
+      "ticker": "AI",
+      "action": "SELL",
+      "reason": "STOP_LOSS",
+      "shares": 17,
+      "entry_price": 11.28,
+      "exit_price": 9.62,
+      "entry_date": "2026-10-07",
+      "exit_date": "2026-11-20",
+      "open_trade_id": "T008",
+      "gross_proceeds_usd": 163.54,
+      "fee_usd": 2.05,
+      "proceeds_usd": 161.49,
+      "gross_pnl_usd": -28.22,
+      "gross_pnl_pct": -14.72,
+      "net_pnl_usd": -32.31,
+      "net_pnl_pct": -16.67,
+      "status": "closed",
+      "decision_note": "hourly check 2026-11-21 00:06 HKT: 9.62 vs SL 9.78"
+    }
+  ],
+  "week_summary": {
+    "days_analyzed": 5,
+    "buy_signals": 0,
+    "hold_signals": 45,
+    "sell_signals": 0
+  },
+  "signal_hit_rate_sample": {
+    "total_signals": 38,
+    "hits": 16,
+    "partials": 13,
+    "misses": 9,
+    "neutrals": 9,
+    "hit_rate_pct": 42.1,
+    "partial_rate_pct": 34.2,
+    "note": "從 2026-07-07 開始實時收集",
+    "miss_rate_pct": 23.7,
+    "label": "信號命中率樣本（唔係實際交易筆數）"
+  },
+  "telegram_ok": true,
+  "engine": "px v3-core"
+}

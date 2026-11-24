@@ -1,7 +1,7 @@
 {
-  "hkt": "2026-11-23T22:35:03.416196+08:00",
-  "session_date": "2026-11-23",
-  "vix": 26.8,
+  "hkt": "2026-11-24T22:35:03.379457+08:00",
+  "session_date": "2026-11-24",
+  "vix": 29.19,
   "regime": "CAUTION",
   "title": "謹慎市場",
   "emoji": "🟡",
@@ -14,7 +14,7 @@
   "equity_usd": 1190.79,
   "cash_usd": 1190.79,
   "telegram_ok": true,
-  "telegram_result": "[1138]",
+  "telegram_result": "[1164]",
   "dry_run": false,
   "engine": "px v3-core"
 }

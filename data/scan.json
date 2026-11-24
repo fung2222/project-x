@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-11-24T06:00:19+08:00",
+ "generated_at": "2026-11-24T22:53:16+08:00",
  "bar_date": "2026-11-23",
  "equity_usd": 1190.79,
- "fx_usdhkd": 7.8,
+ "fx_usdhkd": 7.8412,
  "max_position_usd": 297.7,
  "risk_per_trade_usd": 23.82,
  "universe_size": 54,
@@ -46,10 +46,10 @@
    "atr_pct": 5.18,
    "shares": 12,
    "cost_usd": 142.08,
-   "cost_hkd": 1108.0,
+   "cost_hkd": 1114.0,
    "risk_usd": 22.1,
    "fee_drag_pct": 2.86,
-   "earnings_days": 8,
+   "earnings_days": 7,
    "why": [
     "相對 QQQ：20日 -8.6pp / 60日 -25.6pp",
     "結構：價 < MA20，MA20 < MA50，MA50 向下",
@@ -96,7 +96,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": 44.81,
    "ex_qqq_60d_pp": -0.56,
-   "dollar_vol20_musd": 487.3
+   "dollar_vol20_musd": 487.4
   },
   {
    "ticker": "LYFT",
@@ -207,7 +207,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -11.56,
    "ex_qqq_60d_pp": -3.04,
-   "dollar_vol20_musd": 1254.4
+   "dollar_vol20_musd": 1254.6
   },
   {
    "ticker": "RKLB",
@@ -225,7 +225,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": 0.8,
    "ex_qqq_60d_pp": -13.79,
-   "dollar_vol20_musd": 1069.2
+   "dollar_vol20_musd": 1069.8
   },
   {
    "ticker": "RIVN",
@@ -243,7 +243,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": 6.75,
    "ex_qqq_60d_pp": -21.05,
-   "dollar_vol20_musd": 425.7
+   "dollar_vol20_musd": 425.8
   },
   {
    "ticker": "CORZ",
@@ -261,7 +261,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": 0.08,
    "ex_qqq_60d_pp": -16.01,
-   "dollar_vol20_musd": 244.7
+   "dollar_vol20_musd": 245.8
   },
   {
    "ticker": "PLTR",
@@ -280,7 +280,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -11.27,
    "ex_qqq_60d_pp": -5.33,
-   "dollar_vol20_musd": 4349.0
+   "dollar_vol20_musd": 4349.7
   },
   {
    "ticker": "WULF",
@@ -298,7 +298,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -0.34,
    "ex_qqq_60d_pp": -19.8,
-   "dollar_vol20_musd": 626.8
+   "dollar_vol20_musd": 627.0
   },
   {
    "ticker": "MP",
@@ -316,7 +316,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": 3.44,
    "ex_qqq_60d_pp": -27.55,
-   "dollar_vol20_musd": 255.2
+   "dollar_vol20_musd": 255.3
   },
   {
    "ticker": "SOFI",
@@ -334,7 +334,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -0.89,
    "ex_qqq_60d_pp": -18.39,
-   "dollar_vol20_musd": 944.6
+   "dollar_vol20_musd": 944.9
   },
   {
    "ticker": "SNAP",
@@ -371,7 +371,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": 1.62,
    "ex_qqq_60d_pp": -27.44,
-   "dollar_vol20_musd": 113.9
+   "dollar_vol20_musd": 114.0
   },
   {
    "ticker": "RXRX",
@@ -389,7 +389,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -21.28,
    "ex_qqq_60d_pp": -11.08,
-   "dollar_vol20_musd": 83.6
+   "dollar_vol20_musd": 83.7
   },
   {
    "ticker": "AFRM",
@@ -460,7 +460,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -3.84,
    "ex_qqq_60d_pp": -33.49,
-   "dollar_vol20_musd": 3683.6
+   "dollar_vol20_musd": 3685.3
   },
   {
    "ticker": "SMCI",
@@ -478,7 +478,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -16.37,
    "ex_qqq_60d_pp": -24.72,
-   "dollar_vol20_musd": 1363.1
+   "dollar_vol20_musd": 1363.5
   },
   {
    "ticker": "NIO",
@@ -487,17 +487,17 @@
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.3%（> 3.0%）",
-    "5 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "4 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
    "close": 2.57,
    "rsi": 30.0,
-   "rr": 7.11,
+   "rr": 7.1,
    "setup": "趨勢延續",
    "theme": "EV",
    "earnings_date": "2026-12-01",
    "ex_qqq_20d_pp": -12.58,
    "ex_qqq_60d_pp": -32.06,
-   "dollar_vol20_musd": 134.0
+   "dollar_vol20_musd": 134.1
   },
   {
    "ticker": "JOBY",
@@ -533,7 +533,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -18.85,
    "ex_qqq_60d_pp": -26.25,
-   "dollar_vol20_musd": 1719.9
+   "dollar_vol20_musd": 1720.8
   },
   {
    "ticker": "DKNG",
@@ -569,7 +569,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -15.53,
    "ex_qqq_60d_pp": -31.33,
-   "dollar_vol20_musd": 685.4
+   "dollar_vol20_musd": 685.8
   },
   {
    "ticker": "MARA",
@@ -623,7 +623,7 @@
    "earnings_date": "2027-01-05",
    "ex_qqq_20d_pp": -13.9,
    "ex_qqq_60d_pp": -36.33,
-   "dollar_vol20_musd": 451.4
+   "dollar_vol20_musd": 451.8
   },
   {
    "ticker": "BBAI",
@@ -660,7 +660,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -11.34,
    "ex_qqq_60d_pp": -39.13,
-   "dollar_vol20_musd": 252.6
+   "dollar_vol20_musd": 252.7
   },
   {
    "ticker": "ACHR",
@@ -696,7 +696,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -23.25,
    "ex_qqq_60d_pp": -29.98,
-   "dollar_vol20_musd": 1241.8
+   "dollar_vol20_musd": 1242.4
   },
   {
    "ticker": "QS",
@@ -732,7 +732,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -31.05,
    "ex_qqq_60d_pp": -24.58,
-   "dollar_vol20_musd": 2225.3
+   "dollar_vol20_musd": 2226.4
   },
   {
    "ticker": "RGTI",
@@ -750,7 +750,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -20.65,
    "ex_qqq_60d_pp": -38.95,
-   "dollar_vol20_musd": 188.4
+   "dollar_vol20_musd": 188.5
   },
   {
    "ticker": "RDDT",
@@ -768,7 +768,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -27.3,
    "ex_qqq_60d_pp": -32.86,
-   "dollar_vol20_musd": 801.2
+   "dollar_vol20_musd": 801.3
   },
   {
    "ticker": "CIFR",
@@ -786,7 +786,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -11.0,
    "ex_qqq_60d_pp": -50.0,
-   "dollar_vol20_musd": 379.1
+   "dollar_vol20_musd": 379.2
   },
   {
    "ticker": "CLSK",
@@ -795,7 +795,7 @@
    "fail": [
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 3.5%（> 3.0%）",
-    "1 日內有業績（跳空風險，唔喺業績前開新倉）"
+    "0 日內有業績（跳空風險，唔喺業績前開新倉）"
    ],
    "close": 5.53,
    "rsi": 35.1,
@@ -816,14 +816,14 @@
     "價低於 MA50（唔接跌緊嘅刀）",
     "注碼太細：來回手續費佔 4.0%（> 3.0%）"
    ],
-   "close": 0.9936,
-   "rsi": 28.6,
-   "rr": 13.72,
+   "close": 0.99,
+   "rsi": 28.2,
+   "rr": 13.79,
    "setup": "趨勢延續",
    "theme": "CLEAN_ENERGY",
    "earnings_date": null,
-   "ex_qqq_20d_pp": -18.89,
-   "ex_qqq_60d_pp": -45.5,
+   "ex_qqq_20d_pp": -19.15,
+   "ex_qqq_60d_pp": -45.67,
    "dollar_vol20_musd": 80.3
   },
   {
@@ -842,7 +842,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -25.99,
    "ex_qqq_60d_pp": -39.86,
-   "dollar_vol20_musd": 251.8
+   "dollar_vol20_musd": 251.9
   },
   {
    "ticker": "ASTS",
@@ -860,7 +860,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -26.34,
    "ex_qqq_60d_pp": -46.65,
-   "dollar_vol20_musd": 624.7
+   "dollar_vol20_musd": 625.0
   },
   {
    "ticker": "SOUN",
@@ -878,7 +878,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -23.13,
    "ex_qqq_60d_pp": -50.15,
-   "dollar_vol20_musd": 73.9
+   "dollar_vol20_musd": 74.0
   },
   {
    "ticker": "HIMS",
@@ -969,7 +969,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -25.61,
    "ex_qqq_60d_pp": -52.27,
-   "dollar_vol20_musd": 64.0
+   "dollar_vol20_musd": 64.1
   },
   {
    "ticker": "SERV",
@@ -1006,7 +1006,7 @@
    "earnings_date": null,
    "ex_qqq_20d_pp": -33.84,
    "ex_qqq_60d_pp": -49.57,
-   "dollar_vol20_musd": 1569.8
+   "dollar_vol20_musd": 1571.0
   },
   {
    "ticker": "RCAT",

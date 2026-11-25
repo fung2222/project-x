@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-24T22:00:02+08:00",
-  "generated_at": "2026-11-24T22:00:02+08:00",
-  "last_success_at": "2026-11-24T22:00:02+08:00",
+  "started_at": "2026-11-25T22:00:02+08:00",
+  "generated_at": "2026-11-25T22:00:02+08:00",
+  "last_success_at": "2026-11-25T22:00:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -21,29 +21,29 @@
   "hits": [
     {
       "ticker": "HON",
-      "close": 221.97000122070312,
-      "return_3m_pct": 0.9052251430372582,
-      "from_52w_high_pct": -13.723542225031526,
-      "price_ma50_ratio": 1.0336771880727977,
-      "ma50": 214.73822174072265,
-      "bar_date": "2026-11-23"
+      "close": 224.82000732421875,
+      "return_3m_pct": 2.330647262802832,
+      "from_52w_high_pct": -12.615807730561901,
+      "price_ma50_ratio": 1.0448066891300303,
+      "ma50": 215.17856811523438,
+      "bar_date": "2026-11-24"
     },
     {
       "ticker": "LMT",
-      "close": 571.6699829101562,
-      "return_3m_pct": 1.6947604876402123,
-      "from_52w_high_pct": -16.33360502223549,
-      "price_ma50_ratio": 1.021921756879513,
-      "ma50": 559.4068029785157,
-      "bar_date": "2026-11-23"
+      "close": 586.6300048828125,
+      "return_3m_pct": 4.306212306886903,
+      "from_52w_high_pct": -14.144140567816155,
+      "price_ma50_ratio": 1.0466747422486076,
+      "ma50": 560.4702026367188,
+      "bar_date": "2026-11-24"
     }
   ],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-23",
+  "bar_date": "2026-11-24",
   "bar_dates": [
-    "2026-11-23"
+    "2026-11-24"
   ],
   "hit_count": 2,
   "failure_count": 0,

@@ -2133,7 +2133,18 @@
    "pnl": null,
    "source": "px",
    "generated_at": "2026-11-24T22:35:04+08:00"
+  },
+  {
+   "date": "2026-11-25",
+   "kind": "open",
+   "kind_zh": "開市監控",
+   "file": "reports/open_report_2026-11-25.html",
+   "md": "reports/open_report_2026-11-25.md",
+   "summary": "開市監控 · 防禦市場（VIX 31.67）",
+   "pnl": null,
+   "source": "px",
+   "generated_at": "2026-11-25T22:35:04+08:00"
   }
  ],
- "updated": "2026-11-25T08:30:04+08:00"
+ "updated": "2026-11-25T22:35:04+08:00"
 }

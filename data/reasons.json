@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-25T06:00:23+08:00",
+ "generated_at": "2026-11-25T22:35:03+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "似係個股消息（比大市強 1.5%）：Did Nvidia's Rebound Make VOO Owners Whole?",
-   "kind": "stock",
-   "chg_pct": -0.48,
-   "mkt_chg_pct": -1.99,
+   "text": "跟大市跌（納指 -4.0%）｜新聞：$1 Million In VYM Matched VOO With Smaller Falls",
+   "kind": "market",
+   "chg_pct": -2.66,
+   "mkt_chg_pct": -4.04,
    "sector_etf": null,
    "sector_chg_pct": null,
-   "headline": "Did Nvidia's Rebound Make VOO Owners Whole?",
-   "url": "https://finnhub.io/api/news?id=4f3c0a2c3bc65b744ee1c4d9732c5e3f951288e7bb48bbd1a5506d58cb301b9b",
+   "headline": "$1 Million In VYM Matched VOO With Smaller Falls",
+   "url": "https://finnhub.io/api/news?id=948df7a4413f432fc3f6dc0c196b65c47da13f4c6ad815f62ff9ef95322828c7",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-25T06:00:04+08:00"
+   "at": "2026-11-25T22:35:03+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

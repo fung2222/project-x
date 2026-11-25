@@ -1766,5 +1766,29 @@
    "n_closed": 0,
    "real_start_date": "2026-10-26"
   }
+ },
+ {
+  "date": "2026-11-25",
+  "equity_usd": 1190.79,
+  "cash_usd": 1190.79,
+  "total_pnl_usd": -89.21,
+  "total_return_pct": -6.97,
+  "realized_pnl_usd": -89.21,
+  "unrealized_pnl_usd": 0.0,
+  "fx_usdhkd": 7.8,
+  "equity_hkd": 9288.16,
+  "spy_close": 716.7,
+  "qqq_close": 633.93,
+  "positions": [],
+  "real": {
+   "equity_usd": 1235.68,
+   "cash_usd": 576.81,
+   "unrealized_usd": -44.32,
+   "realized_usd": 0.0,
+   "return_pct": -3.46,
+   "n_open": 1,
+   "n_closed": 0,
+   "real_start_date": "2026-10-26"
+  }
  }
 ]

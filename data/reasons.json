@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-25T22:53:13+08:00",
+ "generated_at": "2026-11-26T06:00:23+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市跌（納指 -4.3%）｜新聞：$1 Million In VYM Matched VOO With Smaller Falls",
-   "kind": "market",
-   "chg_pct": -2.9,
-   "mkt_chg_pct": -4.3,
+   "text": "窄幅上落｜新聞：$1 Million In VYM Matched VOO With Smaller Falls",
+   "kind": "flat",
+   "chg_pct": -0.28,
+   "mkt_chg_pct": -0.65,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "$1 Million In VYM Matched VOO With Smaller Falls",
    "url": "https://finnhub.io/api/news?id=948df7a4413f432fc3f6dc0c196b65c47da13f4c6ad815f62ff9ef95322828c7",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-25T22:53:13+08:00"
+   "at": "2026-11-26T06:00:04+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",

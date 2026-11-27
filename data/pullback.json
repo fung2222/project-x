@@ -1,9 +1,9 @@
 {
   "schema": "pullback_scan_v2",
   "status": "ok",
-  "started_at": "2026-11-25T22:00:02+08:00",
-  "generated_at": "2026-11-25T22:00:02+08:00",
-  "last_success_at": "2026-11-25T22:00:02+08:00",
+  "started_at": "2026-11-27T22:00:02+08:00",
+  "generated_at": "2026-11-27T22:00:02+08:00",
+  "last_success_at": "2026-11-27T22:00:02+08:00",
   "strategy": "large_cap_pullback_research",
   "research_only": true,
   "criteria": {
@@ -21,31 +21,22 @@
   "hits": [
     {
       "ticker": "HON",
-      "close": 224.82000732421875,
-      "return_3m_pct": 2.330647262802832,
-      "from_52w_high_pct": -12.615807730561901,
-      "price_ma50_ratio": 1.0448066891300303,
-      "ma50": 215.17856811523438,
-      "bar_date": "2026-11-24"
-    },
-    {
-      "ticker": "LMT",
-      "close": 586.6300048828125,
-      "return_3m_pct": 4.306212306886903,
-      "from_52w_high_pct": -14.144140567816155,
-      "price_ma50_ratio": 1.0466747422486076,
-      "ma50": 560.4702026367188,
-      "bar_date": "2026-11-24"
+      "close": 225.10000610351562,
+      "return_3m_pct": 3.8529156197533387,
+      "from_52w_high_pct": -12.506955602414383,
+      "price_ma50_ratio": 1.044351908066095,
+      "ma50": 215.5403790283203,
+      "bar_date": "2026-11-25"
     }
   ],
   "failures": [],
   "scanned": 45,
   "universe_size": 45,
-  "bar_date": "2026-11-24",
+  "bar_date": "2026-11-25",
   "bar_dates": [
-    "2026-11-24"
+    "2026-11-25"
   ],
-  "hit_count": 2,
+  "hit_count": 1,
   "failure_count": 0,
   "message": "完整掃描完成"
 }

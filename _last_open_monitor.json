@@ -1,11 +1,11 @@
 {
-  "hkt": "2026-11-25T22:35:03.380414+08:00",
-  "session_date": "2026-11-25",
-  "vix": 31.67,
-  "regime": "DEFENSIVE",
-  "title": "防禦市場",
-  "emoji": "🔴",
-  "teach": "開市急跌先分清缺口定趨勢：未穿止損就忍住唔抄底，等頭半小時波動收斂再決定。",
+  "hkt": "2026-11-27T22:35:03.775362+08:00",
+  "session_date": "2026-11-27",
+  "vix": 25.81,
+  "regime": "CAUTION",
+  "title": "謹慎市場",
+  "emoji": "🟡",
+  "teach": "VIX 已入謹慎區：開市波動會放大，優先守住止損線，新倉等確認訊號先動手。",
   "price_watch": [],
   "alerts": [],
   "real_alerts": [],
@@ -14,7 +14,7 @@
   "equity_usd": 1190.79,
   "cash_usd": 1190.79,
   "telegram_ok": true,
-  "telegram_result": "[1177]",
+  "telegram_result": "[1202]",
   "dry_run": false,
   "engine": "px v3-core"
 }

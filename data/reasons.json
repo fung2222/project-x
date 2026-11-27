@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-27T22:35:04+08:00",
+ "generated_at": "2026-11-27T22:53:21+08:00",
  "reasons": {
   "IONQ": {
    "ticker": "IONQ",
@@ -45,16 +45,16 @@
   },
   "VOO": {
    "ticker": "VOO",
-   "text": "跟大市升（納指 +1.1%）｜新聞：What's Left Of $1 Million In VOO And BND?",
-   "kind": "market",
-   "chg_pct": 0.88,
-   "mkt_chg_pct": 1.09,
+   "text": "窄幅上落｜新聞：What's Left Of $1 Million In VOO And BND?",
+   "kind": "flat",
+   "chg_pct": 0.74,
+   "mkt_chg_pct": 0.85,
    "sector_etf": null,
    "sector_chg_pct": null,
    "headline": "What's Left Of $1 Million In VOO And BND?",
    "url": "https://finnhub.io/api/news?id=466cb20ed73bcf84bb5f83e092d1c938e797855302beda1d809a76f6c96e0522",
    "news_source": "finnhub:Yahoo",
-   "at": "2026-11-27T22:35:04+08:00"
+   "at": "2026-11-27T22:53:20+08:00"
   },
   "DKNG": {
    "ticker": "DKNG",
